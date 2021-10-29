@@ -10,6 +10,10 @@ import SwiftUI
 @main
 struct DuckDepoApp: App {
     let persistenceController = PersistenceController.shared
+    
+    init() {
+        InitialSetup.main.populateCoreDataIfNeeded()
+    }
 
     var body: some Scene {
         WindowGroup {
@@ -17,4 +21,5 @@ struct DuckDepoApp: App {
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }
+    
 }

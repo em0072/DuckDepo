@@ -1,9 +1,35 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="true" userDefinedModelVersionIdentifier="">
-    <entity name="Item" representedClassName="Item" syncable="YES" codeGenerationType="class">
-        <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19206" systemVersion="21A559" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
+    <entity name="DDDocument" representedClassName="DDDocument" syncable="YES">
+        <attribute name="info" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="number" optional="YES" attributeType="String"/>
+        <attribute name="photos" optional="YES" attributeType="Binary"/>
+        <relationship name="folder" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DDFolder" inverseName="documnets" inverseEntity="DDFolder"/>
+        <relationship name="sections" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="DDSection" inverseName="document" inverseEntity="DDSection"/>
+    </entity>
+    <entity name="DDField" representedClassName="DDField" syncable="YES">
+        <attribute name="order" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <attribute name="type" optional="YES" attributeType="String"/>
+        <attribute name="value" optional="YES" attributeType="String"/>
+        <relationship name="section" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DDSection" inverseName="fields" inverseEntity="DDSection"/>
+    </entity>
+    <entity name="DDFolder" representedClassName="DDFolder" syncable="YES">
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="order" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <relationship name="documnets" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="DDDocument" inverseName="folder" inverseEntity="DDDocument"/>
+    </entity>
+    <entity name="DDSection" representedClassName="DDSection" syncable="YES">
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="order" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="document" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DDDocument" inverseName="sections" inverseEntity="DDDocument"/>
+        <relationship name="fields" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="DDField" inverseName="section" inverseEntity="DDField"/>
     </entity>
     <elements>
-        <element name="Item" positionX="-63" positionY="-18" width="128" height="44"/>
+        <element name="DDDocument" positionX="-54" positionY="18" width="128" height="119"/>
+        <element name="DDFolder" positionX="-63" positionY="-9" width="128" height="74"/>
+        <element name="DDSection" positionX="-63" positionY="54" width="128" height="89"/>
+        <element name="DDField" positionX="-54" positionY="63" width="128" height="104"/>
     </elements>
 </model>
