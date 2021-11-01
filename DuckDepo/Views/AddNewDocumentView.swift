@@ -12,6 +12,8 @@ import ImageViewer
 
 struct AddNewDocumentView: View {
     
+    
+    
     @Environment(\.managedObjectContext) private var viewContext
     
     @State var documentName: String = ""
@@ -47,7 +49,7 @@ struct AddNewDocumentView: View {
                         AddPhotosView(images: $images, showingPhotoChooser: $showingPhotoChooser, showingImagePicker: $showingImagePicker, showingImageViewer: $showingImageViewer, imageViewerImage: $imageViewerImage, showingCameraView: $showingCameraView, imagePickerInputImage: $imagePickerInputImage, cameraPickerInputImages: $cameraPickerInputImages, onImagePickerAction: loadImagePickerImage, onCameraPickerAction: loadCameraPickerImage)
 
                         
-                        SectionsView(sections: $sections, showingAddNewSectionView: $showingAddNewSectionView, deleteAction: deleteSection, addFieldAction: addField)
+                        SectionsView(sections: $sections, showingAddNewSectionView: $showingAddNewSectionView, deleteSectionAction: deleteSection, deleteFieldAction: delete, addFieldAction: addField)
 
                         AddSectionButton(showingAddNewSectionView: $showingAddNewSectionView, duplicateCheck: checkSectionIfDuplicat, addNewSectionAction: addNewSection)
                         
@@ -72,6 +74,12 @@ struct AddNewDocumentView: View {
         .overlay(ImageViewer(image: self.$imageViewerImage, viewerShown: self.$showingImageViewer))
     }
     
+    private func delete(field: DDField, in section: DDSection) {
+        guard let index = sections.firstIndex(of: section) else { return }
+        section.removeFromFields(field)
+        update(section: section, at: index)
+    }
+    
     private func deleteSection(_ section: DDSection) {
         if let index = sections.firstIndex(of: section) {
             _ = withAnimation {
@@ -81,12 +89,21 @@ struct AddNewDocumentView: View {
     }
     
     private func addField(_ field: Field, to section: DDSection) {
+        guard let index = sections.firstIndex(of: section) else { return }
+                
+        let newField = DDField(context: viewContext)
+        newField.title = field.title
+        newField.section = section
+        newField.order = Int32(section.fields?.count ?? 0)
+        
+        section.addToFields(newField)
+        update(section: section, at: index)
+    }
+    
+    private func update(section: DDSection, at index: Int) {
         withAnimation {
-            let newField = DDField(context: viewContext)
-            newField.title = field.title
-            newField.section = section
-            
-            section.addToFields(newField)
+            sections.remove(at: index)
+            sections.insert(section, at: index)
         }
     }
     
@@ -305,33 +322,42 @@ struct SectionsView: View {
     
     @Binding var sections: [DDSection]
     @Binding var showingAddNewSectionView: Bool
-    var deleteAction: ((DDSection)->())?
+    @State var showingAddNewFieldView: Bool = false
+    @State var showingAddNewFieldDuplicateWarning: Bool = false
+    
+    
+    var deleteSectionAction: ((DDSection)->())?
+    var deleteFieldAction: ((DDField, DDSection)->())
     var addFieldAction: ((Field, DDSection))->()
     @State var fieldValue: String = ""
+    @State var currentSection: DDSection?
     
     var body: some View {
         ForEach(sections) { section in
             Section {
                 ForEach(section.getAllFields()) { field in
                     if let fieldTitle = field.title {
-                    TextField(fieldTitle, text: $fieldValue)
+                        TextField(fieldTitle, text: $fieldValue)
                     }
+                }.onDelete { index in
+                    self.deleteField(offsets: index, in: section)
                 }
                 Menu {
                     Button(role: .destructive) {
-                        self.showingAddNewSectionView = true
+                        currentSection = section
+                        self.showingAddNewFieldView = true
                     } label: {
                         Text("Custom")
                     }
                     ForEach(FieldOptions.allOptions, id: \.title) { field in
-//                        let dupCheck = duplicateCheck?(section) ?? false
-//                        if !dupCheck {
-                            Button {
-                                addFieldAction((field, section))
-                            } label: {
-                                Text(field.title)
-                            }
-//                        }
+                        //                        let dupCheck = duplicateCheck?(section) ?? false
+                        //                        if !dupCheck {
+                        Button {
+                            addFieldAction((field, section))
+                        } label: {
+                            Text(field.title)
+                        }
+                        //                        }
                     }
                 } label: {
                     Label("Add Field", systemImage: "plus.circle")
@@ -342,13 +368,44 @@ struct SectionsView: View {
                     Text(section.name ?? "")
                     Spacer()
                     Button {
-                        deleteAction?(section)
+                        deleteSectionAction?(section)
                     } label: {
                         Image(systemName: "multiply.circle.fill")
                             .foregroundColor(Color.red)
                     }
                 }
             }
+            .sheet(isPresented: $showingAddNewFieldView) {
+                AddNewView(isPresented: $showingAddNewFieldView, folderDoesExsistAlertShown: $showingAddNewFieldDuplicateWarning, type: .field, addAction: addNewField)
+            }
         }
     }
+    
+    private func deleteField(offsets: IndexSet, in section: DDSection) {
+        let fields = section.getAllFields()
+        guard let index = offsets.first, index < fields.count else {return}
+        let fieldToDelete = fields[index]
+        deleteFieldAction(fieldToDelete, section)
+        //        withAnimation {
+        //            offsets.map { folders[$0] }.forEach(viewContext.delete)
+        //
+        //            do {
+        //                try viewContext.save()
+        //            } catch {
+        //                // Replace this implementation with code to handle the error appropriately.
+        //                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+        //                let nsError = error as NSError
+        //                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+        //            }
+        //        }
+    }
+    
+    private func addNewField(_ name: String) {
+        if let section = currentSection {
+            let field = Field(title: name, type: .string)
+        addFieldAction((field, section))
+        }
+        showingAddNewFieldView = false
+    }
+    
 }

@@ -1,0 +1,20 @@
+//
+//  AddNewDocumentController.swift
+//  DuckDepo
+//
+//  Created by Evgeny Mitko on 01/11/2021.
+//
+
+import SwiftUI
+
+
+class AddNewDocumentViewModel: ObservableObject {
+    
+    @Environment(\.managedObjectContext) private var viewContext
+
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \DDFolder.order, ascending: true)], predicate: nil, animation: .default)
+    @Published private var folders: FetchedResults<DDFolder>
+
+    
+    
+}

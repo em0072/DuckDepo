@@ -42,7 +42,7 @@ extension DDSection {
 
 extension DDSection {
     public func getAllFields() -> [DDField] {
-        return Array(fields ?? [])
+        return Array(fields ?? []).sorted()
     }
 }
 

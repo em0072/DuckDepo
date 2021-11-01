@@ -24,6 +24,14 @@ extension DDField {
 
 }
 
+extension DDField: Comparable {
+    public static func < (lhs: DDField, rhs: DDField) -> Bool {
+        lhs.order < rhs.order
+    }
+    
+    
+}
+
 extension DDField : Identifiable {
 
 }
