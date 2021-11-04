@@ -136,7 +136,7 @@ struct DocumentView: View {
 struct DocumentView_Previews: PreviewProvider {
     
     static var document: DDDocument = {
-        let context = PersistenceController.shared.container.viewContext
+        let context = PersistenceController.shared.context
         let document = DDDocument(context: context)
         document.name = "Test Doc"
         document.addToPhotos([UIImage(named: "duck")!, UIImage(named: "duck")!, UIImage(named: "duck")!])

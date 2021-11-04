@@ -75,7 +75,7 @@ struct EditFoldersView: View {
             withAnimation {
                 let newFolder = DDFolder(context: viewContext)
                 newFolder.name = name
-                newFolder.order = Int32(DDFolder.getRecordsCount() ?? 0)
+                newFolder.order = Int32(DDFolder.fetchCount())
                 do {
                     try viewContext.save()
                 } catch {
@@ -105,8 +105,8 @@ struct EditFoldersView: View {
     
 }
 
-struct EditFoldersView_Previews: PreviewProvider {
-    static var previews: some View {
-        EditFoldersView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
-    }
-}
+//struct EditFoldersView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        EditFoldersView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+//    }
+//}

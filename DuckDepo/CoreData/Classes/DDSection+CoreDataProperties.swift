@@ -66,7 +66,9 @@ extension DDSection {
         self.order = Int32(order)
         for index in 0..<object.fields.count {
             let field = object.fields[index]
-            self.addToFields(DDField(viewContext: viewContext, object: field, order: index, section: self))
+            if !field.value.isEmpty {
+                self.addToFields(DDField(viewContext: viewContext, object: field, order: index, section: self))
+            }
         }
     }
     
