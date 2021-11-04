@@ -17,7 +17,7 @@ class InitialSetup {
     
     static let main = InitialSetup()
     
-    private var viewContext = PersistenceController.shared.container.viewContext
+    private var viewContext = PersistenceController.shared.context
 
     
     private init() {}

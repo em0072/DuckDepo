@@ -44,12 +44,21 @@ extension DDFolder {
 
 extension DDFolder {
     
-    static func getRecordsCount() -> Int? {
+    static func fetchCount() -> Int {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: CDEntity.DDFolder)
-        return try? PersistenceController.shared.container.viewContext.count(for: fetchRequest)
+        let count = try? PersistenceController.shared.context.count(for: fetchRequest)
+        return count ?? 0
     }
     
-    public func getDocuments() -> [DDDocument] {
+    public func fetchDocumentsCount() -> Int {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: CDEntity.DDDOcumnet)
+        fetchRequest.predicate = NSPredicate(format: "folder == %@", self)
+        let count = try? PersistenceController.shared.context.count(for: fetchRequest)
+        return count ?? 0
+//        fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \.folder, ascending: true)]
+    }
+    
+    public func fetchDocuments() -> [DDDocument] {
         return Array(documnets ?? []).sorted()
     }
 

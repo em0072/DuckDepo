@@ -6,63 +6,36 @@
 //
 
 import SwiftUI
-import CoreData
-
-protocol EditDocumentViewModelDelegate {
-    var isPresented: Bool { get set }
-    func showAlert(title: String, message: String)
-}
 
 extension EditDocumentView {
-    class ViewModel: NSObject, ObservableObject {
+    class ViewModel: ObservableObject {
         
         enum DocumentType {
             case new
             case existing(Document)
         }
-        
-
-        
-        var viewContext: NSManagedObjectContext = PersistenceController.shared.container.viewContext
-        private let folderController: NSFetchedResultsController<DDFolder>
+                        
+        private let db: DataBase = DataBase.shared
         
         @Published var folders = [DDFolder]()
         @Published var document = Document()
         var type: DocumentType = .new
                 
-        var view: EditDocumentViewModelDelegate?
-                
-        override init() {
-            folderController = NSFetchedResultsController(fetchRequest: DDFolder.fetchRequest(), managedObjectContext: viewContext, sectionNameKeyPath: nil, cacheName: nil)
-            super.init()
-            folderController.delegate = self
-            fetchFolders()
-            
-        }
+        var view: EditDocumentView?
         
-        func fetchFolders() {
-            do {
-                try folderController.performFetch()
-                folders = folderController.fetchedObjects ?? []
-            } catch {
-                print("failed to fetch items!")
-            }
+        init() {
+            folders = db.fetchFolder()
         }
         
         //MARK: -Data Manipulation
         private func saveDocument() {
             switch type {
             case .new:
-                let folderToSave = folders[selectedFolder]
-                let order = folderToSave.getDocuments().count
-                _ = DDDocument(viewContext: viewContext, object: document, order: order, folder: folderToSave)
+                db.save(document, in: folders[selectedFolder])
             case .existing(_):
-                if let fetchedDDDocument = DDDocument.fetchDocument(with: document.id, viewContext: viewContext) {
-                    let folderToSave = folders[selectedFolder]
-                    fetchedDDDocument.update(with: document, and: folderToSave, viewContext: viewContext)
-                }
+                db.update(document, in: folders[selectedFolder])
             }
-            save()
+            view?.isPresented = false
         }
         
         func updateViewWith(document: Document) {
@@ -77,24 +50,10 @@ extension EditDocumentView {
         }
         
         func delete() {
-            if let fetchedDDDocument = DDDocument.fetchDocument(with: document.id, viewContext: viewContext) {
-                viewContext.delete(fetchedDDDocument)
-                save()
-                view?.isPresented = false
-            }
+            db.delete(document)
+            view?.isPresented = false
         }
-        
-        func save() {
-            do {
-                try viewContext.save()
-                view?.isPresented = false
-            } catch {
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
-
-        }
-                
+                        
         
         //MARK: -Name & Folder
         //MARK: State
@@ -116,7 +75,7 @@ extension EditDocumentView {
         @Published var addButtonisDisabled: Bool = true
         //MARK: Functions
         func addNewDocumentButtonAction() {
-            if folders[selectedFolder].getDocuments().map({ $0.name }).contains(document.name), case .new = type {
+            if folders[selectedFolder].fetchDocuments().map({ $0.name }).contains(document.name), case .new = type {
                 view?.showAlert(title: "Duplicate", message: "The document with this name already exsists. Please choose a different name.")
             } else {
                 saveDocument()
@@ -215,12 +174,12 @@ extension EditDocumentView.ViewModel: AddSectionMenuDelegate {
     
 }
 
-// MARK: -NSFetchedResultsControllerDelegate
-extension EditDocumentView.ViewModel: NSFetchedResultsControllerDelegate {
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        guard let folders = controller.fetchedObjects as? [DDFolder]
-        else { return }
-        
-        self.folders = folders
-    }
-}
+//// MARK: -NSFetchedResultsControllerDelegate
+//extension EditDocumentView.ViewModel: NSFetchedResultsControllerDelegate {
+//    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+//        guard let folders = controller.fetchedObjects as? [DDFolder]
+//        else { return }
+//
+//        self.folders = folders
+//    }
+//}

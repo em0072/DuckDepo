@@ -49,6 +49,7 @@
 		758ABD132729828F0074F61A /* EditDocumentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758ABD122729828F0074F61A /* EditDocumentView.swift */; };
 		75A021ED27343B53001484BA /* ShareSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A021EC27343B53001484BA /* ShareSheetView.swift */; };
 		75A021F027343E48001484BA /* Biometric Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A021EF27343E48001484BA /* Biometric Controller.swift */; };
+		75A021F227347E86001484BA /* DataBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A021F127347E86001484BA /* DataBase.swift */; };
 		75AB83E12733E2C9000618F1 /* Pill Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75AB83E02733E2C9000618F1 /* Pill Notification.swift */; };
 		75AB83E32733E77D000618F1 /* Notification.Name extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75AB83E22733E77D000618F1 /* Notification.Name extension.swift */; };
 		75C5CFBD272C7C9200C90C3C /* FloatingTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C5CFBC272C7C9200C90C3C /* FloatingTextField.swift */; };
@@ -106,6 +107,7 @@
 		758ABD122729828F0074F61A /* EditDocumentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDocumentView.swift; sourceTree = "<group>"; };
 		75A021EC27343B53001484BA /* ShareSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheetView.swift; sourceTree = "<group>"; };
 		75A021EF27343E48001484BA /* Biometric Controller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Biometric Controller.swift"; sourceTree = "<group>"; };
+		75A021F127347E86001484BA /* DataBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBase.swift; sourceTree = "<group>"; };
 		75AB83E02733E2C9000618F1 /* Pill Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Pill Notification.swift"; sourceTree = "<group>"; };
 		75AB83E22733E77D000618F1 /* Notification.Name extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification.Name extension.swift"; sourceTree = "<group>"; };
 		75C5CFBC272C7C9200C90C3C /* FloatingTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingTextField.swift; sourceTree = "<group>"; };
@@ -149,14 +151,15 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
-		7557599B272FFD8700DA8B9A /* Add New Document */ = {
+		7557599B272FFD8700DA8B9A /* Edit Document */ = {
 			isa = PBXGroup;
 			children = (
+				755759A52730449B00DA8B9A /* Models */,
 				758ABD122729828F0074F61A /* EditDocumentView.swift */,
 				75575999272FE66400DA8B9A /* EditDocumentViewModel.swift */,
 				7557599C272FFDA400DA8B9A /* Subviews */,
 			);
-			path = "Add New Document";
+			path = "Edit Document";
 			sourceTree = "<group>";
 		};
 		7557599C272FFDA400DA8B9A /* Subviews */ = {
@@ -205,12 +208,10 @@
 				756AF0C32726C4CD001CB821 /* Info.plist */,
 				756AF0C22726C4B6001CB821 /* DuckDepo.entitlements */,
 				756AF0AF2726C320001CB821 /* DuckDepoApp.swift */,
-				755759A52730449B00DA8B9A /* Models */,
 				758ABD10272977C50074F61A /* Views */,
 				756AF0B32726C324001CB821 /* Assets.xcassets */,
 				7542D917272819A100DB7A95 /* Helpers */,
 				75A021EE27343E10001484BA /* Controllers */,
-				756AF0BA2726C324001CB821 /* DuckDepo.xcdatamodeld */,
 				75D414F62728002C00355AE7 /* CoreData */,
 				756AF0B52726C324001CB821 /* Preview Content */,
 			);
@@ -230,7 +231,7 @@
 			children = (
 				756AF0B12726C320001CB821 /* ContentView.swift */,
 				75D414FF27280CF300355AE7 /* DepoListView.swift */,
-				7557599B272FFD8700DA8B9A /* Add New Document */,
+				7557599B272FFD8700DA8B9A /* Edit Document */,
 				7574E8EC272AE66B0079B51C /* DocumentView.swift */,
 				75D4150327280F6400355AE7 /* SettingsView.swift */,
 				7542D9152728122D00DB7A95 /* EditFoldersView.swift */,
@@ -299,6 +300,8 @@
 		75D414F62728002C00355AE7 /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
+				756AF0BA2726C324001CB821 /* DuckDepo.xcdatamodeld */,
+				75A021F127347E86001484BA /* DataBase.swift */,
 				75D414EC2727E7A400355AE7 /* Initial Setup.swift */,
 				758ABD11272977D50074F61A /* Classes */,
 			);
@@ -421,6 +424,7 @@
 				756AF0B02726C320001CB821 /* DuckDepoApp.swift in Sources */,
 				75D414F9272800BD00355AE7 /* DDFolder+CoreDataClass.swift in Sources */,
 				755425CF272AA10400733D64 /* PhotoCell.swift in Sources */,
+				75A021F227347E86001484BA /* DataBase.swift in Sources */,
 				75A021F027343E48001484BA /* Biometric Controller.swift in Sources */,
 				7542D9162728122E00DB7A95 /* EditFoldersView.swift in Sources */,
 				753F1FE7272C0A9A00804584 /* CustomButtonStyle.swift in Sources */,

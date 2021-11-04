@@ -10,7 +10,7 @@ import ImageViewer
 
 
 
-struct EditDocumentView: View, EditDocumentViewModelDelegate {
+struct EditDocumentView: View {
     
     
     @StateObject var viewModel = ViewModel()
@@ -93,7 +93,7 @@ struct EditDocumentView: View, EditDocumentViewModelDelegate {
         })
     }
     
-    func titleForSaveButton() -> String {
+    private func titleForSaveButton() -> String {
         switch type {
         case .new:
             return "Add New Document"
