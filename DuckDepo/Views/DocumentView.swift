@@ -7,41 +7,121 @@
 
 import SwiftUI
 import ImageViewer
+import CoreData
+
 
 struct DocumentView: View {
-    
-    let document: DDDocument
-    @State var showingImageViewer = false
-    @State var imageViewerImage: Image?
+
+    @ObservedObject var document: DDDocument
+    @State private var imageViewerImage: Image?
+    @State private var showingImageViewer = false
+    @State private var isEditingDocumentView = false
+    @State private var showShareActionSheet = false
 
     
     var body: some View {
         List {
-            Section("Photos") {
-                if let photos = document.getPhotos(), !photos.isEmpty {
-                    ScrollView(.horizontal) {
-                        LazyHStack {
-                            ForEach(photos, id: \.self) { photo in
-                                PhotoCell(image: photo)
-                                    .onTapGesture {
-                                        self.imageViewerImage = Image(uiImage: photo)
-                                        self.showingImageViewer = true
-                                    }
-
-                            }
-                        }
-                        .frame(height: 150)
+            PhotosView(document: document, imageViewerImage: $imageViewerImage, showingImageViewer: $showingImageViewer)
+            
+            
+            ForEach(document.getSections()) { section in
+                Section {
+                ForEach(section.getAllFields()) { field in
+                    if let fieldTitle = field.title, let fieldValue = field.value {
+                        FloatingTextView(title: fieldTitle, value: fieldValue)
                     }
-                    .padding([.trailing, .leading], -12)
-                } else {
-                    Text("No Photos")
                 }
+                } header: {
+                    Text(section.name ?? "")
+                }
+                
+            }
+            
+        }
+        .navigationBarTitleDisplayMode(.large)
+        .navigationBarTitle(Text((document.name ?? "")))
+        .toolbar {
+            ToolbarItemGroup(placement: .navigationBarTrailing) {
+//                ToolbarItem {
+                    Button(action: shareInfo) {
+                        Image(systemName: "square.and.arrow.up")
+                    }
+//                }
+//                ToolbarItem {
+                    Button(action: {
+                        self.isEditingDocumentView = true
+                    }) {
+                        Image(systemName: "pencil")
+                    }
+//                }
             }
         }
-        .navigationBarTitle(Text((document.name ?? "")))
         .fullScreenCover(isPresented: $showingImageViewer, onDismiss: nil) {
             ImageViewer(image: $imageViewerImage, viewerShown: $showingImageViewer)
         }
+        .sheet(isPresented: $isEditingDocumentView) {
+            let document = document.convert()
+            EditDocumentView(isPresented: $isEditingDocumentView, type: .existing(document))
+        }
+        .actionSheet(isPresented: $showShareActionSheet, content: {
+                ActionSheet(title: Text("Share Document"),
+                        message: Text("Would you like to share document photos or text information?"),
+                        buttons: [
+                            .default(Text("Photos")) {
+                      sharePhotos()
+                            },
+                  .default(Text("Text")) {
+                      shareText()
+                  },
+                  .cancel()
+                ])
+        })
+
+
+    }
+    
+    private func shareInfo() {
+        if document.getPhotos()?.count ?? 0 == 0 {
+            shareText()
+        } else {
+            showShareActionSheet = true
+        }
+    }
+        
+    private func sharePhotos() {
+        if let photos = document.getPhotos() {
+            share(items: photos)
+        }
+    }
+    
+    private func shareText() {
+        var documentString: String = ""
+        if let docName = document.name {
+            documentString.append("Here is details of ")
+            documentString.append(docName)
+            documentString.append("\n\n")
+        }
+        for section in document.getSections() {
+            documentString.append(section.name ?? "")
+            documentString.append(":")
+            documentString.append("\n")
+            for field in section.getAllFields() {
+                documentString.append(field.title ?? "")
+                documentString.append(": ")
+                documentString.append(field.value ?? "")
+                documentString.append("\n")
+            }
+            documentString.append("\n")
+        }
+        documentString.append("Shared with 🦆 DuckDepo.")
+        documentString.append("\n")
+        documentString.append("https://DuckDepo.com")
+        share(items: [documentString])
+    }
+    
+    private func share(items: [Any]) {
+        let activityController = UIActivityViewController(activityItems: items, applicationActivities: nil)
+        UIApplication.shared.windows.first?.rootViewController!.present(activityController, animated: true, completion: nil)
     }
 }
 
@@ -52,11 +132,41 @@ struct DocumentView_Previews: PreviewProvider {
         let document = DDDocument(context: context)
         document.name = "Test Doc"
         document.addToPhotos([UIImage(named: "duck")!, UIImage(named: "duck")!, UIImage(named: "duck")!])
-
+        
         return document
     }()
     
     static var previews: some View {
         DocumentView(document: DocumentView_Previews.document)
+    }
+}
+
+struct PhotosView: View {
+    
+    @ObservedObject var document: DDDocument
+    @Binding var imageViewerImage: Image?
+    @Binding var showingImageViewer: Bool
+
+    var body: some View {
+        Section("Photos") {
+            if let photos = document.getPhotos(), !photos.isEmpty {
+                ScrollView(.horizontal) {
+                    LazyHStack {
+                        ForEach(photos, id: \.self) { photo in
+                            PhotoCell(image: photo)
+                                .onTapGesture {
+                                    self.imageViewerImage = Image(uiImage: photo)
+                                    self.showingImageViewer = true
+                                }
+                            
+                        }
+                    }
+                    .frame(height: 150)
+                }
+                .padding([.trailing, .leading], -12)
+            } else {
+                Text("No Photos")
+            }
+        }
     }
 }

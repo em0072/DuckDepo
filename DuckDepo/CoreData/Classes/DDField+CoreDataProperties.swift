@@ -28,9 +28,24 @@ extension DDField: Comparable {
     public static func < (lhs: DDField, rhs: DDField) -> Bool {
         lhs.order < rhs.order
     }
+}
+
+extension DDField {
     
+    convenience init(viewContext: NSManagedObjectContext, object: Field, order: Int, section: DDSection?) {
+        self.init(context: viewContext)
+        title = object.title
+        value = object.value
+        self.order = Int32(order)
+        self.section = section
+    }
+    
+    func convert() -> Field {
+        return Field(title: self.title ?? "", value: self.value ?? "")
+    }
     
 }
+
 
 extension DDField : Identifiable {
 

@@ -26,7 +26,7 @@ struct PhotoCell: View {
         .cornerRadius(15)
         .overlay(
                 RoundedRectangle(cornerRadius: 15)
-                    .stroke(Color.black, lineWidth: 0.5)
+                    .stroke(Color(white: 0, opacity: 0), lineWidth: 0.5)
             )
     }
 }

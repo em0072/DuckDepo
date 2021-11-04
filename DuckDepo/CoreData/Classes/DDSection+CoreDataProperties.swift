@@ -40,11 +40,46 @@ extension DDSection {
 
 }
 
+extension DDSection: Comparable {
+    public static func < (lhs: DDSection, rhs: DDSection) -> Bool {
+        lhs.order < rhs.order
+    }
+}
+
+
+
 extension DDSection {
     public func getAllFields() -> [DDField] {
         return Array(fields ?? []).sorted()
     }
+    
+    public func fieldCount() -> Int {
+        return getAllFields().count
+    }
 }
+
+extension DDSection {
+    
+    convenience init(viewContext: NSManagedObjectContext, object: DocSection, order: Int, document: DDDocument?) {
+        self.init(context: viewContext)
+        name = object.name
+        self.order = Int32(order)
+        for index in 0..<object.fields.count {
+            let field = object.fields[index]
+            self.addToFields(DDField(viewContext: viewContext, object: field, order: index, section: self))
+        }
+    }
+    
+    func convert() -> DocSection {
+        var fields = [Field]()
+        for field in getAllFields() {
+            fields.append(field.convert())
+        }
+        return DocSection(name: self.name ?? "", fields: fields)
+    }
+
+}
+
 
 extension DDSection : Identifiable {
 

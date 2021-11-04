@@ -10,7 +10,7 @@ import SwiftUI
 struct AddNewView: View {
     
     enum DataType: String {
-        case folder
+        case folder = "category"
         case section
         case field
     }
@@ -33,10 +33,10 @@ struct AddNewView: View {
             }
             .navigationTitle("New \(type.rawValue.capitalized)")
             .navigationBarTitleDisplayMode(.inline)
-            .navigationBarItems(trailing: Button {
+            .navigationBarItems(leading: Button {
                 self.isPresented = false
             } label: {
-                Text("Dismiss")
+                Image(systemName: "xmark")
             })
         }
     }

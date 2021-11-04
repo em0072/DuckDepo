@@ -9,9 +9,11 @@ import SwiftUI
 import CoreData
 
 struct ContentView: View {
+    
+    @State var isShowingCopyNotification: Bool = false
+    @State var copyNotificationText: String = "Copied"
    
     var body: some View {
-//        NavigationView {
             TabView {
                 DepoListView().tabItem {
                     Label("Depo", systemImage: "archivebox")
@@ -20,9 +22,12 @@ struct ContentView: View {
                     Label("Settings", systemImage: "gear")
                 }.tag(2)
             }
-//        }
+            .onReceive(NotificationCenter.default.publisher(for: .floatingTextFieldCopyNotification)) { _ in
+                isShowingCopyNotification = true
+            }
+            .pillNotification(text: $copyNotificationText, show: $isShowingCopyNotification)
+        
     }
-
 }
 
 struct ContentView_Previews: PreviewProvider {

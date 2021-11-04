@@ -7,19 +7,8 @@
 
 import Foundation
 
-struct Field {
-    var title: String
-    var value: String?
-    var type: SectionOptions.FieldType
-}
-
 enum SectionOptions {
-    
-    enum FieldType {
-        case string
-        case date
-    }
-    
+        
     static let allOptions = [
         "Additional Info",
         "Vehical Info",
@@ -30,18 +19,31 @@ enum SectionOptions {
 }
 
 enum FieldOptions {
+//
+//    static let allOptions = [
+//        Field(title: "Date Of Expiry", order: 1, type: .date),
+//        Field(title: "Issue Date", order: 2, type: .date),
+//        Field(title: "Issued By", order: 3, type: .string),
+//        Field(title: "Nationality", order: 4, type: .string),
+//        Field(title: "Sex", order: 5, type: .string),
+//        Field(title: "Place Of Birth", order: 6, type: .string),
+//        Field(title: "Date Of Birth", order: 7, type: .date),
+//        Field(title: "Full Name", order: 8, type: .string),
+//        Field(title: "Number", order: 9, type: .string)
+//    ]
     
     static let allOptions = [
-        Field(title: "Date Of Expiry", type: .date),
-        Field(title: "Issue Date", type: .date),
-        Field(title: "Issued By", type: .string),
-        Field(title: "Nationality", type: .string),
-        Field(title: "Sex", type: .string),
-        Field(title: "Place Of Birth", type: .string),
-        Field(title: "Date Of Birth", type: .date),
-        Field(title: "Full Name", type: .string),
-        Field(title: "Number", type: .string)
+        "Date Of Expiry",
+        "Issue Date",
+       "Issued By",
+        "Nationality",
+        "Sex",
+        "Place Of Birth",
+        "Date Of Birth",
+        "Full Name",
+        "Number"
     ]
+
     
     
 }

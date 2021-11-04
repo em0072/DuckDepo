@@ -12,14 +12,14 @@ struct AddCell: View {
         ZStack {
             Rectangle()
                 .aspectRatio(1.0, contentMode: .fit)
-                .foregroundColor(Color.white)
+                .foregroundColor(Color.transparent)
             Label("Add Image", systemImage: "plus.circle")
                 .labelStyle(VerticalLabelStyle())
         }
         .cornerRadius(15)
         .overlay(
                 RoundedRectangle(cornerRadius: 15)
-                    .stroke(Color.black, lineWidth: 0.5)
+                    .stroke(Color.duckOutline, lineWidth: 0.5)
             )
     }
 }

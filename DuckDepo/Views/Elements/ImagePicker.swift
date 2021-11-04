@@ -25,9 +25,6 @@ struct ImagePicker: UIViewControllerRepresentable {
                 let compressedImage = uiImage.resized(to: 720)
                 parent.image = compressedImage
             }
-//            if let compressedData = compressedImage.jpegData(compressionQuality: 1) {
-//                    print(compressedData.count)
-//            }
             parent.presentationMode.wrappedValue.dismiss()
         }
 

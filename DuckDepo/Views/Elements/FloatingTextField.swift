@@ -6,30 +6,46 @@
 //
 
 import SwiftUI
+import Combine
+
+protocol FloatingTextFieldDelegate {
+    func valueChangedForField(with id: UUID, newValue: String)
+}
 
 struct FloatingTextField: View {
     
-    @State var text: String = ""
     var title: String
+    var value: String = ""
+    @State var textFieldValue: String = ""
+    var id: UUID
+    var delegate: FloatingTextFieldDelegate?
 
     var body: some View {
-        List {
+//        List {
             ZStack(alignment: .leading) {
                 if let title = title {
-                    withAnimation {
                         Text(title)
-                            .foregroundColor(text.isEmpty ? .gray : Color.accentColor)
-                            .offset(y: text.isEmpty ? 0 : -25)
-                            .scaleEffect(text.isEmpty ? 1 : 0.8, anchor: .leading)
-                    }
+                        .foregroundColor(textFieldValue.isEmpty ? .gray : Color(white: 0.3))
+                        .offset(y: textFieldValue.isEmpty ? -5 : -25)
+                        .scaleEffect(textFieldValue.isEmpty ? 1 : 0.8, anchor: .leading)
                 }
-                TextField("", text: $text)
+                TextField("", text: $textFieldValue)
+                    .offset(y: textFieldValue.isEmpty ? -5 : 0)
             }
-            .padding(.top, text.isEmpty ? 0 : 15)
-            .padding(.bottom, text.isEmpty ? 0 : 5)
-            .animation(.default, value: text)
+            .padding(.top, 15)
+            .padding(.bottom, 5)
+            .animation(.easeInOut(duration: 0.2), value: textFieldValue)
+//        }
+        .onAppear {
+            textFieldValue = value
         }
+        .onChange(of: textFieldValue) { newValue in
+            delegate?.valueChangedForField(with: id, newValue: newValue)
+        }
+        
     }
+    
+    
 }
 
 struct FloatingTextField_Previews: PreviewProvider {
@@ -37,7 +53,7 @@ struct FloatingTextField_Previews: PreviewProvider {
     
     static var previews: some View {
         
-        FloatingTextField(title: "Title")
+        FloatingTextField(title: "Title", id: UUID())
         
     }
 }

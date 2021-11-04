@@ -13,7 +13,10 @@ import CoreData
 extension DDFolder {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<DDFolder> {
-        return NSFetchRequest<DDFolder>(entityName: "DDFolder")
+        let request = NSFetchRequest<DDFolder>(entityName: "DDFolder")
+        let sort = [NSSortDescriptor(keyPath: \DDFolder.order, ascending: true)]
+        request.sortDescriptors = sort
+        return request
     }
 
     @NSManaged public var name: String?
@@ -47,7 +50,7 @@ extension DDFolder {
     }
     
     public func getDocuments() -> [DDDocument] {
-        return Array(documnets ?? [])
+        return Array(documnets ?? []).sorted()
     }
 
     
