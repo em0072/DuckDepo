@@ -19,8 +19,11 @@ struct EditFoldersView: View {
     @State var AddCategoryAlertIsPresented: Bool = false
     @State var isAddingMode: Bool = false
     @State var folderDoesExsistAlertShown: Bool = false
+    @State var isShownDeleteConfirmation: Bool = false
+
 
     var body: some View {
+        ZStack(alignment: .center) {
             List {
                 ForEach(folders) { folder in
                     if let folderName = folder.name {
@@ -32,36 +35,37 @@ struct EditFoldersView: View {
                     }
                 }
                 .onDelete(perform: deleteFolder)
-
-            }
-            
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: {
-                        self.isAddingMode = true
-                    }) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                    .sheet(isPresented: $isAddingMode) {
-                        self.isAddingMode = false
-                    } content: {
-                        AddNewView(isPresented: $isAddingMode, folderDoesExsistAlertShown: $folderDoesExsistAlertShown, type: .folder) { name in
-                            if folders.map({ $0.name }).contains(name) {
-                                self.folderDoesExsistAlertShown = true
-                            } else {
-                                self.addFolder(name: name)
-                                self.isAddingMode = false
-                            }
-                        }
-                    }
-
-                }
                 
             }
-            .navigationTitle("Edit Categories")
+            if folders.count == 0 {
+                Text("Seems like you don't have any categories. press \"+\" button at the top to add your first category.")
+                    .padding()
+                    .multilineTextAlignment(.center)
+            }
+        }
+        .toolbar {
+            ToolbarItemGroup(placement: .navigationBarTrailing) {
+                Button(action: {
+                    self.isAddingMode = true
+                }) {
+                    Label("Add Item", systemImage: "plus")
+                }
+                EditButton()
+            }
+        }
+        .navigationTitle("Edit Categories")
+        .sheet(isPresented: $isAddingMode) {
+            self.isAddingMode = false
+        } content: {
+            AddNewView(isPresented: $isAddingMode, folderDoesExsistAlertShown: $folderDoesExsistAlertShown, type: .folder) { name in
+                if folders.map({ $0.name }).contains(name) {
+                    self.folderDoesExsistAlertShown = true
+                } else {
+                    self.addFolder(name: name)
+                    self.isAddingMode = false
+                }
+            }
+        }
     }
     
     
@@ -83,6 +87,7 @@ struct EditFoldersView: View {
     
     
     private func deleteFolder(offsets: IndexSet) {
+        
         withAnimation {
             offsets.map { folders[$0] }.forEach(viewContext.delete)
             

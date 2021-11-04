@@ -52,10 +52,10 @@ struct PhotosSectionView: View {
                                 ])
                             }
                             .sheet(isPresented: $showingImagePicker, onDismiss: onImagePickerAction) {
-                                ImagePicker(image: $imagePickerSelectedImage)
+                                ImagePickerView(image: $imagePickerSelectedImage)
                             }
                             .sheet(isPresented: $showingCameraView, onDismiss: onCameraPickerAction) {
-                                CameraPicker(imageArray: $cameraPickerSelectedImages)
+                                CameraPickerView(imageArray: $cameraPickerSelectedImages)
                             }
                     }
                     .frame(height: 100)

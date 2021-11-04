@@ -17,7 +17,8 @@ struct DocumentView: View {
     @State private var showingImageViewer = false
     @State private var isEditingDocumentView = false
     @State private var showShareActionSheet = false
-
+    @State private var showShareSheetView = false
+    @State private var sharedItems: [Any]?
     
     var body: some View {
         List {
@@ -58,6 +59,13 @@ struct DocumentView: View {
         }
         .fullScreenCover(isPresented: $showingImageViewer, onDismiss: nil) {
             ImageViewer(image: $imageViewerImage, viewerShown: $showingImageViewer)
+        }
+        .sheet(isPresented: $showShareSheetView, onDismiss: {
+            sharedItems = nil
+        }) {
+            if let items = sharedItems {
+                ShareSheetView(items: .constant(items))
+            }
         }
         .sheet(isPresented: $isEditingDocumentView) {
             let document = document.convert()
@@ -120,8 +128,8 @@ struct DocumentView: View {
     }
     
     private func share(items: [Any]) {
-        let activityController = UIActivityViewController(activityItems: items, applicationActivities: nil)
-        UIApplication.shared.windows.first?.rootViewController!.present(activityController, animated: true, completion: nil)
+        sharedItems = items
+        showShareSheetView = true
     }
 }
 

@@ -8,7 +8,7 @@
 import CoreData
 import CloudKit
 
-struct PersistenceController {
+class PersistenceController {
     static let shared = PersistenceController()
 
     static var preview: PersistenceController = {

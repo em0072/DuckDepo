@@ -8,16 +8,16 @@
 import SwiftUI
 import VisionKit
 
-struct CameraPicker: UIViewControllerRepresentable {
+struct CameraPickerView: UIViewControllerRepresentable {
     @Environment(\.presentationMode) var presentationMode
     @Binding var imageArray: [UIImage]?
     
     
     class Coordinator: NSObject, VNDocumentCameraViewControllerDelegate {
         
-        let parent: CameraPicker
+        let parent: CameraPickerView
 
-        init(_ parent: CameraPicker) {
+        init(_ parent: CameraPickerView) {
             self.parent = parent
         }
         
@@ -48,13 +48,13 @@ struct CameraPicker: UIViewControllerRepresentable {
     }
 
 
-    func makeUIViewController(context: UIViewControllerRepresentableContext<CameraPicker>) -> VNDocumentCameraViewController {
+    func makeUIViewController(context: UIViewControllerRepresentableContext<CameraPickerView>) -> VNDocumentCameraViewController {
         let camera = VNDocumentCameraViewController()
         camera.delegate = context.coordinator
         return camera
     }
 
-    func updateUIViewController(_ uiViewController: VNDocumentCameraViewController, context: UIViewControllerRepresentableContext<CameraPicker>) {
+    func updateUIViewController(_ uiViewController: VNDocumentCameraViewController, context: UIViewControllerRepresentableContext<CameraPickerView>) {
 
     }
 }
