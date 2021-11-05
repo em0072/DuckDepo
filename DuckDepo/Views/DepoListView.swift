@@ -22,8 +22,7 @@ struct DepoListView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                List {
-                    ForEach(folders) { folder in
+                List(folders) { folder in
                         if let folderName = folder.name {
                             Section {
                                 if let dddocuments = folder.fetchDocuments() {
@@ -38,7 +37,6 @@ struct DepoListView: View {
                             }
                             
                         }
-                    }
                 }
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
@@ -73,7 +71,6 @@ struct DepoListView: View {
                 }
             }
         }
-
     }
     
     private func addFolder(name: String?) {
