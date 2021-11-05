@@ -87,7 +87,16 @@ extension EditDocumentView {
 
 // MARK: -PhotosSectionViewDelegate
 extension EditDocumentView.ViewModel: PhotosSectionViewDelegate {
-    func select(photo: UIImage, at index: Int?) {
+    
+    func delete(photo: UIImage) {
+        if let index = document.photos.firstIndex(of: photo) {
+            withAnimation {
+                document.photos.remove(at: index)
+            }
+        }
+    }
+    
+    func select(photo: UIImage) {
         imageViewerImage = Image(uiImage: photo)
         showingImageViewer = true
     }

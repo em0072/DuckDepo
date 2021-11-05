@@ -15,15 +15,27 @@ struct DepoListView: View {
     
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \DDFolder.order, ascending: true)], predicate: nil, animation: .default)
     private var folders: FetchedResults<DDFolder>
+    @StateObject var viewModel = ViewModel()
         
     @State var isAddingNewDocumentView: Bool = false
     @State var isAddingNewCategoryView: Bool = false
-
+    
+    private var bindableNoFolders: Binding<Bool> { Binding (
+        get: {self.folders.isEmpty},
+        set: {_ in return}
+        )
+    }
+    
+    private var bindableNoDocument: Binding<Bool> { Binding (
+        get: {self.folders.first?.fetchDocumentsCount() ?? 0 == 0},
+        set: {_ in return}
+        )
+    }
+    
     var body: some View {
         NavigationView {
             ZStack {
-                List {
-                    ForEach(folders) { folder in
+                List(folders) { folder in
                         if let folderName = folder.name {
                             Section {
                                 if let dddocuments = folder.fetchDocuments() {
@@ -38,16 +50,18 @@ struct DepoListView: View {
                             }
                             
                         }
-                    }
                 }
                 .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button(action: {
-                            self.isAddingNewDocumentView = true
-                        }) {
-                            Label("Add Item", systemImage: "plus")
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            if !folders.isEmpty {
+                                Button(action: {
+                                    self.isAddingNewDocumentView = true
+                                }) {
+                                    Label("Add Item", systemImage: "plus")
+                                }
+                            }
                         }
-                    }
+//                    }
                 }
                 .navigationBarTitle(Text("🦆 Depo"))
                 .sheet(isPresented: $isAddingNewCategoryView) {
@@ -64,17 +78,19 @@ struct DepoListView: View {
 
                 
                 // Initial Instructions
-                InitialInstructionsView(folderCount: Binding(get: {
-                    folders.count
-                }, set:{ _ in return}), documentCount: Binding(get: {
-                        folders.first?.fetchDocumentsCount() ?? 0
-                }, set: { _ in return})) {
-                    isAddingNewCategoryView = true
-                }
+                InitialInstructionsView(noFolders: bindableNoFolders,
+                                        noDocuments: bindableNoDocument,
+                                        isShowingNewCategoryAdd: $isAddingNewCategoryView,
+                                        isShowingNewDocumentAdd: $isAddingNewDocumentView)
             }
+        }
+        .onAppear {
+            viewModel.view = self
         }
 
     }
+    
+    
     
     private func addFolder(name: String?) {
         guard let name = name else { return }
@@ -108,32 +124,50 @@ struct DocumentRow: View {
 
 struct InitialInstructionsView: View {
     
-    @Binding var folderCount: Int
-    @Binding var documentCount: Int
-    var onNewCategorAdd: ()->()
-    
+    @Binding var noFolders: Bool
+    @Binding var noDocuments: Bool
+    @Binding var isShowingNewCategoryAdd: Bool
+    @Binding var isShowingNewDocumentAdd: Bool
     
     var body: some View {
-        if folderCount == 0 {
+        if noFolders {
             VStack(alignment: .center) {
-                Text("Wow! It looks empty here. Press the button below to add your first category.")
-                    .padding()
-                    .multilineTextAlignment(.center)
+                VStack {
+                Text("Yikes!")
+                        .padding(.bottom, 5)
+                Text("It looks empty here. Let's add a new category to store your documents in.")
+                }
+                .padding()
+                .multilineTextAlignment(.center)
                 Button {
-                    onNewCategorAdd()
+                    isShowingNewCategoryAdd = true
                 } label: {
                     Text("Add Category")
                 }
+                .padding(.bottom, 15)
+                Text("If you already used DuckDepo on another device, please give it a moment to update the database.")
+                    .font(.caption2)
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(Color(uiColor: .lightGray))
+                    .padding()
             }
-        } else if folderCount == 1 && documentCount == 0 {
-                VStack {
+        } else if noDocuments {
+            VStack {
+                    VStack {
                     Text("🎉")
                         .font(.largeTitle)
-                        .padding()
-                    Text("Nice, you have first category! Now press \"+\" button at the top to add your first document.")
-                        .multilineTextAlignment(.center)
-                }
-//            }
+                    Text("Congratulations!")
+                            .padding(.bottom, 5)
+                    Text("You created your first category and looks like you are ready to add your first document")
+                    }
+                    .multilineTextAlignment(.center)
+                    .padding()
+                    Button {
+                        isShowingNewDocumentAdd = true
+                    } label: {
+                        Text("Add Document")
+                    }
+            }
         }
     }
 }

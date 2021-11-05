@@ -61,6 +61,7 @@
 		75D414FE2728021700355AE7 /* DDDocument+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D414FC2728021700355AE7 /* DDDocument+CoreDataProperties.swift */; };
 		75D4150027280CF300355AE7 /* DepoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D414FF27280CF300355AE7 /* DepoListView.swift */; };
 		75D4150427280F6400355AE7 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D4150327280F6400355AE7 /* SettingsView.swift */; };
+		75F13FE527351FF60022F1B0 /* DepoListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F13FE427351FF50022F1B0 /* DepoListViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -119,6 +120,7 @@
 		75D414FC2728021700355AE7 /* DDDocument+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DDDocument+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		75D414FF27280CF300355AE7 /* DepoListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepoListView.swift; sourceTree = "<group>"; };
 		75D4150327280F6400355AE7 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		75F13FE427351FF50022F1B0 /* DepoListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepoListViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -231,6 +233,7 @@
 			children = (
 				756AF0B12726C320001CB821 /* ContentView.swift */,
 				75D414FF27280CF300355AE7 /* DepoListView.swift */,
+				75F13FE427351FF50022F1B0 /* DepoListViewModel.swift */,
 				7557599B272FFD8700DA8B9A /* Edit Document */,
 				7574E8EC272AE66B0079B51C /* DocumentView.swift */,
 				75D4150327280F6400355AE7 /* SettingsView.swift */,
@@ -385,6 +388,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75F13FE527351FF60022F1B0 /* DepoListViewModel.swift in Sources */,
 				75D414FE2728021700355AE7 /* DDDocument+CoreDataProperties.swift in Sources */,
 				7557599A272FE66400DA8B9A /* EditDocumentViewModel.swift in Sources */,
 				75D414FA272800BD00355AE7 /* DDFolder+CoreDataProperties.swift in Sources */,

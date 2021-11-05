@@ -12,7 +12,7 @@ import CoreData
 
 struct DocumentView: View {
 
-    @ObservedObject var document: DDDocument
+    @StateObject var document: DDDocument
     @State private var imageViewerImage: Image?
     @State private var showingImageViewer = false
     @State private var isEditingDocumentView = false
@@ -39,6 +39,13 @@ struct DocumentView: View {
             }
             
         }
+        .onAppear {
+            print("DocumentView onAppear")
+        }
+        .onChange(of: document, perform: { newValue in
+            print("DocumentView onChange")
+
+        })
         .navigationBarTitleDisplayMode(.large)
         .navigationBarTitle(Text((document.name ?? "")))
         .toolbar {
@@ -67,7 +74,7 @@ struct DocumentView: View {
                 ShareSheetView(items: .constant(items))
             }
         }
-        .sheet(isPresented: $isEditingDocumentView) {
+        .fullScreenCover(isPresented: $isEditingDocumentView) {
             let document = document.convert()
             EditDocumentView(isPresented: $isEditingDocumentView, type: .existing(document))
         }
@@ -84,6 +91,7 @@ struct DocumentView: View {
                   .cancel()
                 ])
         })
+        .animation(.default, value: document)
 
 
     }
@@ -169,7 +177,7 @@ struct PhotosView: View {
                             
                         }
                     }
-                    .frame(height: 150)
+                    .frame(height: 70)
                 }
                 .padding([.trailing, .leading], -12)
             } else {

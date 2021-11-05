@@ -8,9 +8,10 @@
 import SwiftUI
 
 protocol PhotosSectionViewDelegate {
-    func select(photo: UIImage, at index: Int?)
+    func select(photo: UIImage)
     func photoPicked(didPickPhoto photo: UIImage)
     func cameraPicker(didPickPhotos photos: [UIImage])
+    func delete(photo: UIImage)
 }
 
 struct PhotosSectionView: View {
@@ -29,39 +30,50 @@ struct PhotosSectionView: View {
             ScrollView(.horizontal) {
                 ScrollViewReader { scrollProxy in
                     LazyHStack {
-                        ForEach(images, id: \.self) { image in
-                            PhotoCell(image: image)
-                                .onTapGesture {
-                                    delegate?.select(photo: image, at: images.firstIndex(of: image))
-                                }
-                        }
-                        
                         AddCell()
                             .onTapGesture {
                                 showingPhotoChooser = true
                             }
-                            .actionSheet(isPresented: $showingPhotoChooser) {
-                                ActionSheet(title: Text("Do you want to scan a document with camera or choose it from photo library?"), buttons: [
-                                    .default(Text("Camera")) {
-                                        showingCameraView = true
-                                    },
-                                    .default(Text("Photo Library")) {
-                                        showingImagePicker = true
-                                    },
-                                    .cancel()
-                                ])
+
+                        ForEach(images, id: \.self) { image in
+                            ZStack(alignment: .topTrailing) {
+                                PhotoCell(image: image)
+                                    .onTapGesture {
+                                        delegate?.select(photo: image)
+                                    }
+                                Image(systemName: "multiply.circle.fill")
+                                    .foregroundColor(Color.red)
+                                    .frame(width: 20)
+                                    .offset(x: 5, y: -5)
+                                    .onTapGesture {
+                                        delegate?.delete(photo: image)
+                                    }
                             }
-                            .sheet(isPresented: $showingImagePicker, onDismiss: onImagePickerAction) {
-                                ImagePickerView(image: $imagePickerSelectedImage)
-                            }
-                            .sheet(isPresented: $showingCameraView, onDismiss: onCameraPickerAction) {
-                                CameraPickerView(imageArray: $cameraPickerSelectedImages)
-                            }
+                        }
+                        
                     }
-                    .frame(height: 100)
+                    .padding([.top, .bottom], 5)
+                    .frame(height: 75)
                 }
             }
             .padding([.leading, .trailing], -12)
+            .actionSheet(isPresented: $showingPhotoChooser) {
+                ActionSheet(title: Text("Do you want to scan a document with camera or choose it from photo library?"), buttons: [
+                    .default(Text("Camera")) {
+                        showingCameraView = true
+                    },
+                    .default(Text("Photo Library")) {
+                        showingImagePicker = true
+                    },
+                    .cancel()
+                ])
+            }
+            .sheet(isPresented: $showingImagePicker, onDismiss: onImagePickerAction) {
+                ImagePickerView(image: $imagePickerSelectedImage)
+            }
+            .sheet(isPresented: $showingCameraView, onDismiss: onCameraPickerAction) {
+                CameraPickerView(imageArray: $cameraPickerSelectedImages)
+            }
             
         }
     }
@@ -84,5 +96,6 @@ struct PhotosSectionView_Previews: PreviewProvider {
             let images = [UIImage(named: "duck")!, UIImage(named: "duck")!]
             PhotosSectionView(images: .constant(images))
         }
+        
     }
 }

@@ -8,13 +8,25 @@
 import Foundation
 import CoreData
 
-class DataBase: NSObject, NSFetchedResultsControllerDelegate {
+protocol DataBaseDelegate {
+    func updateView()
+}
+
+class DataBase: NSObject, ObservableObject, NSFetchedResultsControllerDelegate {
     
     static let shared = DataBase()
     
     private let context: NSManagedObjectContext = PersistenceController.shared.context
+    private var delegates: [DataBaseDelegate?] = []
         
-    private override init() {}
+    private override init() {
+        super.init()
+        PersistenceController.shared.delegate = self
+    }
+    
+    public func subscribe(_ subscriber: DataBaseDelegate) {
+        delegates.append(subscriber)
+    }
     
     public func fetchFolder() -> [DDFolder] {
         var folders: [DDFolder] = []
@@ -64,4 +76,20 @@ class DataBase: NSObject, NSFetchedResultsControllerDelegate {
 //        }
 //    }
 
+}
+
+
+extension DataBase: PersistenceControllerDelegate {
+    
+    func receivedRemoteChanges() {
+        for delegate in delegates {
+            delegate?.updateView()
+        }
+    }
+    
+    func didSave() {
+        for delegate in delegates {
+            delegate?.updateView()
+        }
+    }
 }

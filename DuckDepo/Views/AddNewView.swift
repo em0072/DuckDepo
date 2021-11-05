@@ -28,7 +28,7 @@ struct AddNewView: View {
                 Color(.systemGroupedBackground)
                     .ignoresSafeArea()
                 VStack() {
-                    AddFolderForm(folderDoesExsistAlertShown: $folderDoesExsistAlertShown, newCategoryName: $newCategoryName, type: type, addAction: addAction)
+                    AddFolderForm(folderDoesExsistAlertShown: $folderDoesExsistAlertShown, name: $newCategoryName, type: type, addAction: addAction)
                 }
             }
             .navigationTitle("New \(type.rawValue.capitalized)")
@@ -46,14 +46,14 @@ struct AddNewView: View {
 struct AddFolderForm: View {
     
     @Binding var folderDoesExsistAlertShown: Bool
-    @Binding var newCategoryName: String
+    @Binding var name: String
     var type: AddNewView.DataType
     var addAction: ((String) -> ())?
     
     var body: some View {
         Form {
             Section {
-                TextField("Add the name of a new \(type.rawValue)", text: $newCategoryName, prompt: Text("New \(type.rawValue.capitalized) Name"))
+                TextField("Add the name of a new \(type.rawValue)", text: $name, prompt: Text("New \(type.rawValue.capitalized) Name"))
             } header: {
                 Text("Enter a name for a new \(type.rawValue)")
             }
@@ -61,15 +61,15 @@ struct AddFolderForm: View {
                 HStack {
                     Spacer()
                 Button(action: {
-                    self.addAction?(newCategoryName)
+                    self.addAction?(name)
                 }, label: {
                     Text("Add new \(type.rawValue)")
                 })
-                    .disabled(newCategoryName.isEmpty)
+                    .disabled(name.isEmpty)
                     Spacer()
                 }
-                .foregroundColor(newCategoryName.isEmpty ? Color(white: 0.5) : Color.black)
-                .listRowBackground(newCategoryName.isEmpty ? Color(white: 0.9) : Color.duckYellow)
+                .foregroundColor(name.isEmpty ? Color.duckDisabledText : Color.black)
+                .listRowBackground(name.isEmpty ? Color.duckDisabledButton : Color.duckYellow)
             }
         }
         .alert("Duplicate", isPresented: $folderDoesExsistAlertShown, actions: {
