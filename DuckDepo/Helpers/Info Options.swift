@@ -7,6 +7,40 @@
 
 import Foundation
 
+struct InputOption: Codable {
+    let sections: [SectionOption]
+    
+    init() {
+        var sections = [SectionOption]()
+        if let url = Bundle.main.url(forResource: "Predefiened Field Options", withExtension: "json"),
+           let data = try? Data(contentsOf: url, options: .dataReadingMapped) {
+            do {
+                let object = try JSONDecoder().decode(InputOption.self, from: data)
+                print(object)
+                sections = object.sections
+            } catch {
+                print(error)
+            }
+        }
+        self.sections = sections
+    }
+    
+    func listOfSectionNames() -> [String] {
+        sections.map { $0.name }
+    }
+}
+
+struct SectionOption: Codable {
+//    var id: UUID = UUID()
+    let name: String
+    let fields: [FieldOption]
+}
+
+struct FieldOption: Codable {
+//    var id: UUID = UUID()
+    let name: String
+}
+
 enum SectionOptions {
         
     static let allOptions = [

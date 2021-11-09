@@ -1,0 +1,81 @@
+{
+  "sections": [
+    {
+      "name": "Document Info",
+      "fields": [
+        {
+          "name": "Number"
+        },
+        {
+          "name": "Issue Date"
+        },
+        {
+          "name": "Issued By"
+        },
+        {
+          "name": "Date Of Expiry"
+        }
+      ]
+    },
+    {
+      "name": "Document Owner",
+      "fields": [
+        {
+          "name": "Full Name"
+        },
+        {
+          "name": "Sex"
+        },
+        {
+          "name": "Date Of Birth"
+        },
+        {
+          "name": "Place Of Birth"
+        },
+        {
+          "name": "Nationality"
+        },
+        {
+          "name": "Phone"
+        }
+      ]
+    },
+    {
+      "name": "Vehical Info",
+      "fields": [
+        {
+          "name": "Licence Plate"
+        },
+        {
+          "name": "Identification Number (VIN)"
+        },
+        {
+          "name": "Make"
+        },
+        {
+          "name": "Model"
+        },
+        {
+          "name": "Type"
+        },
+        {
+          "name": "Color"
+        },
+        {
+          "name": "Power"
+        }
+      ]
+    },
+    {
+      "name": "Additional Info",
+      "fields": [
+        {
+          "name": "Remarks"
+        },
+        {
+          "name": "Notes"
+        }
+      ]
+    }
+  ]
+}

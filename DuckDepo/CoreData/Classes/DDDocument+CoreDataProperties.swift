@@ -22,7 +22,7 @@ extension DDDocument {
     @NSManaged public var order: Int32
     @NSManaged public var name: String?
     @NSManaged public var number: String?
-    @NSManaged public var photos: Data?
+    @NSManaged public var photoData: Data?
     @NSManaged public var folder: DDFolder?
     @NSManaged public var sections: Set<DDSection>?
 
@@ -53,15 +53,16 @@ extension DDDocument: Comparable {
 
 extension DDDocument {
     
+    
     public func addToPhotos(_ images: [UIImage]) {
         let dataArray = NSMutableArray()
             for img in images {
-                if let data = img.jpegData(compressionQuality: 0.5) {
+                if let data = img.jpegData(compressionQuality: 0.3) {
                     dataArray.add(data)
                 }
             }
         do {
-            self.photos = try NSKeyedArchiver.archivedData(withRootObject: dataArray, requiringSecureCoding: false)
+            self.photoData = try NSKeyedArchiver.archivedData(withRootObject: dataArray, requiringSecureCoding: false)
         } catch {
             let nsError = error as NSError
             fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
@@ -70,15 +71,33 @@ extension DDDocument {
 
     public func getPhotos() -> [UIImage]? {
         var retVal = [UIImage]()
-            guard let object = photos else { return nil }
-        if let dataArray = try? NSKeyedUnarchiver.unarchivedArrayOfObjects(ofClass: NSData.self, from: object) { //NSKeyedUnarchiver.unarchivedObject(ofClass: NSArray.self, from: object) {
-                for data in dataArray {
-                    if let image = UIImage(data: data as Data) {
-                        retVal.append(image)
+        guard let object = photoData else { return nil }
+        if let dataArray = try? NSKeyedUnarchiver.unarchivedArrayOfObjects(ofClass: NSData.self, from: object) {
+            for data in dataArray {
+                if let image = UIImage(data: data as Data) {
+                    retVal.append(image)
+                }
+            }
+        }
+        return retVal
+    }
+
+    public func getPhotosAsync(completion: @escaping ([UIImage])->()) {
+        var photos = [UIImage]()
+        DispatchQueue.global(qos: .userInteractive).async {
+            if let photoData = self.photoData {
+                if let dataArray = try? NSKeyedUnarchiver.unarchivedArrayOfObjects(ofClass: NSData.self, from: photoData) {
+                    for data in dataArray {
+                        if let image = UIImage(data: data as Data) {
+                            photos.append(image)
+                        }
                     }
                 }
             }
-            return retVal
+            DispatchQueue.main.async {
+                completion(photos)
+            }
+        }
     }
     
     public func getSections() -> [DDSection] {
@@ -102,7 +121,7 @@ extension DDDocument {
     
     func update(with object: Document, and folder: DDFolder, viewContext: NSManagedObjectContext) {
         self.name = object.name
-        self.photos = nil
+        self.photoData = nil
         addToPhotos(object.photos)
         self.sections = nil
         for index in 0..<object.sections.count {
@@ -114,7 +133,7 @@ extension DDDocument {
     
     func convert() -> Document {
         var sections = [DocSection]()
-        var document = Document(id: self.identifier ?? UUID(), name: self.name ?? "", photos: getPhotos() ?? [], sections: [], folder: self.folder?.name ?? "")
+        var document = Document(id: self.identifier ?? UUID(), name: self.name ?? "", photos: self.getPhotos() ?? [], sections: [], folder: self.folder?.name ?? "")
         for section in getSections() {
             sections.append(section.convert())
         }

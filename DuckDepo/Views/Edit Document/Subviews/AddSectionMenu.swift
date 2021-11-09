@@ -21,30 +21,11 @@ struct AddSectionMenu: View {
     var delegate: AddSectionMenuDelegate?
     
     var body: some View {
-            Menu {
-                Button(role: .destructive) {
-                    self.showingAddNewSectionView = true
-                } label: {
-                    Text("Custom")
-                }
-                ForEach(menuOptions, id: \.self) { section in
-                    let dupCheck = delegate?.sectionIsDuplicate(section) ?? false
-                    if !dupCheck {
-                        Button {
-                            addSection(section)
-                        } label: {
-                            Text(section)
-                        }
-                    }
-                }
-            } label: {
-                Label("Add Section", systemImage: "plus.circle")
-            }
+        addButton
             .frame(maxWidth: .infinity)
             .sheet(isPresented: $showingAddNewSectionView) {
-                AddNewView(isPresented: $showingAddNewSectionView, folderDoesExsistAlertShown: $showDuplicatedAlert, type: .section, addAction: addSection)
+                AddNewView(isPresented: $showingAddNewSectionView, duplicateAlertPresented: $showDuplicatedAlert, type: .section, onSave: addSection)
             }
-            
             .alert("Duplicate", isPresented: $showDuplicatedAlert, actions: {
                 Button("Ok") {
                     self.showDuplicatedAlert = false
@@ -52,6 +33,57 @@ struct AddSectionMenu: View {
             }, message: {
                 Text("The section with this name already exsists. Please choose a different name.")
             })
+    }
+    
+    
+    @ViewBuilder var addButton: some View {
+        if possibleOptions.isEmpty {
+            addCustomSectionbutton
+        } else {
+            menuButton
+        }
+    }
+    
+    var addCustomSectionbutton: some View {
+        Button {
+            self.showingAddNewSectionView = true
+        } label: {
+            Label("Add Section", systemImage: "plus.circle")
+        }
+
+    }
+    
+    var menuButton: some View {
+        Menu {
+            ForEach(possibleOptions, id: \.self) { section in
+//                let dupCheck = delegate?.sectionIsDuplicate(section) ?? false
+//                if !dupCheck {
+                    Button {
+                        addSection(section)
+                    } label: {
+                        Text(section)
+                    }
+//                }
+            }
+            Button(role: .destructive) {
+                self.showingAddNewSectionView = true
+            } label: {
+                Text("Custom")
+            }
+        } label: {
+            Label("Add Section", systemImage: "plus.circle")
+        }
+    }
+    
+    var possibleOptions: [String] {
+        var options = [String]()
+        for option in menuOptions {
+            let dupCheck = delegate?.sectionIsDuplicate(option) ?? false
+            if !dupCheck {
+                options.append(option)
+            }
+        }
+        return options
     }
     
     func addSection(_ name: String) {

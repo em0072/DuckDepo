@@ -18,18 +18,13 @@ struct ContentView: View {
    
     var body: some View {
             TabView {
-//                if isUnlocked {
                 DepoListView().tabItem {
                     Label("Depo", systemImage: "archivebox")
                 }.tag(1)
                 SettingsView().tabItem {
                     Label("Settings", systemImage: "gear")
                 }.tag(2)
-//                }
             }
-//            .onAppear {
-//                authenticate()
-//            }
             .onReceive(NotificationCenter.default.publisher(for: .floatingTextFieldCopyNotification)) { _ in
                 isShowingCopyNotification = true
             }

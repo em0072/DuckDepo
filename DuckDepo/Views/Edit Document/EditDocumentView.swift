@@ -13,9 +13,9 @@ import ImageViewer
 struct EditDocumentView: View {
     
     
-    @StateObject var viewModel = ViewModel()
+    @ObservedObject var viewModel: ViewModel
     @Binding var isPresented: Bool
-    var type: ViewModel.DocumentType
+//    var type: ViewModel.DocumentType
     //MARK: Views States
     @State var isShowingAlert: Bool = false
     @State var isShowingDeleteAlert: Bool = false
@@ -24,11 +24,17 @@ struct EditDocumentView: View {
     @State var showingAddNewSectionView = false
     @State var showingAddNewInfoDuplicateWarning = false
 
-    //    var addAction: (() -> ())?
+
+    var onDismiss: (() -> ())?
     
-    init(isPresented: Binding<Bool>, type: ViewModel.DocumentType = .new) {
+    init(isPresented: Binding<Bool>, type: ViewModel.DocumentType = .new, selectedFolder: String? = nil, onDismiss: (() -> ())? = nil) {
+        self.viewModel = ViewModel()
         _isPresented = isPresented
-        self.type = type
+        viewModel.type = type
+        if let folderName = selectedFolder {
+            viewModel.setSelectedFolder(folderName)
+        }
+
     }
                 
     var body: some View {
@@ -40,25 +46,26 @@ struct EditDocumentView: View {
                         NameAndFolderView(name: $viewModel.document.name, selectedFolder: $viewModel.selectedFolder, folders: $viewModel.folders)
                         PhotosSectionView(images: $viewModel.document.photos, delegate: viewModel)
                         
-                        SectionView(sections: $viewModel.document.sections, delegate: viewModel)
+                        SectionView(sections: $viewModel.document.sections, options: viewModel.inputOption.sections, delegate: viewModel)
 
-                        AddSectionMenu(menuOptions: .constant(SectionOptions.allOptions), delegate: viewModel)
+                        AddSectionMenu(menuOptions: .constant(viewModel.inputOption.listOfSectionNames()), delegate: viewModel)
                         
-                        AddDocumentButton(action: viewModel.addNewDocumentButtonAction, title: titleForSaveButton())
+                        AddDocumentButton(action: viewModel.addNewDocumentButtonAction, title: viewModel.saveButtonTitle)
                             .disabled(viewModel.document.name.isEmpty)
                             .foregroundColor(viewModel.document.name.isEmpty ? Color.duckDisabledText : Color.black)
                             .listRowBackground(viewModel.document.name.isEmpty ? Color.duckDisabledButton : Color.duckYellow)
                     }
             }
-            .navigationTitle(getViewTitle())
+            .navigationTitle(viewModel.viewTitle)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarItems(leading: Button {
+                onDismiss?()
                 self.isPresented = false
             } label: {
                 Image(systemName: "xmark")
             }, trailing:
             Group {
-                if case .existing(_) = type {
+                if case .existing(_) = viewModel.type {
                     Button(action: {
                         self.isShowingDeleteAlert = true
                     }, label: {
@@ -72,9 +79,6 @@ struct EditDocumentView: View {
         .overlay(ImageViewer(image: $viewModel.imageViewerImage, viewerShown: $viewModel.showingImageViewer))
         .onAppear {
             viewModel.view = self
-            if case .existing(let document) = type {
-                viewModel.updateViewWith(document: document)
-            }
         }
         .alert(alertTitle, isPresented: $isShowingAlert, actions: {
             Button("Ok") {
@@ -93,14 +97,6 @@ struct EditDocumentView: View {
         })
     }
     
-    private func titleForSaveButton() -> String {
-        switch type {
-        case .new:
-            return "Add New Document"
-        case .existing(_):
-            return "Save Changes"
-        }
-    }
         
     func showAlert(title: String, message: String) {
         alertTitle = title
@@ -108,15 +104,6 @@ struct EditDocumentView: View {
         isShowingAlert = true
     }
     
-    private func getViewTitle() -> String {
-        switch type {
-        case .new:
-            return "New Document"
-        case .existing(let document):
-            return "Edit \(document.name)"
-        }
-
-    }
 }
 
 struct AddNewDocumentVirew_Previews: PreviewProvider {

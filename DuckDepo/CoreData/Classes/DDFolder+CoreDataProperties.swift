@@ -61,6 +61,21 @@ extension DDFolder {
     public func fetchDocuments() -> [DDDocument] {
         return Array(documnets ?? []).sorted()
     }
+    
+    static func fetchFolder(with name: String, viewContext: NSManagedObjectContext) -> DDFolder? {
+        var fetchedDocument: DDFolder?
+        viewContext.performAndWait {
+            let fetchRequest = DDFolder.fetchRequest()
+            fetchRequest.predicate = DDFolder.predicate(for: name)
+            fetchRequest.fetchLimit = 1
+            fetchedDocument = (try? fetchRequest.execute())?.first
+        }
+        return fetchedDocument
+    }
+    
+    static func predicate(for name: String) -> NSPredicate {
+        return NSPredicate(format: "name = %@", name as CVarArg)
+    }
 
     
 }

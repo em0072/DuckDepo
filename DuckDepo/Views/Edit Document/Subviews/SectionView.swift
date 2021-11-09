@@ -20,14 +20,18 @@ protocol SectionViewDelegate {
 struct SectionView: View {
     
     @Binding var sections: [DocSection]
-
+    var options: [SectionOption]
     var delegate: SectionViewDelegate?
     @State var showingAddNewFieldView: Bool = false
     @State var customFieldSection: DocSection?
     @State var showDuplicatedAlert: Bool = false
+    @State var menuOptions: [String] = FieldOptions.allOptions
 
+    
+    //MARK: - View Bulding
     var body: some View {
-        ForEach(sections) { section in
+        List(sections) { section in
+//            section(for: section)
             Section {
                 ForEach(section.fields) { field in
                     FloatingTextField(title: field.title, value: field.value, id: field.id, delegate: self)
@@ -37,43 +41,35 @@ struct SectionView: View {
                     let fieldToDelete = section.fields[index]
                     delegate?.delete(fieldToDelete, in: section)
                 }
-                Menu {
-                    Button(role: .destructive) {
-                        customFieldSection = section
-                        self.showingAddNewFieldView = true
-                    } label: {
-                        Text("Custom")
-                    }
-                    ForEach(FieldOptions.allOptions, id: \.self) { field in
-                        let dupCheck = delegate?.fieldIsDuplicate(field, in: section) ?? false
-                        if !dupCheck {
-                            Button {
-                                delegate?.addNewFieldWith(name: field, in: section)
-                            } label: {
-                                Text(field)
-                            }
-                        }
-                    }
-                } label: {
-                    Label("Add Field", systemImage: "plus.circle")
-                }
+                    addField(for: section)
+//                Menu {
+//                    ForEach(possibleFields(for: section.name), id: \.self) { field in
+//                        let dupCheck = delegate?.fieldIsDuplicate(field, in: section) ?? false
+//                        if !dupCheck {
+//                            Button {
+//                                delegate?.addNewFieldWith(name: field, in: section)
+//                            } label: {
+//                                Text(field)
+//                            }
+//                        }
+//                    }
+//                    Button(role: .destructive) {
+//                        customFieldSection = section
+//                        self.showingAddNewFieldView = true
+//                    } label: {
+//                        Text("Custom")
+//                    }
+//                } label: {
+//                    Label("Add Field", systemImage: "plus.circle")
+//                }
                 .frame(maxWidth: .infinity)
             } header: {
-                HStack {
-                    Text(section.name)
-                    Spacer()
-                    Button {
-                        delegate?.delete(section)
-                    } label: {
-                        Image(systemName: "multiply.circle.fill")
-                            .foregroundColor(Color.red)
-                    }
-                }
+                sectionHeader(for: section)
             }
             
         }
         .sheet(isPresented: $showingAddNewFieldView) {
-            AddNewView(isPresented: $showingAddNewFieldView, folderDoesExsistAlertShown: $showDuplicatedAlert, type: .field, addAction: addCustomField)
+            AddNewView(isPresented: $showingAddNewFieldView, duplicateAlertPresented: $showDuplicatedAlert, type: .field, onSave: addCustomField)
         }
         .alert("Duplicate", isPresented: $showDuplicatedAlert, actions: {
             Button("Ok") {
@@ -82,8 +78,95 @@ struct SectionView: View {
         }, message: {
             Text("The field with this name already exsists. Please choose a different name.")
         })
-
     }
+    
+    @ViewBuilder func addField(for section: DocSection) -> some View {
+            if possibleFields(in: section).isEmpty {
+                addFieldButton(for: section)
+                    .id(UUID(uuidString: "add"))
+            } else {
+                menuButton(for: section)
+                    .id(UUID(uuidString: "add"))
+            }
+    }
+    
+    @ViewBuilder func addFieldButton(for section: DocSection) -> some View {
+        Button {
+            customFieldSection = section
+            self.showingAddNewFieldView = true
+        } label: {
+            Label("Add Field", systemImage: "plus.circle")
+        }
+    }
+    
+    @ViewBuilder func menuButton(for section: DocSection) -> some View {
+        Menu {
+            ForEach(possibleFields(in: section), id: \.self) { field in
+//                let dupCheck = delegate?.fieldIsDuplicate(field, in: section) ?? false
+//                if !dupCheck {
+                    Button {
+                        delegate?.addNewFieldWith(name: field, in: section)
+                    } label: {
+                        Text(field)
+                    }
+//                }
+            }
+            Button(role: .destructive) {
+                customFieldSection = section
+                self.showingAddNewFieldView = true
+            } label: {
+                Text("Custom")
+            }
+        } label: {
+            Label("Add Field", systemImage: "plus.circle")
+        }
+    }
+    
+    func possibleFields(in section: DocSection) -> [String] {
+        var possibleFields = [String]()
+        for option in options {
+            if option.name == section.name {
+                for field in option.fields {
+                    let dupCheck = delegate?.fieldIsDuplicate(field.name, in: section) ?? false
+                    if !dupCheck {
+                        possibleFields.append(field.name)
+                    }
+                }
+                break
+            }
+        }
+        return possibleFields
+    }
+
+    
+//    func predefinedFields(for section: String) -> [String] {
+//        var possibleFields = [String]()
+//        for sectionOption in options {
+//            if sectionOption.name == section {
+//                possibleFields = sectionOption.fields.map{ $0.name }
+//                break
+//            }
+//        }
+//        return possibleFields
+//    }
+    
+    func sectionHeader(for section: DocSection) -> some View {
+        return HStack {
+            Text(section.name)
+            Spacer()
+            Button {
+                delegate?.delete(section)
+            } label: {
+                Image(systemName: "multiply.circle.fill")
+                    .foregroundColor(Color.red)
+            }
+        }
+    }
+    
+    func fieldOptions(for section: DocSection) -> [String] {
+        FieldOptions.allOptions
+    }
+
     
     private func addCustomField(_ name: String) {
         guard let customFieldSection = customFieldSection else { return }
@@ -123,7 +206,7 @@ struct SectionView_Previews: PreviewProvider {
     
     static var previews: some View {
         Form {
-            SectionView(sections: .constant(doc.sections))
+            SectionView(sections: .constant(doc.sections), options: InputOption().sections)
         }
     }
 }

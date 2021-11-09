@@ -11,21 +11,22 @@ struct AddCell: View {
     var body: some View {
         ZStack {
             Rectangle()
-                .aspectRatio(1.0, contentMode: .fit)
                 .foregroundColor(Color.transparent)
-            Label("Add Image", systemImage: "plus.circle")
-                .labelStyle(VerticalLabelStyle())
+            Image(systemName: "plus.circle")
         }
         .cornerRadius(15)
         .overlay(
                 RoundedRectangle(cornerRadius: 15)
-                    .stroke(Color.duckOutline, lineWidth: 0.5)
+                    .stroke(Color.duckOutline, lineWidth: 1)
             )
+        .aspectRatio(1.0, contentMode: .fit)
+
     }
 }
 
 struct AddCell_Previews: PreviewProvider {
     static var previews: some View {
         AddCell()
+            .frame(height: 50)
     }
 }

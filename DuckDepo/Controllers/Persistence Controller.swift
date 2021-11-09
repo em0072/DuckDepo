@@ -8,7 +8,12 @@
 import CoreData
 import CloudKit
 
-class PersistenceController {
+protocol PersistenceControllerDelegate {
+    func receivedRemoteChanges()
+    func didSave()
+}
+
+class PersistenceController: ObservableObject {
     static let shared = PersistenceController()
     
     //MARK: - Public Properties
@@ -16,7 +21,7 @@ class PersistenceController {
         return container.viewContext
     }
     
-    
+    public var delegate: PersistenceControllerDelegate?
 
     //MARK: - Private Properties
 
@@ -40,7 +45,7 @@ class PersistenceController {
 //        return result
 //    }()
 
-    private let container: NSPersistentCloudKitContainer
+    public let container: NSPersistentCloudKitContainer
 
     init(inMemory: Bool = false) {
         // Prepare container
@@ -48,6 +53,9 @@ class PersistenceController {
         if inMemory {
             container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
         }
+//        for description in container.persistentStoreDescriptions {
+//            description.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
+//        }
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
@@ -57,19 +65,27 @@ class PersistenceController {
         container.viewContext.automaticallyMergesChangesFromParent = true
         
         //Subscribe to change notification from the backgroundContext
-        NotificationCenter.default.addObserver(self, selector: #selector(backgroundContextDidSave(notification:)), name: .NSManagedObjectContextDidSave, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(didSave(_:)), name: .NSManagedObjectContextDidSave, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(coordinatorReceivedRemoteChanges(_:)), name: .NSPersistentStoreRemoteChange, object: nil)
     }
     
-    @objc private func backgroundContextDidSave(notification: Notification) {
-        guard let notificationContext = notification.object as? NSManagedObjectContext else { return }
-
-        guard notificationContext !== context else {
-            return
-        }
-        context.perform {
-            self.context.mergeChanges(fromContextDidSave: notification)
-        }
-    }
+//    @objc private func didSave(_ notification: Notification) {
+//        if let notificationContext = notification.object as? NSManagedObjectContext {
+//            guard notificationContext !== context else {
+//                return
+//            }
+//            context.perform {
+//                self.context.mergeChanges(fromContextDidSave: notification)
+//            }
+//        }
+//        delegate?.didSave()
+//    }
+    
+//    @objc func coordinatorReceivedRemoteChanges(_ notification: Notification) {
+//        DispatchQueue.main.async {
+//            self.delegate?.receivedRemoteChanges()
+//        }
+//    }
     
     public func performBackgroundTask(block: @escaping (NSManagedObjectContext) -> Void) {
         container.performBackgroundTask(block)

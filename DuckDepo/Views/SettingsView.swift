@@ -14,6 +14,7 @@ struct SettingsView: View {
                 CategorySection()
             }.navigationBarTitle(Text("Settings"))
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
