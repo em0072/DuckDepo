@@ -17,7 +17,7 @@ struct AddCell: View {
         .cornerRadius(15)
         .overlay(
                 RoundedRectangle(cornerRadius: 15)
-                    .stroke(Color.duckOutline, lineWidth: 0.5)
+                    .stroke(Color.duckOutline, lineWidth: 1)
             )
         .aspectRatio(1.0, contentMode: .fit)
 

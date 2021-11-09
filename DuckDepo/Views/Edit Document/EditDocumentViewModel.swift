@@ -17,9 +17,17 @@ extension EditDocumentView {
                         
         private let db: DataBase = DataBase.shared
         
-        @Published var folders = [DDFolder]()
-        @Published var document = Document()
-        var type: DocumentType = .new
+        @Published var folders: [DDFolder] = [DDFolder]()
+        @Published var document: Document = Document()
+        var inputOption: InputOption = InputOption()
+        
+        var type: DocumentType = .new {
+            didSet {
+                if case .existing(let document) = type {
+                    updateViewWith(document: document)
+                }
+            }
+        }
                 
         var view: EditDocumentView?
         
@@ -39,7 +47,7 @@ extension EditDocumentView {
         }
         
         func updateViewWith(document: Document) {
-            self.type = .existing(document)
+//            self.type = .existing(document)
             self.document = document
             let docFolder = document.folder
             for (i, folder)  in folders.enumerated() {
@@ -54,13 +62,31 @@ extension EditDocumentView {
             view?.isPresented = false
         }
                         
+        func setSelectedFolder(_ folderName: String) {
+            for (i, folder) in folders.enumerated() {
+                if folder.name == folderName {
+                    selectedFolder = i
+                    return
+                }
+            }
+        }
         
         //MARK: -Name & Folder
+        
+        var viewTitle: String {
+            switch type {
+            case .new:
+                return "New Document"
+            case .existing(let document):
+                return "Edit \(document.name)"
+            }
+        }
+
         //MARK: State
         @Published var selectedFolder: Int = 0
         
         //MARK: Functions
-        
+
         
         //MARK: -Photo Section
         //MARK: State
@@ -71,6 +97,15 @@ extension EditDocumentView {
         
         
         //MARK: -Add Button
+        
+        var saveButtonTitle: String {
+            switch type {
+            case .new:
+                return "Add New Document"
+            case .existing(_):
+                return "Save Changes"
+            }
+        }
         //MARK: State
         @Published var addButtonisDisabled: Bool = true
         //MARK: Functions
@@ -82,6 +117,7 @@ extension EditDocumentView {
             }
         }
         
+        
     }
 }
 
@@ -91,7 +127,7 @@ extension EditDocumentView.ViewModel: PhotosSectionViewDelegate {
     func delete(photo: UIImage) {
         if let index = document.photos.firstIndex(of: photo) {
             withAnimation {
-                document.photos.remove(at: index)
+                _ = document.photos.remove(at: index)
             }
         }
     }

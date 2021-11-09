@@ -35,7 +35,7 @@
 		755759A0273006F700DA8B9A /* AddDocumentButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7557599F273006F700DA8B9A /* AddDocumentButton.swift */; };
 		755759A22730242600DA8B9A /* PhotosSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755759A12730242600DA8B9A /* PhotosSectionView.swift */; };
 		755759A7273044A800DA8B9A /* Field.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755759A6273044A800DA8B9A /* Field.swift */; };
-		755759A9273044BC00DA8B9A /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755759A8273044BC00DA8B9A /* Section.swift */; };
+		755759A9273044BC00DA8B9A /* DocSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755759A8273044BC00DA8B9A /* DocSection.swift */; };
 		755759AB2730450800DA8B9A /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755759AA2730450800DA8B9A /* Document.swift */; };
 		755759AD2730455600DA8B9A /* Folder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755759AC2730455600DA8B9A /* Folder.swift */; };
 		755759AF273045B900DA8B9A /* CoreDataConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755759AE273045B900DA8B9A /* CoreDataConverter.swift */; };
@@ -47,6 +47,11 @@
 		756AF0BC2726C324001CB821 /* DuckDepo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 756AF0BA2726C324001CB821 /* DuckDepo.xcdatamodeld */; };
 		7574E8ED272AE66B0079B51C /* DocumentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7574E8EC272AE66B0079B51C /* DocumentView.swift */; };
 		758ABD132729828F0074F61A /* EditDocumentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758ABD122729828F0074F61A /* EditDocumentView.swift */; };
+		75948C8C273914DC00EB880E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75948C8B273914DC00EB880E /* SceneDelegate.swift */; };
+		75948C902739202D00EB880E /* DocumentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75948C8F2739202D00EB880E /* DocumentViewModel.swift */; };
+		75948C922739250100EB880E /* DepoListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75948C912739250100EB880E /* DepoListViewModel.swift */; };
+		75973025273A734300A105A7 /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75973024273A734300A105A7 /* TestView.swift */; };
+		75973027273A7D2600A105A7 /* Predefiened Field Options.json in Resources */ = {isa = PBXBuildFile; fileRef = 75973026273A7D2600A105A7 /* Predefiened Field Options.json */; };
 		75A021ED27343B53001484BA /* ShareSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A021EC27343B53001484BA /* ShareSheetView.swift */; };
 		75A021F027343E48001484BA /* Biometric Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A021EF27343E48001484BA /* Biometric Controller.swift */; };
 		75A021F227347E86001484BA /* DataBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A021F127347E86001484BA /* DataBase.swift */; };
@@ -61,7 +66,10 @@
 		75D414FE2728021700355AE7 /* DDDocument+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D414FC2728021700355AE7 /* DDDocument+CoreDataProperties.swift */; };
 		75D4150027280CF300355AE7 /* DepoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D414FF27280CF300355AE7 /* DepoListView.swift */; };
 		75D4150427280F6400355AE7 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D4150327280F6400355AE7 /* SettingsView.swift */; };
-		75F13FE527351FF60022F1B0 /* DepoListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F13FE427351FF50022F1B0 /* DepoListViewModel.swift */; };
+		75E8F82427393F0200DCF4BD /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = 75E8F82327393F0200DCF4BD /* Introspect */; };
+		75E8F82A2739540C00DCF4BD /* Cloud Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E8F8292739540C00DCF4BD /* Cloud Controller.swift */; };
+		75E8F82C2739544300DCF4BD /* CloudSharingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E8F82B2739544300DCF4BD /* CloudSharingView.swift */; };
+		75E8F82E273981AB00DCF4BD /* EditFoldersViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E8F82D273981AA00DCF4BD /* EditFoldersViewState.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -91,7 +99,7 @@
 		7557599F273006F700DA8B9A /* AddDocumentButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDocumentButton.swift; sourceTree = "<group>"; };
 		755759A12730242600DA8B9A /* PhotosSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosSectionView.swift; sourceTree = "<group>"; };
 		755759A6273044A800DA8B9A /* Field.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Field.swift; sourceTree = "<group>"; };
-		755759A8273044BC00DA8B9A /* Section.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Section.swift; sourceTree = "<group>"; };
+		755759A8273044BC00DA8B9A /* DocSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocSection.swift; sourceTree = "<group>"; };
 		755759AA2730450800DA8B9A /* Document.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Document.swift; sourceTree = "<group>"; };
 		755759AC2730455600DA8B9A /* Folder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Folder.swift; sourceTree = "<group>"; };
 		755759AE273045B900DA8B9A /* CoreDataConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataConverter.swift; sourceTree = "<group>"; };
@@ -106,6 +114,11 @@
 		756AF0C32726C4CD001CB821 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		7574E8EC272AE66B0079B51C /* DocumentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentView.swift; sourceTree = "<group>"; };
 		758ABD122729828F0074F61A /* EditDocumentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDocumentView.swift; sourceTree = "<group>"; };
+		75948C8B273914DC00EB880E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		75948C8F2739202D00EB880E /* DocumentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentViewModel.swift; sourceTree = "<group>"; };
+		75948C912739250100EB880E /* DepoListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepoListViewModel.swift; sourceTree = "<group>"; };
+		75973024273A734300A105A7 /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
+		75973026273A7D2600A105A7 /* Predefiened Field Options.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Predefiened Field Options.json"; sourceTree = "<group>"; };
 		75A021EC27343B53001484BA /* ShareSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheetView.swift; sourceTree = "<group>"; };
 		75A021EF27343E48001484BA /* Biometric Controller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Biometric Controller.swift"; sourceTree = "<group>"; };
 		75A021F127347E86001484BA /* DataBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBase.swift; sourceTree = "<group>"; };
@@ -120,7 +133,9 @@
 		75D414FC2728021700355AE7 /* DDDocument+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DDDocument+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		75D414FF27280CF300355AE7 /* DepoListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepoListView.swift; sourceTree = "<group>"; };
 		75D4150327280F6400355AE7 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		75F13FE427351FF50022F1B0 /* DepoListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepoListViewModel.swift; sourceTree = "<group>"; };
+		75E8F8292739540C00DCF4BD /* Cloud Controller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Cloud Controller.swift"; sourceTree = "<group>"; };
+		75E8F82B2739544300DCF4BD /* CloudSharingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSharingView.swift; sourceTree = "<group>"; };
+		75E8F82D273981AA00DCF4BD /* EditFoldersViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFoldersViewState.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +144,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				755425D3272AC9C700733D64 /* ImageViewer in Frameworks */,
+				75E8F82427393F0200DCF4BD /* Introspect in Frameworks */,
 				75D414EB2726CA6700355AE7 /* CloudKit.framework in Frameworks */,
 				755425D5272AC9C700733D64 /* ImageViewerRemote in Frameworks */,
 			);
@@ -156,9 +172,9 @@
 		7557599B272FFD8700DA8B9A /* Edit Document */ = {
 			isa = PBXGroup;
 			children = (
-				755759A52730449B00DA8B9A /* Models */,
 				758ABD122729828F0074F61A /* EditDocumentView.swift */,
 				75575999272FE66400DA8B9A /* EditDocumentViewModel.swift */,
+				755759A52730449B00DA8B9A /* Models */,
 				7557599C272FFDA400DA8B9A /* Subviews */,
 			);
 			path = "Edit Document";
@@ -168,10 +184,12 @@
 			isa = PBXGroup;
 			children = (
 				7557599D272FFDCB00DA8B9A /* NameAndFolderView.swift */,
-				7557599F273006F700DA8B9A /* AddDocumentButton.swift */,
 				755759A12730242600DA8B9A /* PhotosSectionView.swift */,
 				7502B5EF27316F2E00E9F0C8 /* SectionView.swift */,
 				7502B5EB27312E3C00E9F0C8 /* AddSectionMenu.swift */,
+				7557599F273006F700DA8B9A /* AddDocumentButton.swift */,
+				755425C8272A98B500733D64 /* AddCell.swift */,
+				755425CE272AA10400733D64 /* PhotoCell.swift */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -180,7 +198,7 @@
 			isa = PBXGroup;
 			children = (
 				755759A6273044A800DA8B9A /* Field.swift */,
-				755759A8273044BC00DA8B9A /* Section.swift */,
+				755759A8273044BC00DA8B9A /* DocSection.swift */,
 				755759AA2730450800DA8B9A /* Document.swift */,
 				755759AC2730455600DA8B9A /* Folder.swift */,
 			);
@@ -207,11 +225,13 @@
 		756AF0AE2726C320001CB821 /* DuckDepo */ = {
 			isa = PBXGroup;
 			children = (
+				756AF0B32726C324001CB821 /* Assets.xcassets */,
 				756AF0C32726C4CD001CB821 /* Info.plist */,
+				75973026273A7D2600A105A7 /* Predefiened Field Options.json */,
 				756AF0C22726C4B6001CB821 /* DuckDepo.entitlements */,
 				756AF0AF2726C320001CB821 /* DuckDepoApp.swift */,
+				75948C8B273914DC00EB880E /* SceneDelegate.swift */,
 				758ABD10272977C50074F61A /* Views */,
-				756AF0B32726C324001CB821 /* Assets.xcassets */,
 				7542D917272819A100DB7A95 /* Helpers */,
 				75A021EE27343E10001484BA /* Controllers */,
 				75D414F62728002C00355AE7 /* CoreData */,
@@ -231,13 +251,14 @@
 		758ABD10272977C50074F61A /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				75973024273A734300A105A7 /* TestView.swift */,
 				756AF0B12726C320001CB821 /* ContentView.swift */,
-				75D414FF27280CF300355AE7 /* DepoListView.swift */,
-				75F13FE427351FF50022F1B0 /* DepoListViewModel.swift */,
+				75E8F830273A64E100DCF4BD /* DepoList */,
 				7557599B272FFD8700DA8B9A /* Edit Document */,
 				7574E8EC272AE66B0079B51C /* DocumentView.swift */,
+				75948C8F2739202D00EB880E /* DocumentViewModel.swift */,
 				75D4150327280F6400355AE7 /* SettingsView.swift */,
-				7542D9152728122D00DB7A95 /* EditFoldersView.swift */,
+				75E8F82F2739857000DCF4BD /* EditFolders */,
 				7542D92027284F4B00DB7A95 /* AddNewView.swift */,
 				758ABD16272987A90074F61A /* Elements */,
 				75A021EB27343B10001484BA /* UIViewControllerRepresentable */,
@@ -264,8 +285,6 @@
 		758ABD16272987A90074F61A /* Elements */ = {
 			isa = PBXGroup;
 			children = (
-				755425C8272A98B500733D64 /* AddCell.swift */,
-				755425CE272AA10400733D64 /* PhotoCell.swift */,
 				75C5CFBC272C7C9200C90C3C /* FloatingTextField.swift */,
 				7502B5F127318F7300E9F0C8 /* FloatingTextView.swift */,
 				75AB83E02733E2C9000618F1 /* Pill Notification.swift */,
@@ -279,6 +298,7 @@
 				755425CC272AA02200733D64 /* ImagePickerView.swift */,
 				755425D6272ACC8D00733D64 /* CameraPickerView.swift */,
 				75A021EC27343B53001484BA /* ShareSheetView.swift */,
+				75E8F82B2739544300DCF4BD /* CloudSharingView.swift */,
 			);
 			path = UIViewControllerRepresentable;
 			sourceTree = "<group>";
@@ -287,6 +307,7 @@
 			isa = PBXGroup;
 			children = (
 				756AF0B82726C324001CB821 /* Persistence Controller.swift */,
+				75E8F8292739540C00DCF4BD /* Cloud Controller.swift */,
 				75A021EF27343E48001484BA /* Biometric Controller.swift */,
 			);
 			path = Controllers;
@@ -311,6 +332,24 @@
 			path = CoreData;
 			sourceTree = "<group>";
 		};
+		75E8F82F2739857000DCF4BD /* EditFolders */ = {
+			isa = PBXGroup;
+			children = (
+				7542D9152728122D00DB7A95 /* EditFoldersView.swift */,
+				75E8F82D273981AA00DCF4BD /* EditFoldersViewState.swift */,
+			);
+			path = EditFolders;
+			sourceTree = "<group>";
+		};
+		75E8F830273A64E100DCF4BD /* DepoList */ = {
+			isa = PBXGroup;
+			children = (
+				75D414FF27280CF300355AE7 /* DepoListView.swift */,
+				75948C912739250100EB880E /* DepoListViewModel.swift */,
+			);
+			path = DepoList;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -330,6 +369,7 @@
 			packageProductDependencies = (
 				755425D2272AC9C700733D64 /* ImageViewer */,
 				755425D4272AC9C700733D64 /* ImageViewerRemote */,
+				75E8F82327393F0200DCF4BD /* Introspect */,
 			);
 			productName = DuckDepo;
 			productReference = 756AF0AC2726C320001CB821 /* DuckDepo.app */;
@@ -361,6 +401,7 @@
 			mainGroup = 756AF0A32726C320001CB821;
 			packageReferences = (
 				755425D1272AC9C700733D64 /* XCRemoteSwiftPackageReference "swiftui-image-viewer" */,
+				75E8F82227393F0100DCF4BD /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
 			);
 			productRefGroup = 756AF0AD2726C320001CB821 /* Products */;
 			projectDirPath = "";
@@ -376,6 +417,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75973027273A7D2600A105A7 /* Predefiened Field Options.json in Resources */,
 				756AF0B72726C324001CB821 /* Preview Assets.xcassets in Resources */,
 				756AF0B42726C324001CB821 /* Assets.xcassets in Resources */,
 			);
@@ -388,21 +430,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				75F13FE527351FF60022F1B0 /* DepoListViewModel.swift in Sources */,
 				75D414FE2728021700355AE7 /* DDDocument+CoreDataProperties.swift in Sources */,
 				7557599A272FE66400DA8B9A /* EditDocumentViewModel.swift in Sources */,
 				75D414FA272800BD00355AE7 /* DDFolder+CoreDataProperties.swift in Sources */,
 				75D4150027280CF300355AE7 /* DepoListView.swift in Sources */,
+				75E8F82A2739540C00DCF4BD /* Cloud Controller.swift in Sources */,
 				7502B5F227318F7400E9F0C8 /* FloatingTextView.swift in Sources */,
 				758ABD132729828F0074F61A /* EditDocumentView.swift in Sources */,
-				755759A9273044BC00DA8B9A /* Section.swift in Sources */,
+				755759A9273044BC00DA8B9A /* DocSection.swift in Sources */,
 				753F1FBF272BE56400804584 /* Color extension.swift in Sources */,
 				7502B5F027316F2E00E9F0C8 /* SectionView.swift in Sources */,
+				75E8F82C2739544300DCF4BD /* CloudSharingView.swift in Sources */,
 				75D414ED2727E7A500355AE7 /* Initial Setup.swift in Sources */,
+				75948C922739250100EB880E /* DepoListViewModel.swift in Sources */,
 				756AF0BC2726C324001CB821 /* DuckDepo.xcdatamodeld in Sources */,
 				755759AB2730450800DA8B9A /* Document.swift in Sources */,
 				7557599E272FFDCB00DA8B9A /* NameAndFolderView.swift in Sources */,
 				75AB83E32733E77D000618F1 /* Notification.Name extension.swift in Sources */,
+				75E8F82E273981AB00DCF4BD /* EditFoldersViewState.swift in Sources */,
+				75948C8C273914DC00EB880E /* SceneDelegate.swift in Sources */,
 				75AB83E12733E2C9000618F1 /* Pill Notification.swift in Sources */,
 				755425C9272A98B500733D64 /* AddCell.swift in Sources */,
 				7574E8ED272AE66B0079B51C /* DocumentView.swift in Sources */,
@@ -412,6 +458,7 @@
 				7542D91F272845D600DB7A95 /* CoreDataEntity.swift in Sources */,
 				753F1FC5272BF3B500804584 /* DDField+CoreDataProperties.swift in Sources */,
 				753F1FE5272C019700804584 /* String Extension.swift in Sources */,
+				75973025273A734300A105A7 /* TestView.swift in Sources */,
 				755759A22730242600DA8B9A /* PhotosSectionView.swift in Sources */,
 				753F1FDB272BF5F000804584 /* DDSection+CoreDataProperties.swift in Sources */,
 				755759A0273006F700DA8B9A /* AddDocumentButton.swift in Sources */,
@@ -420,6 +467,7 @@
 				75C5CFBD272C7C9200C90C3C /* FloatingTextField.swift in Sources */,
 				756AF0B92726C324001CB821 /* Persistence Controller.swift in Sources */,
 				7542D92127284F4C00DB7A95 /* AddNewView.swift in Sources */,
+				75948C902739202D00EB880E /* DocumentViewModel.swift in Sources */,
 				7542D91D27283C9000DB7A95 /* Alert Extension.swift in Sources */,
 				751E9B48272AF7B1008D4D26 /* UIImage Extension.swift in Sources */,
 				75D414FD2728021700355AE7 /* DDDocument+CoreDataClass.swift in Sources */,
@@ -662,6 +710,14 @@
 				kind = branch;
 			};
 		};
+		75E8F82227393F0100DCF4BD /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/siteline/SwiftUI-Introspect";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.3;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -674,6 +730,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 755425D1272AC9C700733D64 /* XCRemoteSwiftPackageReference "swiftui-image-viewer" */;
 			productName = ImageViewerRemote;
+		};
+		75E8F82327393F0200DCF4BD /* Introspect */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 75E8F82227393F0100DCF4BD /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */;
+			productName = Introspect;
 		};
 /* End XCSwiftPackageProductDependency section */
 

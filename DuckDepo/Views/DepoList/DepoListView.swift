@@ -13,9 +13,9 @@ struct DepoListView: View {
     
     @Environment(\.managedObjectContext) private var viewContext
     
-    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \DDFolder.order, ascending: true)], predicate: nil, animation: .default)
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \DDDocument.order, ascending: true)], predicate: nil, animation: .default)
     private var folders: FetchedResults<DDFolder>
-    @StateObject var viewModel = ViewModel()
+    @StateObject private var viewModel: ViewModel = ViewModel()
         
     @State var isAddingNewDocumentView: Bool = false
     @State var isAddingNewCategoryView: Bool = false
@@ -27,7 +27,7 @@ struct DepoListView: View {
     }
     
     private var bindableNoDocument: Binding<Bool> { Binding (
-        get: {self.folders.first?.fetchDocumentsCount() ?? 0 == 0},
+        get: {self.folders.count == 1 && self.folders.first?.fetchDocumentsCount() ?? 0 == 0},
         set: {_ in return}
         )
     }
@@ -45,52 +45,57 @@ struct DepoListView: View {
                                         }
                                     }
                                 }
+                                if folder.fetchDocumentsCount() == 0 {
+                                    Button("Add New Document") {
+                                        viewModel.folderNameToAddDoc = folderName
+                                        isAddingNewDocumentView = true
+                                    }
+                                }
                             } header: {
                                 Text(folderName)
+                                    .font(.headline)
+                                    .foregroundColor(Color(uiColor: .label))
                             }
-                            
+                            .textCase(nil)
+
                         }
                 }
                 .toolbar {
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            if !folders.isEmpty {
-                                Button(action: {
-                                    self.isAddingNewDocumentView = true
-                                }) {
-                                    Label("Add Item", systemImage: "plus")
-                                }
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        if !folders.isEmpty {
+                            Button(action: {
+                                self.isAddingNewDocumentView = true
+                            }) {
+                                Label("Add Item", systemImage: "plus")
                             }
                         }
-//                    }
-                }
-                .navigationBarTitle(Text("🦆 Depo"))
-                .sheet(isPresented: $isAddingNewCategoryView) {
-                    self.isAddingNewCategoryView = false
-                } content: {
-                    AddNewView(isPresented: $isAddingNewCategoryView, folderDoesExsistAlertShown: .constant(false), type: .folder) { name in
-                        self.addFolder(name: name)
-                        self.isAddingNewCategoryView = false
                     }
-                }
-                .fullScreenCover(isPresented: $isAddingNewDocumentView) {
-                    EditDocumentView(isPresented: $isAddingNewDocumentView, type: .new)
-                }
+                    }
 
-                
                 // Initial Instructions
                 InitialInstructionsView(noFolders: bindableNoFolders,
                                         noDocuments: bindableNoDocument,
                                         isShowingNewCategoryAdd: $isAddingNewCategoryView,
                                         isShowingNewDocumentAdd: $isAddingNewDocumentView)
             }
+            .navigationTitle("🦆 Depo")
         }
-        .onAppear {
-            viewModel.view = self
+        .navigationViewStyle(StackNavigationViewStyle())
+        .sheet(isPresented: $isAddingNewCategoryView) {
+            self.isAddingNewCategoryView = false
+        } content: {
+            AddNewView(isPresented: $isAddingNewCategoryView, duplicateAlertPresented: .constant(false), type: .folder, onSave: { name in
+                self.addFolder(name: name)
+                self.isAddingNewCategoryView = false
+            })
         }
-
+        .fullScreenCover(isPresented: $isAddingNewDocumentView) {
+            EditDocumentView(isPresented: $isAddingNewDocumentView, type: .new, selectedFolder: viewModel.folderNameToAddDoc, onDismiss: {
+                viewModel.folderNameToAddDoc = nil
+            })
+        }
     }
-    
-    
+        
     
     private func addFolder(name: String?) {
         guard let name = name else { return }

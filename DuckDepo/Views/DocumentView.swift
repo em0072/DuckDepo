@@ -12,18 +12,18 @@ import CoreData
 
 struct DocumentView: View {
 
-    @StateObject var document: DDDocument
+    @ObservedObject var document: DDDocument
+    @StateObject var viewModel: ViewModel = ViewModel()
+    
     @State private var imageViewerImage: Image?
     @State private var showingImageViewer = false
     @State private var isEditingDocumentView = false
     @State private var showShareActionSheet = false
     @State private var showShareSheetView = false
-    @State private var sharedItems: [Any]?
     
     var body: some View {
         List {
             PhotosView(document: document, imageViewerImage: $imageViewerImage, showingImageViewer: $showingImageViewer)
-            
             
             ForEach(document.getSections()) { section in
                 Section {
@@ -39,39 +39,34 @@ struct DocumentView: View {
             }
             
         }
-        .onAppear {
-            print("DocumentView onAppear")
-        }
-        .onChange(of: document, perform: { newValue in
-            print("DocumentView onChange")
-
-        })
         .navigationBarTitleDisplayMode(.large)
         .navigationBarTitle(Text((document.name ?? "")))
         .toolbar {
             ToolbarItemGroup(placement: .navigationBarTrailing) {
-//                ToolbarItem {
-                    Button(action: shareInfo) {
-                        Image(systemName: "square.and.arrow.up")
-                    }
+//                Button(action: {
+//                    print("Share")
+//                }) {
+//                    Image(systemName: "person.crop.circle.badge.plus")
 //                }
-//                ToolbarItem {
-                    Button(action: {
-                        self.isEditingDocumentView = true
-                    }) {
-                        Image(systemName: "pencil")
-                    }
-//                }
+                
+                Button(action: shareInfo) {
+                    Image(systemName: "square.and.arrow.up")
+                }
+                Button(action: {
+                    self.isEditingDocumentView = true
+                }) {
+                    Image(systemName: "pencil")
+                }
             }
         }
         .fullScreenCover(isPresented: $showingImageViewer, onDismiss: nil) {
             ImageViewer(image: $imageViewerImage, viewerShown: $showingImageViewer)
         }
         .sheet(isPresented: $showShareSheetView, onDismiss: {
-            sharedItems = nil
+            viewModel.itemsToShare = nil
         }) {
-            if let items = sharedItems {
-                ShareSheetView(items: .constant(items))
+            if let items = viewModel.itemsToShare {
+                ShareSheetView(items: items)
             }
         }
         .fullScreenCover(isPresented: $isEditingDocumentView) {
@@ -136,7 +131,7 @@ struct DocumentView: View {
     }
     
     private func share(items: [Any]) {
-        sharedItems = items
+        viewModel.itemsToShare = items
         showShareSheetView = true
     }
 }

@@ -9,21 +9,14 @@ import SwiftUI
 
 struct ShareSheetView: UIViewControllerRepresentable {
     @Environment(\.presentationMode) var presentationMode
-    @Binding var items: [Any]
+    var items: [Any]
     
     
     class Coordinator: NSObject {
-        
-        let parent: ShareSheetView
-
-        init(_ parent: ShareSheetView) {
-            self.parent = parent
-        }
-        
     }
 
-    func makeCoordinator() -> Coordinator {
-        Coordinator(self)
+    func makeCoordinator() -> ShareSheetView.Coordinator {
+        Coordinator()
     }
 
 

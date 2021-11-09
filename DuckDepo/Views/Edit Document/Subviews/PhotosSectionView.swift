@@ -42,6 +42,9 @@ struct PhotosSectionView: View {
                                         delegate?.select(photo: image)
                                     }
                                 Image(systemName: "multiply.circle.fill")
+                                    .background(
+                                      Color.white.mask(Circle())
+                                    )
                                     .foregroundColor(Color.red)
                                     .frame(width: 20)
                                     .offset(x: 5, y: -5)

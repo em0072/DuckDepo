@@ -23,7 +23,6 @@ class InitialSetup {
     private init() {}
     
     func populateCoreDataIfNeeded() {
-        return
         let coreDataIsPopulated = UserDefaults.standard.bool(forKey: InitialKeys.coreDataPopulated)
         guard !coreDataIsPopulated else { return }
         

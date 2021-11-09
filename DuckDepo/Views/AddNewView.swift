@@ -6,21 +6,58 @@
 //
 
 import SwiftUI
+import Introspect
 
 struct AddNewView: View {
     
-    enum DataType: String {
-        case folder = "category"
+    enum DataType {
+        case editFolder(name: String)
+        case folder
         case section
         case field
+        
+        var title: String {
+            switch self {
+            case .folder, .editFolder(_):
+                return "category"
+            case .field:
+                return "field"
+            case .section:
+                return "section"
+            }
+        }
     }
     
     @Binding var isPresented: Bool
     @Binding var folderDoesExsistAlertShown: Bool
-    @State private var newCategoryName: String = ""
+    @State var name: String
     var type: DataType
-    var addAction: ((String) -> ())?
+    var onDismiss: (()->())?
+    var onSave: ((String) -> ())?
     
+    private var title: String {
+        switch type {
+        case .editFolder(let name):
+            return "Edit \(name)"
+        default:
+            return "New \(type.title.capitalized)"
+        }
+    }
+    
+        init(isPresented: Binding<Bool>, duplicateAlertPresented: Binding<Bool>, type: DataType, onDismiss: (()->())? = nil, onSave: ((String) -> ())? = nil) {
+            _isPresented = isPresented
+            _folderDoesExsistAlertShown = duplicateAlertPresented
+            if case .editFolder(let name) = type {
+                self.name = name
+            } else {
+                self.name = ""
+            }
+            self.type = type
+            self.onDismiss = onDismiss
+            self.onSave = onSave
+        }
+
+
     
     var body: some View {
         NavigationView {
@@ -28,18 +65,21 @@ struct AddNewView: View {
                 Color(.systemGroupedBackground)
                     .ignoresSafeArea()
                 VStack() {
-                    AddFolderForm(folderDoesExsistAlertShown: $folderDoesExsistAlertShown, name: $newCategoryName, type: type, addAction: addAction)
+                    AddFolderForm(folderDoesExsistAlertShown: $folderDoesExsistAlertShown, name: $name, type: type, onSave: onSave)
                 }
             }
-            .navigationTitle("New \(type.rawValue.capitalized)")
+            .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarItems(leading: Button {
                 self.isPresented = false
+                onDismiss?()
             } label: {
                 Image(systemName: "xmark")
             })
         }
     }
+    
+    
 }
 
 
@@ -48,22 +88,41 @@ struct AddFolderForm: View {
     @Binding var folderDoesExsistAlertShown: Bool
     @Binding var name: String
     var type: AddNewView.DataType
-    var addAction: ((String) -> ())?
+    var onSave: ((String) -> ())?
+    
+    var sectionTitle: String {
+        switch type {
+        case .editFolder(_):
+            return "Enter a new name for the \(type.title.capitalized)"
+        default:
+            return "Enter a name for a new \(type.title.capitalized)"
+        }
+    }
+    
+    var buttonTitle: String {
+        switch type {
+        case .editFolder(_):
+            return "Edit \(type.title.capitalized)"
+        default:
+            return "Add new \(type.title.capitalized)"
+        }
+    }
+
     
     var body: some View {
         Form {
             Section {
-                TextField("Add the name of a new \(type.rawValue)", text: $name, prompt: Text("New \(type.rawValue.capitalized) Name"))
+                TextField("Add the name of a new \(type.title)", text: $name, prompt: Text("New \(type.title.capitalized) Name"))
             } header: {
-                Text("Enter a name for a new \(type.rawValue)")
+                Text(sectionTitle)
             }
             Section {
                 HStack {
                     Spacer()
                 Button(action: {
-                    self.addAction?(name)
+                    self.onSave?(name)
                 }, label: {
-                    Text("Add new \(type.rawValue)")
+                    Text(buttonTitle)
                 })
                     .disabled(name.isEmpty)
                     Spacer()
@@ -77,7 +136,7 @@ struct AddFolderForm: View {
                 self.folderDoesExsistAlertShown = false
             }
         }, message: {
-            Text("The \(type.rawValue) with this name already exsists. Please choose a different name.")
+            Text("The \(type.title) with this name already exsists. Please choose a different name.")
         })
     }
     
@@ -86,7 +145,7 @@ struct AddFolderForm: View {
 
 struct AddNewFolderView_Previews: PreviewProvider {
     static var previews: some View {
-        AddNewView(isPresented: .constant(true), folderDoesExsistAlertShown: .constant(false), type: .folder, addAction: nil)
+        AddNewView(isPresented: .constant(true), duplicateAlertPresented: .constant(false), type: .folder)
     }
 }
 
