@@ -7,6 +7,8 @@
         <attribute name="number" optional="YES" attributeType="String"/>
         <attribute name="order" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="photoData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <attribute name="shareRecordName" optional="YES" attributeType="String"/>
+        <attribute name="type" optional="YES" attributeType="String"/>
         <relationship name="folder" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DDFolder" inverseName="documnets" inverseEntity="DDFolder"/>
         <relationship name="sections" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="DDSection" inverseName="document" inverseEntity="DDSection"/>
     </entity>
@@ -29,7 +31,7 @@
         <relationship name="fields" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="DDField" inverseName="section" inverseEntity="DDField"/>
     </entity>
     <elements>
-        <element name="DDDocument" positionX="-54" positionY="18" width="128" height="149"/>
+        <element name="DDDocument" positionX="-54" positionY="18" width="128" height="179"/>
         <element name="DDField" positionX="-54" positionY="63" width="128" height="104"/>
         <element name="DDFolder" positionX="-63" positionY="-9" width="128" height="74"/>
         <element name="DDSection" positionX="-63" positionY="54" width="128" height="89"/>

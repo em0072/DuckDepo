@@ -8,6 +8,7 @@
 import SwiftUI
 import ImageViewer
 import CoreData
+import CloudKit
 
 
 struct DocumentView: View {
@@ -20,7 +21,8 @@ struct DocumentView: View {
     @State private var isEditingDocumentView = false
     @State private var showShareActionSheet = false
     @State private var showShareSheetView = false
-    
+    @State private var showCloudShareSheetView = false
+
     var body: some View {
         List {
             PhotosView(document: document, imageViewerImage: $imageViewerImage, showingImageViewer: $showingImageViewer)
@@ -43,11 +45,7 @@ struct DocumentView: View {
         .navigationBarTitle(Text((document.name ?? "")))
         .toolbar {
             ToolbarItemGroup(placement: .navigationBarTrailing) {
-//                Button(action: {
-//                    print("Share")
-//                }) {
-//                    Image(systemName: "person.crop.circle.badge.plus")
-//                }
+                Button(action: shareAction, label: iconForShareButton)
                 
                 Button(action: shareInfo) {
                     Image(systemName: "square.and.arrow.up")
@@ -69,6 +67,7 @@ struct DocumentView: View {
                 ShareSheetView(items: items)
             }
         }
+        .fullScreenCover(isPresented: $viewModel.isCloudSharing, content: shareView)
         .fullScreenCover(isPresented: $isEditingDocumentView) {
             let document = document.convert()
             EditDocumentView(isPresented: $isEditingDocumentView, type: .existing(document))
@@ -87,9 +86,34 @@ struct DocumentView: View {
                 ])
         })
         .animation(.default, value: document)
-
-
     }
+    
+    private func shareAction() {
+        viewModel.share(document: document) { share, container, error in
+            if let shareError = error {
+                print("Couldn't create a share - \(shareError)")
+            } else {
+                DispatchQueue.main.async {
+                    viewModel.activeContainer = container
+                    viewModel.activeShare = share
+                    viewModel.isCloudSharing = true
+                }
+            }
+        }
+    }
+    
+    private func iconForShareButton() -> some View {
+        Image(systemName: viewModel.hasShare(for: document) ? "person.crop.circle.badge.checkmark" : "person.crop.circle.badge.plus")
+            .renderingMode(.original)
+    }
+    
+    private func shareView() -> CloudSharingView? {
+        guard let share = viewModel.activeShare, let container = viewModel.activeContainer else {
+            return nil
+        }
+        return CloudSharingView(container: container, share: share)
+    }
+
     
     private func shareInfo() {
         if document.getPhotos()?.count ?? 0 == 0 {

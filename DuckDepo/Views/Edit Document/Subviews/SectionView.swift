@@ -25,7 +25,6 @@ struct SectionView: View {
     @State var showingAddNewFieldView: Bool = false
     @State var customFieldSection: DocSection?
     @State var showDuplicatedAlert: Bool = false
-    @State var menuOptions: [String] = FieldOptions.allOptions
 
     
     //MARK: - View Bulding
@@ -162,11 +161,6 @@ struct SectionView: View {
             }
         }
     }
-    
-    func fieldOptions(for section: DocSection) -> [String] {
-        FieldOptions.allOptions
-    }
-
     
     private func addCustomField(_ name: String) {
         guard let customFieldSection = customFieldSection else { return }

@@ -9,6 +9,7 @@
 import Foundation
 import CoreData
 import UIKit
+import CloudKit
 
 
 extension DDDocument {
@@ -25,6 +26,9 @@ extension DDDocument {
     @NSManaged public var photoData: Data?
     @NSManaged public var folder: DDFolder?
     @NSManaged public var sections: Set<DDSection>?
+    @NSManaged public var shareRecordName: String?
+    @NSManaged public var type: String?
+    
 
 }
 
@@ -131,6 +135,13 @@ extension DDDocument {
         self.folder = folder
     }
     
+    func updateWithShared(_ object: DDDocument) {
+        self.name = object.name
+        self.photoData = object.photoData
+        self.sections = object.sections
+        self.shareRecordName = object.shareRecordName
+    }
+    
     func convert() -> Document {
         var sections = [DocSection]()
         var document = Document(id: self.identifier ?? UUID(), name: self.name ?? "", photos: self.getPhotos() ?? [], sections: [], folder: self.folder?.name ?? "")
@@ -152,8 +163,66 @@ extension DDDocument {
         return fetchedDocument
     }
     
+    static func fetchDocument(with shareRecordName: String, viewContext: NSManagedObjectContext) -> DDDocument? {
+        var fetchedDocument: DDDocument?
+        viewContext.performAndWait {
+            let fetchRequest = DDDocument.fetchRequest()
+            fetchRequest.predicate = DDDocument.predicateFor(shareRecordName: shareRecordName)
+            fetchRequest.fetchLimit = 1
+            fetchedDocument = (try? fetchRequest.execute())?.first
+        }
+        return fetchedDocument
+    }
+    
+    static func fetchSharedDocument(viewContext: NSManagedObjectContext) -> [DDDocument] {
+        var fetchedDocument: [DDDocument] = []
+        viewContext.performAndWait {
+            let fetchRequest = DDDocument.fetchRequest()
+            fetchRequest.predicate = DDDocument.predicateForShared()
+            if let requestResult = try? fetchRequest.execute() {
+                fetchedDocument = requestResult
+            }
+        }
+        return fetchedDocument
+    }
+
+
+    
     static func predicate(for id: UUID) -> NSPredicate {
         return NSPredicate(format: "identifier = %@", id as CVarArg)
+    }
+    
+    static func predicateFor(shareRecordName: String) -> NSPredicate {
+        return NSPredicate(format: "shareRecordName = %@", shareRecordName as CVarArg)
+    }
+
+    static func predicateForShared() -> NSPredicate {
+        return NSPredicate(format: "type = shared")
+    }
+
+}
+
+extension DDDocument {
+    /// Initializes a `Contact` object from a CloudKit record.
+    /// - Parameter record: CloudKit record to pull values from.
+    convenience init?(record: CKRecord) {
+        print(record)
+//        @NSManaged public var order: Int32
+//        @NSManaged public var name: String?
+//        @NSManaged public var number: String?
+//        @NSManaged public var photoData: Data?
+//        @NSManaged public var folder: DDFolder?
+//        @NSManaged public var sections: Set<DDSection>?
+
+         let name = record["CD_name"] as? String
+//              let photoData = record["CD_photoData"] as? Data else {
+//                  return nil
+//              }
+        self.init(context: PersistenceController.shared.context)
+        self.shareRecordName = record.recordID.recordName
+        self.type = "shared"
+        self.name = name
+//        self.photoData = photoData
     }
 }
 

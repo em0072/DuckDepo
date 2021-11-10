@@ -6,25 +6,27 @@
 //
 
 import SwiftUI
+import CloudKit
 
 struct TestView: View {
     
-    @State var items = InputOption()
+    @State var shares = [CKShare]()
     
     var body: some View {
         ZStack {
             Color.red
-            List(items.sections, id: \.name) { section in
-                Section(section.name) {
-                    ForEach(section.fields, id: \.name) { field in
-                        Text(field.name)
-                    }
-                }
+            List(shares, id: \.url) { share in
+                Text(share.description)
             }
         }
-        .onAppear() {
-            print(items.sections)
+        .onAppear {
+            fetch()
         }
+    }
+    
+    func fetch() {
+        let sh = try? PersistenceController.shared.container.fetchShares(in: nil)
+        shares = sh ?? []
     }
 }
 

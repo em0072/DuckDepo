@@ -46,6 +46,7 @@
 		756AF0B92726C324001CB821 /* Persistence Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756AF0B82726C324001CB821 /* Persistence Controller.swift */; };
 		756AF0BC2726C324001CB821 /* DuckDepo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 756AF0BA2726C324001CB821 /* DuckDepo.xcdatamodeld */; };
 		7574E8ED272AE66B0079B51C /* DocumentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7574E8EC272AE66B0079B51C /* DocumentView.swift */; };
+		7580B246273AA99A00F06F23 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7580B245273AA99A00F06F23 /* AppDelegate.swift */; };
 		758ABD132729828F0074F61A /* EditDocumentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758ABD122729828F0074F61A /* EditDocumentView.swift */; };
 		75948C8C273914DC00EB880E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75948C8B273914DC00EB880E /* SceneDelegate.swift */; };
 		75948C902739202D00EB880E /* DocumentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75948C8F2739202D00EB880E /* DocumentViewModel.swift */; };
@@ -67,7 +68,6 @@
 		75D4150027280CF300355AE7 /* DepoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D414FF27280CF300355AE7 /* DepoListView.swift */; };
 		75D4150427280F6400355AE7 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D4150327280F6400355AE7 /* SettingsView.swift */; };
 		75E8F82427393F0200DCF4BD /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = 75E8F82327393F0200DCF4BD /* Introspect */; };
-		75E8F82A2739540C00DCF4BD /* Cloud Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E8F8292739540C00DCF4BD /* Cloud Controller.swift */; };
 		75E8F82C2739544300DCF4BD /* CloudSharingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E8F82B2739544300DCF4BD /* CloudSharingView.swift */; };
 		75E8F82E273981AB00DCF4BD /* EditFoldersViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E8F82D273981AA00DCF4BD /* EditFoldersViewState.swift */; };
 /* End PBXBuildFile section */
@@ -113,6 +113,7 @@
 		756AF0C22726C4B6001CB821 /* DuckDepo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DuckDepo.entitlements; sourceTree = "<group>"; };
 		756AF0C32726C4CD001CB821 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		7574E8EC272AE66B0079B51C /* DocumentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentView.swift; sourceTree = "<group>"; };
+		7580B245273AA99A00F06F23 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		758ABD122729828F0074F61A /* EditDocumentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDocumentView.swift; sourceTree = "<group>"; };
 		75948C8B273914DC00EB880E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		75948C8F2739202D00EB880E /* DocumentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentViewModel.swift; sourceTree = "<group>"; };
@@ -133,7 +134,6 @@
 		75D414FC2728021700355AE7 /* DDDocument+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DDDocument+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		75D414FF27280CF300355AE7 /* DepoListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepoListView.swift; sourceTree = "<group>"; };
 		75D4150327280F6400355AE7 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		75E8F8292739540C00DCF4BD /* Cloud Controller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Cloud Controller.swift"; sourceTree = "<group>"; };
 		75E8F82B2739544300DCF4BD /* CloudSharingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSharingView.swift; sourceTree = "<group>"; };
 		75E8F82D273981AA00DCF4BD /* EditFoldersViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFoldersViewState.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -230,6 +230,7 @@
 				75973026273A7D2600A105A7 /* Predefiened Field Options.json */,
 				756AF0C22726C4B6001CB821 /* DuckDepo.entitlements */,
 				756AF0AF2726C320001CB821 /* DuckDepoApp.swift */,
+				7580B245273AA99A00F06F23 /* AppDelegate.swift */,
 				75948C8B273914DC00EB880E /* SceneDelegate.swift */,
 				758ABD10272977C50074F61A /* Views */,
 				7542D917272819A100DB7A95 /* Helpers */,
@@ -307,7 +308,6 @@
 			isa = PBXGroup;
 			children = (
 				756AF0B82726C324001CB821 /* Persistence Controller.swift */,
-				75E8F8292739540C00DCF4BD /* Cloud Controller.swift */,
 				75A021EF27343E48001484BA /* Biometric Controller.swift */,
 			);
 			path = Controllers;
@@ -434,7 +434,6 @@
 				7557599A272FE66400DA8B9A /* EditDocumentViewModel.swift in Sources */,
 				75D414FA272800BD00355AE7 /* DDFolder+CoreDataProperties.swift in Sources */,
 				75D4150027280CF300355AE7 /* DepoListView.swift in Sources */,
-				75E8F82A2739540C00DCF4BD /* Cloud Controller.swift in Sources */,
 				7502B5F227318F7400E9F0C8 /* FloatingTextView.swift in Sources */,
 				758ABD132729828F0074F61A /* EditDocumentView.swift in Sources */,
 				755759A9273044BC00DA8B9A /* DocSection.swift in Sources */,
@@ -451,6 +450,7 @@
 				75948C8C273914DC00EB880E /* SceneDelegate.swift in Sources */,
 				75AB83E12733E2C9000618F1 /* Pill Notification.swift in Sources */,
 				755425C9272A98B500733D64 /* AddCell.swift in Sources */,
+				7580B246273AA99A00F06F23 /* AppDelegate.swift in Sources */,
 				7574E8ED272AE66B0079B51C /* DocumentView.swift in Sources */,
 				7502B5EC27312E3C00E9F0C8 /* AddSectionMenu.swift in Sources */,
 				753F1FC4272BF3B500804584 /* DDField+CoreDataClass.swift in Sources */,
@@ -623,7 +623,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DuckDepo/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Camera is used to scan documents. ";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Face ID is used to unlock your data";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -635,7 +635,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.DuckDepo;
+				PRODUCT_BUNDLE_IDENTIFIER = DuckDepo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -658,7 +658,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DuckDepo/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Camera is used to scan documents. ";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Face ID is used to unlock your data";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -670,7 +670,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.DuckDepo;
+				PRODUCT_BUNDLE_IDENTIFIER = DuckDepo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

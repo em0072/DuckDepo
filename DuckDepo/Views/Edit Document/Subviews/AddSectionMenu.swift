@@ -56,14 +56,11 @@ struct AddSectionMenu: View {
     var menuButton: some View {
         Menu {
             ForEach(possibleOptions, id: \.self) { section in
-//                let dupCheck = delegate?.sectionIsDuplicate(section) ?? false
-//                if !dupCheck {
                     Button {
                         addSection(section)
                     } label: {
                         Text(section)
                     }
-//                }
             }
             Button(role: .destructive) {
                 self.showingAddNewSectionView = true
@@ -100,7 +97,7 @@ struct AddSectionMenu: View {
 struct AddSectionMenu_Previews: PreviewProvider {
     static var previews: some View {
         Form {
-            AddSectionMenu(menuOptions: .constant(SectionOptions.allOptions))
+            AddSectionMenu(menuOptions: .constant(InputOption().listOfSectionNames()))
         }
     }
 }

@@ -15,7 +15,7 @@ struct CloudSharingView: UIViewControllerRepresentable {
 
     // MARK: - Properties
 
-    @Environment(\.presentationMode) var presentationMode
+//    @Environment(\.presentationMode) var presentationMode
     let container: CKContainer
     let share: CKShare
 

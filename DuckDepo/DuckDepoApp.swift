@@ -9,6 +9,8 @@ import SwiftUI
 
 @main
 struct DuckDepoApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+
     @Environment(\.scenePhase) private var scenePhase
 
     var body: some Scene {
