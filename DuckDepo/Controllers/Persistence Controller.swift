@@ -13,7 +13,9 @@ protocol PersistenceControllerDelegate {
     func didSave()
 }
 
-class PersistenceController: ObservableObject {
+
+class PersistenceController {
+        
     static let shared = PersistenceController()
     
     //MARK: - Public Properties
@@ -119,6 +121,7 @@ class PersistenceController: ObservableObject {
         }
         
     }
+
         
     public func performBackgroundTask(block: @escaping (NSManagedObjectContext) -> Void) {
         container.performBackgroundTask(block)
@@ -133,6 +136,85 @@ class PersistenceController: ObservableObject {
             print(error.localizedDescription)
         }
     }
-
+    
 }
 
+
+// Mark - Sharing
+extension PersistenceController {
+    func isShared(object: NSManagedObject) -> Bool {
+        return isShared(objectID: object.objectID)
+    }
+
+    func isShared(objectID: NSManagedObjectID) -> Bool {
+        var isShared = false
+        if let persistentStore = objectID.persistentStore {
+            if persistentStore == sharedPersistentStore {
+                isShared = true
+            } else {
+                do {
+                    let shares = try container.fetchShares(matching: [objectID])
+                    if shares[objectID] != nil {
+                            isShared = true
+                    }
+                } catch let error {
+                    print("Failed to fetch share for \(objectID): \(error)")
+                }
+            }
+        }
+        return isShared
+    }
+
+    
+    
+//    func participants(for object: NSManagedObject) -> [RenderableShareParticipant] {
+//        var participants = [CKShare.Participant]()
+//        do {
+//            let container = persistentContainer
+//            let shares = try container.fetchShares(matching: [object.objectID])
+//            if let share = shares[object.objectID] {
+//                participants = share.participants
+//            }
+//        } catch let error {
+//            print("Failed to fetch share for \(object): \(error)")
+//        }
+//        return participants
+//    }
+    
+    func fetchRemoteShare(for object: NSManagedObject, completion: @escaping (CKShare?) -> Void) {
+        guard let shareURL = fetchShare(for: object)?.url else {
+            completion(nil)
+            return
+        }
+        
+        let operation = CKFetchShareMetadataOperation(shareURLs: [shareURL])
+        operation.perShareMetadataResultBlock = { _, result in
+            switch result {
+            case .failure(let error):
+                print("CKFetchShareMetadataOperation - \(error)")
+                completion(nil)
+            case .success(let shareMeta):
+                completion(shareMeta.share)
+            }
+        }
+        CKContainer.default().add(operation)
+        
+    }
+    
+    func fetchShare(for object: NSManagedObject) -> CKShare? {
+        let shares = try? shares(matching: [object.objectID])
+        return shares?[object.objectID]
+    }
+    
+    func shares(matching objectIDs: [NSManagedObjectID]) throws -> [NSManagedObjectID: CKShare] {
+        return try container.fetchShares(matching: objectIDs)
+    }
+    
+    func canEdit(object: NSManagedObject) -> Bool {
+        return container.canUpdateRecord(forManagedObjectWith: object.objectID)
+    }
+        
+    func canDelete(object: NSManagedObject) -> Bool {
+        return container.canDeleteRecord(forManagedObjectWith: object.objectID)
+    }
+}

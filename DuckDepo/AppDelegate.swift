@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+import CloudKit
 
 //@main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -40,4 +40,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
+    
+    func application(_ application: UIApplication, userDidAcceptCloudKitShareWith cloudKitShareMetadata: CKShare.Metadata) {
+        let sharedStore = PersistenceController.shared.sharedPersistentStore
+        let container = PersistenceController.shared.container
+        container.acceptShareInvitations(from: [cloudKitShareMetadata], into: sharedStore) { shareMetas, error in
+            if let shareAcceptenceError = error {
+                print("Could not accept share - \(shareAcceptenceError)")
+            } else {
+                print("Accepted share with metadata - \(String(describing: shareMetas))")
+            }
+        }
+
+    }
 }
+
+

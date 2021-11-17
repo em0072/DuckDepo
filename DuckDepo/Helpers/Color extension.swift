@@ -16,6 +16,9 @@ extension Color {
     static let duckOutline = Color("outline")
     static let pillNotificationBackground = Color("pillNotificationBackground")
     static let pillNotificationText = Color("pillNotificationText")
+    static let duckText = Color("text")
+    static let background = Color("background")
+
 
 
 }

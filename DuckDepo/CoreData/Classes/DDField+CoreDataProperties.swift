@@ -43,7 +43,6 @@ extension DDField {
     func convert() -> Field {
         return Field(title: self.title ?? "", value: self.value ?? "")
     }
-    
 }
 
 

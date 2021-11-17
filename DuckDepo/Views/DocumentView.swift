@@ -8,7 +8,6 @@
 import SwiftUI
 import ImageViewer
 import CoreData
-import CloudKit
 
 
 struct DocumentView: View {
@@ -21,10 +20,13 @@ struct DocumentView: View {
     @State private var isEditingDocumentView = false
     @State private var showShareActionSheet = false
     @State private var showShareSheetView = false
-    @State private var showCloudShareSheetView = false
 
     var body: some View {
         List {
+            Section("Document name") {
+                Text(document.name ?? "")
+            }
+            
             PhotosView(document: document, imageViewerImage: $imageViewerImage, showingImageViewer: $showingImageViewer)
             
             ForEach(document.getSections()) { section in
@@ -37,40 +39,37 @@ struct DocumentView: View {
                 } header: {
                     Text(section.name ?? "")
                 }
-                
             }
-            
         }
-        .navigationBarTitleDisplayMode(.large)
-        .navigationBarTitle(Text((document.name ?? "")))
+        
+        .navigationBarTitle(Text(document.name ?? ""))
         .toolbar {
             ToolbarItemGroup(placement: .navigationBarTrailing) {
-                Button(action: shareAction, label: iconForShareButton)
-                
+//MARK:  For Now it is not possible to use it - there is a bug in the NSPersistanceCloudKitController that is prevent database of deleteing created earlier share when the user taps "unshare". As a result, even though share is unshared, UI will always be as it is shared. So we wait for the bugfix from Apple.
+//                Button(action: shareAction, label: iconForShareButton)
+//                    .sheet(isPresented: $viewModel.isCloudSharing, content: shareView)
                 Button(action: shareInfo) {
                     Image(systemName: "square.and.arrow.up")
                 }
-                Button(action: {
-                    self.isEditingDocumentView = true
+                .sheet(isPresented: $showShareSheetView, onDismiss: {
+                    viewModel.itemsToShare = nil
                 }) {
+                    if let items = viewModel.itemsToShare {
+                        ShareSheetView(items: items)
+                    }
+                }
+                Button(action: editButtonAction) {
                     Image(systemName: "pencil")
+                }
+                .disabled(!viewModel.canEdit(document))
+                .fullScreenCover(isPresented: $isEditingDocumentView) {
+                    let document = document.convert()
+                    EditDocumentView(isPresented: $isEditingDocumentView, type: .existing(document))
                 }
             }
         }
         .fullScreenCover(isPresented: $showingImageViewer, onDismiss: nil) {
             ImageViewer(image: $imageViewerImage, viewerShown: $showingImageViewer)
-        }
-        .sheet(isPresented: $showShareSheetView, onDismiss: {
-            viewModel.itemsToShare = nil
-        }) {
-            if let items = viewModel.itemsToShare {
-                ShareSheetView(items: items)
-            }
-        }
-        .fullScreenCover(isPresented: $viewModel.isCloudSharing, content: shareView)
-        .fullScreenCover(isPresented: $isEditingDocumentView) {
-            let document = document.convert()
-            EditDocumentView(isPresented: $isEditingDocumentView, type: .existing(document))
         }
         .actionSheet(isPresented: $showShareActionSheet, content: {
                 ActionSheet(title: Text("Share Document"),
@@ -88,8 +87,12 @@ struct DocumentView: View {
         .animation(.default, value: document)
     }
     
+    private func editButtonAction() {
+        self.isEditingDocumentView = true
+    }
+    
     private func shareAction() {
-        viewModel.share(document: document) { share, container, error in
+        viewModel.share(document) { share, container, error in
             if let shareError = error {
                 print("Couldn't create a share - \(shareError)")
             } else {
@@ -103,7 +106,7 @@ struct DocumentView: View {
     }
     
     private func iconForShareButton() -> some View {
-        Image(systemName: viewModel.hasShare(for: document) ? "person.crop.circle.badge.checkmark" : "person.crop.circle.badge.plus")
+        Image(systemName: viewModel.isShared(document) ? "person.crop.circle.badge.checkmark" : "person.crop.circle.badge.plus")
             .renderingMode(.original)
     }
     

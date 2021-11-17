@@ -31,19 +31,13 @@ struct EditDocumentView: View {
         self.viewModel = ViewModel()
         _isPresented = isPresented
         viewModel.type = type
-        if let folderName = selectedFolder {
-            viewModel.setSelectedFolder(folderName)
-        }
-
     }
                 
     var body: some View {
         NavigationView {
-            ZStack {
-                Color(.systemGroupedBackground)
-                    .ignoresSafeArea()
                     Form {
-                        NameAndFolderView(name: $viewModel.document.name, selectedFolder: $viewModel.selectedFolder, folders: $viewModel.folders)
+//                        NameAndFolderView(name: $viewModel.document.name, selectedFolder: $viewModel.selectedFolder, folders: $viewModel.folders)
+                        NameView(name:  $viewModel.document.name)
                         PhotosSectionView(images: $viewModel.document.photos, delegate: viewModel)
                         
                         SectionView(sections: $viewModel.document.sections, options: viewModel.inputOption.sections, delegate: viewModel)
@@ -51,11 +45,10 @@ struct EditDocumentView: View {
                         AddSectionMenu(menuOptions: .constant(viewModel.inputOption.listOfSectionNames()), delegate: viewModel)
                         
                         AddDocumentButton(action: viewModel.addNewDocumentButtonAction, title: viewModel.saveButtonTitle)
-                            .disabled(viewModel.document.name.isEmpty)
-                            .foregroundColor(viewModel.document.name.isEmpty ? Color.duckDisabledText : Color.black)
                             .listRowBackground(viewModel.document.name.isEmpty ? Color.duckDisabledButton : Color.duckYellow)
+                            .foregroundColor(viewModel.document.name.isEmpty ? Color.duckDisabledText : Color.black)
+                            .disabled(viewModel.document.name.isEmpty)
                     }
-            }
             .navigationTitle(viewModel.viewTitle)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarItems(leading: Button {
@@ -64,18 +57,14 @@ struct EditDocumentView: View {
             } label: {
                 Image(systemName: "xmark")
             }, trailing:
-            Group {
+                                    Group {
                 if case .existing(_) = viewModel.type {
-                    Button(action: {
-                        self.isShowingDeleteAlert = true
-                    }, label: {
+                    Button(action: deleteButtonAction) {
                         Image(systemName: "trash.fill")
-                    })
-                } else {
-                    EmptyView()
+                    }
                 }
             })
-            }
+        }
         .overlay(ImageViewer(image: $viewModel.imageViewerImage, viewerShown: $viewModel.showingImageViewer))
         .onAppear {
             viewModel.view = self
@@ -88,15 +77,21 @@ struct EditDocumentView: View {
             Text(alertMessage)
         })
         .alert("Delete confirmation", isPresented: $isShowingDeleteAlert, actions: {
-            Button("Delete", role: .destructive) {
-                self.isShowingDeleteAlert = false
-                viewModel.delete()
-            }
+            Button("Delete", role: .destructive, action: deleteAlertAction)
         }, message: {
             Text("Are you sure you want to delete this document?")
         })
     }
     
+    func deleteButtonAction() {
+        self.isShowingDeleteAlert = true
+    }
+    
+    func deleteAlertAction() {
+        self.isShowingDeleteAlert = false
+        viewModel.delete()
+
+    }
         
     func showAlert(title: String, message: String) {
         alertTitle = title

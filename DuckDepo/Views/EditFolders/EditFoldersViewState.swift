@@ -7,13 +7,13 @@
 
 import Foundation
 
-extension EditFoldersView {
-    class ViewState: ObservableObject {
-        
-//        var view: EditFoldersView?
-        
-        @Published var folderToDelete: DDFolder?
-        @Published var folderToEdit: DDFolder?
-
-    }
-}
+//extension EditFoldersView {
+//    class ViewState: ObservableObject {
+//        
+////        var view: EditFoldersView?
+//        
+////        @Published var folderToDelete: DDFolder?
+////        @Published var folderToEdit: DDFolder?
+//
+//    }
+//}

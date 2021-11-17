@@ -10,6 +10,9 @@
 		7502B5EC27312E3C00E9F0C8 /* AddSectionMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7502B5EB27312E3C00E9F0C8 /* AddSectionMenu.swift */; };
 		7502B5F027316F2E00E9F0C8 /* SectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7502B5EF27316F2E00E9F0C8 /* SectionView.swift */; };
 		7502B5F227318F7400E9F0C8 /* FloatingTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7502B5F127318F7300E9F0C8 /* FloatingTextView.swift */; };
+		75088874273E913A009A7D3B /* Defaults Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75088873273E913A009A7D3B /* Defaults Controller.swift */; };
+		75088877273E9736009A7D3B /* ColorfulIconLabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75088876273E9736009A7D3B /* ColorfulIconLabelStyle.swift */; };
+		7508887A273EA21D009A7D3B /* BiometricSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75088879273EA21D009A7D3B /* BiometricSection.swift */; };
 		751E9B48272AF7B1008D4D26 /* UIImage Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 751E9B47272AF7B1008D4D26 /* UIImage Extension.swift */; };
 		753F1FBF272BE56400804584 /* Color extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753F1FBE272BE56400804584 /* Color extension.swift */; };
 		753F1FC4272BF3B500804584 /* DDField+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753F1FC0272BF3B500804584 /* DDField+CoreDataClass.swift */; };
@@ -31,7 +34,6 @@
 		755425D5272AC9C700733D64 /* ImageViewerRemote in Frameworks */ = {isa = PBXBuildFile; productRef = 755425D4272AC9C700733D64 /* ImageViewerRemote */; };
 		755425D7272ACC8D00733D64 /* CameraPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755425D6272ACC8D00733D64 /* CameraPickerView.swift */; };
 		7557599A272FE66400DA8B9A /* EditDocumentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75575999272FE66400DA8B9A /* EditDocumentViewModel.swift */; };
-		7557599E272FFDCB00DA8B9A /* NameAndFolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7557599D272FFDCB00DA8B9A /* NameAndFolderView.swift */; };
 		755759A0273006F700DA8B9A /* AddDocumentButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7557599F273006F700DA8B9A /* AddDocumentButton.swift */; };
 		755759A22730242600DA8B9A /* PhotosSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755759A12730242600DA8B9A /* PhotosSectionView.swift */; };
 		755759A7273044A800DA8B9A /* Field.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755759A6273044A800DA8B9A /* Field.swift */; };
@@ -58,16 +60,18 @@
 		75A021F227347E86001484BA /* DataBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A021F127347E86001484BA /* DataBase.swift */; };
 		75AB83E12733E2C9000618F1 /* Pill Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75AB83E02733E2C9000618F1 /* Pill Notification.swift */; };
 		75AB83E32733E77D000618F1 /* Notification.Name extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75AB83E22733E77D000618F1 /* Notification.Name extension.swift */; };
+		75B130F82744061B0059F314 /* SizeUnits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B130F72744061B0059F314 /* SizeUnits.swift */; };
 		75C5CFBD272C7C9200C90C3C /* FloatingTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C5CFBC272C7C9200C90C3C /* FloatingTextField.swift */; };
 		75D414EB2726CA6700355AE7 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75D414EA2726CA6700355AE7 /* CloudKit.framework */; };
-		75D414ED2727E7A500355AE7 /* Initial Setup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D414EC2727E7A400355AE7 /* Initial Setup.swift */; };
-		75D414F9272800BD00355AE7 /* DDFolder+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D414F7272800BD00355AE7 /* DDFolder+CoreDataClass.swift */; };
-		75D414FA272800BD00355AE7 /* DDFolder+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D414F8272800BD00355AE7 /* DDFolder+CoreDataProperties.swift */; };
 		75D414FD2728021700355AE7 /* DDDocument+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D414FB2728021700355AE7 /* DDDocument+CoreDataClass.swift */; };
 		75D414FE2728021700355AE7 /* DDDocument+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D414FC2728021700355AE7 /* DDDocument+CoreDataProperties.swift */; };
 		75D4150027280CF300355AE7 /* DepoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D414FF27280CF300355AE7 /* DepoListView.swift */; };
 		75D4150427280F6400355AE7 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D4150327280F6400355AE7 /* SettingsView.swift */; };
-		75E8F82427393F0200DCF4BD /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = 75E8F82327393F0200DCF4BD /* Introspect */; };
+		75D4307F2743BE6000D4EE2A /* OverviewSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D4307E2743BE6000D4EE2A /* OverviewSection.swift */; };
+		75D430812743BE8600D4EE2A /* DeleteAllSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D430802743BE8600D4EE2A /* DeleteAllSection.swift */; };
+		75D430832743EA7900D4EE2A /* VisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D430822743EA7900D4EE2A /* VisualEffectView.swift */; };
+		75D792A42744FFC600396535 /* NoDocumentSelectedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D792A32744FFC500396535 /* NoDocumentSelectedView.swift */; };
+		75E45300273BDDDF003AF1CE /* NameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E452FF273BDDDF003AF1CE /* NameView.swift */; };
 		75E8F82C2739544300DCF4BD /* CloudSharingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E8F82B2739544300DCF4BD /* CloudSharingView.swift */; };
 		75E8F82E273981AB00DCF4BD /* EditFoldersViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E8F82D273981AA00DCF4BD /* EditFoldersViewState.swift */; };
 /* End PBXBuildFile section */
@@ -76,6 +80,9 @@
 		7502B5EB27312E3C00E9F0C8 /* AddSectionMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSectionMenu.swift; sourceTree = "<group>"; };
 		7502B5EF27316F2E00E9F0C8 /* SectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionView.swift; sourceTree = "<group>"; };
 		7502B5F127318F7300E9F0C8 /* FloatingTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingTextView.swift; sourceTree = "<group>"; };
+		75088873273E913A009A7D3B /* Defaults Controller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Defaults Controller.swift"; sourceTree = "<group>"; };
+		75088876273E9736009A7D3B /* ColorfulIconLabelStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorfulIconLabelStyle.swift; sourceTree = "<group>"; };
+		75088879273EA21D009A7D3B /* BiometricSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricSection.swift; sourceTree = "<group>"; };
 		751E9B47272AF7B1008D4D26 /* UIImage Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage Extension.swift"; sourceTree = "<group>"; };
 		753F1FBE272BE56400804584 /* Color extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color extension.swift"; sourceTree = "<group>"; };
 		753F1FC0272BF3B500804584 /* DDField+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DDField+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -95,7 +102,6 @@
 		755425CE272AA10400733D64 /* PhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
 		755425D6272ACC8D00733D64 /* CameraPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPickerView.swift; sourceTree = "<group>"; };
 		75575999272FE66400DA8B9A /* EditDocumentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDocumentViewModel.swift; sourceTree = "<group>"; };
-		7557599D272FFDCB00DA8B9A /* NameAndFolderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameAndFolderView.swift; sourceTree = "<group>"; };
 		7557599F273006F700DA8B9A /* AddDocumentButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDocumentButton.swift; sourceTree = "<group>"; };
 		755759A12730242600DA8B9A /* PhotosSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosSectionView.swift; sourceTree = "<group>"; };
 		755759A6273044A800DA8B9A /* Field.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Field.swift; sourceTree = "<group>"; };
@@ -125,15 +131,18 @@
 		75A021F127347E86001484BA /* DataBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBase.swift; sourceTree = "<group>"; };
 		75AB83E02733E2C9000618F1 /* Pill Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Pill Notification.swift"; sourceTree = "<group>"; };
 		75AB83E22733E77D000618F1 /* Notification.Name extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification.Name extension.swift"; sourceTree = "<group>"; };
+		75B130F72744061B0059F314 /* SizeUnits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeUnits.swift; sourceTree = "<group>"; };
 		75C5CFBC272C7C9200C90C3C /* FloatingTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingTextField.swift; sourceTree = "<group>"; };
 		75D414EA2726CA6700355AE7 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
-		75D414EC2727E7A400355AE7 /* Initial Setup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Initial Setup.swift"; sourceTree = "<group>"; };
-		75D414F7272800BD00355AE7 /* DDFolder+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DDFolder+CoreDataClass.swift"; sourceTree = "<group>"; };
-		75D414F8272800BD00355AE7 /* DDFolder+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DDFolder+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		75D414FB2728021700355AE7 /* DDDocument+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DDDocument+CoreDataClass.swift"; sourceTree = "<group>"; };
 		75D414FC2728021700355AE7 /* DDDocument+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DDDocument+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		75D414FF27280CF300355AE7 /* DepoListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepoListView.swift; sourceTree = "<group>"; };
 		75D4150327280F6400355AE7 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		75D4307E2743BE6000D4EE2A /* OverviewSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverviewSection.swift; sourceTree = "<group>"; };
+		75D430802743BE8600D4EE2A /* DeleteAllSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAllSection.swift; sourceTree = "<group>"; };
+		75D430822743EA7900D4EE2A /* VisualEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualEffectView.swift; sourceTree = "<group>"; };
+		75D792A32744FFC500396535 /* NoDocumentSelectedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoDocumentSelectedView.swift; sourceTree = "<group>"; };
+		75E452FF273BDDDF003AF1CE /* NameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameView.swift; sourceTree = "<group>"; };
 		75E8F82B2739544300DCF4BD /* CloudSharingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSharingView.swift; sourceTree = "<group>"; };
 		75E8F82D273981AA00DCF4BD /* EditFoldersViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFoldersViewState.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -144,7 +153,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				755425D3272AC9C700733D64 /* ImageViewer in Frameworks */,
-				75E8F82427393F0200DCF4BD /* Introspect in Frameworks */,
 				75D414EB2726CA6700355AE7 /* CloudKit.framework in Frameworks */,
 				755425D5272AC9C700733D64 /* ImageViewerRemote in Frameworks */,
 			);
@@ -153,6 +161,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		75088875273E9722009A7D3B /* Styles */ = {
+			isa = PBXGroup;
+			children = (
+				75088876273E9736009A7D3B /* ColorfulIconLabelStyle.swift */,
+			);
+			path = Styles;
+			sourceTree = "<group>";
+		};
+		75088878273EA1FB009A7D3B /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				75D4150327280F6400355AE7 /* SettingsView.swift */,
+				75088879273EA21D009A7D3B /* BiometricSection.swift */,
+				75D4307E2743BE6000D4EE2A /* OverviewSection.swift */,
+				75D430802743BE8600D4EE2A /* DeleteAllSection.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
 		7542D917272819A100DB7A95 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -165,6 +192,7 @@
 				753F1FE6272C0A9A00804584 /* CustomButtonStyle.swift */,
 				755759AE273045B900DA8B9A /* CoreDataConverter.swift */,
 				75AB83E22733E77D000618F1 /* Notification.Name extension.swift */,
+				75B130F72744061B0059F314 /* SizeUnits.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -183,7 +211,7 @@
 		7557599C272FFDA400DA8B9A /* Subviews */ = {
 			isa = PBXGroup;
 			children = (
-				7557599D272FFDCB00DA8B9A /* NameAndFolderView.swift */,
+				75E452FF273BDDDF003AF1CE /* NameView.swift */,
 				755759A12730242600DA8B9A /* PhotosSectionView.swift */,
 				7502B5EF27316F2E00E9F0C8 /* SectionView.swift */,
 				7502B5EB27312E3C00E9F0C8 /* AddSectionMenu.swift */,
@@ -233,6 +261,7 @@
 				7580B245273AA99A00F06F23 /* AppDelegate.swift */,
 				75948C8B273914DC00EB880E /* SceneDelegate.swift */,
 				758ABD10272977C50074F61A /* Views */,
+				75088875273E9722009A7D3B /* Styles */,
 				7542D917272819A100DB7A95 /* Helpers */,
 				75A021EE27343E10001484BA /* Controllers */,
 				75D414F62728002C00355AE7 /* CoreData */,
@@ -253,12 +282,13 @@
 			isa = PBXGroup;
 			children = (
 				75973024273A734300A105A7 /* TestView.swift */,
+				75D792A32744FFC500396535 /* NoDocumentSelectedView.swift */,
 				756AF0B12726C320001CB821 /* ContentView.swift */,
 				75E8F830273A64E100DCF4BD /* DepoList */,
 				7557599B272FFD8700DA8B9A /* Edit Document */,
 				7574E8EC272AE66B0079B51C /* DocumentView.swift */,
 				75948C8F2739202D00EB880E /* DocumentViewModel.swift */,
-				75D4150327280F6400355AE7 /* SettingsView.swift */,
+				75088878273EA1FB009A7D3B /* Settings */,
 				75E8F82F2739857000DCF4BD /* EditFolders */,
 				7542D92027284F4B00DB7A95 /* AddNewView.swift */,
 				758ABD16272987A90074F61A /* Elements */,
@@ -270,8 +300,6 @@
 		758ABD11272977D50074F61A /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				75D414F7272800BD00355AE7 /* DDFolder+CoreDataClass.swift */,
-				75D414F8272800BD00355AE7 /* DDFolder+CoreDataProperties.swift */,
 				75D414FB2728021700355AE7 /* DDDocument+CoreDataClass.swift */,
 				75D414FC2728021700355AE7 /* DDDocument+CoreDataProperties.swift */,
 				753F1FC0272BF3B500804584 /* DDField+CoreDataClass.swift */,
@@ -300,6 +328,7 @@
 				755425D6272ACC8D00733D64 /* CameraPickerView.swift */,
 				75A021EC27343B53001484BA /* ShareSheetView.swift */,
 				75E8F82B2739544300DCF4BD /* CloudSharingView.swift */,
+				75D430822743EA7900D4EE2A /* VisualEffectView.swift */,
 			);
 			path = UIViewControllerRepresentable;
 			sourceTree = "<group>";
@@ -309,6 +338,7 @@
 			children = (
 				756AF0B82726C324001CB821 /* Persistence Controller.swift */,
 				75A021EF27343E48001484BA /* Biometric Controller.swift */,
+				75088873273E913A009A7D3B /* Defaults Controller.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -326,7 +356,6 @@
 			children = (
 				756AF0BA2726C324001CB821 /* DuckDepo.xcdatamodeld */,
 				75A021F127347E86001484BA /* DataBase.swift */,
-				75D414EC2727E7A400355AE7 /* Initial Setup.swift */,
 				758ABD11272977D50074F61A /* Classes */,
 			);
 			path = CoreData;
@@ -369,7 +398,6 @@
 			packageProductDependencies = (
 				755425D2272AC9C700733D64 /* ImageViewer */,
 				755425D4272AC9C700733D64 /* ImageViewerRemote */,
-				75E8F82327393F0200DCF4BD /* Introspect */,
 			);
 			productName = DuckDepo;
 			productReference = 756AF0AC2726C320001CB821 /* DuckDepo.app */;
@@ -402,6 +430,7 @@
 			packageReferences = (
 				755425D1272AC9C700733D64 /* XCRemoteSwiftPackageReference "swiftui-image-viewer" */,
 				75E8F82227393F0100DCF4BD /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
+				75A6B53D273E5DBC0092FD5A /* XCRemoteSwiftPackageReference "BottomSheet" */,
 			);
 			productRefGroup = 756AF0AD2726C320001CB821 /* Products */;
 			projectDirPath = "";
@@ -432,7 +461,7 @@
 			files = (
 				75D414FE2728021700355AE7 /* DDDocument+CoreDataProperties.swift in Sources */,
 				7557599A272FE66400DA8B9A /* EditDocumentViewModel.swift in Sources */,
-				75D414FA272800BD00355AE7 /* DDFolder+CoreDataProperties.swift in Sources */,
+				75D430812743BE8600D4EE2A /* DeleteAllSection.swift in Sources */,
 				75D4150027280CF300355AE7 /* DepoListView.swift in Sources */,
 				7502B5F227318F7400E9F0C8 /* FloatingTextView.swift in Sources */,
 				758ABD132729828F0074F61A /* EditDocumentView.swift in Sources */,
@@ -440,11 +469,9 @@
 				753F1FBF272BE56400804584 /* Color extension.swift in Sources */,
 				7502B5F027316F2E00E9F0C8 /* SectionView.swift in Sources */,
 				75E8F82C2739544300DCF4BD /* CloudSharingView.swift in Sources */,
-				75D414ED2727E7A500355AE7 /* Initial Setup.swift in Sources */,
 				75948C922739250100EB880E /* DepoListViewModel.swift in Sources */,
 				756AF0BC2726C324001CB821 /* DuckDepo.xcdatamodeld in Sources */,
 				755759AB2730450800DA8B9A /* Document.swift in Sources */,
-				7557599E272FFDCB00DA8B9A /* NameAndFolderView.swift in Sources */,
 				75AB83E32733E77D000618F1 /* Notification.Name extension.swift in Sources */,
 				75E8F82E273981AB00DCF4BD /* EditFoldersViewState.swift in Sources */,
 				75948C8C273914DC00EB880E /* SceneDelegate.swift in Sources */,
@@ -452,6 +479,7 @@
 				755425C9272A98B500733D64 /* AddCell.swift in Sources */,
 				7580B246273AA99A00F06F23 /* AppDelegate.swift in Sources */,
 				7574E8ED272AE66B0079B51C /* DocumentView.swift in Sources */,
+				75D430832743EA7900D4EE2A /* VisualEffectView.swift in Sources */,
 				7502B5EC27312E3C00E9F0C8 /* AddSectionMenu.swift in Sources */,
 				753F1FC4272BF3B500804584 /* DDField+CoreDataClass.swift in Sources */,
 				755425CD272AA02200733D64 /* ImagePickerView.swift in Sources */,
@@ -460,31 +488,37 @@
 				753F1FE5272C019700804584 /* String Extension.swift in Sources */,
 				75973025273A734300A105A7 /* TestView.swift in Sources */,
 				755759A22730242600DA8B9A /* PhotosSectionView.swift in Sources */,
+				75D792A42744FFC600396535 /* NoDocumentSelectedView.swift in Sources */,
 				753F1FDB272BF5F000804584 /* DDSection+CoreDataProperties.swift in Sources */,
 				755759A0273006F700DA8B9A /* AddDocumentButton.swift in Sources */,
+				75E45300273BDDDF003AF1CE /* NameView.swift in Sources */,
 				755759A7273044A800DA8B9A /* Field.swift in Sources */,
 				75A021ED27343B53001484BA /* ShareSheetView.swift in Sources */,
 				75C5CFBD272C7C9200C90C3C /* FloatingTextField.swift in Sources */,
+				75D4307F2743BE6000D4EE2A /* OverviewSection.swift in Sources */,
 				756AF0B92726C324001CB821 /* Persistence Controller.swift in Sources */,
 				7542D92127284F4C00DB7A95 /* AddNewView.swift in Sources */,
 				75948C902739202D00EB880E /* DocumentViewModel.swift in Sources */,
+				7508887A273EA21D009A7D3B /* BiometricSection.swift in Sources */,
 				7542D91D27283C9000DB7A95 /* Alert Extension.swift in Sources */,
 				751E9B48272AF7B1008D4D26 /* UIImage Extension.swift in Sources */,
 				75D414FD2728021700355AE7 /* DDDocument+CoreDataClass.swift in Sources */,
 				755759AF273045B900DA8B9A /* CoreDataConverter.swift in Sources */,
 				756AF0B22726C320001CB821 /* ContentView.swift in Sources */,
 				756AF0B02726C320001CB821 /* DuckDepoApp.swift in Sources */,
-				75D414F9272800BD00355AE7 /* DDFolder+CoreDataClass.swift in Sources */,
 				755425CF272AA10400733D64 /* PhotoCell.swift in Sources */,
 				75A021F227347E86001484BA /* DataBase.swift in Sources */,
+				75B130F82744061B0059F314 /* SizeUnits.swift in Sources */,
 				75A021F027343E48001484BA /* Biometric Controller.swift in Sources */,
 				7542D9162728122E00DB7A95 /* EditFoldersView.swift in Sources */,
 				753F1FE7272C0A9A00804584 /* CustomButtonStyle.swift in Sources */,
 				755425D7272ACC8D00733D64 /* CameraPickerView.swift in Sources */,
+				75088877273E9736009A7D3B /* ColorfulIconLabelStyle.swift in Sources */,
 				753F1FDA272BF5F000804584 /* DDSection+CoreDataClass.swift in Sources */,
 				755425CB272A9C4700733D64 /* VerticalLabelStyle.swift in Sources */,
 				75D4150427280F6400355AE7 /* SettingsView.swift in Sources */,
 				753F1FE3272C008B00804584 /* Info Options.swift in Sources */,
+				75088874273E913A009A7D3B /* Defaults Controller.swift in Sources */,
 				755759AD2730455600DA8B9A /* Folder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -615,6 +649,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = DuckDepo/DuckDepo.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"DuckDepo/Preview Content\"";
@@ -625,8 +660,7 @@
 				INFOPLIST_KEY_NSCameraUsageDescription = "Camera is used to scan documents. ";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Face ID is used to unlock your data";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -637,9 +671,10 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = DuckDepo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -650,6 +685,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = DuckDepo/DuckDepo.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"DuckDepo/Preview Content\"";
@@ -660,8 +696,7 @@
 				INFOPLIST_KEY_NSCameraUsageDescription = "Camera is used to scan documents. ";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Face ID is used to unlock your data";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -672,9 +707,10 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = DuckDepo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -710,6 +746,14 @@
 				kind = branch;
 			};
 		};
+		75A6B53D273E5DBC0092FD5A /* XCRemoteSwiftPackageReference "BottomSheet" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/adamfootdev/BottomSheet";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		75E8F82227393F0100DCF4BD /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/siteline/SwiftUI-Introspect";
@@ -730,11 +774,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 755425D1272AC9C700733D64 /* XCRemoteSwiftPackageReference "swiftui-image-viewer" */;
 			productName = ImageViewerRemote;
-		};
-		75E8F82327393F0200DCF4BD /* Introspect */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 75E8F82227393F0100DCF4BD /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */;
-			productName = Introspect;
 		};
 /* End XCSwiftPackageProductDependency section */
 

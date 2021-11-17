@@ -7,39 +7,50 @@
 
 import Foundation
 import CloudKit
+import SwiftUI
 
 
 extension DocumentView {
-    class ViewModel: ObservableObject {
+    class ViewModel: NSObject, ObservableObject {
         
+        let db = DataBase.shared
+        @Published var document: DDDocument?
         @Published var isCloudSharing: Bool = false
         @Published var activeShare: CKShare?
         @Published var activeContainer: CKContainer?
+//        @Published var isShared: Bool = false
+//        @Published var canEdit: Bool = true
+
 
         var itemsToShare: [Any]?
         
-        func hasShare(for document: DDDocument) -> Bool {
-            PersistenceController.shared.container.record(for: document.objectID)?.share != nil
+//        func update(with document: DDDocument) {
+//            self.document = document
+//            fetchShareInfo()
+//        }
+//        
+//        func fetchShareInfo() {
+//            if let doc = document {
+//                self.isShared = db.isShared(doc)
+//                self.canEdit = db.canEdit(doc)
+//
+//            }
+//        }
+//        
+        func isShared(_ document: DDDocument) -> Bool {
+            db.isShared(document)
         }
         
-        func share(document: DDDocument, completion: @escaping (CKShare?, CKContainer?, Error?) -> Void) {
-            PersistenceController.shared.container.share([document], to: nil) { objectIDs, share, container, error in
-                if let actualShare = share {
-                    document.managedObjectContext?.performAndWait {
-                        actualShare[CKShare.SystemFieldKey.title] = document.name
-                    }
-                }
-                completion(share, container, error)
-            }
+        func canEdit(_ document: DDDocument) -> Bool {
+            db.canEdit(document)
         }
+
+        
+        func share(_ document: DDDocument, completion: @escaping (CKShare?, CKContainer?, Error?) -> Void) {
+            db.share(document: document, completion: completion)
+        }
+        
     }
 }
-    
-    // MARK: - Error
-
-    enum ViewModelError: Error {
-        case invalidRemoteShare
-    }
-
 
 

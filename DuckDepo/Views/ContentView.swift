@@ -13,7 +13,6 @@ struct ContentView: View {
     
     @State var isShowingCopyNotification: Bool = false
     @State var copyNotificationText: String = "Copied"
-    @State private var isUnlocked = false
 
    
     var body: some View {
@@ -21,6 +20,7 @@ struct ContentView: View {
                 DepoListView().tabItem {
                     Label("Depo", systemImage: "archivebox")
                 }.tag(1)
+
                 SettingsView().tabItem {
                     Label("Settings", systemImage: "gear")
                 }.tag(2)
@@ -32,31 +32,6 @@ struct ContentView: View {
         
     }
     
-    func authenticate() {
-        let context = LAContext()
-        var error: NSError?
-
-        // check whether biometric authentication is possible
-        if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
-            // it's possible, so go ahead and use it
-            let reason = "We need to unlock your data."
-
-            context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) { success, authenticationError in
-                // authentication has now completed
-                DispatchQueue.main.async {
-                    if success {
-                        self.isUnlocked = true
-                        // authenticated successfully
-                    } else {
-                        // there was a problem
-                    }
-                }
-            }
-        } else {
-            // no biometrics
-        }
-    }
-
 }
 
 struct ContentView_Previews: PreviewProvider {

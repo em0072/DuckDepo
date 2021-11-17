@@ -12,7 +12,11 @@ extension DepoListView {
     class ViewModel: ObservableObject {
         
         var folderNameToAddDoc: String?
-        @Published var sharedDocuments: [DDDocument] = []
+        
+        
+        func isShared(_ document: DDDocument) -> Bool {
+            PersistenceController.shared.isShared(object: document)
+        }
         
 //        func fetchSharedDocuments(competion: @escaping ([DDDocument]) -> Void) {
 //            CloudController.shared.fetchSharedObjects { result in

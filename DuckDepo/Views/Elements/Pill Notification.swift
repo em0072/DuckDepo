@@ -37,7 +37,7 @@ struct Pill_Notification: ViewModifier {
                 .animation(.default, value: show)
                 .onChange(of: show, perform: { newValue in
                     if newValue == true {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                             withAnimation {
                                 self.show = false
                             }

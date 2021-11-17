@@ -17,7 +17,7 @@ extension EditDocumentView {
                         
         private let db: DataBase = DataBase.shared
         
-        @Published var folders: [DDFolder] = [DDFolder]()
+//        @Published var folders: [DDFolder] = [DDFolder]()
         @Published var document: Document = Document()
         var inputOption: InputOption = InputOption()
         
@@ -32,16 +32,18 @@ extension EditDocumentView {
         var view: EditDocumentView?
         
         init() {
-            folders = db.fetchFolder()
+//            folders = db.fetchFolder()
         }
         
         //MARK: -Data Manipulation
         private func saveDocument() {
             switch type {
             case .new:
-                db.save(document, in: folders[selectedFolder])
+                db.save(document)
+//                db.save(document, in: folders[selectedFolder])
             case .existing(_):
-                db.update(document, in: folders[selectedFolder])
+                db.update(document)
+//                db.update(document, in: folders[selectedFolder])
             }
             view?.isPresented = false
         }
@@ -49,12 +51,16 @@ extension EditDocumentView {
         func updateViewWith(document: Document) {
 //            self.type = .existing(document)
             self.document = document
-            let docFolder = document.folder
-            for (i, folder)  in folders.enumerated() {
-                if folder.name == docFolder {
-                    selectedFolder = i
-                }
-            }
+//            let docFolder = document.folder
+//            for (i, folder)  in folders.enumerated() {
+//                if folder.name == docFolder {
+//                    selectedFolder = i
+//                }
+//            }
+        }
+        
+        func isShared() -> Bool {
+            db.isShared(document)
         }
         
         func delete() {
@@ -62,14 +68,14 @@ extension EditDocumentView {
             view?.isPresented = false
         }
                         
-        func setSelectedFolder(_ folderName: String) {
-            for (i, folder) in folders.enumerated() {
-                if folder.name == folderName {
-                    selectedFolder = i
-                    return
-                }
-            }
-        }
+//        func setSelectedFolder(_ folderName: String) {
+//            for (i, folder) in folders.enumerated() {
+//                if folder.name == folderName {
+//                    selectedFolder = i
+//                    return
+//                }
+//            }
+//        }
         
         //MARK: -Name & Folder
         
@@ -110,11 +116,11 @@ extension EditDocumentView {
         @Published var addButtonisDisabled: Bool = true
         //MARK: Functions
         func addNewDocumentButtonAction() {
-            if folders[selectedFolder].fetchDocuments().map({ $0.name }).contains(document.name), case .new = type {
-                view?.showAlert(title: "Duplicate", message: "The document with this name already exsists. Please choose a different name.")
-            } else {
+//            if folders[selectedFolder].fetchDocuments().map({ $0.name }).contains(document.name), case .new = type {
+//                view?.showAlert(title: "Duplicate", message: "The document with this name already exsists. Please choose a different name.")
+//            } else {
                 saveDocument()
-            }
+//            }
         }
         
         

@@ -13,21 +13,18 @@ import CloudKit
 
 
 extension DDDocument {
+    
+    static let entityName = "DDDocument"
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<DDDocument> {
-        return NSFetchRequest<DDDocument>(entityName: "DDDocument")
+        return NSFetchRequest<DDDocument>(entityName: DDDocument.entityName)
     }
 
     @NSManaged public var identifier: UUID?
-    @NSManaged public var info: String?
     @NSManaged public var order: Int32
     @NSManaged public var name: String?
-    @NSManaged public var number: String?
     @NSManaged public var photoData: Data?
-    @NSManaged public var folder: DDFolder?
     @NSManaged public var sections: Set<DDSection>?
-    @NSManaged public var shareRecordName: String?
-    @NSManaged public var type: String?
     
 
 }
@@ -110,7 +107,21 @@ extension DDDocument {
 }
 
 extension DDDocument {
-    convenience init(viewContext: NSManagedObjectContext, object: Document, order: Int, folder: DDFolder) {
+//    //To Be Deleted
+//    convenience init(viewContext: NSManagedObjectContext, object: Document, order: Int, folder: DDFolder) {
+//        self.init(context: viewContext)
+//        self.identifier = object.id
+//        self.name = object.name
+//        self.order = Int32(order)
+//        self.addToPhotos(object.photos)
+//        for index in 0..<object.sections.count {
+//            let section = object.sections[index]
+//            self.addToSections(DDSection(viewContext: viewContext, object: section, order: index, document: self))
+//        }
+////        self.folder = folder
+//    }
+    
+    convenience init(viewContext: NSManagedObjectContext, object: Document, order: Int) {
         self.init(context: viewContext)
         self.identifier = object.id
         self.name = object.name
@@ -120,31 +131,49 @@ extension DDDocument {
             let section = object.sections[index]
             self.addToSections(DDSection(viewContext: viewContext, object: section, order: index, document: self))
         }
-        self.folder = folder
     }
+
+//    //To Be Deleted
+//    func update(with object: Document, and folder: DDFolder, viewContext: NSManagedObjectContext) {
+//        self.name = object.name
+//        self.photoData = nil
+//        addToPhotos(object.photos)
+//        self.sections = nil
+//        for index in 0..<object.sections.count {
+//            let section = object.sections[index]
+//            self.addToSections(DDSection(viewContext: viewContext, object: section, order: index, document: self))
+//        }
+////        self.folder = folder
+//    }
     
-    func update(with object: Document, and folder: DDFolder, viewContext: NSManagedObjectContext) {
-        self.name = object.name
-        self.photoData = nil
-        addToPhotos(object.photos)
-        self.sections = nil
-        for index in 0..<object.sections.count {
-            let section = object.sections[index]
-            self.addToSections(DDSection(viewContext: viewContext, object: section, order: index, document: self))
-        }
-        self.folder = folder
-    }
+//    func update(with object: Document, viewContext: NSManagedObjectContext) {
+//        self.name = object.name
+//        self.photoData = nil
+//        addToPhotos(object.photos)
+//        removeAllSections()
+//        for index in 0..<object.sections.count {
+//            let section = object.sections[index]
+//            self.addToSections(DDSection(viewContext: viewContext, object: section, order: index, document: self))
+//        }
+//    }
     
-    func updateWithShared(_ object: DDDocument) {
-        self.name = object.name
-        self.photoData = object.photoData
-        self.sections = object.sections
-        self.shareRecordName = object.shareRecordName
-    }
+//    private func removeAllSections() {
+//        guard let sections = self.sections else {return}
+//            for section in sections {
+//                removeFromSections(section)
+//            }
+//    }
+    
+//    func updateWithShared(_ object: DDDocument) {
+//        self.name = object.name
+//        self.photoData = object.photoData
+//        self.sections = object.sections
+//        self.shareRecordName = object.shareRecordName
+//    }
     
     func convert() -> Document {
         var sections = [DocSection]()
-        var document = Document(id: self.identifier ?? UUID(), name: self.name ?? "", photos: self.getPhotos() ?? [], sections: [], folder: self.folder?.name ?? "")
+        var document = Document(id: self.identifier ?? UUID(), name: self.name ?? "", photos: self.getPhotos() ?? [], sections: [])
         for section in getSections() {
             sections.append(section.convert())
         }
@@ -163,67 +192,12 @@ extension DDDocument {
         return fetchedDocument
     }
     
-    static func fetchDocument(with shareRecordName: String, viewContext: NSManagedObjectContext) -> DDDocument? {
-        var fetchedDocument: DDDocument?
-        viewContext.performAndWait {
-            let fetchRequest = DDDocument.fetchRequest()
-            fetchRequest.predicate = DDDocument.predicateFor(shareRecordName: shareRecordName)
-            fetchRequest.fetchLimit = 1
-            fetchedDocument = (try? fetchRequest.execute())?.first
-        }
-        return fetchedDocument
-    }
-    
-    static func fetchSharedDocument(viewContext: NSManagedObjectContext) -> [DDDocument] {
-        var fetchedDocument: [DDDocument] = []
-        viewContext.performAndWait {
-            let fetchRequest = DDDocument.fetchRequest()
-            fetchRequest.predicate = DDDocument.predicateForShared()
-            if let requestResult = try? fetchRequest.execute() {
-                fetchedDocument = requestResult
-            }
-        }
-        return fetchedDocument
-    }
-
 
     
     static func predicate(for id: UUID) -> NSPredicate {
         return NSPredicate(format: "identifier = %@", id as CVarArg)
     }
     
-    static func predicateFor(shareRecordName: String) -> NSPredicate {
-        return NSPredicate(format: "shareRecordName = %@", shareRecordName as CVarArg)
-    }
-
-    static func predicateForShared() -> NSPredicate {
-        return NSPredicate(format: "type = shared")
-    }
-
-}
-
-extension DDDocument {
-    /// Initializes a `Contact` object from a CloudKit record.
-    /// - Parameter record: CloudKit record to pull values from.
-    convenience init?(record: CKRecord) {
-        print(record)
-//        @NSManaged public var order: Int32
-//        @NSManaged public var name: String?
-//        @NSManaged public var number: String?
-//        @NSManaged public var photoData: Data?
-//        @NSManaged public var folder: DDFolder?
-//        @NSManaged public var sections: Set<DDSection>?
-
-         let name = record["CD_name"] as? String
-//              let photoData = record["CD_photoData"] as? Data else {
-//                  return nil
-//              }
-        self.init(context: PersistenceController.shared.context)
-        self.shareRecordName = record.recordID.recordName
-        self.type = "shared"
-        self.name = name
-//        self.photoData = photoData
-    }
 }
 
 extension DDDocument : Identifiable {

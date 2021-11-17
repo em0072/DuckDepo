@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "BottomSheet",
+        "repositoryURL": "https://github.com/adamfootdev/BottomSheet",
+        "state": {
+          "branch": "main",
+          "revision": "6772d56b8bf082dd25565d13d0d5603e969d33b8",
+          "version": null
+        }
+      },
+      {
         "package": "SwiftUIImageViewer",
         "repositoryURL": "https://github.com/Jake-Short/swiftui-image-viewer.git",
         "state": {

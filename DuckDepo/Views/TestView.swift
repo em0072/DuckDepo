@@ -10,23 +10,10 @@ import CloudKit
 
 struct TestView: View {
     
-    @State var shares = [CKShare]()
-    
     var body: some View {
         ZStack {
-            Color.red
-            List(shares, id: \.url) { share in
-                Text(share.description)
-            }
+            Text("Hello there!")
         }
-        .onAppear {
-            fetch()
-        }
-    }
-    
-    func fetch() {
-        let sh = try? PersistenceController.shared.container.fetchShares(in: nil)
-        shares = sh ?? []
     }
 }
 

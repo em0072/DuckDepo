@@ -16,8 +16,9 @@ struct CloudSharingView: UIViewControllerRepresentable {
     // MARK: - Properties
 
 //    @Environment(\.presentationMode) var presentationMode
-    let container: CKContainer
-    let share: CKShare
+    var container: CKContainer
+    var share: CKShare
+//    var delegate: UICloudSharingControllerDelegate
 
     // MARK: - UIViewControllerRepresentable
 
@@ -25,7 +26,7 @@ struct CloudSharingView: UIViewControllerRepresentable {
 
     func makeUIViewController(context: Context) -> some UIViewController {
         let sharingController = UICloudSharingController(share: share, container: container)
-        sharingController.availablePermissions = [.allowReadWrite, .allowPrivate]
+        sharingController.availablePermissions = [.allowReadOnly, .allowReadWrite, .allowPrivate]
         sharingController.delegate = context.coordinator
         sharingController.modalPresentationStyle = .formSheet
         return sharingController
@@ -43,6 +44,24 @@ struct CloudSharingView: UIViewControllerRepresentable {
         func itemTitle(for csc: UICloudSharingController) -> String? {
             "Sharing Example"
         }
+//
+        //Optional
+        func itemThumbnailData(for csc: UICloudSharingController) -> Data? {
+            return nil
+        }
+
+        func itemType(for csc: UICloudSharingController) -> String? {
+            return nil
+        }
+
+        func cloudSharingControllerDidSaveShare(_ csc: UICloudSharingController) {
+            print("Did save share")
+        }
+
+        func cloudSharingControllerDidStopSharing(_ csc: UICloudSharingController) {
+            print("Did stop sharing")
+        }
+
         
     }
 }
