@@ -87,6 +87,8 @@ class BiometricController: ObservableObject {
         }
     }
     private var authenticationInProgress = false
+    private var isBackgroundState = false
+
     
     func biometricType() -> BiometricType {
         let authContext = LAContext()
@@ -104,6 +106,7 @@ class BiometricController: ObservableObject {
     }
     
     public func onActiveState() {
+        isBackgroundState = false
         print("Check if biometric enabled - \(defaultController.isBiometryEnabled) & device Has passcode - \(deviceHasPasscode())")
         guard defaultController.isBiometryEnabled && deviceHasPasscode() else {
             print("set isUnlocked to true")
@@ -125,13 +128,16 @@ class BiometricController: ObservableObject {
     }
     
     public func onInactiveState() {
-        if defaultController.isBiometryEnabled && deviceHasPasscode() && !authenticationInProgress && biometricDelay == .none {
-                self.isUnlocked = false
+        guard defaultController.isBiometryEnabled && deviceHasPasscode() && !authenticationInProgress && !isBackgroundState else { return }
+        if biometricDelay == .none {
+            isUnlocked = false
+        } else {
+            updateLastAuthenticated()
         }
-        updateLastAuthenticated()
     }
     
     public func onBackgroundState() {
+        isBackgroundState = true
     }
     
     public func deviceHasPasscode() -> Bool {

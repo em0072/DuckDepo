@@ -1390,8 +1390,8 @@
             filePath = "DuckDepo/Controllers/Biometric Controller.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "108"
-            endingLineNumber = "108"
+            startingLineNumber = "111"
+            endingLineNumber = "111"
             landmarkName = "onActiveState()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1454,9 +1454,9 @@
             filePath = "DuckDepo/Controllers/Biometric Controller.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "135"
-            endingLineNumber = "135"
-            landmarkName = "onBackgroundState()"
+            startingLineNumber = "141"
+            endingLineNumber = "141"
+            landmarkName = "onInactiveState()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1470,25 +1470,9 @@
             filePath = "DuckDepo/Controllers/Biometric Controller.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "107"
-            endingLineNumber = "107"
+            startingLineNumber = "110"
+            endingLineNumber = "110"
             landmarkName = "onActiveState()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "EC95132A-5D0C-46A4-B60F-5F3A2866E00E"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DuckDepo/Controllers/Biometric Controller.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "129"
-            endingLineNumber = "129"
-            landmarkName = "onInactiveState()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1502,8 +1486,8 @@
             filePath = "DuckDepo/Controllers/Biometric Controller.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "113"
-            endingLineNumber = "113"
+            startingLineNumber = "116"
+            endingLineNumber = "116"
             landmarkName = "onActiveState()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1518,10 +1502,10 @@
             filePath = "DuckDepo/Controllers/Biometric Controller.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "164"
-            endingLineNumber = "164"
+            startingLineNumber = "170"
+            endingLineNumber = "170"
             landmarkName = "authenicate(completion:)"
-            landmarkType = "7">
+            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1534,8 +1518,8 @@
             filePath = "DuckDepo/Controllers/Biometric Controller.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "118"
-            endingLineNumber = "118"
+            startingLineNumber = "121"
+            endingLineNumber = "121"
             landmarkName = "onActiveState()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1554,6 +1538,38 @@
             endingLineNumber = "28"
             landmarkName = "documentCountText"
             landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "72B5604F-DD05-417E-B44D-BBDADFA28054"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DuckDepo/Controllers/Biometric Controller.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "193"
+            endingLineNumber = "193"
+            landmarkName = "updateLastAuthenticated()"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "923A216C-BAFC-41D4-9BCE-4643B5B5CB7D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DuckDepo/Controllers/Biometric Controller.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "131"
+            endingLineNumber = "131"
+            landmarkName = "onInactiveState()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

@@ -4,14 +4,14 @@
         <attribute name="identifier" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="order" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="photoData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <attribute name="photoData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" allowsCloudEncryption="YES"/>
         <relationship name="sections" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="DDSection" inverseName="document" inverseEntity="DDSection"/>
     </entity>
     <entity name="DDField" representedClassName="DDField" syncable="YES">
         <attribute name="order" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <attribute name="type" optional="YES" attributeType="String"/>
-        <attribute name="value" optional="YES" attributeType="String"/>
+        <attribute name="value" optional="YES" attributeType="String" allowsCloudEncryption="YES"/>
         <relationship name="section" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DDSection" inverseName="fields" inverseEntity="DDSection"/>
     </entity>
     <entity name="DDSection" representedClassName="DDSection" syncable="YES">
