@@ -59,7 +59,7 @@ struct PhotosSectionView: View {
                     .frame(height: 75)
                 }
             }
-            .padding([.leading, .trailing], -12)
+            .padding([.leading, .trailing], -15)
             .actionSheet(isPresented: $showingPhotoChooser) {
                 ActionSheet(title: Text("Do you want to scan a document with camera or choose it from photo library?"), buttons: [
                     .default(Text("Camera")) {

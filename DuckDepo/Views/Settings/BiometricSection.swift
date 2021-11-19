@@ -18,7 +18,7 @@ struct BiometricSection: View {
             if BiometricController.shared.deviceHasPasscode() {
                 Toggle(isOn: $isBiometryEnabled.animation()) {
                 Label(biometricToggleTitle, systemImage: biometricToggleImage)
-                    .labelStyle(ColorfulIconLabelStyle(color: .orange, size: size))
+                    .labelStyle(ColorfulIconLabelStyle(color: .green, size: size))
             }
                 if isBiometryEnabled {
                     Picker("Ask after", selection: $biometryDelay) {

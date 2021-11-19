@@ -926,10 +926,10 @@
             filePath = "DuckDepo/Views/DepoList/DepoListView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "107"
-            endingLineNumber = "107"
-            landmarkName = "body"
-            landmarkType = "24">
+            startingLineNumber = "104"
+            endingLineNumber = "104"
+            landmarkName = "DocumentRow"
+            landmarkType = "14">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1280,8 +1280,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "87"
             endingLineNumber = "87"
-            landmarkName = "body"
-            landmarkType = "24">
+            landmarkName = "deleteButtonAction()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

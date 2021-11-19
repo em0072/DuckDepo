@@ -20,6 +20,7 @@ struct AddCell: View {
                     .stroke(Color.duckOutline, lineWidth: 1)
             )
         .aspectRatio(1.0, contentMode: .fit)
+        .padding(2)
 
     }
 }

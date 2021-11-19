@@ -20,11 +20,6 @@ struct DepoListView: View {
     @State var isAddingNewDocumentView: Bool = false
 //    @State var isAddingNewCategoryView: Bool = false
     
-//    private var bindableNoFolders: Binding<Bool> { Binding (
-//        get: {self.folders.isEmpty},
-//        set: {_ in return}
-//        )
-//    }
     
     private var bindableNoDocument: Binding<Bool> { Binding (
         get: {documents.isEmpty},
@@ -35,14 +30,16 @@ struct DepoListView: View {
     var body: some View {
         NavigationView {
             ZStack {
+            if !documents.isEmpty {
                 List(documents) { document in
                     NavigationLink(destination: DocumentView(document: document)) {
                         DocumentRow(document: document, isShared: viewModel.isShared(document))
                     }
                 }
+            } else {
                 //Initial Instructions
-                InitialInstructionsView(noDocuments: bindableNoDocument,
-                                        isShowingNewDocumentAdd: $isAddingNewDocumentView)
+                InitialInstructionsView(isShowingNewDocumentAdd: $isAddingNewDocumentView)
+            }
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -115,11 +112,9 @@ struct DocumentRow: View {
 
 struct InitialInstructionsView: View {
     
-    @Binding var noDocuments: Bool
     @Binding var isShowingNewDocumentAdd: Bool
     
     var body: some View {
-        if noDocuments {
             VStack {
                     VStack {
                         Image(systemName: "lock.doc")
@@ -133,12 +128,6 @@ struct InitialInstructionsView: View {
                     }
                     .multilineTextAlignment(.center)
                     .padding([.leading, .trailing], 15)
-//                    Button {
-//                        isShowingNewDocumentAdd = true
-//                    } label: {
-//                        Text("Add Document")
-//                    }
             }
-        }
     }
 }
