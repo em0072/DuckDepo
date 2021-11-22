@@ -21,7 +21,7 @@ extension DDDocument {
     }
 
     @NSManaged public var identifier: UUID?
-    @NSManaged public var order: Int32
+    @NSManaged public var order: Int16
     @NSManaged public var name: String?
     @NSManaged public var photoData: Data?
     @NSManaged public var sections: Set<DDSection>?
@@ -125,7 +125,7 @@ extension DDDocument {
         self.init(context: viewContext)
         self.identifier = object.id
         self.name = object.name
-        self.order = Int32(order)
+        self.order = Int16(order)
         self.addToPhotos(object.photos)
         for index in 0..<object.sections.count {
             let section = object.sections[index]
@@ -191,6 +191,8 @@ extension DDDocument {
         }
         return fetchedDocument
     }
+    
+    
     
 
     

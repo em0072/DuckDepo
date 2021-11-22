@@ -11,11 +11,24 @@ import SwiftUI
 extension DepoListView {
     class ViewModel: ObservableObject {
         
-        var folderNameToAddDoc: String?
+        @ObservedObject private var db: DataBase = DataBase.shared
         
+        var folderNameToAddDoc: String?
+        @Published var isReordering: Bool = false
+
         
         func isShared(_ document: DDDocument) -> Bool {
             PersistenceController.shared.isShared(object: document)
+        }
+        
+        
+        func move(from index: IndexSet, to destination: Int, in list: [DDDocument]) {
+            var listToOperate = list
+            listToOperate.move(fromOffsets: index, toOffset: destination)
+            _ = listToOperate.enumerated().map { (i, document) in
+                document.order = Int16(i)
+            }
+            db.save()
         }
         
 //        func fetchSharedDocuments(competion: @escaping ([DDDocument]) -> Void) {

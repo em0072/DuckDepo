@@ -84,9 +84,12 @@ class DataBase: NSObject, ObservableObject, NSFetchedResultsControllerDelegate {
 //        _ = DDDocument(viewContext: context, object: document, order: folder.fetchDocumentsCount(), folder: folder)
 //        PersistenceController.shared.saveContext()
 //    }
+    public func save() {
+        persistenceController.saveContext()
+    }
     
     public func save(_ document: Document) {
-        _ = DDDocument(viewContext: context, object: document, order: Int(Date.timeIntervalSinceReferenceDate))
+        _ = DDDocument(viewContext: context, object: document, order: fetchDocumentCount())
         PersistenceController.shared.saveContext()
     }
     

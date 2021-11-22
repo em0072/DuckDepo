@@ -3,7 +3,7 @@
     <entity name="DDDocument" representedClassName="DDDocument" syncable="YES">
         <attribute name="identifier" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
-        <attribute name="order" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="order" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="photoData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" allowsCloudEncryption="YES"/>
         <relationship name="sections" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="DDSection" inverseName="document" inverseEntity="DDSection"/>
     </entity>
