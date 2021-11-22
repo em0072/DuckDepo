@@ -654,8 +654,8 @@
             filePath = "DuckDepo/Views/DepoList/DepoListViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "23"
-            endingLineNumber = "23"
+            startingLineNumber = "36"
+            endingLineNumber = "36"
             landmarkName = "ViewModel"
             landmarkType = "3">
          </BreakpointContent>
@@ -830,8 +830,8 @@
             filePath = "DuckDepo/Views/DepoList/DepoListViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "30"
-            endingLineNumber = "30"
+            startingLineNumber = "43"
+            endingLineNumber = "43"
             landmarkName = "ViewModel"
             landmarkType = "3">
          </BreakpointContent>
@@ -926,10 +926,10 @@
             filePath = "DuckDepo/Views/DepoList/DepoListView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "104"
-            endingLineNumber = "104"
-            landmarkName = "DocumentRow"
-            landmarkType = "14">
+            startingLineNumber = "128"
+            endingLineNumber = "128"
+            landmarkName = "body"
+            landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -958,8 +958,8 @@
             filePath = "DuckDepo/Views/DepoList/DepoListViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "18"
-            endingLineNumber = "18"
+            startingLineNumber = "21"
+            endingLineNumber = "21"
             landmarkName = "isShared(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1570,6 +1570,22 @@
             endingLineNumber = "131"
             landmarkName = "onInactiveState()"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E018C172-23B4-4726-8D36-632F72929BCE"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DuckDepo/Views/DepoList/DepoListView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "42"
+            endingLineNumber = "42"
+            landmarkName = "body"
+            landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

@@ -30,27 +30,45 @@ struct DepoListView: View {
     var body: some View {
         NavigationView {
             ZStack {
-            if !documents.isEmpty {
-                List(documents) { document in
-                    NavigationLink(destination: DocumentView(document: document)) {
-                        DocumentRow(document: document, isShared: viewModel.isShared(document))
+                if !documents.isEmpty {
+                    List {
+                        ForEach(documents) { document in
+                            NavigationLink(destination: DocumentView(document: document)) {
+                                DocumentRow(document: document, isShared: viewModel.isShared(document))
+                            }
+                        }
+                        .onMove(perform: move)
+//                        .onLongPressGesture {
+//                            isReordering = .active
+//                        }
+                        
                     }
+                    .environment(\.editMode, viewModel.isReordering ? .constant(.active) : .constant(.inactive))
+                } else {
+                    //Initial Instructions
+                    InitialInstructionsView(isShowingNewDocumentAdd: $isAddingNewDocumentView)
                 }
-            } else {
-                //Initial Instructions
-                InitialInstructionsView(isShowingNewDocumentAdd: $isAddingNewDocumentView)
-            }
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                        Button(action: {
-                            self.isAddingNewDocumentView = true
-                        }) {
+                    Button(action: {
+                        self.isAddingNewDocumentView = true
+                    }) {
                             Image(systemName: "plus")
                         }
                 }
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Toggle(isOn: $viewModel.isReordering) {
+                        Image(systemName: "shuffle")
+
+                    }
+//                    .toggleStyle(.button)
+                }
+                
+
             }
             .navigationTitle("🦆 Depo")
+            .animation(.default, value: viewModel.isReordering)
             NoDocumentSelectedView()
 
         }
@@ -70,6 +88,12 @@ struct DepoListView: View {
         }
         
 
+    }
+    
+    private func move(from index: IndexSet, to destination: Int) {
+        let docList = documents.map{$0}
+        print("Moved item from \(index.first!) to \(destination)")
+        viewModel.move(from: index, to: destination, in: docList)
     }
         
     
