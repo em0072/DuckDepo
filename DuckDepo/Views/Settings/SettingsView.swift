@@ -12,6 +12,7 @@ struct SettingsView: View {
     @ObservedObject private var biometricController = BiometricController.shared
     @ObservedObject private var db: DataBase = DataBase.shared
     @State var documentsCount: Int = 0
+    @State var passwordsCount: Int = 0
 
     
     var body: some View {
@@ -19,7 +20,7 @@ struct SettingsView: View {
             Form {
                 BiometricSection(isBiometryEnabled: $biometricController.isBiometryEnabled, biometryDelay: $biometricController.biometricDelay)
 ////                CategorySection()
-                OverviewSection(documentCount: $documentsCount)
+                OverviewSection(documentCount: $documentsCount, passwordCount: $passwordsCount)
 //                
                 DeleteAllSection(onDeleteAction: deleteEverything)
             }.navigationBarTitle(Text("Settings"))
@@ -30,6 +31,7 @@ struct SettingsView: View {
     
     private func updateDocumentsCount() {
         documentsCount = db.fetchDocumentCount()
+        passwordsCount = db.fetchPasswordCount()
     }
     
     private func deleteEverything() {

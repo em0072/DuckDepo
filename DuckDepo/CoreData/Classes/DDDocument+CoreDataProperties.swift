@@ -202,6 +202,6 @@ extension DDDocument {
     
 }
 
-extension DDDocument : Identifiable {
-    
+extension DDDocument: Identifiable, CoreDataCountable {
 }
+

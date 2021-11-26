@@ -21,6 +21,7 @@ struct AddSectionMenu: View {
     var delegate: AddSectionMenuDelegate?
     
     var body: some View {
+        Section {
         addButton
             .frame(maxWidth: .infinity)
             .sheet(isPresented: $showingAddNewSectionView) {
@@ -33,6 +34,7 @@ struct AddSectionMenu: View {
             }, message: {
                 Text("The section with this name already exsists. Please choose a different name.")
             })
+        }
     }
     
     

@@ -7,18 +7,26 @@
 
 import SwiftUI
 
-struct NoDocumentSelectedView: View {
+struct NoSelectionViewView: View {
+    
+    enum ViewType: String {
+        case document
+        case password
+    }
+    
+    var type: ViewType
+    
     var body: some View {
         Text("Welcome to DuckDepo!")
             .font(.title)
             .padding()
-        Text("Currently, no document selected. Please select a document on the left panel.")
+        Text("Currently, no \(type.rawValue) selected. Please select a \(type.rawValue) on the left panel.")
             .font(.body)
     }
 }
 
 struct NoDocumentSelectedView_Previews: PreviewProvider {
     static var previews: some View {
-        NoDocumentSelectedView()
+        NoSelectionViewView(type: .password)
     }
 }

@@ -17,7 +17,7 @@ struct FloatingTextField: View {
     var title: String
     var value: String = ""
     @State var textFieldValue: String = ""
-    var id: UUID
+    var id: UUID = UUID()
     var delegate: FloatingTextFieldDelegate?
 
     var body: some View {

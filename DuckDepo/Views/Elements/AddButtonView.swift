@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-struct AddDocumentButton: View {
+struct AddButtonView: View {
     
     var action: (()->())?
     var title: String
+    @Binding var isActive: Bool
 
     var body: some View {
-        Section {
             HStack {
                 Spacer()
                 Button {
@@ -23,12 +23,15 @@ struct AddDocumentButton: View {
                 }
                 Spacer()
             }
-        }
+            .listRowBackground(!isActive ? Color.duckDisabledButton : Color.duckYellow)
+            .foregroundColor(!isActive ? Color.duckDisabledText : Color.black)
+            .disabled(!isActive)
+
     }
 }
 
 struct AddDocumentButton_Previews: PreviewProvider {
     static var previews: some View {
-        AddDocumentButton(title: "Add New Document")
+        AddButtonView(title: "Add New Document", isActive: .constant(true))
     }
 }
