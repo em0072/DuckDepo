@@ -23,11 +23,8 @@ struct EditDocumentView: View {
     @State var alertMessage: String = ""
     @State var showingAddNewSectionView = false
     @State var showingAddNewInfoDuplicateWarning = false
-
-
-    var onDismiss: (() -> ())?
     
-    init(isPresented: Binding<Bool>, type: ViewModel.DocumentType = .new, selectedFolder: String? = nil, onDismiss: (() -> ())? = nil) {
+    init(isPresented: Binding<Bool>, type: ViewModel.DocumentType = .new) {
         self.viewModel = ViewModel()
         _isPresented = isPresented
         viewModel.type = type
@@ -44,15 +41,11 @@ struct EditDocumentView: View {
 
                         AddSectionMenu(menuOptions: .constant(viewModel.inputOption.listOfSectionNames()), delegate: viewModel)
                         
-                        AddDocumentButton(action: viewModel.addNewDocumentButtonAction, title: viewModel.saveButtonTitle)
-                            .listRowBackground(viewModel.document.name.isEmpty ? Color.duckDisabledButton : Color.duckYellow)
-                            .foregroundColor(viewModel.document.name.isEmpty ? Color.duckDisabledText : Color.black)
-                            .disabled(viewModel.document.name.isEmpty)
+                        AddButtonView(action: viewModel.addNewDocumentButtonAction, title: viewModel.saveButtonTitle, isActive: .constant(!viewModel.document.name.isEmpty))
                     }
             .navigationTitle(viewModel.viewTitle)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarItems(leading: Button {
-                onDismiss?()
                 self.isPresented = false
             } label: {
                 Image(systemName: "xmark")

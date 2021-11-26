@@ -6,3 +6,18 @@
 //
 
 import Foundation
+
+extension String {
+    
+    public func containsAnyCharacter(from characters: [Character]) -> Bool {
+        for letter in Set(self) {
+            for char in characters {
+                if char == letter {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+    
+}

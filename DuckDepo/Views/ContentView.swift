@@ -20,10 +20,12 @@ struct ContentView: View {
                 DepoListView().tabItem {
                     Label("Depo", systemImage: "archivebox")
                 }.tag(1)
-
+                PasswordsListView().tabItem {
+                    Label("Passwords", systemImage: "key.fill")
+                }.tag(2)
                 SettingsView().tabItem {
                     Label("Settings", systemImage: "gear")
-                }.tag(2)
+                }.tag(3)
             }
             .onReceive(NotificationCenter.default.publisher(for: .floatingTextFieldCopyNotification)) { _ in
                 isShowingCopyNotification = true

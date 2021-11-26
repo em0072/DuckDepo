@@ -10,6 +10,7 @@ import SwiftUI
 struct OverviewSection: View {
     
     @Binding var documentCount: Int
+    @Binding var passwordCount: Int
     
 //    var documentsCount: Int {
 //        db.fetchDocumentCount()
@@ -18,6 +19,7 @@ struct OverviewSection: View {
     var body: some View {
         Section {
             Text(documentCountText)
+            Text(passwordCountText)
         } header: {
             Text("Storage")
         }
@@ -33,10 +35,21 @@ struct OverviewSection: View {
         }
         return string
     }
+    
+    var passwordCountText: String {
+        var string = "\(passwordCount) "
+        if passwordCount == 1 {
+            string += "password"
+        } else {
+            string += "passwords"
+        }
+        return string
+    }
+
 }
 
 struct OverviewSection_Previews: PreviewProvider {
     static var previews: some View {
-        OverviewSection(documentCount: .constant(0))
+        OverviewSection(documentCount: .constant(5), passwordCount: .constant(10))
     }
 }

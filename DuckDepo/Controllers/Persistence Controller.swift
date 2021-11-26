@@ -81,7 +81,7 @@ class PersistenceController {
         privateStoreDescription.url = storesURL.appendingPathComponent("private.sqlite")
 //        privateStoreDescription.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
         privateStoreDescription.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
-
+        privateStoreDescription.setOption(FileProtectionType.complete as NSObject, forKey: NSPersistentStoreFileProtectionKey)
         //Add Shared Database
         let sharedStoreURL = storesURL.appendingPathComponent("shared.sqlite")
         guard let sharedStoreDescription = privateStoreDescription.copy() as? NSPersistentStoreDescription else {

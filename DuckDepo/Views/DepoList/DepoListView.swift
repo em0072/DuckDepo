@@ -46,7 +46,7 @@ struct DepoListView: View {
                     .environment(\.editMode, viewModel.isReordering ? .constant(.active) : .constant(.inactive))
                 } else {
                     //Initial Instructions
-                    InitialInstructionsView(isShowingNewDocumentAdd: $isAddingNewDocumentView)
+                    InitialInstructionsView(type: .documents)
                 }
             }
             .toolbar {
@@ -62,14 +62,11 @@ struct DepoListView: View {
                         Image(systemName: "shuffle")
 
                     }
-//                    .toggleStyle(.button)
                 }
-                
-
             }
             .navigationTitle("🦆 Depo")
             .animation(.default, value: viewModel.isReordering)
-            NoDocumentSelectedView()
+            NoSelectionViewView(type: .document)
 
         }
 //        .navigationViewStyle(StackNavigationViewStyle())
@@ -82,9 +79,7 @@ struct DepoListView: View {
 //            })
 //        }
         .fullScreenCover(isPresented: $isAddingNewDocumentView) {
-            EditDocumentView(isPresented: $isAddingNewDocumentView, type: .new, selectedFolder: viewModel.folderNameToAddDoc, onDismiss: {
-                viewModel.folderNameToAddDoc = nil
-            })
+            EditDocumentView(isPresented: $isAddingNewDocumentView, type: .new)
         }
         
 
@@ -113,11 +108,12 @@ struct DepoListView: View {
 //    }
 }
 
-//struct DepoListView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        DepoListView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
-//    }
-//}
+struct DepoListView_Previews: PreviewProvider {
+    static var previews: some View {
+        DepoListView()
+            .environment(\.managedObjectContext, PersistenceController.shared.context)
+    }
+}
 
 struct DocumentRow: View {
     
@@ -131,27 +127,5 @@ struct DocumentRow: View {
         } else {
             Text(document.name ?? "")
         }
-    }
-}
-
-struct InitialInstructionsView: View {
-    
-    @Binding var isShowingNewDocumentAdd: Bool
-    
-    var body: some View {
-            VStack {
-                    VStack {
-                        Image(systemName: "lock.doc")
-                            .font(.largeTitle)
-                            .padding()
-                        Text("You'll find you documents here!")
-                            .font(.headline)
-                            .padding(.bottom, 5)
-                        Text("Your documents are stored encrypted on your device and your iCloud account, which means that your information is fully encrypted and available only for you.")
-                            .font(.caption)
-                    }
-                    .multilineTextAlignment(.center)
-                    .padding([.leading, .trailing], 15)
-            }
     }
 }

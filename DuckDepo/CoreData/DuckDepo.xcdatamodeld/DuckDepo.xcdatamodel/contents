@@ -14,6 +14,12 @@
         <attribute name="value" optional="YES" attributeType="String" allowsCloudEncryption="YES"/>
         <relationship name="section" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DDSection" inverseName="fields" inverseEntity="DDSection"/>
     </entity>
+    <entity name="DDPassword" representedClassName="DDPassword" syncable="YES">
+        <attribute name="login" attributeType="String" defaultValueString="" allowsCloudEncryption="YES"/>
+        <attribute name="name" attributeType="String" defaultValueString=""/>
+        <attribute name="value" attributeType="String" defaultValueString="" allowsCloudEncryption="YES"/>
+        <attribute name="website" attributeType="String" defaultValueString=""/>
+    </entity>
     <entity name="DDSection" representedClassName="DDSection" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="order" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
@@ -23,6 +29,7 @@
     <elements>
         <element name="DDDocument" positionX="-54" positionY="18" width="128" height="104"/>
         <element name="DDField" positionX="-54" positionY="63" width="128" height="104"/>
+        <element name="DDPassword" positionX="-54" positionY="90" width="128" height="89"/>
         <element name="DDSection" positionX="-63" positionY="54" width="128" height="89"/>
     </elements>
 </model>

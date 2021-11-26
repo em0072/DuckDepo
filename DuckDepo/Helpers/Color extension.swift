@@ -10,6 +10,7 @@ import SwiftUI
 extension Color {
     
     static let duckYellow = Color("yellow")
+    static let duckYellowPressed = Color("yellowPressed")
     static let duckDisabledButton = Color("disabledButton")
     static let duckDisabledText = Color("disabledText")
     static let transparent = Color.black.opacity(0)
@@ -18,6 +19,10 @@ extension Color {
     static let pillNotificationText = Color("pillNotificationText")
     static let duckText = Color("text")
     static let background = Color("background")
+    static let duckOverlay = Color("overlayColor")
+    static let duckShadow = Color("shadow")
+
+    
 
 
 

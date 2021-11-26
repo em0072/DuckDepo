@@ -14,9 +14,23 @@ protocol FloatingTextViewDelegate {
 
 struct FloatingTextView: View {
     
+    @Environment(\.openURL) var openURL
+
     var title: String
     var value: String
+    var url: URL?
+    @Binding var isVisible: Bool
     var delegate: FloatingTextViewDelegate?
+    
+    
+    init(title: String, value: String, url: URL? = nil, isVisible: Binding<Bool>? = nil, delegate: FloatingTextViewDelegate? = nil) {
+        self.title = title
+        self.value = value
+        self.url = url
+        self._isVisible = isVisible ?? .constant(true)
+        self.delegate = delegate
+    }
+    
     
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
@@ -27,7 +41,13 @@ struct FloatingTextView: View {
                     .padding(.top, 5)
             }
             HStack {
-            Text(value)
+                Group {
+                    if let url = url, UIApplication.shared.canOpenURL(url) {
+                        Link(proccessedValue, destination: url)
+                    } else {
+                        Text(proccessedValue)
+                    }
+                }
                 .padding(.bottom, 5)
                 .contextMenu {
                         Button(action: {
@@ -37,6 +57,15 @@ struct FloatingTextView: View {
                             Text("Copy to clipboard")
                             Image(systemName: "doc.on.doc")
                         }
+                    if let url = url, UIApplication.shared.canOpenURL(url) {
+                        Button(action: {
+                            openURL(url)
+                        }) {
+                            Text("Open website")
+                            Image(systemName: "network")
+
+                        }
+                    }
                      }
                 Spacer()
             }
@@ -46,10 +75,17 @@ struct FloatingTextView: View {
                 UIPasteboard.general.string = value
             }
         }
-//        .frame(maxWidth: .infinity, alignment: .topLeading)
     }
     
+    var proccessedValue: String {
+        return isVisible ? value : String(repeating: "•", count: value.count)
+    }
+//    private func open(url: URL) {
+//        guard UIApplication.shared.canOpenURL(url) else { return }
+//        openURL(URL)
+//        UIApplication.shared.open(url)
 
+//    }
 
     
     private func postCopyNotification() {
