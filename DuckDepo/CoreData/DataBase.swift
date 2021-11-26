@@ -22,14 +22,20 @@ class DataBase: NSObject, ObservableObject, NSFetchedResultsControllerDelegate {
     }
     
     public func deleteEverything() {
-        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: DDDocument.entityName)
+        var requests = [NSFetchRequest<NSFetchRequestResult>]()
+        let docFetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: DDDocument.entityName)
+        requests.append(docFetchRequest)
+        let passFetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: DDPassword.entityName)
+        requests.append(passFetchRequest)
         do {
-        let objects = try context.fetch(fetchRequest)
-        for object in objects {
-            guard let objectData = object as? NSManagedObject else {continue}
-            context.delete(objectData)
+            for request in requests {
+                let objects = try context.fetch(request)
+                for object in objects {
+                    guard let objectData = object as? NSManagedObject else {continue}
+                    context.delete(objectData)
+                }
+            }
             persistenceController.saveContext()
-        }
         } catch let error {
             print("Error Deleteing everything - \(error)")
         }
