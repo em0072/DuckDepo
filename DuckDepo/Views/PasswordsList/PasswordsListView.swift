@@ -47,7 +47,7 @@ struct PasswordsListView: View {
                         }
                 }
             }
-            .navigationTitle("Passwords")
+            .navigationTitle("plv_title")
             .fullScreenCover(isPresented: $isAddingNewPassword) {
                 EditPasswordView(isPresented: $isAddingNewPassword, type: .new)
             }

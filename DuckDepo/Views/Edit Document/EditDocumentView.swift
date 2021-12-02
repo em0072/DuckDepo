@@ -69,10 +69,10 @@ struct EditDocumentView: View {
         }, message: {
             Text(alertMessage)
         })
-        .alert("Delete confirmation", isPresented: $isShowingDeleteAlert, actions: {
-            Button("Delete", role: .destructive, action: deleteAlertAction)
+        .alert("delete_confirmation_title", isPresented: $isShowingDeleteAlert, actions: {
+            Button("delete", role: .destructive, action: deleteAlertAction)
         }, message: {
-            Text("Are you sure you want to delete this document?")
+            Text("delete_confirmation_body")
         })
     }
     

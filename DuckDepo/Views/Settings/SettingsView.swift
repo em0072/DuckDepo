@@ -23,7 +23,7 @@ struct SettingsView: View {
                 OverviewSection(documentCount: $documentsCount, passwordCount: $passwordsCount)
 //                
                 DeleteAllSection(onDeleteAction: deleteEverything)
-            }.navigationBarTitle(Text("Settings"))
+            }.navigationBarTitle(Text("sv_title"))
         }
         .onAppear(perform: updateDocumentsCount)
         .navigationViewStyle(StackNavigationViewStyle())

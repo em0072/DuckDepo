@@ -18,11 +18,11 @@ struct AddNewView: View {
         var title: String {
             switch self {
             case .folder, .editFolder(_):
-                return "category"
+                return "anv_category".localized()
             case .field:
-                return "field"
+                return "anv_field".localized()
             case .section:
-                return "section"
+                return "anv_section".localized()
             }
         }
     }
@@ -34,12 +34,16 @@ struct AddNewView: View {
     var onDismiss: (()->())?
     var onSave: ((String) -> ())?
     
-    private var title: String {
+    private var title: LocalizedStringKey {
         switch type {
         case .editFolder(let name):
-            return "Edit \(name)"
-        default:
-            return "New \(type.title.capitalized)"
+            return "anv_edit_folder \(name)"
+        case .folder:
+            return "anv_new_folder"
+        case .section:
+            return "anv_new_section"
+        case .field:
+            return "anv_new_field"
         }
     }
     
@@ -67,8 +71,8 @@ struct AddNewView: View {
                     AddFolderForm(folderDoesExsistAlertShown: $folderDoesExsistAlertShown, name: $name, type: type, onSave: onSave)
                 }
             }
-            .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
+            .navigationTitle(title)
             .navigationBarItems(leading: Button {
                 self.isPresented = false
                 onDismiss?()
@@ -76,6 +80,7 @@ struct AddNewView: View {
                 Image(systemName: "xmark")
             })
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
     
     
@@ -89,21 +94,38 @@ struct AddFolderForm: View {
     var type: AddNewView.DataType
     var onSave: ((String) -> ())?
     
-    var sectionTitle: String {
+    var sectionTitle: LocalizedStringKey {
         switch type {
-        case .editFolder(_):
-            return "Enter a new name for the \(type.title.capitalized)"
-        default:
-            return "Enter a name for a new \(type.title.capitalized)"
+        case .editFolder(_), .folder:
+            return "anv_enter_name_folder"
+        case .section:
+            return "anv_enter_name_section"
+        case .field:
+            return "anv_enter_name_field"
         }
     }
     
-    var buttonTitle: String {
+    var buttonTitle: LocalizedStringKey {
         switch type {
         case .editFolder(_):
-            return "Edit \(type.title.capitalized)"
-        default:
-            return "Add new \(type.title.capitalized)"
+            return "anv_edit_folder"
+        case .folder:
+            return "anv_add_new_folder"
+        case .section:
+            return "anv_add_new_section"
+        case .field:
+            return "anv_add_new_field"
+        }
+    }
+    
+    var textFieldPrompt: LocalizedStringKey {
+        switch type {
+        case .editFolder(_), .folder:
+            return "anv_text_filed_new_name_folder"
+        case .section:
+            return "anv_text_filed_new_name_section"
+        case .field:
+            return "anv_text_filed_new_name_field"
         }
     }
 
@@ -111,7 +133,7 @@ struct AddFolderForm: View {
     var body: some View {
         Form {
             Section {
-                TextField("Add the name of a new \(type.title)", text: $name, prompt: Text("New \(type.title.capitalized) Name"))
+                TextField(textFieldPrompt, text: $name, prompt: Text(textFieldPrompt))
             } header: {
                 Text(sectionTitle)
             }
@@ -130,12 +152,12 @@ struct AddFolderForm: View {
                 .listRowBackground(name.isEmpty ? Color.duckDisabledButton : Color.duckYellow)
             }
         }
-        .alert("Duplicate", isPresented: $folderDoesExsistAlertShown, actions: {
+        .alert("anv_duplicate_title", isPresented: $folderDoesExsistAlertShown, actions: {
             Button("Ok") {
                 self.folderDoesExsistAlertShown = false
             }
         }, message: {
-            Text("The \(type.title) with this name already exsists. Please choose a different name.")
+            Text("asm_duplicate_body \(type.title)")
         })
     }
     

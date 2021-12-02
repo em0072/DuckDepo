@@ -6,6 +6,16 @@
 //
 
 import Foundation
+import SwiftUI
+
+struct SectionOption: Codable {
+    let name: String
+    let fields: [FieldOption]
+}
+
+struct FieldOption: Codable {
+    let name: String
+}
 
 struct InputOption: Codable {
     let sections: [SectionOption]
@@ -16,7 +26,13 @@ struct InputOption: Codable {
            let data = try? Data(contentsOf: url, options: .dataReadingMapped) {
             do {
                 let object = try JSONDecoder().decode(InputOption.self, from: data)
-                sections = object.sections
+                for section in object.sections {
+                    var fields = [FieldOption]()
+                    for field in section.fields {
+                        fields.append(FieldOption(name: field.name.localized()))
+                    }
+                    sections.append(SectionOption(name: section.name.localized(), fields: fields))
+                }
             } catch {
                 print(error)
             }
@@ -29,11 +45,3 @@ struct InputOption: Codable {
     }
 }
 
-struct SectionOption: Codable {
-    let name: String
-    let fields: [FieldOption]
-}
-
-struct FieldOption: Codable {
-    let name: String
-}

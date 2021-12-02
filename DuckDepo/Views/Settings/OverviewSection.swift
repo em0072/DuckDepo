@@ -27,23 +27,11 @@ struct OverviewSection: View {
     
     
     var documentCountText: String {
-        var string = "\(documentCount) "
-        if documentCount == 1 {
-            string += "document"
-        } else {
-            string += "documents"
-        }
-        return string
+        return "sv_document_count".localizedPlurual(documentCount)
     }
     
     var passwordCountText: String {
-        var string = "\(passwordCount) "
-        if passwordCount == 1 {
-            string += "password"
-        } else {
-            string += "passwords"
-        }
-        return string
+        return "sv_password_count".localizedPlurual(passwordCount)
     }
 
 }

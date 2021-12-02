@@ -35,7 +35,7 @@ struct PasswordGeneratorView: View {
             Button {
                 onAction?(generatedPassword)
             } label: {
-                Text("Use Password")
+                Text("pgv_use_button")
             }
             .buttonStyle(DuckButtonStyle())
             .clipShape(Capsule())
@@ -59,7 +59,7 @@ struct PasswordGeneratorView: View {
     
     @ViewBuilder var title: some View {
         HStack {
-            Text("Password Generation")
+            Text("pgv_title")
                 .font(.title)
             Spacer()
             Button(action: {
@@ -74,12 +74,12 @@ struct PasswordGeneratorView: View {
     
     @ViewBuilder var slider: some View {
         HStack {
-            Text("Number of symbols:")
+            Text("pgv_num_of_symbols")
             Spacer()
             Text("\(Int(numberOfSymbols))")
         }
         Slider(value: $numberOfSymbols, in: 6...20, step: 1, label: {
-            Text("Number of symbols")
+            Text("pgv_num_of_symbols")
         }, minimumValueLabel: {
             Text("5")
         }, maximumValueLabel: {
@@ -94,7 +94,7 @@ struct PasswordGeneratorView: View {
     
     @ViewBuilder var params: some View {
         HStack {
-        Text("Parameters:")
+        Text("pgv_params")
             Spacer()
         }
         HStack {

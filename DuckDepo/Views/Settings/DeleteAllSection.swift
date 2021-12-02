@@ -14,14 +14,14 @@ struct DeleteAllSection: View {
     
     var body: some View {
         Section {
-        Button("Delete All Data", role: .destructive, action: showDeleteAllAlert)
-            .confirmationDialog("Are you sure?", isPresented: $isShowingDeleteAlert, titleVisibility: .visible, actions: {
-                Button("Yes, I am sure!", role: .destructive, action: {onDeleteAction?()})
+        Button("sv_delete_all_button", role: .destructive, action: showDeleteAllAlert)
+            .confirmationDialog("sv_delete_all_confirm_title", isPresented: $isShowingDeleteAlert, titleVisibility: .visible, actions: {
+                Button("sv_delete_all_confirm_button", role: .destructive, action: {onDeleteAction?()})
             }, message: {
-                Text("This action will delete all data and it cannot be undone. Are you sure you want to proceed?")
+                Text("sv_delete_all_confirm_body")
             })
         } header: {
-            Text("Reset Content")
+            Text("sv_content_reset")
         }
     }
     

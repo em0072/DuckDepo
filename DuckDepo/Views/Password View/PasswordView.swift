@@ -25,10 +25,10 @@ struct PasswordView: View {
                 Button(action: shareAlert) {
                     Image(systemName: "square.and.arrow.up")
                 }
-                .alert("Are you sure?", isPresented: $viewModel.showShareAlert, actions: {
-                    Button("Share", role: .destructive, action: sharePassword)
+                .alert("pv_share_alert_title", isPresented: $viewModel.showShareAlert, actions: {
+                    Button("pv_share_alert_button", role: .destructive, action: sharePassword)
                 }, message: {
-                    Text("Sharing passwords with people you don't trust is unsafe and can result in your account being hacked! Are you sure you want to share your password?")
+                    Text("pv_share_alert_body")
                 })
                 .sheet(isPresented: $viewModel.showShareSheetView, onDismiss: {
                     viewModel.itemsToShare = nil
@@ -51,31 +51,31 @@ struct PasswordView: View {
     var credentialsSection: some View {
         Section {
             if password.login.isEmpty, password.value.isEmpty {
-                Text("Credentials Are Empty")
+                Text("pv_empty_credentials")
             } else {
                 if !password.login.isEmpty {
-                    FloatingTextView(title: "Login", value: password.login)
+                    FloatingTextView(title: "pv_login".localized(), value: password.login)
                 }
                 if !password.value.isEmpty {
                     HStack {
                         ZStack {
-                            FloatingTextView(title: "Password", value: password.value, isVisible: $isPasswordVisible)
+                            FloatingTextView(title: "pv_password".localized(), value: password.value, isVisible: $isPasswordVisible)
                         }
                         FormButton(action: togglePasswordVisibility, imageSystemName: isPasswordVisible ? "eye.slash" : "eye")
                     }
                 }
             }
         } header: {
-            Text("Credentials")
+            Text("pv_credentials")
         }
     }
     
     @ViewBuilder var websiteSection: some View {
         if !password.website.isEmpty {
         Section {
-            FloatingTextView(title: "Website", value: password.website, url: password.websiteURL)
+            FloatingTextView(title: "pv_website".localized(), value: password.website, url: password.websiteURL)
         } header: {
-            Text("Additional Information")
+            Text("pv_additional_information")
         }
         }
     }
@@ -83,7 +83,7 @@ struct PasswordView: View {
     private func sharePassword() {
         var shareString: String = ""
         if !password.name.isEmpty {
-            shareString.append("Here is details of ")
+            shareString.append("pv_share_details_title".localized())
             shareString.append(password.name)
             shareString.append("\n\n")
         }
@@ -103,7 +103,7 @@ struct PasswordView: View {
             shareString.append("\n\n")
         }
 
-        shareString.append("Shared with 🦆 DuckDepo.")
+        shareString.append("pv_share_caption".localized())
         shareString.append("\n")
         shareString.append("https://DuckDepo.com")
         share(items: [shareString])

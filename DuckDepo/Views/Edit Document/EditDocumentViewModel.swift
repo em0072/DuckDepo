@@ -79,12 +79,12 @@ extension EditDocumentView {
         
         //MARK: -Name & Folder
         
-        var viewTitle: String {
+        var viewTitle: LocalizedStringKey {
             switch type {
             case .new:
-                return "New Document"
+                return "add_new_doc"
             case .existing(let document):
-                return "Edit \(document.name)"
+                return "edit \(document.name)"
             }
         }
 
@@ -104,12 +104,12 @@ extension EditDocumentView {
         
         //MARK: -Add Button
         
-        var saveButtonTitle: String {
+        var saveButtonTitle: LocalizedStringKey {
             switch type {
             case .new:
-                return "Add New Document"
+                return "add_new_doc"
             case .existing(_):
-                return "Save Changes"
+                return "save_changes"
             }
         }
         //MARK: State

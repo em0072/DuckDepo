@@ -20,4 +20,13 @@ extension String {
         return false
     }
     
+    func localized() -> String {
+        return NSLocalizedString(self, comment: self)
+    }
+    
+    func localizedPlurual(_ number: Int) -> String {
+        let localzedString = NSLocalizedString(self, comment: self)
+        return String.localizedStringWithFormat(localzedString, number)
+    }
+    
 }

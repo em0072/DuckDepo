@@ -25,14 +25,5 @@
 	<array>
 		<string>remote-notification</string>
 	</array>
-	<key>UILaunchScreen</key>
-	<dict>
-		<key>UIColorName</key>
-		<string>background</string>
-		<key>UIImageName</key>
-		<string>LaunchScreenDuck</string>
-		<key>UIImageRespectsSafeAreaInsets</key>
-		<true/>
-	</dict>
 </dict>
 </plist>

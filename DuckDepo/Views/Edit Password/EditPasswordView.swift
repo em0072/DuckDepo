@@ -27,20 +27,20 @@ struct EditPasswordView: View {
         Form {
             NameSection(viewModel: viewModel)
             Section {
-                BindableFloatingTextField(title: "Login", value: $viewModel.passwordLogin)
+                BindableFloatingTextField(title: "epv_login".localized(), value: $viewModel.passwordLogin)
                 HStack {
-                    BindableFloatingTextField(title: "Password", value: $viewModel.passwordValue)
+                    BindableFloatingTextField(title: "epv_password".localized(), value: $viewModel.passwordValue)
                     FormButton(action: {
                         isShowingPassGenerator = true
                     }, imageSystemName: "wand.and.stars.inverse")
                 }
             } header: {
-                Text("Credentials")
+                Text("epv_credentials")
             }
             Section {
-                BindableFloatingTextField(title: "Website", value: $viewModel.passwordWebsite, keyboardType: .URL)
+                BindableFloatingTextField(title: "epv_website".localized(), value: $viewModel.passwordWebsite, keyboardType: .URL)
             } header: {
-                Text("Additional Information")
+                Text("epv_additional_information")
             }
             AddButtonView(action: {
                 viewModel.addNewPasswordButtonAction()
@@ -72,10 +72,10 @@ struct EditPasswordView: View {
             passGenerationView
                 .background(BackgroundCleanerView())
         })
-        .alert("Delete confirmation", isPresented: $isShowingDeleteAlert, actions: {
-            Button("Delete", role: .destructive, action: deleteAlertAction)
+        .alert("epv_delete_alert_title", isPresented: $isShowingDeleteAlert, actions: {
+            Button("epv_delete_alert_delete", role: .destructive, action: deleteAlertAction)
         }, message: {
-            Text("Are you sure you want to delete this password?")
+            Text("epv_delete_alert_body")
         })
 
         }
@@ -111,9 +111,9 @@ struct NameSection: View {
     
     var body: some View {
         Section {
-            BindableFloatingTextField(title: "Name", value: $viewModel.passwordName)
+            BindableFloatingTextField(title: "epv_name".localized(), value: $viewModel.passwordName)
         } header: {
-            Text("General Information")
+            Text("epv_general_information")
         }
     }
 }

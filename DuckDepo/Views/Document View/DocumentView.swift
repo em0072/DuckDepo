@@ -23,8 +23,10 @@ struct DocumentView: View {
 
     var body: some View {
         List {
-            Section("Document name") {
+            Section {
                 Text(document.name ?? "")
+            } header: {
+                Text("dv_doc_name")
             }
             
             PhotosView(document: document, imageViewerImage: $imageViewerImage, showingImageViewer: $showingImageViewer)
@@ -51,6 +53,23 @@ struct DocumentView: View {
                 Button(action: shareInfo) {
                     Image(systemName: "square.and.arrow.up")
                 }
+                .actionSheet(isPresented: $showShareActionSheet, content: {
+                        ActionSheet(title: Text("dv_share_doc_title"),
+                                message: Text("dv_share_doc_body"),
+                                    buttons: [
+                                        //MARK: Doesn't work for some reason - only single object can be shared
+//                                        .default(Text("dv_share_photo_and_text")) {
+//                                            sharePhotosAndText()
+//                                        },
+                                        .default(Text("dv_share_photo")) {
+                                            sharePhotos()
+                                        },
+                                        .default(Text("dv_share_text")) {
+                                            shareText()
+                                        },
+                                        .cancel()
+                                    ])
+                })
                 .sheet(isPresented: $showShareSheetView, onDismiss: {
                     viewModel.itemsToShare = nil
                 }) {
@@ -71,19 +90,7 @@ struct DocumentView: View {
         .fullScreenCover(isPresented: $showingImageViewer, onDismiss: nil) {
             ImageViewer(image: $imageViewerImage, viewerShown: $showingImageViewer)
         }
-        .actionSheet(isPresented: $showShareActionSheet, content: {
-                ActionSheet(title: Text("Share Document"),
-                        message: Text("Would you like to share document photos or text information?"),
-                        buttons: [
-                            .default(Text("Photos")) {
-                      sharePhotos()
-                            },
-                  .default(Text("Text")) {
-                      shareText()
-                  },
-                  .cancel()
-                ])
-        })
+        
         .animation(.default, value: document)
     }
     
@@ -93,8 +100,7 @@ struct DocumentView: View {
     
     private func shareAction() {
         viewModel.share(document) { share, container, error in
-            if let shareError = error {
-                print("Couldn't create a share - \(shareError)")
+            if error != nil {
             } else {
                 DispatchQueue.main.async {
                     viewModel.activeContainer = container
@@ -125,17 +131,23 @@ struct DocumentView: View {
             showShareActionSheet = true
         }
     }
+    
+    private func sharePhotosAndText() {
+        share(items: [constractSharePhotos(), constractShareText()])
+    }
         
     private func sharePhotos() {
-        if let photos = document.getPhotos() {
-            share(items: photos)
-        }
+        share(items: constractSharePhotos())
     }
     
-    private func shareText() {
+    private func constractSharePhotos() -> [UIImage] {
+        return document.getPhotos() ?? []
+    }
+    
+    private func constractShareText() -> String {
         var documentString: String = ""
         if let docName = document.name {
-            documentString.append("Here is details of ")
+            documentString.append("dv_share_details_title".localized())
             documentString.append(docName)
             documentString.append("\n\n")
         }
@@ -151,10 +163,14 @@ struct DocumentView: View {
             }
             documentString.append("\n")
         }
-        documentString.append("Shared with 🦆 DuckDepo.")
+        documentString.append("dv_share_caption".localized())
         documentString.append("\n")
         documentString.append("https://DuckDepo.com")
-        share(items: [documentString])
+        return documentString
+    }
+    
+    private func shareText() {
+        share(items: [constractShareText()])
     }
     
     private func share(items: [Any]) {
@@ -186,7 +202,7 @@ struct PhotosView: View {
     @Binding var showingImageViewer: Bool
 
     var body: some View {
-        Section("Photos") {
+        Section {
             if let photos = document.getPhotos(), !photos.isEmpty {
                 ScrollView(.horizontal) {
                     LazyHStack {
@@ -203,8 +219,10 @@ struct PhotosView: View {
                 }
                 .padding([.trailing, .leading], -12)
             } else {
-                Text("No Photos")
+                Text("dv_no_photos")
             }
+        } header: {
+            Text("dv_photos")
         }
     }
 }

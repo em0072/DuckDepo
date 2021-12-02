@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>sv_password_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@sv_password_count@</string>
+		<key>sv_password_count</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>u</string>
+			<key>zero</key>
+			<string>Нет паролей</string>
+			<key>one</key>
+			<string>1 пароль</string>
+			<key>few</key>
+			<string>%u пароля</string>
+			<key>many</key>
+			<string>%u паролей</string>
+			<key>other</key>
+			<string>%u пароля</string>
+		</dict>
+	</dict>
+	<key>sv_document_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@sv_document_count@</string>
+		<key>sv_document_count</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>u</string>
+			<key>zero</key>
+			<string>Нет документов</string>
+			<key>one</key>
+			<string>1 документ</string>
+			<key>few</key>
+			<string>%u документа</string>
+			<key>many</key>
+			<string>%u документов</string>
+			<key>other</key>
+			<string>%u документа</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

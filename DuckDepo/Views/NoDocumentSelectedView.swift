@@ -9,18 +9,28 @@ import SwiftUI
 
 struct NoSelectionViewView: View {
     
-    enum ViewType: String {
+    enum ViewType {
         case document
         case password
+        
+        var title: LocalizedStringKey {
+            switch self {
+            case .document:
+                return "no_doc_view_body_docs"
+            case .password:
+                return "no_doc_view_body_passwords"
+            }
+            
+        }
     }
     
     var type: ViewType
     
     var body: some View {
-        Text("Welcome to DuckDepo!")
+        Text("no_doc_view_title")
             .font(.title)
             .padding()
-        Text("Currently, no \(type.rawValue) selected. Please select a \(type.rawValue) on the left panel.")
+        Text(type.title)
             .font(.body)
     }
 }

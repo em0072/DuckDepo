@@ -36,21 +36,21 @@ extension EditPasswordView {
             }
         }
         
-        var viewTitle: String {
+        var viewTitle: LocalizedStringKey {
             switch type {
             case .new:
-                return "New Password"
+                return "epv_new_password_title"
             case .existing(_):
-                return "Edit Password"
+                return "epv_edit_password_title"
             }
         }
         
-        var saveButtonTitle: String {
+        var saveButtonTitle: LocalizedStringKey {
             switch type {
             case .new:
-                return "Add New Password"
+                return "epv_add_new_password_button"
             case .existing(_):
-                return "Save Changes"
+                return "epv_edit_password_button"
             }
         }
 

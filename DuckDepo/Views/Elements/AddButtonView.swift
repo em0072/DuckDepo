@@ -10,7 +10,7 @@ import SwiftUI
 struct AddButtonView: View {
     
     var action: (()->())?
-    var title: String
+    var title: LocalizedStringKey
     @Binding var isActive: Bool
 
     var body: some View {

@@ -87,7 +87,6 @@ struct DepoListView: View {
     
     private func move(from index: IndexSet, to destination: Int) {
         let docList = documents.map{$0}
-        print("Moved item from \(index.first!) to \(destination)")
         viewModel.move(from: index, to: destination, in: docList)
     }
         

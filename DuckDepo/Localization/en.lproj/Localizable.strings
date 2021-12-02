@@ -1,0 +1,170 @@
+/* 
+ Localizable.strings
+  DuckDepo
+
+  Created by Evgeny Mitko on 02/12/2021.
+  
+*/
+
+//Predefiened Field Options
+"Document Info" = "Document Info";
+"Number" = "Number";
+"Issue Date" = "Issue Date";
+"Issued By" = "Issued By";
+"Date Of Expiry" = "Date Of Expiry";
+"Document Owner" = "Document Owner";
+"Full Name" = "Full Name";
+"Date Of Birth" = "Date Of Birth";
+"Place Of Birth" = "Place Of Birth";
+"Nationality" = "Nationality";
+"Phone" = "Phone";
+"Vehical Info" = "Vehical Info";
+"Licence Plate" = "Licence Plate";
+"Identification Number (VIN)" = "Identification Number (VIN)";
+"Make" = "Make";
+"Model" = "Model";
+"Type" = "Type";
+"Color" = "Color";
+"Power" = "Power";
+"Additional Info" = "Additional Info";
+"Remarks" = "Remarks";
+"Notes" = "Notes";
+
+
+// NoDocumentSelectedView 
+"no_doc_view_title" = "Welcome to DuckDepo!";
+"no_doc_view_body_docs" = "Currently, no document selected. Please select a document on the left panel.";
+"no_doc_view_body_passwords" = "Currently, no password selected. Please select a password on the left panel.";
+
+
+// ContentView
+"Passwords" = "Passwords";
+"Settings" = "Settings";
+
+
+//DepoListView
+
+
+//EditDocumentView
+"delete_confirmation_title" = "Delete confirmation";
+"delete" = "Delete";
+"delete_confirmation_body" = "Are you sure you want to delete this document?";
+"add_new_doc" = "Add New Document";
+"edit %@" = "Edit %@";
+"save_changes" = "Save Changes";
+
+//NameView
+"nv_main_info" = "Main Info";
+"nv_add_new_doc" = "Add New Document";
+"nv_doc_name" = "Document Name";
+
+//PhotosSectionView
+"psv_photo_selection_body" = "Do you want to scan a document with camera or choose it from photo library?";
+"psv_camera" = "Camera";
+"psv_photo_library" = "Photo Library";
+"psv_photos" = "Photos";
+
+
+//SectionView
+"sv_duplicate_title" = "Duplicate";
+"sv_duplicate_body" = "The field with this name already exsists. Please choose a different name.";
+"sv_add_field" = "Add Field";
+"sv_custom" = "Custom";
+
+//AddSectionMenu
+"asm_duplicate_title" = "Duplicate";
+"asm_duplicate_body" = "The section with this name already exsists. Please choose a different name.";
+"asm_add_section" = "Add Section";
+"asm_custom" = "Custom";
+
+//AddNewView
+"anv_edit_folder %@" = "Edit %@";
+"anv_new_folder" = "New Folder";
+"anv_new_section" = "New Section";
+"anv_new_field" = "New Field";
+"anv_enter_name_folder" = "Enter a new name for the folder";
+"anv_enter_name_section" = "Enter a new name for the section";
+"anv_enter_name_field" = "Enter a new name for the field";
+"anv_edit_folder" = "Edit Folder";
+"anv_add_new_folder" = "Add Folder";
+"anv_add_new_section" = "Add Section";
+"anv_add_new_field" = "Add Field";
+"anv_text_filed_new_name_folder" = "Folder Name";
+"anv_text_filed_new_name_section" = "Section Name";
+"anv_text_filed_new_name_field" = "Field Name";
+"anv_duplicate_title" = "Duplicate";
+"asm_duplicate_body %@" = "%@ with this name already exsists. Please choose a different name.";
+"anv_category" = "Category";
+"anv_field" = "Field";
+"anv_section" = "Section";
+
+//DocumentView
+"dv_doc_name" = "Document Name";
+"dv_share_doc_title" = "Share Document";
+"dv_share_doc_body" = "Would you like to share document photos, text information or all together?";
+"dv_share_photo_and_text" = "Photos and text";
+"dv_share_photo" = "Photos only";
+"dv_share_text" = "Text only";
+"dv_share_details_title" = "Here is details of ";
+"dv_share_caption" = "Shared with 🦆 DuckDepo.";
+"dv_photos" = "Photos";
+"dv_no_photos" = "No Photos";
+
+//PasswordsListView
+"plv_title" = "Passwords";
+
+//EditPasswordView
+"epv_login" = "Login";
+"epv_password" = "Password";
+"epv_credentials" = "Credentials";
+"epv_website" = "Website";
+"epv_additional_information" = "Additional Information";
+"epv_delete_alert_title" = "Delete confirmation";
+"epv_delete_alert_delete" = "Delete";
+"epv_delete_alert_body" = "Are you sure you want to delete this password?";
+"epv_name" = "Name";
+"epv_general_information" = "General Information";
+"epv_new_password_title" = "New Password";
+"epv_edit_password_title" = "Edit Password";
+"epv_add_new_password_button" = "Add New Password";
+"epv_edit_password_button" = "Save Changes";
+
+//PasswordGeneratorView
+"pgv_use_button" = "Use Password";
+"pgv_title" = "Password Generation";
+"pgv_num_of_symbols" = "Number of symbols:";
+"pgv_params" = "Parameters:";
+
+//PasswordView
+"pv_share_alert_title" = "Are you sure?";
+"pv_share_alert_body" = "Sharing passwords with people you don't trust is unsafe and can result in your account being hacked! Are you sure you want to share your password?";
+"pv_share_alert_button" = "Share";
+"pv_empty_credentials" = "Credentials Are Empty";
+"pv_login" = "Login";
+"pv_password" = "Password";
+"pv_credentials" = "Credentials";
+"pv_website" = "Website";
+"pv_additional_information" = "Additional Information";
+"pv_share_details_title" = "Here is details of ";
+"pv_share_caption" = "Shared with 🦆 DuckDepo.";
+
+//SettingsView
+"sv_title" = "Settings";
+"sv_ask_after" = "Ask after";
+"sv_passcode_not_set" = "You need to enable passcode in the phone settings to secure DuckDepo app.";
+"sv_security" = "Security";
+"sv_immediatley" = "Immediatley";
+"sv_5_sec" = "After 5 seconds";
+"sv_15_sec" = "After 15 seconds";
+"sv_1_min" = "After 1 minute";
+"sv_5_min" = "After 5 minute";
+"sv_15_min" = "After 15 minute";
+"sv_enable_faceid" = "Enable Face ID";
+"sv_enable_touchid" = "Enable Touch ID";
+"sv_enable_passcode" = "Enable passcode";
+"sv_storage" = "Storage";
+"sv_content_reset" = "Reset Content";
+"sv_delete_all_button" = "Delete All Data";
+"sv_delete_all_confirm_title" = "Are you sure?";
+"sv_delete_all_confirm_button" = "Yes, I am sure!";
+"sv_delete_all_confirm_body" = "This action will delete all data and it cannot be undone. Are you sure you want to proceed?";

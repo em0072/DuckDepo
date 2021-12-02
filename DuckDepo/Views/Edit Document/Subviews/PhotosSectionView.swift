@@ -26,7 +26,7 @@ struct PhotosSectionView: View {
     @State var cameraPickerSelectedImages: [UIImage]?
 
     var body: some View {
-        Section("Photos") {
+        Section {
             ScrollView(.horizontal) {
                 ScrollViewReader { scrollProxy in
                     LazyHStack {
@@ -61,11 +61,11 @@ struct PhotosSectionView: View {
             }
             .padding([.leading, .trailing], -15)
             .actionSheet(isPresented: $showingPhotoChooser) {
-                ActionSheet(title: Text("Do you want to scan a document with camera or choose it from photo library?"), buttons: [
-                    .default(Text("Camera")) {
+                ActionSheet(title: Text("psv_photo_selection_body"), buttons: [
+                    .default(Text("psv_camera")) {
                         showingCameraView = true
                     },
-                    .default(Text("Photo Library")) {
+                    .default(Text("psv_photo_library")) {
                         showingImagePicker = true
                     },
                     .cancel()
@@ -78,6 +78,8 @@ struct PhotosSectionView: View {
                 CameraPickerView(imageArray: $cameraPickerSelectedImages)
             }
             
+        } header: {
+            Text("psv_photos")
         }
     }
     

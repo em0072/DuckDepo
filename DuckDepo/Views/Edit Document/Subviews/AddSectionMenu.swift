@@ -27,12 +27,12 @@ struct AddSectionMenu: View {
             .sheet(isPresented: $showingAddNewSectionView) {
                 AddNewView(isPresented: $showingAddNewSectionView, duplicateAlertPresented: $showDuplicatedAlert, type: .section, onSave: addSection)
             }
-            .alert("Duplicate", isPresented: $showDuplicatedAlert, actions: {
+            .alert("asm_duplicate_title", isPresented: $showDuplicatedAlert, actions: {
                 Button("Ok") {
                     self.showDuplicatedAlert = false
                 }
             }, message: {
-                Text("The section with this name already exsists. Please choose a different name.")
+                Text("asm_duplicate_body")
             })
         }
     }
@@ -40,17 +40,17 @@ struct AddSectionMenu: View {
     
     @ViewBuilder var addButton: some View {
         if possibleOptions.isEmpty {
-            addCustomSectionbutton
+            addCustomSectionButton
         } else {
             menuButton
         }
     }
     
-    var addCustomSectionbutton: some View {
+    var addCustomSectionButton: some View {
         Button {
             self.showingAddNewSectionView = true
         } label: {
-            Label("Add Section", systemImage: "plus.circle")
+            Label("asm_add_section", systemImage: "plus.circle")
         }
 
     }
@@ -67,10 +67,10 @@ struct AddSectionMenu: View {
             Button(role: .destructive) {
                 self.showingAddNewSectionView = true
             } label: {
-                Text("Custom")
+                Text("asm_custom")
             }
         } label: {
-            Label("Add Section", systemImage: "plus.circle")
+            Label("asm_add_section", systemImage: "plus.circle")
         }
     }
     

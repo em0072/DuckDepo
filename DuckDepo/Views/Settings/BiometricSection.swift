@@ -21,46 +21,46 @@ struct BiometricSection: View {
                     .labelStyle(ColorfulIconLabelStyle(color: .green, size: size))
             }
                 if isBiometryEnabled {
-                    Picker("Ask after", selection: $biometryDelay) {
+                    Picker("sv_ask_after", selection: $biometryDelay) {
                         ForEach(BiometricController.BiometricDelay.allCases, id: \.self) { option in
                             Text(biometricDelayCasesText(option))
                         }
                     }
                 }
             } else {
-                Text("You need to enable passcode in the phone settings to secure DuckDepo app.")
+                Text("sv_passcode_not_set")
                     .font(.caption)
             }
         } header: {
-            Text("Security")
+            Text("sv_security")
         }
     }
     
     private func biometricDelayCasesText(_ delay: BiometricController.BiometricDelay) -> String {
         switch delay {
         case .none:
-            return "Immediatley"
+            return "sv_immediatley".localized()
         case .fiveSeconds:
-            return "After 5 seconds"
+            return "sv_5_sec".localized()
         case .fiveteenSeconds:
-            return "After 15 seconds"
+            return "sv_15_sec".localized()
         case .minute:
-            return "After 1 minute"
+            return "sv_1_min".localized()
         case .fiveMinutes:
-            return "After 5 minutes"
+            return "sv_1_min".localized()
         case .fiveteenMinutes:
-            return "After 15 minutes"
+            return "sv_1_min".localized()
         }
     }
     
     private var biometricToggleTitle: String {
         let type = BiometricController.shared.biometricType()
         if case .face = type {
-            return "Enable Face ID"
+            return "sv_enable_faceid".localized()
         } else if case .touch = type {
-            return "Enable Touch ID"
+            return "sv_enable_touchid".localized()
         } else {
-            return "Enable Passcode"
+            return "sv_enable_passcode".localized()
         }
     }
     

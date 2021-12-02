@@ -41,6 +41,8 @@
 		755759AB2730450800DA8B9A /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755759AA2730450800DA8B9A /* Document.swift */; };
 		755759AD2730455600DA8B9A /* Folder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755759AC2730455600DA8B9A /* Folder.swift */; };
 		755759AF273045B900DA8B9A /* CoreDataConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755759AE273045B900DA8B9A /* CoreDataConverter.swift */; };
+		756A0D5F2758B99500CD29E0 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 756A0D5E2758B99500CD29E0 /* Launch Screen.storyboard */; };
+		756A0D602758BCB800CD29E0 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 756A0D622758BCB800CD29E0 /* Localizable.strings */; };
 		756AF0B02726C320001CB821 /* DuckDepoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756AF0AF2726C320001CB821 /* DuckDepoApp.swift */; };
 		756AF0B22726C320001CB821 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756AF0B12726C320001CB821 /* ContentView.swift */; };
 		756AF0B42726C324001CB821 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 756AF0B32726C324001CB821 /* Assets.xcassets */; };
@@ -50,6 +52,7 @@
 		7574E8ED272AE66B0079B51C /* DocumentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7574E8EC272AE66B0079B51C /* DocumentView.swift */; };
 		7580B246273AA99A00F06F23 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7580B245273AA99A00F06F23 /* AppDelegate.swift */; };
 		758ABD132729828F0074F61A /* EditDocumentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758ABD122729828F0074F61A /* EditDocumentView.swift */; };
+		759257632759047C003C9826 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 759257652759047D003C9826 /* Localizable.stringsdict */; };
 		75948C8C273914DC00EB880E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75948C8B273914DC00EB880E /* SceneDelegate.swift */; };
 		75948C902739202D00EB880E /* DocumentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75948C8F2739202D00EB880E /* DocumentViewModel.swift */; };
 		75948C922739250100EB880E /* DepoListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75948C912739250100EB880E /* DepoListViewModel.swift */; };
@@ -128,6 +131,9 @@
 		755759AA2730450800DA8B9A /* Document.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Document.swift; sourceTree = "<group>"; };
 		755759AC2730455600DA8B9A /* Folder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Folder.swift; sourceTree = "<group>"; };
 		755759AE273045B900DA8B9A /* CoreDataConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataConverter.swift; sourceTree = "<group>"; };
+		756A0D5E2758B99500CD29E0 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		756A0D612758BCB800CD29E0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		756A0D642758BCCA00CD29E0 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		756AF0AC2726C320001CB821 /* DuckDepo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DuckDepo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		756AF0AF2726C320001CB821 /* DuckDepoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuckDepoApp.swift; sourceTree = "<group>"; };
 		756AF0B12726C320001CB821 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -136,10 +142,12 @@
 		756AF0B82726C324001CB821 /* Persistence Controller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Persistence Controller.swift"; sourceTree = "<group>"; };
 		756AF0BB2726C324001CB821 /* DuckDepo.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DuckDepo.xcdatamodel; sourceTree = "<group>"; };
 		756AF0C22726C4B6001CB821 /* DuckDepo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DuckDepo.entitlements; sourceTree = "<group>"; };
-		756AF0C32726C4CD001CB821 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		756AF0C32726C4CD001CB821 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7574E8EC272AE66B0079B51C /* DocumentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentView.swift; sourceTree = "<group>"; };
 		7580B245273AA99A00F06F23 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		758ABD122729828F0074F61A /* EditDocumentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDocumentView.swift; sourceTree = "<group>"; };
+		759257642759047D003C9826 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		759257662759047E003C9826 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ru; path = ru.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		75948C8B273914DC00EB880E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		75948C8F2739202D00EB880E /* DocumentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentViewModel.swift; sourceTree = "<group>"; };
 		75948C912739250100EB880E /* DepoListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepoListViewModel.swift; sourceTree = "<group>"; };
@@ -272,6 +280,25 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		756A0D5A2758B7BB00CD29E0 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				756AF0B32726C324001CB821 /* Assets.xcassets */,
+				75973026273A7D2600A105A7 /* Predefiened Field Options.json */,
+				756A0D5E2758B99500CD29E0 /* Launch Screen.storyboard */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
+		756A0D5B2758B7D000CD29E0 /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				756A0D622758BCB800CD29E0 /* Localizable.strings */,
+				759257652759047D003C9826 /* Localizable.stringsdict */,
+			);
+			path = Localization;
+			sourceTree = "<group>";
+		};
 		756AF0A32726C320001CB821 = {
 			isa = PBXGroup;
 			children = (
@@ -292,10 +319,10 @@
 		756AF0AE2726C320001CB821 /* DuckDepo */ = {
 			isa = PBXGroup;
 			children = (
-				756AF0B32726C324001CB821 /* Assets.xcassets */,
-				756AF0C32726C4CD001CB821 /* Info.plist */,
-				75973026273A7D2600A105A7 /* Predefiened Field Options.json */,
+				756A0D5B2758B7D000CD29E0 /* Localization */,
+				756A0D5A2758B7BB00CD29E0 /* Assets */,
 				756AF0C22726C4B6001CB821 /* DuckDepo.entitlements */,
+				756AF0C32726C4CD001CB821 /* Info.plist */,
 				756AF0AF2726C320001CB821 /* DuckDepoApp.swift */,
 				7580B245273AA99A00F06F23 /* AppDelegate.swift */,
 				75948C8B273914DC00EB880E /* SceneDelegate.swift */,
@@ -522,6 +549,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = 756AF0A32726C320001CB821;
 			packageReferences = (
@@ -544,7 +572,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				75973027273A7D2600A105A7 /* Predefiened Field Options.json in Resources */,
+				759257632759047C003C9826 /* Localizable.stringsdict in Resources */,
+				756A0D602758BCB800CD29E0 /* Localizable.strings in Resources */,
 				756AF0B72726C324001CB821 /* Preview Assets.xcassets in Resources */,
+				756A0D5F2758B99500CD29E0 /* Launch Screen.storyboard in Resources */,
 				756AF0B42726C324001CB821 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -640,6 +671,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		756A0D622758BCB800CD29E0 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				756A0D612758BCB800CD29E0 /* en */,
+				756A0D642758BCCA00CD29E0 /* ru */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		759257652759047D003C9826 /* Localizable.stringsdict */ = {
+			isa = PBXVariantGroup;
+			children = (
+				759257642759047D003C9826 /* en */,
+				759257662759047E003C9826 /* ru */,
+			);
+			name = Localizable.stringsdict;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		756AF0BD2726C324001CB821 /* Debug */ = {
@@ -776,6 +828,7 @@
 				INFOPLIST_KEY_NSCameraUsageDescription = "Camera is used to scan documents. ";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Face ID is used to unlock your data";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -812,6 +865,7 @@
 				INFOPLIST_KEY_NSCameraUsageDescription = "Camera is used to scan documents. ";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Face ID is used to unlock your data";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";

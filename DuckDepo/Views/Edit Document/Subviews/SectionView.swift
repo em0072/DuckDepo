@@ -70,12 +70,12 @@ struct SectionView: View {
         .sheet(isPresented: $showingAddNewFieldView) {
             AddNewView(isPresented: $showingAddNewFieldView, duplicateAlertPresented: $showDuplicatedAlert, type: .field, onSave: addCustomField)
         }
-        .alert("Duplicate", isPresented: $showDuplicatedAlert, actions: {
+        .alert("sv_duplicate_title", isPresented: $showDuplicatedAlert, actions: {
             Button("Ok") {
                 self.showDuplicatedAlert = false
             }
         }, message: {
-            Text("The field with this name already exsists. Please choose a different name.")
+            Text("sv_duplicate_body")
         })
     }
     
@@ -94,7 +94,7 @@ struct SectionView: View {
             customFieldSection = section
             self.showingAddNewFieldView = true
         } label: {
-            Label("Add Field", systemImage: "plus.circle")
+            Label("sv_add_field", systemImage: "plus.circle")
         }
     }
     
@@ -114,10 +114,10 @@ struct SectionView: View {
                 customFieldSection = section
                 self.showingAddNewFieldView = true
             } label: {
-                Text("Custom")
+                Text("sv_custom")
             }
         } label: {
-            Label("Add Field", systemImage: "plus.circle")
+            Label("sv_add_field", systemImage: "plus.circle")
         }
     }
     

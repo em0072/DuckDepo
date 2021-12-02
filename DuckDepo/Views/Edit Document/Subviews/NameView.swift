@@ -12,8 +12,10 @@ struct NameView: View {
     @Binding var name: String
     
     var body: some View {
-        Section("Main Info") {
-            TextField("Add New Document", text: $name, prompt: Text("Document Name"))
+        Section {
+            TextField("nv_add_new_doc", text: $name, prompt: Text("nv_doc_name"))
+        } header: {
+            Text("nv_main_info")
         }
     }
 
@@ -21,6 +23,6 @@ struct NameView: View {
 
 struct NameView_Previews: PreviewProvider {
     static var previews: some View {
-        NameView(name: .constant("Document Name"))
+        NameView(name: .constant("nv_doc_name"))
     }
 }
