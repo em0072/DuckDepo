@@ -31,24 +31,27 @@ struct DepoListView: View {
         NavigationView {
             ZStack {
                 if !documents.isEmpty {
-                    List {
-                        ForEach(documents) { document in
-                            NavigationLink(destination: DocumentView(document: document)) {
-                                DocumentRow(document: document, isShared: viewModel.isShared(document))
+                    ScrollView {
+                        VStack {
+                            ForEach(documents) { document in
+                                NavigationLink(destination: DocumentView(document: document)) {
+                                    DocumentRow(document: document, isShared: viewModel.isShared(document))
+                                }
+                                .buttonStyle(PlainButtonStyle())
                             }
+                            .onMove(perform: move)
+                            
                         }
-                        .onMove(perform: move)
-//                        .onLongPressGesture {
-//                            isReordering = .active
-//                        }
-                        
                     }
+                    .padding(.horizontal)
+//                    .listStyle(.plain)
                     .environment(\.editMode, viewModel.isReordering ? .constant(.active) : .constant(.inactive))
                 } else {
                     //Initial Instructions
                     InitialInstructionsView(type: .documents)
                 }
             }
+            .background(Color(.systemGray6))
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
@@ -65,6 +68,7 @@ struct DepoListView: View {
                 }
             }
             .navigationTitle("🦆 Depo")
+            .navigationBarTitleDisplayMode(.large)
             .animation(.default, value: viewModel.isReordering)
             NoSelectionViewView(type: .document)
 
@@ -120,11 +124,25 @@ struct DocumentRow: View {
     var isShared: Bool
 
     var body: some View {
-        if isShared {
-            Label(document.name ?? "", systemImage: "person.2.circle")
-                .foregroundColor(Color.duckText)
-        } else {
-            Text(document.name ?? "")
+        
+        ZStack(alignment: .leading) {
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color.white)
+            HStack {
+                document.convert().documentType.image
+                    .frame(width: 40, height: 40)
+                VStack {
+                    Text(document.name ?? "")
+                }
+            }
+            .padding(15)
         }
+        
+//        if isShared {
+//            Label(document.name ?? "", systemImage: "person.2.circle")
+//                .foregroundColor(Color.duckText)
+//        } else {
+//            Text(document.name ?? "")
+//        }
     }
 }

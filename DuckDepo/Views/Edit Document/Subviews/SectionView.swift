@@ -33,7 +33,7 @@ struct SectionView: View {
 //            section(for: section)
             Section {
                 ForEach(section.fields) { field in
-                    FloatingTextField(title: field.title, value: field.value, id: field.id, delegate: self)
+                    FloatingTextField(title: field.title, value: .constant(field.value), id: field.id, delegate: self)
                 }
                 .onDelete { offsets in
                     guard let index = offsets.first, index < section.fields.count else {return}

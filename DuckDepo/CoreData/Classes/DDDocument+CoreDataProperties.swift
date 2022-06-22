@@ -23,8 +23,11 @@ extension DDDocument {
     @NSManaged public var identifier: UUID?
     @NSManaged public var order: Int16
     @NSManaged public var name: String?
+    @NSManaged public var documentDescription: String?
+    @NSManaged public var documentType: String?
     @NSManaged public var photoData: Data?
     @NSManaged public var sections: Set<DDSection>?
+    @NSManaged public var documentTypeOrder: Int16
     
 
 }
@@ -107,24 +110,13 @@ extension DDDocument {
 }
 
 extension DDDocument {
-//    //To Be Deleted
-//    convenience init(viewContext: NSManagedObjectContext, object: Document, order: Int, folder: DDFolder) {
-//        self.init(context: viewContext)
-//        self.identifier = object.id
-//        self.name = object.name
-//        self.order = Int32(order)
-//        self.addToPhotos(object.photos)
-//        for index in 0..<object.sections.count {
-//            let section = object.sections[index]
-//            self.addToSections(DDSection(viewContext: viewContext, object: section, order: index, document: self))
-//        }
-////        self.folder = folder
-//    }
     
     convenience init(viewContext: NSManagedObjectContext, object: Document, order: Int) {
         self.init(context: viewContext)
         self.identifier = object.id
         self.name = object.name
+        self.documentDescription = object.description
+        updateType(newType: object.documentType)
         self.order = Int16(order)
         self.addToPhotos(object.photos)
         for index in 0..<object.sections.count {
@@ -133,52 +125,25 @@ extension DDDocument {
         }
     }
 
-//    //To Be Deleted
-//    func update(with object: Document, and folder: DDFolder, viewContext: NSManagedObjectContext) {
-//        self.name = object.name
-//        self.photoData = nil
-//        addToPhotos(object.photos)
-//        self.sections = nil
-//        for index in 0..<object.sections.count {
-//            let section = object.sections[index]
-//            self.addToSections(DDSection(viewContext: viewContext, object: section, order: index, document: self))
-//        }
-////        self.folder = folder
-//    }
     
-//    func update(with object: Document, viewContext: NSManagedObjectContext) {
-//        self.name = object.name
-//        self.photoData = nil
-//        addToPhotos(object.photos)
-//        removeAllSections()
-//        for index in 0..<object.sections.count {
-//            let section = object.sections[index]
-//            self.addToSections(DDSection(viewContext: viewContext, object: section, order: index, document: self))
-//        }
-//    }
-    
-//    private func removeAllSections() {
-//        guard let sections = self.sections else {return}
-//            for section in sections {
-//                removeFromSections(section)
-//            }
-//    }
-    
-//    func updateWithShared(_ object: DDDocument) {
-//        self.name = object.name
-//        self.photoData = object.photoData
-//        self.sections = object.sections
-//        self.shareRecordName = object.shareRecordName
-//    }
     
     func convert() -> Document {
         var sections = [DocSection]()
-        var document = Document(id: self.identifier ?? UUID(), name: self.name ?? "", photos: self.getPhotos() ?? [], sections: [])
+        let documentType = DocumentType(rawValue: self.documentType ?? "") ?? .other
+        var document = Document(id: self.identifier ?? UUID(), name: self.name ?? "",
+                                description: self.documentDescription ?? "", documentType: documentType,
+                                photos: self.getPhotos() ?? [], sections: [])
+        document.order = Int(self.order)
         for section in getSections() {
             sections.append(section.convert())
         }
         document.sections = sections
         return document
+    }
+    
+    func updateType( newType: DocumentType) {
+        self.documentType = newType.rawValue
+        self.documentTypeOrder = Int16(newType.typeOrder)
     }
     
     static func fetchDocument(with id: UUID, viewContext: NSManagedObjectContext) -> DDDocument? {

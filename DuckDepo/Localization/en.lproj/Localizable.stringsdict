@@ -2,11 +2,11 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>sv_password_count </key>
+	<key>sv_password_count</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@sv_password_count @</string>
-		<key>sv_password_count </key>
+		<string>%#@sv_password_count@</string>
+		<key>sv_password_count</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
 			<string>NSStringPluralRuleType</string>
@@ -31,7 +31,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>u</string>
 			<key>zero</key>
-			<string>No document</string>
+			<string>No documents</string>
 			<key>one</key>
 			<string>1 document</string>
 			<key>other</key>

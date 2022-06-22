@@ -56,7 +56,11 @@
 //NameView
 "nv_main_info" = "Main Info";
 "nv_add_new_doc" = "Add New Document";
-"nv_doc_name" = "Document Name";
+"nv_doc_name" = "Document Title";
+"nv_doc_categoory" = "Category";
+"nv_doc_description" = "Document Description";
+
+
 
 //PhotosSectionView
 "psv_photo_selection_body" = "Do you want to scan a document with camera or choose it from photo library?";

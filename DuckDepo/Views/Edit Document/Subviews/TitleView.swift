@@ -7,15 +7,21 @@
 
 import SwiftUI
 
-struct NameView: View, FloatingTextFieldDelegate {
+struct TitleView: View {
+    
     
     @Binding var name: String
+    @Binding var description: String
     @Binding var documentType: DocumentType
+    
+    
     
     var body: some View {
         Section {
             VStack {
-                FloatingTextField(title: "nv_doc_name".localized(), value: name, delegate: self)
+                FloatingTextField(title: "nv_doc_name".localized(), value: $name)
+                Divider()
+                FloatingTextField(title: "nv_doc_description".localized(), value: $description)
                 Divider()
                 HStack {
                 Text("nv_doc_categoory".localized())
@@ -44,14 +50,18 @@ struct NameView: View, FloatingTextFieldDelegate {
         }
     }
     
-    func valueChangedForField(with id: UUID, newValue: String) {
-        self.name = newValue
-    }
+//    func valueChangedForField(with id: UUID, newValue: String) {
+//        if FieldIds.name.id == id {
+//            self.name = newValue
+//        } else if FieldIds.description.id == id {
+//            self.description = newValue
+//        }
+//    }
 
 }
 
 struct NameView_Previews: PreviewProvider {
     static var previews: some View {
-        NameView(name: .constant("nv_doc_name"), documentType: .constant(.education))
+        TitleView(name: .constant("nv_doc_name"), description: .constant("Description"), documentType: .constant(.education))
     }
 }

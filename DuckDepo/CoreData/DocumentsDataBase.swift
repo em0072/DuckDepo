@@ -8,6 +8,52 @@
 import Foundation
 import CloudKit
 import CoreData
+import Combine
+
+class DocumentsStorage: NSObject {
+    
+    var documents = CurrentValueSubject<[Document], Never>([])
+    private var fetchedRequestController: NSFetchedResultsController<DDDocument>
+    
+    override init() {
+
+        let fetchRequest = DDDocument.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \DDDocument.documentTypeOrder, ascending: true),
+                                        NSSortDescriptor(keyPath: \DDDocument.order, ascending: true)]
+        fetchedRequestController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: DataBase.shared.context, sectionNameKeyPath: nil, cacheName: nil)
+        super.init()
+        
+        fetchedRequestController.delegate = self
+        do {
+            try fetchedRequestController.performFetch()
+            controllerDidChangeContent(fetchedRequestController as! NSFetchedResultsController<NSFetchRequestResult>)
+            
+        } catch {
+            print("Oops, could not fetch documents")
+        }
+    }
+    
+    @objc func managedObjectContextObjectsDidChange() {
+        do {
+            try fetchedRequestController.performFetch()
+        } catch {
+            print("Oops, could not fetch documents")
+        }
+    }
+    
+}
+
+extension DocumentsStorage: NSFetchedResultsControllerDelegate {
+    
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        guard let documents = controller.fetchedObjects as? [DDDocument] else {
+            return
+        }
+        self.documents.value = documents.map({ $0.convert() })
+    }
+}
+
 
 extension DataBase {
     
@@ -63,6 +109,8 @@ extension DataBase {
                 context.delete(section)
             }
             fetchedDDDocument.name = document.name
+            fetchedDDDocument.updateType(newType: document.documentType)
+            fetchedDDDocument.documentDescription = document.description
             fetchedDDDocument.addToPhotos(document.photos)
             for index in 0..<document.sections.count {
                 let section = document.sections[index]

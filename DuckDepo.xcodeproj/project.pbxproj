@@ -13,6 +13,14 @@
 		75088874273E913A009A7D3B /* Defaults Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75088873273E913A009A7D3B /* Defaults Controller.swift */; };
 		75088877273E9736009A7D3B /* ColorfulIconLabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75088876273E9736009A7D3B /* ColorfulIconLabelStyle.swift */; };
 		7508887A273EA21D009A7D3B /* BiometricSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75088879273EA21D009A7D3B /* BiometricSection.swift */; };
+		75102F5B285FA6A800464528 /* ListCellButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75102F5A285FA6A800464528 /* ListCellButtonStyle.swift */; };
+		75102F5D285FB36A00464528 /* NewDocumentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75102F5C285FB36A00464528 /* NewDocumentView.swift */; };
+		75102F5F285FB37600464528 /* NewDocumentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75102F5E285FB37600464528 /* NewDocumentViewModel.swift */; };
+		75102F61286075BF00464528 /* NewPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75102F60286075BF00464528 /* NewPhotoView.swift */; };
+		75102F6328607C0800464528 /* ImageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75102F6228607C0800464528 /* ImageViewer.swift */; };
+		7517B5B2285C7F8C00C5B8F5 /* NewDepoListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7517B5B1285C7F8C00C5B8F5 /* NewDepoListViewModel.swift */; };
+		7517B5B4285C824700C5B8F5 /* NewDepoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7517B5B3285C824700C5B8F5 /* NewDepoListView.swift */; };
+		7517B5B6285C840E00C5B8F5 /* DepoListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7517B5B5285C840E00C5B8F5 /* DepoListRowView.swift */; };
 		751E9B48272AF7B1008D4D26 /* UIImage Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 751E9B47272AF7B1008D4D26 /* UIImage Extension.swift */; };
 		753F1FBF272BE56400804584 /* Color extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753F1FBE272BE56400804584 /* Color extension.swift */; };
 		753F1FC4272BF3B500804584 /* DDField+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753F1FC0272BF3B500804584 /* DDField+CoreDataClass.swift */; };
@@ -30,8 +38,6 @@
 		755425CB272A9C4700733D64 /* VerticalLabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755425CA272A9C4700733D64 /* VerticalLabelStyle.swift */; };
 		755425CD272AA02200733D64 /* ImagePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755425CC272AA02200733D64 /* ImagePickerView.swift */; };
 		755425CF272AA10400733D64 /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755425CE272AA10400733D64 /* PhotoCell.swift */; };
-		755425D3272AC9C700733D64 /* ImageViewer in Frameworks */ = {isa = PBXBuildFile; productRef = 755425D2272AC9C700733D64 /* ImageViewer */; };
-		755425D5272AC9C700733D64 /* ImageViewerRemote in Frameworks */ = {isa = PBXBuildFile; productRef = 755425D4272AC9C700733D64 /* ImageViewerRemote */; };
 		755425D7272ACC8D00733D64 /* CameraPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755425D6272ACC8D00733D64 /* CameraPickerView.swift */; };
 		7557599A272FE66400DA8B9A /* EditDocumentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75575999272FE66400DA8B9A /* EditDocumentViewModel.swift */; };
 		755759A0273006F700DA8B9A /* AddButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7557599F273006F700DA8B9A /* AddButtonView.swift */; };
@@ -51,6 +57,7 @@
 		756AF0BC2726C324001CB821 /* DuckDepo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 756AF0BA2726C324001CB821 /* DuckDepo.xcdatamodeld */; };
 		7574E8ED272AE66B0079B51C /* DocumentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7574E8EC272AE66B0079B51C /* DocumentView.swift */; };
 		7580B246273AA99A00F06F23 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7580B245273AA99A00F06F23 /* AppDelegate.swift */; };
+		758AB2B4285B79F400BF94B0 /* FloatingPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758AB2B3285B79F400BF94B0 /* FloatingPickerView.swift */; };
 		758ABD132729828F0074F61A /* EditDocumentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758ABD122729828F0074F61A /* EditDocumentView.swift */; };
 		759257632759047C003C9826 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 759257652759047D003C9826 /* Localizable.stringsdict */; };
 		75948C8C273914DC00EB880E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75948C8B273914DC00EB880E /* SceneDelegate.swift */; };
@@ -80,11 +87,11 @@
 		75A1C928274FDE2000551645 /* Password Generator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C927274FDE1F00551645 /* Password Generator.swift */; };
 		75A1C92A274FEB9F00551645 /* BackgroundCleanerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C929274FEB9F00551645 /* BackgroundCleanerView.swift */; };
 		75A1C92C2750D65700551645 /* DuckButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C92B2750D65600551645 /* DuckButtonStyle.swift */; };
+		75A369D92850F14600196EE2 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75D414EA2726CA6700355AE7 /* CloudKit.framework */; };
 		75AB83E12733E2C9000618F1 /* Pill Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75AB83E02733E2C9000618F1 /* Pill Notification.swift */; };
 		75AB83E32733E77D000618F1 /* Notification.Name extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75AB83E22733E77D000618F1 /* Notification.Name extension.swift */; };
 		75B130F82744061B0059F314 /* SizeUnits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B130F72744061B0059F314 /* SizeUnits.swift */; };
 		75C5CFBD272C7C9200C90C3C /* FloatingTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C5CFBC272C7C9200C90C3C /* FloatingTextField.swift */; };
-		75D414EB2726CA6700355AE7 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75D414EA2726CA6700355AE7 /* CloudKit.framework */; };
 		75D414FD2728021700355AE7 /* DDDocument+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D414FB2728021700355AE7 /* DDDocument+CoreDataClass.swift */; };
 		75D414FE2728021700355AE7 /* DDDocument+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D414FC2728021700355AE7 /* DDDocument+CoreDataProperties.swift */; };
 		75D4150027280CF300355AE7 /* DepoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D414FF27280CF300355AE7 /* DepoListView.swift */; };
@@ -93,7 +100,7 @@
 		75D430812743BE8600D4EE2A /* DeleteAllSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D430802743BE8600D4EE2A /* DeleteAllSection.swift */; };
 		75D430832743EA7900D4EE2A /* VisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D430822743EA7900D4EE2A /* VisualEffectView.swift */; };
 		75D792A42744FFC600396535 /* NoDocumentSelectedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D792A32744FFC500396535 /* NoDocumentSelectedView.swift */; };
-		75E45300273BDDDF003AF1CE /* NameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E452FF273BDDDF003AF1CE /* NameView.swift */; };
+		75E45300273BDDDF003AF1CE /* TitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E452FF273BDDDF003AF1CE /* TitleView.swift */; };
 		75E8F82C2739544300DCF4BD /* CloudSharingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E8F82B2739544300DCF4BD /* CloudSharingView.swift */; };
 		75E8F82E273981AB00DCF4BD /* EditFoldersViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E8F82D273981AA00DCF4BD /* EditFoldersViewState.swift */; };
 /* End PBXBuildFile section */
@@ -105,6 +112,14 @@
 		75088873273E913A009A7D3B /* Defaults Controller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Defaults Controller.swift"; sourceTree = "<group>"; };
 		75088876273E9736009A7D3B /* ColorfulIconLabelStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorfulIconLabelStyle.swift; sourceTree = "<group>"; };
 		75088879273EA21D009A7D3B /* BiometricSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricSection.swift; sourceTree = "<group>"; };
+		75102F5A285FA6A800464528 /* ListCellButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCellButtonStyle.swift; sourceTree = "<group>"; };
+		75102F5C285FB36A00464528 /* NewDocumentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDocumentView.swift; sourceTree = "<group>"; };
+		75102F5E285FB37600464528 /* NewDocumentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDocumentViewModel.swift; sourceTree = "<group>"; };
+		75102F60286075BF00464528 /* NewPhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPhotoView.swift; sourceTree = "<group>"; };
+		75102F6228607C0800464528 /* ImageViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewer.swift; sourceTree = "<group>"; };
+		7517B5B1285C7F8C00C5B8F5 /* NewDepoListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDepoListViewModel.swift; sourceTree = "<group>"; };
+		7517B5B3285C824700C5B8F5 /* NewDepoListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDepoListView.swift; sourceTree = "<group>"; };
+		7517B5B5285C840E00C5B8F5 /* DepoListRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepoListRowView.swift; sourceTree = "<group>"; };
 		751E9B47272AF7B1008D4D26 /* UIImage Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage Extension.swift"; sourceTree = "<group>"; };
 		753F1FBE272BE56400804584 /* Color extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color extension.swift"; sourceTree = "<group>"; };
 		753F1FC0272BF3B500804584 /* DDField+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DDField+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -145,6 +160,7 @@
 		756AF0C32726C4CD001CB821 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7574E8EC272AE66B0079B51C /* DocumentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentView.swift; sourceTree = "<group>"; };
 		7580B245273AA99A00F06F23 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		758AB2B3285B79F400BF94B0 /* FloatingPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingPickerView.swift; sourceTree = "<group>"; };
 		758ABD122729828F0074F61A /* EditDocumentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDocumentView.swift; sourceTree = "<group>"; };
 		759257642759047D003C9826 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		759257662759047E003C9826 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ru; path = ru.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
@@ -188,7 +204,7 @@
 		75D430802743BE8600D4EE2A /* DeleteAllSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAllSection.swift; sourceTree = "<group>"; };
 		75D430822743EA7900D4EE2A /* VisualEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualEffectView.swift; sourceTree = "<group>"; };
 		75D792A32744FFC500396535 /* NoDocumentSelectedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoDocumentSelectedView.swift; sourceTree = "<group>"; };
-		75E452FF273BDDDF003AF1CE /* NameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameView.swift; sourceTree = "<group>"; };
+		75E452FF273BDDDF003AF1CE /* TitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleView.swift; sourceTree = "<group>"; };
 		75E8F82B2739544300DCF4BD /* CloudSharingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSharingView.swift; sourceTree = "<group>"; };
 		75E8F82D273981AA00DCF4BD /* EditFoldersViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFoldersViewState.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -198,9 +214,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				755425D3272AC9C700733D64 /* ImageViewer in Frameworks */,
-				75D414EB2726CA6700355AE7 /* CloudKit.framework in Frameworks */,
-				755425D5272AC9C700733D64 /* ImageViewerRemote in Frameworks */,
+				75A369D92850F14600196EE2 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -212,6 +226,7 @@
 			children = (
 				75088876273E9736009A7D3B /* ColorfulIconLabelStyle.swift */,
 				75A1C92B2750D65600551645 /* DuckButtonStyle.swift */,
+				75102F5A285FA6A800464528 /* ListCellButtonStyle.swift */,
 			);
 			path = Styles;
 			sourceTree = "<group>";
@@ -259,7 +274,7 @@
 		7557599C272FFDA400DA8B9A /* Subviews */ = {
 			isa = PBXGroup;
 			children = (
-				75E452FF273BDDDF003AF1CE /* NameView.swift */,
+				75E452FF273BDDDF003AF1CE /* TitleView.swift */,
 				755759A12730242600DA8B9A /* PhotosSectionView.swift */,
 				7502B5EF27316F2E00E9F0C8 /* SectionView.swift */,
 				7502B5EB27312E3C00E9F0C8 /* AddSectionMenu.swift */,
@@ -392,6 +407,8 @@
 				75AB83E02733E2C9000618F1 /* Pill Notification.swift */,
 				75A1C90D274F825200551645 /* InitialInstructionsView.swift */,
 				75A1C925274FD0F400551645 /* PasswordGeneratorView.swift */,
+				758AB2B3285B79F400BF94B0 /* FloatingPickerView.swift */,
+				75102F6228607C0800464528 /* ImageViewer.swift */,
 			);
 			path = Elements;
 			sourceTree = "<group>";
@@ -433,6 +450,9 @@
 			children = (
 				7574E8EC272AE66B0079B51C /* DocumentView.swift */,
 				75948C8F2739202D00EB880E /* DocumentViewModel.swift */,
+				75102F5C285FB36A00464528 /* NewDocumentView.swift */,
+				75102F60286075BF00464528 /* NewPhotoView.swift */,
+				75102F5E285FB37600464528 /* NewDocumentViewModel.swift */,
 			);
 			path = "Document View";
 			sourceTree = "<group>";
@@ -499,6 +519,9 @@
 			children = (
 				75D414FF27280CF300355AE7 /* DepoListView.swift */,
 				75948C912739250100EB880E /* DepoListViewModel.swift */,
+				7517B5B3285C824700C5B8F5 /* NewDepoListView.swift */,
+				7517B5B5285C840E00C5B8F5 /* DepoListRowView.swift */,
+				7517B5B1285C7F8C00C5B8F5 /* NewDepoListViewModel.swift */,
 			);
 			path = DepoList;
 			sourceTree = "<group>";
@@ -520,8 +543,6 @@
 			);
 			name = DuckDepo;
 			packageProductDependencies = (
-				755425D2272AC9C700733D64 /* ImageViewer */,
-				755425D4272AC9C700733D64 /* ImageViewerRemote */,
 			);
 			productName = DuckDepo;
 			productReference = 756AF0AC2726C320001CB821 /* DuckDepo.app */;
@@ -535,7 +556,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1300;
-				LastUpgradeCheck = 1300;
+				LastUpgradeCheck = 1320;
 				TargetAttributes = {
 					756AF0AB2726C320001CB821 = {
 						CreatedOnToolsVersion = 13.0;
@@ -553,9 +574,6 @@
 			);
 			mainGroup = 756AF0A32726C320001CB821;
 			packageReferences = (
-				755425D1272AC9C700733D64 /* XCRemoteSwiftPackageReference "swiftui-image-viewer" */,
-				75E8F82227393F0100DCF4BD /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
-				75A6B53D273E5DBC0092FD5A /* XCRemoteSwiftPackageReference "BottomSheet" */,
 			);
 			productRefGroup = 756AF0AD2726C320001CB821 /* Products */;
 			projectDirPath = "";
@@ -601,6 +619,7 @@
 				75E8F82C2739544300DCF4BD /* CloudSharingView.swift in Sources */,
 				75948C922739250100EB880E /* DepoListViewModel.swift in Sources */,
 				75A1C903274F7F0800551645 /* PasswordsListViewModel.swift in Sources */,
+				75102F6328607C0800464528 /* ImageViewer.swift in Sources */,
 				756AF0BC2726C324001CB821 /* DuckDepo.xcdatamodeld in Sources */,
 				755759AB2730450800DA8B9A /* Document.swift in Sources */,
 				75AB83E32733E77D000618F1 /* Notification.Name extension.swift in Sources */,
@@ -610,15 +629,18 @@
 				755425C9272A98B500733D64 /* AddCell.swift in Sources */,
 				7580B246273AA99A00F06F23 /* AppDelegate.swift in Sources */,
 				7574E8ED272AE66B0079B51C /* DocumentView.swift in Sources */,
+				75102F5B285FA6A800464528 /* ListCellButtonStyle.swift in Sources */,
 				75A1C90E274F825200551645 /* InitialInstructionsView.swift in Sources */,
 				75D430832743EA7900D4EE2A /* VisualEffectView.swift in Sources */,
 				7502B5EC27312E3C00E9F0C8 /* AddSectionMenu.swift in Sources */,
 				753F1FC4272BF3B500804584 /* DDField+CoreDataClass.swift in Sources */,
+				7517B5B2285C7F8C00C5B8F5 /* NewDepoListViewModel.swift in Sources */,
 				755425CD272AA02200733D64 /* ImagePickerView.swift in Sources */,
 				7542D91F272845D600DB7A95 /* CoreDataEntity.swift in Sources */,
 				753F1FC5272BF3B500804584 /* DDField+CoreDataProperties.swift in Sources */,
 				75A1C906274F7F2C00551645 /* PasswordView.swift in Sources */,
 				753F1FE5272C019700804584 /* String Extension.swift in Sources */,
+				758AB2B4285B79F400BF94B0 /* FloatingPickerView.swift in Sources */,
 				75A1C908274F7F8F00551645 /* PasswordViewModel.swift in Sources */,
 				75A1C918274F8C7400551645 /* BindableFloatingTextField.swift in Sources */,
 				75A1C916274F85A600551645 /* Password.swift in Sources */,
@@ -630,9 +652,10 @@
 				75A1C913274F84C600551645 /* EditPasswordViewModel.swift in Sources */,
 				75D792A42744FFC600396535 /* NoDocumentSelectedView.swift in Sources */,
 				753F1FDB272BF5F000804584 /* DDSection+CoreDataProperties.swift in Sources */,
+				7517B5B4285C824700C5B8F5 /* NewDepoListView.swift in Sources */,
 				75A1C928274FDE2000551645 /* Password Generator.swift in Sources */,
 				755759A0273006F700DA8B9A /* AddButtonView.swift in Sources */,
-				75E45300273BDDDF003AF1CE /* NameView.swift in Sources */,
+				75E45300273BDDDF003AF1CE /* TitleView.swift in Sources */,
 				755759A7273044A800DA8B9A /* Field.swift in Sources */,
 				75A1C924274FC82800551645 /* CoreData Countable.swift in Sources */,
 				75A021ED27343B53001484BA /* ShareSheetView.swift in Sources */,
@@ -654,6 +677,7 @@
 				75A021F227347E86001484BA /* DataBase.swift in Sources */,
 				75B130F82744061B0059F314 /* SizeUnits.swift in Sources */,
 				75A021F027343E48001484BA /* Biometric Controller.swift in Sources */,
+				75102F5F285FB37600464528 /* NewDocumentViewModel.swift in Sources */,
 				7542D9162728122E00DB7A95 /* EditFoldersView.swift in Sources */,
 				753F1FE7272C0A9A00804584 /* CustomButtonStyle.swift in Sources */,
 				755425D7272ACC8D00733D64 /* CameraPickerView.swift in Sources */,
@@ -663,9 +687,12 @@
 				755425CB272A9C4700733D64 /* VerticalLabelStyle.swift in Sources */,
 				75D4150427280F6400355AE7 /* SettingsView.swift in Sources */,
 				753F1FE3272C008B00804584 /* Info Options.swift in Sources */,
+				7517B5B6285C840E00C5B8F5 /* DepoListRowView.swift in Sources */,
 				75A1C91A274FA64700551645 /* DocumentsDataBase.swift in Sources */,
 				75088874273E913A009A7D3B /* Defaults Controller.swift in Sources */,
+				75102F61286075BF00464528 /* NewPhotoView.swift in Sources */,
 				755759AD2730455600DA8B9A /* Folder.swift in Sources */,
+				75102F5D285FB36A00464528 /* NewDocumentView.swift in Sources */,
 				75A1C911274F84B500551645 /* EditPasswordView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -698,6 +725,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -759,6 +787,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -828,7 +857,7 @@
 				INFOPLIST_KEY_NSCameraUsageDescription = "Camera is used to scan documents. ";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Face ID is used to unlock your data";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen";
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -865,7 +894,7 @@
 				INFOPLIST_KEY_NSCameraUsageDescription = "Camera is used to scan documents. ";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Face ID is used to unlock your data";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen";
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -906,46 +935,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		755425D1272AC9C700733D64 /* XCRemoteSwiftPackageReference "swiftui-image-viewer" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Jake-Short/swiftui-image-viewer.git";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
-		75A6B53D273E5DBC0092FD5A /* XCRemoteSwiftPackageReference "BottomSheet" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/adamfootdev/BottomSheet";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
-		75E8F82227393F0100DCF4BD /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/siteline/SwiftUI-Introspect";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.1.3;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		755425D2272AC9C700733D64 /* ImageViewer */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 755425D1272AC9C700733D64 /* XCRemoteSwiftPackageReference "swiftui-image-viewer" */;
-			productName = ImageViewer;
-		};
-		755425D4272AC9C700733D64 /* ImageViewerRemote */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 755425D1272AC9C700733D64 /* XCRemoteSwiftPackageReference "swiftui-image-viewer" */;
-			productName = ImageViewerRemote;
-		};
-/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		756AF0BA2726C324001CB821 /* DuckDepo.xcdatamodeld */ = {

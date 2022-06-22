@@ -6,9 +6,6 @@
 //
 
 import SwiftUI
-import ImageViewer
-
-
 
 struct EditDocumentView: View {
     
@@ -34,7 +31,7 @@ struct EditDocumentView: View {
         NavigationView {
                     Form {
 //                        NameAndFolderView(name: $viewModel.document.name, selectedFolder: $viewModel.selectedFolder, folders: $viewModel.folders)
-                        NameView(name:  $viewModel.document.name)
+                        TitleView(name:  $viewModel.document.name, description: $viewModel.document.description, documentType: $viewModel.document.documentType)
                         PhotosSectionView(images: $viewModel.document.photos, delegate: viewModel)
                         
                         SectionView(sections: $viewModel.document.sections, options: viewModel.inputOption.sections, delegate: viewModel)
@@ -58,7 +55,6 @@ struct EditDocumentView: View {
                 }
             })
         }
-        .overlay(ImageViewer(image: $viewModel.imageViewerImage, viewerShown: $viewModel.showingImageViewer))
         .onAppear {
             viewModel.view = self
         }

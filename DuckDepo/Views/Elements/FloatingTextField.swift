@@ -15,7 +15,7 @@ protocol FloatingTextFieldDelegate {
 struct FloatingTextField: View {
     
     var title: String
-    var value: String = ""
+    @Binding var value: String
     @State var textFieldValue: String = ""
     var id: UUID = UUID()
     var delegate: FloatingTextFieldDelegate?
@@ -41,11 +41,9 @@ struct FloatingTextField: View {
         }
         .onChange(of: textFieldValue) { newValue in
             delegate?.valueChangedForField(with: id, newValue: newValue)
+            value = textFieldValue
         }
-        
     }
-    
-    
 }
 
 struct FloatingTextField_Previews: PreviewProvider {
@@ -53,7 +51,7 @@ struct FloatingTextField_Previews: PreviewProvider {
     
     static var previews: some View {
         
-        FloatingTextField(title: "Title", id: UUID())
+        FloatingTextField(title: "Title", value: .constant(""))
         
     }
 }

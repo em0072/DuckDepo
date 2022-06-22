@@ -38,6 +38,6 @@ struct OverviewSection: View {
 
 struct OverviewSection_Previews: PreviewProvider {
     static var previews: some View {
-        OverviewSection(documentCount: .constant(5), passwordCount: .constant(10))
+        OverviewSection(documentCount: .constant(5), passwordCount: .constant(0))
     }
 }

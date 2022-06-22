@@ -6,8 +6,8 @@
 //
 
 import SwiftUI
-import ImageViewer
 import CoreData
+import PDFKit
 
 
 struct DocumentView: View {
@@ -23,11 +23,17 @@ struct DocumentView: View {
 
     var body: some View {
         List {
-            Section {
+            HStack {
+                document.convert().documentType.image
+                    .frame(width: 35, height: 35)
                 Text(document.name ?? "")
-            } header: {
-                Text("dv_doc_name")
             }
+            .padding(.vertical, 8)
+//            .listRowBackground(Color.transparent)
+//            Section {
+//            } header: {
+//                Text("dv_doc_name")
+//            }
             
             PhotosView(document: document, imageViewerImage: $imageViewerImage, showingImageViewer: $showingImageViewer)
             
@@ -43,32 +49,34 @@ struct DocumentView: View {
                 }
             }
         }
-        
-        .navigationBarTitle(Text(document.name ?? ""))
+        //        .navigationBarTitle(Text(document.name ?? ""), displayMode: .inline)
+//        .navigationBarTitle("", displayMode: .inline)
+        .navigationTitle("")
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItemGroup(placement: .navigationBarTrailing) {
-//MARK:  For Now it is not possible to use it - there is a bug in the NSPersistanceCloudKitController that is prevent database of deleteing created earlier share when the user taps "unshare". As a result, even though share is unshared, UI will always be as it is shared. So we wait for the bugfix from Apple.
-//                Button(action: shareAction, label: iconForShareButton)
-//                    .sheet(isPresented: $viewModel.isCloudSharing, content: shareView)
+                //MARK:  For Now it is not possible to use it - there is a bug in the NSPersistanceCloudKitController that is prevent database of deleteing created earlier share when the user taps "unshare". As a result, even though share is unshared, UI will always be as it is shared. So we wait for the bugfix from Apple.
+                //                Button(action: shareAction, label: iconForShareButton)
+                //                    .sheet(isPresented: $viewModel.isCloudSharing, content: shareView)
                 Button(action: shareInfo) {
                     Image(systemName: "square.and.arrow.up")
                 }
                 .actionSheet(isPresented: $showShareActionSheet, content: {
-                        ActionSheet(title: Text("dv_share_doc_title"),
+                    ActionSheet(title: Text("dv_share_doc_title"),
                                 message: Text("dv_share_doc_body"),
-                                    buttons: [
-                                        //MARK: Doesn't work for some reason - only single object can be shared
-//                                        .default(Text("dv_share_photo_and_text")) {
-//                                            sharePhotosAndText()
-//                                        },
-                                        .default(Text("dv_share_photo")) {
-                                            sharePhotos()
-                                        },
-                                        .default(Text("dv_share_text")) {
-                                            shareText()
-                                        },
-                                        .cancel()
-                                    ])
+                                buttons: [
+                                    //MARK: Doesn't work for some reason - only single object can be shared
+                                    .default(Text("dv_share_photo_and_text")) {
+                                        sharePhotosAndText()
+                                    },
+                                    .default(Text("dv_share_photo")) {
+                                        sharePhotos()
+                                    },
+                                    .default(Text("dv_share_text")) {
+                                        shareText()
+                                    },
+                                    .cancel()
+                                ])
                 })
                 .sheet(isPresented: $showShareSheetView, onDismiss: {
                     viewModel.itemsToShare = nil
@@ -88,9 +96,8 @@ struct DocumentView: View {
             }
         }
         .fullScreenCover(isPresented: $showingImageViewer, onDismiss: nil) {
-            ImageViewer(image: $imageViewerImage, viewerShown: $showingImageViewer)
+//            ImageViewer(image: $imageViewerImage, viewerShown: $showingImageViewer)
         }
-        
         .animation(.default, value: document)
     }
     
@@ -133,11 +140,22 @@ struct DocumentView: View {
     }
     
     private func sharePhotosAndText() {
-        share(items: [constractSharePhotos(), constractShareText()])
+        share(items: [constractSharePhotosPdf().dataRepresentation() as Any, constractShareText()])
     }
         
     private func sharePhotos() {
-        share(items: constractSharePhotos())
+        share(items: [constractSharePhotosPdf().dataRepresentation() as Any])
+    }
+    
+    private func constractSharePhotosPdf() -> PDFDocument {
+        let images = document.getPhotos() ?? []
+        let pdfDocument = PDFDocument()
+        for (i, image) in images.enumerated() {
+            if let pdfPage = PDFPage(image: image) {
+                pdfDocument.insert(pdfPage, at: i)
+            }
+        }
+        return pdfDocument
     }
     
     private func constractSharePhotos() -> [UIImage] {

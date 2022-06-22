@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct Field: Identifiable, Equatable {
+struct Field: Identifiable, Equatable, Hashable {
     
     enum FieldType: String {
         case string

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct DocSection: Identifiable, Equatable {
+struct DocSection: Identifiable, Equatable, Hashable {
     
     static func == (lhs: DocSection, rhs: DocSection) -> Bool {
         lhs.id == rhs.id

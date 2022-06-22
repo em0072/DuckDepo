@@ -47,9 +47,9 @@ struct BiometricSection: View {
         case .minute:
             return "sv_1_min".localized()
         case .fiveMinutes:
-            return "sv_1_min".localized()
+            return "sv_5_min".localized()
         case .fiveteenMinutes:
-            return "sv_1_min".localized()
+            return "sv_15_min".localized()
         }
     }
     
