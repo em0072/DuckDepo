@@ -7,11 +7,10 @@
 
 import SwiftUI
 
-struct NewPhotoView: View {
+struct PhotoView: View {
     
     var photos: [UIImage]
     @Binding var selectedPhoto: UIImage?
-//    @Binding var showingImageViewer: Bool
 
     var body: some View {
         Section {
@@ -41,6 +40,6 @@ struct NewPhotoView: View {
 struct NewPhotoView_Previews: PreviewProvider {
     
     static var previews: some View {
-        NewPhotoView(photos: [UIImage(named: "duck")!], selectedPhoto: .constant(nil))
+        PhotoView(photos: [UIImage(named: "duck")!], selectedPhoto: .constant(nil))
     }
 }

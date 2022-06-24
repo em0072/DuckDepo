@@ -8,7 +8,6 @@
 import Foundation
 import UIKit
 
-
 struct Document: Identifiable, Hashable {
     
     public var id: UUID

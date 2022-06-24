@@ -23,10 +23,10 @@ struct Password: Identifiable {
         self.login = login
         self.value = value
         self.website = website
-        if website.starts(with: "http") {
+        if website.starts(with: "https") {
             self.websiteURL = URL(string: website)
         } else {
-            self.websiteURL = URL(string: "http://\(website)")
+            self.websiteURL = URL(string: "https://\(website)")
         }
         
 

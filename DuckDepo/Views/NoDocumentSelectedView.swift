@@ -27,11 +27,15 @@ struct NoSelectionViewView: View {
     var type: ViewType
     
     var body: some View {
-        Text("no_doc_view_title")
-            .font(.title)
-            .padding()
-        Text(type.title)
-            .font(.body)
+        VStack {
+            Image(systemName: "arrow.turn.up.left")
+                .font(.largeTitle)
+            Text("no_doc_view_title")
+                .font(.title)
+                .padding()
+            Text(type.title)
+                .font(.body)
+        }
     }
 }
 

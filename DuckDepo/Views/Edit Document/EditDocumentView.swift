@@ -12,7 +12,7 @@ struct EditDocumentView: View {
     
     @ObservedObject var viewModel: ViewModel
     @Binding var isPresented: Bool
-//    var type: ViewModel.DocumentType
+
     //MARK: Views States
     @State var isShowingAlert: Bool = false
     @State var isShowingDeleteAlert: Bool = false
@@ -30,7 +30,6 @@ struct EditDocumentView: View {
     var body: some View {
         NavigationView {
                     Form {
-//                        NameAndFolderView(name: $viewModel.document.name, selectedFolder: $viewModel.selectedFolder, folders: $viewModel.folders)
                         TitleView(name:  $viewModel.document.name, description: $viewModel.document.description, documentType: $viewModel.document.documentType)
                         PhotosSectionView(images: $viewModel.document.photos, delegate: viewModel)
                         
