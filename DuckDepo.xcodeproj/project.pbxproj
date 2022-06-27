@@ -62,7 +62,6 @@
 		758ABD132729828F0074F61A /* EditDocumentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758ABD122729828F0074F61A /* EditDocumentView.swift */; };
 		759257632759047C003C9826 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 759257652759047D003C9826 /* Localizable.stringsdict */; };
 		7593B5C82864A12A008925E6 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7593B5C72864A129008925E6 /* AuthenticationServices.framework */; };
-		7593B5CB28659FED008925E6 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 7593B5CA28659FED008925E6 /* KeychainAccess */; };
 		75948C8C273914DC00EB880E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75948C8B273914DC00EB880E /* SceneDelegate.swift */; };
 		75948C902739202D00EB880E /* OldDocumentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75948C8F2739202D00EB880E /* OldDocumentViewModel.swift */; };
 		75973025273A734300A105A7 /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75973024273A734300A105A7 /* TestView.swift */; };
@@ -70,8 +69,10 @@
 		75A021ED27343B53001484BA /* ShareSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A021EC27343B53001484BA /* ShareSheetView.swift */; };
 		75A021F027343E48001484BA /* Biometric Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A021EF27343E48001484BA /* Biometric Controller.swift */; };
 		75A021F227347E86001484BA /* DataBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A021F127347E86001484BA /* DataBase.swift */; };
-		75A1C900274F7ED700551645 /* PasswordsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C8FF274F7ED700551645 /* PasswordsListView.swift */; };
-		75A1C903274F7F0800551645 /* PasswordsListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C902274F7F0800551645 /* PasswordsListViewModel.swift */; };
+		75A140CC2869C440004A47A8 /* ManualMigrationV1toV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A140CB2869C440004A47A8 /* ManualMigrationV1toV2.swift */; };
+		75A140CF2869C914004A47A8 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 75A140CE2869C913004A47A8 /* KeychainSwift */; };
+		75A140D12869D25F004A47A8 /* PasswordsListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A140D02869D25F004A47A8 /* PasswordsListViewModel.swift */; };
+		75A140D32869D3F4004A47A8 /* PasswordsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A140D22869D3F4004A47A8 /* PasswordsListView.swift */; };
 		75A1C906274F7F2C00551645 /* PasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C905274F7F2C00551645 /* PasswordView.swift */; };
 		75A1C908274F7F8F00551645 /* PasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C907274F7F8F00551645 /* PasswordViewModel.swift */; };
 		75A1C90B274F814100551645 /* DDPassword+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C909274F814100551645 /* DDPassword+CoreDataClass.swift */; };
@@ -81,8 +82,8 @@
 		75A1C913274F84C600551645 /* EditPasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C912274F84C600551645 /* EditPasswordViewModel.swift */; };
 		75A1C916274F85A600551645 /* Password.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C915274F85A600551645 /* Password.swift */; };
 		75A1C918274F8C7400551645 /* BindableFloatingTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C917274F8C7400551645 /* BindableFloatingTextField.swift */; };
-		75A1C91A274FA64700551645 /* DocumentsDataBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C919274FA64700551645 /* DocumentsDataBase.swift */; };
-		75A1C91C274FA66300551645 /* PasswordsDataBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C91B274FA66300551645 /* PasswordsDataBase.swift */; };
+		75A1C91A274FA64700551645 /* DocumentsStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C919274FA64700551645 /* DocumentsStorage.swift */; };
+		75A1C91C274FA66300551645 /* PasswordsStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C91B274FA66300551645 /* PasswordsStorage.swift */; };
 		75A1C91E274FAD5400551645 /* FormButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C91D274FAD5400551645 /* FormButton.swift */; };
 		75A1C924274FC82800551645 /* CoreData Countable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C923274FC82800551645 /* CoreData Countable.swift */; };
 		75A1C926274FD0F400551645 /* PasswordGeneratorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C925274FD0F400551645 /* PasswordGeneratorView.swift */; };
@@ -104,6 +105,7 @@
 		75E45300273BDDDF003AF1CE /* TitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E452FF273BDDDF003AF1CE /* TitleView.swift */; };
 		75E8F82C2739544300DCF4BD /* CloudSharingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E8F82B2739544300DCF4BD /* CloudSharingView.swift */; };
 		75E8F82E273981AB00DCF4BD /* EditFoldersViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E8F82D273981AA00DCF4BD /* EditFoldersViewState.swift */; };
+		75ED53B32869A1D6009FE1E2 /* AppProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75ED53B22869A1D6009FE1E2 /* AppProgressView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -174,8 +176,9 @@
 		75A021EC27343B53001484BA /* ShareSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheetView.swift; sourceTree = "<group>"; };
 		75A021EF27343E48001484BA /* Biometric Controller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Biometric Controller.swift"; sourceTree = "<group>"; };
 		75A021F127347E86001484BA /* DataBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBase.swift; sourceTree = "<group>"; };
-		75A1C8FF274F7ED700551645 /* PasswordsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordsListView.swift; sourceTree = "<group>"; };
-		75A1C902274F7F0800551645 /* PasswordsListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordsListViewModel.swift; sourceTree = "<group>"; };
+		75A140CB2869C440004A47A8 /* ManualMigrationV1toV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualMigrationV1toV2.swift; sourceTree = "<group>"; };
+		75A140D02869D25F004A47A8 /* PasswordsListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordsListViewModel.swift; sourceTree = "<group>"; };
+		75A140D22869D3F4004A47A8 /* PasswordsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordsListView.swift; sourceTree = "<group>"; };
 		75A1C905274F7F2C00551645 /* PasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordView.swift; sourceTree = "<group>"; };
 		75A1C907274F7F8F00551645 /* PasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordViewModel.swift; sourceTree = "<group>"; };
 		75A1C909274F814100551645 /* DDPassword+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DDPassword+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -185,8 +188,8 @@
 		75A1C912274F84C600551645 /* EditPasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPasswordViewModel.swift; sourceTree = "<group>"; };
 		75A1C915274F85A600551645 /* Password.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Password.swift; sourceTree = "<group>"; };
 		75A1C917274F8C7400551645 /* BindableFloatingTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BindableFloatingTextField.swift; sourceTree = "<group>"; };
-		75A1C919274FA64700551645 /* DocumentsDataBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentsDataBase.swift; sourceTree = "<group>"; };
-		75A1C91B274FA66300551645 /* PasswordsDataBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordsDataBase.swift; sourceTree = "<group>"; };
+		75A1C919274FA64700551645 /* DocumentsStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentsStorage.swift; sourceTree = "<group>"; };
+		75A1C91B274FA66300551645 /* PasswordsStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordsStorage.swift; sourceTree = "<group>"; };
 		75A1C91D274FAD5400551645 /* FormButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormButton.swift; sourceTree = "<group>"; };
 		75A1C923274FC82800551645 /* CoreData Countable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CoreData Countable.swift"; sourceTree = "<group>"; };
 		75A1C925274FD0F400551645 /* PasswordGeneratorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordGeneratorView.swift; sourceTree = "<group>"; };
@@ -208,6 +211,7 @@
 		75E452FF273BDDDF003AF1CE /* TitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleView.swift; sourceTree = "<group>"; };
 		75E8F82B2739544300DCF4BD /* CloudSharingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSharingView.swift; sourceTree = "<group>"; };
 		75E8F82D273981AA00DCF4BD /* EditFoldersViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFoldersViewState.swift; sourceTree = "<group>"; };
+		75ED53B22869A1D6009FE1E2 /* AppProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppProgressView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -215,9 +219,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75A140CF2869C914004A47A8 /* KeychainSwift in Frameworks */,
 				7593B5C82864A12A008925E6 /* AuthenticationServices.framework in Frameworks */,
 				75A369D92850F14600196EE2 /* CloudKit.framework in Frameworks */,
-				7593B5CB28659FED008925E6 /* KeychainAccess in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -350,6 +354,7 @@
 				7509CEC82865AA8900C7675F /* Models */,
 				75A021EE27343E10001484BA /* Controllers */,
 				75D414F62728002C00355AE7 /* CoreData */,
+				75A140CA2869C41A004A47A8 /* Support */,
 				756AF0B52726C324001CB821 /* Preview Content */,
 			);
 			path = DuckDepo;
@@ -367,6 +372,7 @@
 			isa = PBXGroup;
 			children = (
 				75973024273A734300A105A7 /* TestView.swift */,
+				75ED53B22869A1D6009FE1E2 /* AppProgressView.swift */,
 				75D792A32744FFC500396535 /* NoDocumentSelectedView.swift */,
 				756AF0B12726C320001CB821 /* ContentView.swift */,
 				75E8F830273A64E100DCF4BD /* DepoList */,
@@ -441,11 +447,19 @@
 			path = Controllers;
 			sourceTree = "<group>";
 		};
+		75A140CA2869C41A004A47A8 /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				75A140CB2869C440004A47A8 /* ManualMigrationV1toV2.swift */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
 		75A1C8FE274F7EBD00551645 /* PasswordsList */ = {
 			isa = PBXGroup;
 			children = (
-				75A1C8FF274F7ED700551645 /* PasswordsListView.swift */,
-				75A1C902274F7F0800551645 /* PasswordsListViewModel.swift */,
+				75A140D22869D3F4004A47A8 /* PasswordsListView.swift */,
+				75A140D02869D25F004A47A8 /* PasswordsListViewModel.swift */,
 			);
 			path = PasswordsList;
 			sourceTree = "<group>";
@@ -454,8 +468,8 @@
 			isa = PBXGroup;
 			children = (
 				75102F5C285FB36A00464528 /* DocumentView.swift */,
-				75102F60286075BF00464528 /* PhotoView.swift */,
 				75102F5E285FB37600464528 /* DocumentViewModel.swift */,
+				75102F60286075BF00464528 /* PhotoView.swift */,
 				7574E8EC272AE66B0079B51C /* OldDocumentView.swift */,
 				75948C8F2739202D00EB880E /* OldDocumentViewModel.swift */,
 			);
@@ -494,8 +508,8 @@
 			children = (
 				7509CEC92865ABB400C7675F /* DuckDepo.xcdatamodeld */,
 				75A021F127347E86001484BA /* DataBase.swift */,
-				75A1C919274FA64700551645 /* DocumentsDataBase.swift */,
-				75A1C91B274FA66300551645 /* PasswordsDataBase.swift */,
+				75A1C919274FA64700551645 /* DocumentsStorage.swift */,
+				75A1C91B274FA66300551645 /* PasswordsStorage.swift */,
 				7542D91E272845D600DB7A95 /* CoreDataEntity.swift */,
 				758ABD11272977D50074F61A /* Classes */,
 			);
@@ -538,7 +552,7 @@
 			);
 			name = DuckDepo;
 			packageProductDependencies = (
-				7593B5CA28659FED008925E6 /* KeychainAccess */,
+				75A140CE2869C913004A47A8 /* KeychainSwift */,
 			);
 			productName = DuckDepo;
 			productReference = 756AF0AC2726C320001CB821 /* DuckDepo.app */;
@@ -570,7 +584,7 @@
 			);
 			mainGroup = 756AF0A32726C320001CB821;
 			packageReferences = (
-				7593B5C928659FED008925E6 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
+				75A140CD2869C913004A47A8 /* XCRemoteSwiftPackageReference "keychain-swift" */,
 			);
 			productRefGroup = 756AF0AD2726C320001CB821 /* Products */;
 			projectDirPath = "";
@@ -612,8 +626,8 @@
 				755759A9273044BC00DA8B9A /* DocSection.swift in Sources */,
 				753F1FBF272BE56400804584 /* Color extension.swift in Sources */,
 				7502B5F027316F2E00E9F0C8 /* SectionView.swift in Sources */,
+				75A140CC2869C440004A47A8 /* ManualMigrationV1toV2.swift in Sources */,
 				75E8F82C2739544300DCF4BD /* CloudSharingView.swift in Sources */,
-				75A1C903274F7F0800551645 /* PasswordsListViewModel.swift in Sources */,
 				75102F6328607C0800464528 /* ImageViewer.swift in Sources */,
 				755759AB2730450800DA8B9A /* Document.swift in Sources */,
 				75AB83E32733E77D000618F1 /* Notification.Name extension.swift in Sources */,
@@ -642,7 +656,6 @@
 				75A1C916274F85A600551645 /* Password.swift in Sources */,
 				75A1C926274FD0F400551645 /* PasswordGeneratorView.swift in Sources */,
 				75A1C92C2750D65700551645 /* DuckButtonStyle.swift in Sources */,
-				75A1C900274F7ED700551645 /* PasswordsListView.swift in Sources */,
 				75973025273A734300A105A7 /* TestView.swift in Sources */,
 				755759A22730242600DA8B9A /* PhotosSectionView.swift in Sources */,
 				75A1C913274F84C600551645 /* EditPasswordViewModel.swift in Sources */,
@@ -671,6 +684,7 @@
 				756AF0B02726C320001CB821 /* DuckDepoApp.swift in Sources */,
 				755425CF272AA10400733D64 /* PhotoCell.swift in Sources */,
 				75A021F227347E86001484BA /* DataBase.swift in Sources */,
+				75ED53B32869A1D6009FE1E2 /* AppProgressView.swift in Sources */,
 				75B130F82744061B0059F314 /* SizeUnits.swift in Sources */,
 				75A021F027343E48001484BA /* Biometric Controller.swift in Sources */,
 				75102F5F285FB37600464528 /* DocumentViewModel.swift in Sources */,
@@ -678,14 +692,16 @@
 				753F1FE7272C0A9A00804584 /* CustomButtonStyle.swift in Sources */,
 				755425D7272ACC8D00733D64 /* CameraPickerView.swift in Sources */,
 				75088877273E9736009A7D3B /* ColorfulIconLabelStyle.swift in Sources */,
-				75A1C91C274FA66300551645 /* PasswordsDataBase.swift in Sources */,
+				75A1C91C274FA66300551645 /* PasswordsStorage.swift in Sources */,
 				753F1FDA272BF5F000804584 /* DDSection+CoreDataClass.swift in Sources */,
 				755425CB272A9C4700733D64 /* VerticalLabelStyle.swift in Sources */,
 				75D4150427280F6400355AE7 /* SettingsView.swift in Sources */,
 				753F1FE3272C008B00804584 /* Info Options.swift in Sources */,
 				7517B5B6285C840E00C5B8F5 /* DepoListRowView.swift in Sources */,
-				75A1C91A274FA64700551645 /* DocumentsDataBase.swift in Sources */,
+				75A140D32869D3F4004A47A8 /* PasswordsListView.swift in Sources */,
+				75A1C91A274FA64700551645 /* DocumentsStorage.swift in Sources */,
 				75088874273E913A009A7D3B /* Defaults Controller.swift in Sources */,
+				75A140D12869D25F004A47A8 /* PasswordsListViewModel.swift in Sources */,
 				75102F61286075BF00464528 /* PhotoView.swift in Sources */,
 				755759AD2730455600DA8B9A /* Folder.swift in Sources */,
 				75102F5D285FB36A00464528 /* DocumentView.swift in Sources */,
@@ -935,9 +951,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		7593B5C928659FED008925E6 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
+		75A140CD2869C913004A47A8 /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess";
+			repositoryURL = "https://github.com/evgenyneu/keychain-swift.git";
 			requirement = {
 				branch = master;
 				kind = branch;
@@ -946,10 +962,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		7593B5CA28659FED008925E6 /* KeychainAccess */ = {
+		75A140CE2869C913004A47A8 /* KeychainSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 7593B5C928659FED008925E6 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
-			productName = KeychainAccess;
+			package = 75A140CD2869C913004A47A8 /* XCRemoteSwiftPackageReference "keychain-swift" */;
+			productName = KeychainSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 

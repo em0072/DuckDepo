@@ -12,32 +12,43 @@ import LocalAuthentication
 struct DuckDepoApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @Environment(\.scenePhase) private var scenePhase
-
+    
+    //Migration Properties
+    @AppStorage("manualMigrationV1toV2") private var manualMigrationV1toV2: Bool = true
+    @StateObject var migrationManager = ManualMigrationV1toV2()
     
     @ObservedObject var biometricController = BiometricController.shared
 
     var body: some Scene {
         WindowGroup {
-            ZStack {
-                ContentView()
-                    .environment(\.managedObjectContext, PersistenceController.shared.context)
-                VisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
-                    .ignoresSafeArea()
-                    .opacity(biometricController.isUnlocked ? 0 : 1)
+            if manualMigrationV1toV2 {
+                AppProgressView(progressValue: $migrationManager.progress)
+                    .onAppear(perform: {
+                        if manualMigrationV1toV2 {
+                            migrationManager.onMigrationEnd = {
+                                manualMigrationV1toV2 = false
+                            }
+                            migrationManager.startMigration()
+                        }
+                    })
+            } else {
+                ZStack {
+                    ContentView()
+                        .environment(\.managedObjectContext, PersistenceController.shared.context)
+                    VisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
+                        .ignoresSafeArea()
+                        .opacity(biometricController.isUnlocked ? 0 : 1)
+                }
+                .animation(.default, value: biometricController.isUnlocked)
             }
-            .animation(.default, value: biometricController.isUnlocked)
-
         }
         .onChange(of: scenePhase) { (newScenePhase) in
             switch newScenePhase {
             case .active:
-                print("scene is now active!")
                 biometricController.onActiveState()
             case .inactive:
-                print("scene is now inactive!")
                 biometricController.onInactiveState()
             case .background:
-                print("scene is now in the background!")
                 biometricController.onBackgroundState()
             @unknown default:
                 print("Apple must have added something new!")

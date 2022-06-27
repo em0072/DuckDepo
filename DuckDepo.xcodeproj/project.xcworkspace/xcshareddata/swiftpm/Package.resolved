@@ -1,12 +1,12 @@
 {
   "pins" : [
     {
-      "identity" : "keychainaccess",
+      "identity" : "keychain-swift",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/kishikawakatsumi/KeychainAccess",
+      "location" : "https://github.com/evgenyneu/keychain-swift.git",
       "state" : {
         "branch" : "master",
-        "revision" : "6299daec1d74be12164fec090faf9ed14d0da9d6"
+        "revision" : "32a99b537d1c6f3529a08257c28a5feb70c0c5af"
       }
     }
   ],

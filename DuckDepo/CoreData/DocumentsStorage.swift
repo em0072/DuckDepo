@@ -31,21 +31,10 @@ class DocumentsStorage: NSObject {
         } catch {
             print("Oops, could not fetch documents")
         }
-    }
-    
-    @objc func managedObjectContextObjectsDidChange() {
-        do {
-            try fetchedRequestController.performFetch()
-        } catch {
-            print("Oops, could not fetch documents")
-        }
-    }
-    
+    }    
 }
 
 extension DocumentsStorage: NSFetchedResultsControllerDelegate {
-    
-    
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         guard let documents = controller.fetchedObjects as? [DDDocument] else {
             return

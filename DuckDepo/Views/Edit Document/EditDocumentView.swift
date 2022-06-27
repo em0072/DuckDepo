@@ -9,7 +9,6 @@ import SwiftUI
 
 struct EditDocumentView: View {
     
-    
     @ObservedObject var viewModel: ViewModel
     @Binding var isPresented: Bool
 

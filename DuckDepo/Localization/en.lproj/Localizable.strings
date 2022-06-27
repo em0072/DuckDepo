@@ -172,3 +172,8 @@
 "sv_delete_all_confirm_title" = "Are you sure?";
 "sv_delete_all_confirm_button" = "Yes, I am sure!";
 "sv_delete_all_confirm_body" = "This action will delete all data and it cannot be undone. Are you sure you want to proceed?";
+
+
+//AppProgressView
+"apv_sorry" = "Sorry!";
+"apv_duckIsBusy" = "The duck is performing some necessary work in the background. Please don't close the app! It will take only a couple of seconds.";

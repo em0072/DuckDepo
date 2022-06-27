@@ -20,6 +20,7 @@ extension DDPassword {
     
     
 
+    @NSManaged public var id: UUID
     @NSManaged public var name: String
     @NSManaged public var login: String
     @NSManaged public var value: String
@@ -31,9 +32,30 @@ extension DDPassword {
         } else {
             return URL(string: "http://\(website)")
         }
-
     }
 
+    func convert() -> Password {
+        let password = Password(id: self.id, name: self.name, login: self.login, website: self.website)
+        return password
+    }
+    
+    func update(name: String? = nil , login: String? = nil, website: String? = nil) {
+        if let name = name {
+            self.name = name
+        }
+        if let login = login {
+            self.login = login
+        }
+        if let website = website {
+            self.website = website
+        }
+    }
+
+    static func predicate(for id: UUID) -> NSPredicate {
+        return NSPredicate(format: "id = %@", id as CVarArg)
+    }
+
+    
 }
 
 extension DDPassword: Identifiable, CoreDataCountable {

@@ -15,10 +15,12 @@ struct EditPasswordView: View {
     @State var isShowingPassGenerator: Bool = false
 
     
-    init(isPresented: Binding<Bool>, type: ViewModel.PasswordType = .new) {
+    init(isPresented: Binding<Bool>, type: ViewModel.PasswordType = .new, delegate: EditPasswordViewModelDelegate? = nil) {
         self.viewModel = ViewModel()
         _isPresented = isPresented
         viewModel.type = type
+        viewModel.delegate = delegate
+
     }
 
     var body: some View {

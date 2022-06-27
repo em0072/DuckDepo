@@ -40,8 +40,8 @@ struct DepoListView: View {
         }
         
 
-        .fullScreenCover(isPresented: $viewModel.isAddingNewDocumentView) {
-            EditDocumentView(isPresented: $viewModel.isAddingNewDocumentView, type: .new)
+        .fullScreenCover(isPresented: $viewModel.isAddingNewDocument) {
+            EditDocumentView(isPresented: $viewModel.isAddingNewDocument, type: .new)
         }
 
     }

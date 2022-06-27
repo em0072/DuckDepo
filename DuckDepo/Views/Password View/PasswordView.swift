@@ -9,17 +9,19 @@ import SwiftUI
 
 struct PasswordView: View {
     
-    @StateObject var viewModel = ViewModel()
-    @ObservedObject var password: DDPassword
-    
-    @State var isPasswordVisible: Bool = false
-    
+    @StateObject var viewModel: PasswordViewModel
+        
+    init(password: Password) {
+        let viewModel = PasswordViewModel(password: password)
+        self._viewModel = StateObject(wrappedValue: viewModel)
+    }
+
     var body: some View {
         Form {
             credentialsSection
             websiteSection
         }
-        .navigationBarTitle(password.name)
+        .navigationBarTitle(viewModel.password.name)
         .toolbar {
             ToolbarItemGroup(placement: .navigationBarTrailing) {
                 Button(action: shareAlert) {
@@ -41,7 +43,7 @@ struct PasswordView: View {
                     Image(systemName: "pencil")
                 }
                 .fullScreenCover(isPresented: $viewModel.isEditingPassword) {
-                    EditPasswordView(isPresented: $viewModel.isEditingPassword, type: .existing(password))
+                    EditPasswordView(isPresented: $viewModel.isEditingPassword, type: .existing(viewModel.password), delegate: viewModel)
                 }
             }
         }
@@ -50,20 +52,20 @@ struct PasswordView: View {
     
     var credentialsSection: some View {
         Section {
-            if password.login.isEmpty, password.value.isEmpty {
-                Text("pv_empty_credentials")
-            } else {
-                if !password.login.isEmpty {
-                    FloatingTextView(title: "pv_login".localized(), value: password.login)
+            if viewModel.shouldShowCredentialsSection {
+                if viewModel.isLoginExist {
+                    FloatingTextView(title: "pv_login".localized(), value: viewModel.password.login)
                 }
-                if !password.value.isEmpty {
+                if viewModel.isPasswordExist {
                     HStack {
                         ZStack {
-                            FloatingTextView(title: "pv_password".localized(), value: password.value, isVisible: $isPasswordVisible)
+                            FloatingTextView(title: "pv_password".localized(), value: viewModel.password.value, isVisible: $viewModel.isPasswordVisible)
                         }
-                        FormButton(action: togglePasswordVisibility, imageSystemName: isPasswordVisible ? "eye.slash" : "eye")
+                        FormButton(action: togglePasswordVisibility, imageSystemName: viewModel.isPasswordVisible ? "eye.slash" : "eye")
                     }
                 }
+            } else {
+                Text("pv_empty_credentials")
             }
         } header: {
             Text("pv_credentials")
@@ -71,9 +73,9 @@ struct PasswordView: View {
     }
     
     @ViewBuilder var websiteSection: some View {
-        if !password.website.isEmpty {
+        if viewModel.isWebsiteExist {
         Section {
-            FloatingTextView(title: "pv_website".localized(), value: password.website, url: password.websiteURL)
+            FloatingTextView(title: "pv_website".localized(), value: viewModel.password.website, url: viewModel.password.websiteURL)
         } header: {
             Text("pv_additional_information")
         }
@@ -82,24 +84,24 @@ struct PasswordView: View {
     
     private func sharePassword() {
         var shareString: String = ""
-        if !password.name.isEmpty {
+        if viewModel.isNameExist {
             shareString.append("pv_share_details_title".localized())
-            shareString.append(password.name)
+            shareString.append(viewModel.password.name)
             shareString.append("\n\n")
         }
-        if !password.login.isEmpty {
+        if viewModel.isLoginExist {
             shareString.append("Login: ")
-            shareString.append(password.login)
+            shareString.append(viewModel.password.login)
             shareString.append("\n\n")
         }
-        if !password.value.isEmpty {
+        if viewModel.isPasswordExist {
             shareString.append("Password: ")
-            shareString.append(password.value)
+            shareString.append(viewModel.password.value)
             shareString.append("\n\n")
         }
-        if !password.website.isEmpty {
+        if viewModel.isWebsiteExist {
             shareString.append("Website: ")
-            shareString.append(password.website)
+            shareString.append(viewModel.password.website)
             shareString.append("\n\n")
         }
 
@@ -120,7 +122,7 @@ struct PasswordView: View {
 
     
     private func togglePasswordVisibility() {
-        isPasswordVisible.toggle()
+        viewModel.isPasswordVisible.toggle()
     }
         
     private func editButtonAction() {
@@ -135,18 +137,15 @@ struct PasswordView: View {
 
 struct PasswordView_Previews: PreviewProvider {
     
-    static var demoPassword: DDPassword {
-        let pass = DDPassword(context: PersistenceController.shared.context)
-        pass.name = "Demo Name"
-        pass.login = "login@login.com"
-        pass.value = "0234irnim0w9eifngm3-i0nfow"
-        pass.website = "apple.com"
+    static var demoPassword: Password {
+        let id = UUID()
+        let pass = Password(id: id, name: "Demo Name", login: "login@login.com", value: "sTr0nG Pa$$w0rD", website: "apple.com")
         return pass
     }
     
     static var previews: some View {
         NavigationView {
-            PasswordView(password: demoPassword)
+            PasswordView(password: PasswordView_Previews.demoPassword)
         }
     }
 }

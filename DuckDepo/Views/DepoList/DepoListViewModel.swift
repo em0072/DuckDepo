@@ -12,7 +12,7 @@ class DepoListViewModel: ObservableObject {
     
     @Published var documents: [Document] = []
     
-    @Published var isAddingNewDocumentView: Bool = false
+    @Published var isAddingNewDocument: Bool = false
     @Published var selectedDocument: Document?
 
     private var cancellable = Set<AnyCancellable>()
@@ -27,7 +27,7 @@ class DepoListViewModel: ObservableObject {
     }
     
     func addNewDocumentButtonPressed() {
-        isAddingNewDocumentView = true
+        isAddingNewDocument = true
     }
     
 }

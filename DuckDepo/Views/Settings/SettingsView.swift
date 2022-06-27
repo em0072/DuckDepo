@@ -9,11 +9,11 @@ import SwiftUI
 
 struct SettingsView: View {
     
-    @ObservedObject private var biometricController = BiometricController.shared
-    @ObservedObject private var db: DataBase = DataBase.shared
+    @StateObject private var biometricController = BiometricController.shared
     @State var documentsCount: Int = 0
     @State var passwordsCount: Int = 0
 
+    private var db: DataBase = DataBase.shared
     
     var body: some View {
         NavigationView {
@@ -30,8 +30,8 @@ struct SettingsView: View {
     }
     
     private func updateDocumentsCount() {
-        documentsCount = db.fetchDocumentCount()
-        passwordsCount = db.fetchPasswordCount()
+        documentsCount = DataBase.shared.fetchDocumentCount()
+        passwordsCount = PasswordsStorage().count()
     }
     
     private func deleteEverything() {

@@ -1,27 +1,24 @@
 //
-//  PasswordsView.swift
+//  NewPasswordsListView.swift
 //  DuckDepo
 //
-//  Created by Evgeny Mitko on 25/11/2021.
+//  Created by Evgeny Mitko on 27/06/2022.
 //
 
 import SwiftUI
 
 struct PasswordsListView: View {
-    @Environment(\.managedObjectContext) private var viewContext
     
-    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \DDPassword.name, ascending: true)], predicate: nil, animation: .default)
-    private var passwords: FetchedResults<DDPassword>
-    @StateObject private var viewModel: ViewModel = ViewModel()
-
-    @State private var isAddingNewPassword = false
+    @StateObject var viewModel = PasswordsListViewModel()
+    
     
     var body: some View {
         NavigationView {
             ZStack {
-                if !passwords.isEmpty {
-                    List(passwords) { password in
+                if !viewModel.passwords.isEmpty {
+                    List(viewModel.passwords) { password in
                         NavigationLink {
+//                            Text(password.login)
                             PasswordView(password: password)
                         } label: {
                             VStack(alignment: .leading) {
@@ -41,24 +38,23 @@ struct PasswordsListView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
-                        isAddingNewPassword = true
+                        viewModel.isAddingNewPassword = true
                     }) {
                             Image(systemName: "plus")
                         }
                 }
             }
             .navigationTitle("plv_title")
-            .fullScreenCover(isPresented: $isAddingNewPassword) {
-                EditPasswordView(isPresented: $isAddingNewPassword, type: .new)
+            .fullScreenCover(isPresented: $viewModel.isAddingNewPassword) {
+                EditPasswordView(isPresented: $viewModel.isAddingNewPassword, type: .new)
             }
             NoSelectionViewView(type: .password)
         }
     }
 }
 
-struct PasswordsListView_Previews: PreviewProvider {
+struct NewPasswordsListView_Previews: PreviewProvider {
     static var previews: some View {
         PasswordsListView()
-            .environment(\.managedObjectContext, PersistenceController.shared.context)
     }
 }
