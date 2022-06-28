@@ -30,6 +30,12 @@
 "Remarks" = "Remarks";
 "Notes" = "Notes";
 
+//InitialInstructionsView
+"ii_headline_documents" = "You'll find you documents here!";
+"ii_headline_passwords" = "You'll find you passwords here!";
+"ii_caption_documents" = "Your documents are stored encrypted on your device and your iCloud account, which means that your information is fully encrypted and available only for you.";
+"ii_caption_passwords" = "Your passwords are stored encrypted on your device and your iCloud account, which means that your information is fully encrypted and available only for you.";
+
 
 // NoDocumentSelectedView 
 "no_doc_view_title" = "Welcome to DuckDepo!";
@@ -177,3 +183,11 @@
 //AppProgressView
 "apv_sorry" = "Sorry!";
 "apv_duckIsBusy" = "The duck is performing some necessary work in the background. Please don't close the app! It will take only a couple of seconds.";
+
+//AutoFill Extension
+"af_nav_title" = "Autofill Password";
+"af_recommended_passwords" = "Recommended Passwords";
+"af_all_passwords" = "All Passwords";
+
+
+

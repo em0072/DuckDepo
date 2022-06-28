@@ -12,30 +12,18 @@ import Combine
 
 class CredentialProviderViewController: ASCredentialProviderViewController {
 
-    var passwords = [Password]()
-    let passwrodStorage = PasswordsStorage()
-    
-    
-    private var cancellable = Set<AnyCancellable>()
-
     /*
      Prepare your UI to list available credentials for the user to choose from. The items in
      'serviceIdentifiers' describe the service the user is logging in to, so your extension can
      prioritize the most relevant credentials in the list.
     */
     override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
-        getPasswords()
-        prepareUI()
-    }
-    
-    private func getPasswords() {
-        passwrodStorage.passwords.sink { passwords in
-            self.passwords = passwords
-        }.store(in: &cancellable)
-    }
-
-    private func prepareUI() {
-        let swiftUIView = getSwiftUIView()
+        let swiftUIView = AutoFillPasswordsListView(identifiers: prepareIdentifiers(serviceIdentifiers)) {
+            self.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code: ASExtensionError.userCanceled.rawValue))
+        } onSelect: { password in
+            let passwordCredential = ASPasswordCredential(user: password.login, password: password.value)
+            self.extensionContext.completeRequest(withSelectedCredential: passwordCredential, completionHandler: nil)
+        }
         let hostController = UIHostingController(rootView: swiftUIView)
         addChild(hostController)
         view.addSubview(hostController.view)
@@ -50,21 +38,10 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
         NSLayoutConstraint.activate(constraints)
         hostController.didMove(toParent: self)
     }
-    
-    private func getSwiftUIView() -> some View {
-        ZStack {
-            VStack {
-                Button("Close") {
-                    self.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code: ASExtensionError.userCanceled.rawValue))
-                }
-                List(passwords) { password in
-                    Text(password.name)
-                }
-            }
-        }
+        
+    private func prepareIdentifiers( _ serviceIdentifiers: [ASCredentialServiceIdentifier]) -> [String] {
+        serviceIdentifiers.map({ $0.identifier } )
     }
-    
-    
 //     Implement this method if your extension supports showing credentials in the QuickType bar.
 //     When the user selects a credential from your app, this method will be called with the
 //     ASPasswordCredentialIdentity your app has previously saved to the ASCredentialIdentityStore.

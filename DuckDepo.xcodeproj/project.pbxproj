@@ -131,6 +131,25 @@
 		75D430812743BE8600D4EE2A /* DeleteAllSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D430802743BE8600D4EE2A /* DeleteAllSection.swift */; };
 		75D430832743EA7900D4EE2A /* VisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D430822743EA7900D4EE2A /* VisualEffectView.swift */; };
 		75D792A42744FFC600396535 /* NoDocumentSelectedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D792A32744FFC500396535 /* NoDocumentSelectedView.swift */; };
+		75E178CE286B32EB00349050 /* AutoFillPasswordsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E178CD286B32EB00349050 /* AutoFillPasswordsListView.swift */; };
+		75E178D0286B336500349050 /* AutoFillPasswordsListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E178CF286B336500349050 /* AutoFillPasswordsListViewModel.swift */; };
+		75E178D1286B3D2C00349050 /* InitialInstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C90D274F825200551645 /* InitialInstructionsView.swift */; };
+		75E178D2286B3DDE00349050 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 756A0D622758BCB800CD29E0 /* Localizable.strings */; };
+		75E178D3286B3F7400349050 /* EditPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C910274F84B500551645 /* EditPasswordView.swift */; };
+		75E178D4286B3F7600349050 /* EditPasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C912274F84C600551645 /* EditPasswordViewModel.swift */; };
+		75E178D5286B3F8100349050 /* BackgroundCleanerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C929274FEB9F00551645 /* BackgroundCleanerView.swift */; };
+		75E178D6286B3F8A00349050 /* PasswordGeneratorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C925274FD0F400551645 /* PasswordGeneratorView.swift */; };
+		75E178D7286B3F8F00349050 /* BindableFloatingTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C917274F8C7400551645 /* BindableFloatingTextField.swift */; };
+		75E178D8286B3F9A00349050 /* DuckButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C92B2750D65600551645 /* DuckButtonStyle.swift */; };
+		75E178D9286B3FA900349050 /* Color extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753F1FBE272BE56400804584 /* Color extension.swift */; };
+		75E178DA286B3FB400349050 /* FormButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C91D274FAD5400551645 /* FormButton.swift */; };
+		75E178DB286B3FB900349050 /* Password Generator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C927274FDE1F00551645 /* Password Generator.swift */; };
+		75E178DC286B3FC300349050 /* AddButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7557599F273006F700DA8B9A /* AddButtonView.swift */; };
+		75E178DD286B3FED00349050 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 756AF0B32726C324001CB821 /* Assets.xcassets */; };
+		75E178E0286B419B00349050 /* ShareSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A021EC27343B53001484BA /* ShareSheetView.swift */; };
+		75E178E2286B41A700349050 /* Notification.Name extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75AB83E22733E77D000618F1 /* Notification.Name extension.swift */; };
+		75E178E4286B425000349050 /* AutoFillPasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E178E3286B425000349050 /* AutoFillPasswordViewModel.swift */; };
+		75E178E6286B426D00349050 /* AutoFillPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E178E5286B426D00349050 /* AutoFillPasswordView.swift */; };
 		75E45300273BDDDF003AF1CE /* TitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E452FF273BDDDF003AF1CE /* TitleView.swift */; };
 		75E8F82C2739544300DCF4BD /* CloudSharingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E8F82B2739544300DCF4BD /* CloudSharingView.swift */; };
 		75E8F82E273981AB00DCF4BD /* EditFoldersViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E8F82D273981AA00DCF4BD /* EditFoldersViewState.swift */; };
@@ -267,6 +286,11 @@
 		75D430802743BE8600D4EE2A /* DeleteAllSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAllSection.swift; sourceTree = "<group>"; };
 		75D430822743EA7900D4EE2A /* VisualEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualEffectView.swift; sourceTree = "<group>"; };
 		75D792A32744FFC500396535 /* NoDocumentSelectedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoDocumentSelectedView.swift; sourceTree = "<group>"; };
+		75E178CC286B302C00349050 /* DuckDepo 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "DuckDepo 2.xcdatamodel"; sourceTree = "<group>"; };
+		75E178CD286B32EB00349050 /* AutoFillPasswordsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoFillPasswordsListView.swift; sourceTree = "<group>"; };
+		75E178CF286B336500349050 /* AutoFillPasswordsListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoFillPasswordsListViewModel.swift; sourceTree = "<group>"; };
+		75E178E3286B425000349050 /* AutoFillPasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoFillPasswordViewModel.swift; sourceTree = "<group>"; };
+		75E178E5286B426D00349050 /* AutoFillPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoFillPasswordView.swift; sourceTree = "<group>"; };
 		75E452FF273BDDDF003AF1CE /* TitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleView.swift; sourceTree = "<group>"; };
 		75E8F82B2739544300DCF4BD /* CloudSharingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSharingView.swift; sourceTree = "<group>"; };
 		75E8F82D273981AA00DCF4BD /* EditFoldersViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFoldersViewState.swift; sourceTree = "<group>"; };
@@ -531,6 +555,10 @@
 			isa = PBXGroup;
 			children = (
 				75A140DD2869FD2E004A47A8 /* CredentialProviderViewController.swift */,
+				75E178CD286B32EB00349050 /* AutoFillPasswordsListView.swift */,
+				75E178CF286B336500349050 /* AutoFillPasswordsListViewModel.swift */,
+				75E178E5286B426D00349050 /* AutoFillPasswordView.swift */,
+				75E178E3286B425000349050 /* AutoFillPasswordViewModel.swift */,
 				75A140DF2869FD2E004A47A8 /* MainInterface.storyboard */,
 				75A140E22869FD2E004A47A8 /* Info.plist */,
 				75A140E32869FD2E004A47A8 /* DuckDepoAutoFillExtension.entitlements */,
@@ -723,6 +751,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				75A140E12869FD2E004A47A8 /* MainInterface.storyboard in Resources */,
+				75E178DD286B3FED00349050 /* Assets.xcassets in Resources */,
+				75E178D2286B3DDE00349050 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -835,24 +865,41 @@
 				75821E59286B0238009F8C5E /* Info Options.swift in Sources */,
 				75821E53286B0209009F8C5E /* DDPassword+CoreDataClass.swift in Sources */,
 				75821E4E286AFF7F009F8C5E /* Password.swift in Sources */,
+				75E178D8286B3F9A00349050 /* DuckButtonStyle.swift in Sources */,
+				75E178DA286B3FB400349050 /* FormButton.swift in Sources */,
 				75821E4D286AFF43009F8C5E /* PasswordsStorage.swift in Sources */,
+				75E178D6286B3F8A00349050 /* PasswordGeneratorView.swift in Sources */,
+				75E178D3286B3F7400349050 /* EditPasswordView.swift in Sources */,
 				75821E5D286B0265009F8C5E /* DDSection+CoreDataProperties.swift in Sources */,
+				75E178E4286B425000349050 /* AutoFillPasswordViewModel.swift in Sources */,
+				75E178D4286B3F7600349050 /* EditPasswordViewModel.swift in Sources */,
+				75E178DB286B3FB900349050 /* Password Generator.swift in Sources */,
 				75821E4A286AFF2E009F8C5E /* DuckDepo.xcdatamodeld in Sources */,
 				75821E56286B0226009F8C5E /* AppDelegate.swift in Sources */,
+				75E178D7286B3F8F00349050 /* BindableFloatingTextField.swift in Sources */,
 				75A140DE2869FD2E004A47A8 /* CredentialProviderViewController.swift in Sources */,
 				75821E50286B01E5009F8C5E /* DDPassword+CoreDataProperties.swift in Sources */,
 				75821E5E286B0268009F8C5E /* DDField+CoreDataProperties.swift in Sources */,
 				75821E58286B0232009F8C5E /* Document.swift in Sources */,
+				75E178E0286B419B00349050 /* ShareSheetView.swift in Sources */,
 				75821E5B286B0246009F8C5E /* Field.swift in Sources */,
+				75E178D5286B3F8100349050 /* BackgroundCleanerView.swift in Sources */,
 				75821E5F286B026E009F8C5E /* DDField+CoreDataClass.swift in Sources */,
+				75E178E2286B41A700349050 /* Notification.Name extension.swift in Sources */,
 				75821E4C286AFF3E009F8C5E /* DataBase.swift in Sources */,
+				75E178CE286B32EB00349050 /* AutoFillPasswordsListView.swift in Sources */,
 				75821E52286B0205009F8C5E /* DDDocument+CoreDataClass.swift in Sources */,
 				75821E5A286B023E009F8C5E /* DocSection.swift in Sources */,
 				75821E55286B021F009F8C5E /* CoreData Countable.swift in Sources */,
 				75821E54286B0210009F8C5E /* CredentialIdentityStoreController.swift in Sources */,
+				75E178D9286B3FA900349050 /* Color extension.swift in Sources */,
 				75821E51286B01EB009F8C5E /* Keychain Controller.swift in Sources */,
 				75821E5C286B0257009F8C5E /* String Extension.swift in Sources */,
+				75E178D1286B3D2C00349050 /* InitialInstructionsView.swift in Sources */,
+				75E178E6286B426D00349050 /* AutoFillPasswordView.swift in Sources */,
+				75E178D0286B336500349050 /* AutoFillPasswordsListViewModel.swift in Sources */,
 				75821E4B286AFF31009F8C5E /* Persistence Controller.swift in Sources */,
+				75E178DC286B3FC300349050 /* AddButtonView.swift in Sources */,
 				75821E4F286B01E3009F8C5E /* DDDocument+CoreDataProperties.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1209,9 +1256,10 @@
 		7509CEC92865ABB400C7675F /* DuckDepo.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				75E178CC286B302C00349050 /* DuckDepo 2.xcdatamodel */,
 				7509CECA2865ABB400C7675F /* DuckDepo.xcdatamodel */,
 			);
-			currentVersion = 7509CECA2865ABB400C7675F /* DuckDepo.xcdatamodel */;
+			currentVersion = 75E178CC286B302C00349050 /* DuckDepo 2.xcdatamodel */;
 			path = DuckDepo.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

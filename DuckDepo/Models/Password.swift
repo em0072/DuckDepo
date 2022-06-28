@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct Password: Identifiable {
+struct Password: Identifiable, Hashable {
     
     public var id: UUID
     public var name: String = ""

@@ -1979,7 +1979,7 @@
             startingLineNumber = "51"
             endingLineNumber = "51"
             landmarkName = "passwordUpdated(_:)"
-            landmarkType = "9">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1992,8 +1992,8 @@
             filePath = "DuckDepoAutoFillExtension/CredentialProviderViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "76"
-            endingLineNumber = "76"
+            startingLineNumber = "53"
+            endingLineNumber = "53"
             landmarkName = "provideCredentialWithoutUserInteraction(for:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2088,8 +2088,8 @@
             filePath = "DuckDepoAutoFillExtension/CredentialProviderViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "27"
-            endingLineNumber = "27"
+            startingLineNumber = "21"
+            endingLineNumber = "21"
             landmarkName = "prepareCredentialList(for:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2104,26 +2104,10 @@
             filePath = "DuckDepoAutoFillExtension/CredentialProviderViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "75"
-            endingLineNumber = "75"
-            landmarkName = "provideCredentialWithoutUserInteraction(for:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "E57FB7DF-1DC6-4930-AC0F-2E5D1E793C43"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DuckDepoAutoFillExtension/CredentialProviderViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "33"
-            endingLineNumber = "33"
-            landmarkName = "getPasswords()"
-            landmarkType = "7">
+            startingLineNumber = "52"
+            endingLineNumber = "52"
+            landmarkName = "CredentialProviderViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
