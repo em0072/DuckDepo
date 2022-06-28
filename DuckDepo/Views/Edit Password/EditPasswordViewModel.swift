@@ -70,6 +70,7 @@ extension EditPasswordView {
                 password.value = passwordValue
                 password.website = passwordWebsite
                 storage.update(password)
+                delegate?.passwordUpdated(password)
             }
         }
                 

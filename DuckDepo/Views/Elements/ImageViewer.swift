@@ -31,6 +31,14 @@ struct ImageViewer: View {
             }
             .tabViewStyle(PageTabViewStyle())
         }
+        .gesture(
+            DragGesture(minimumDistance: 10, coordinateSpace: .global)
+                .onEnded { value in
+                    if value.translation.height > 50 {
+                        dismiss()
+                    }
+                }
+        )
         .background(Color.black)
         .ignoresSafeArea()
         .overlay(

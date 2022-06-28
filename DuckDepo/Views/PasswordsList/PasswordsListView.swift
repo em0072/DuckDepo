@@ -8,9 +8,8 @@
 import SwiftUI
 
 struct PasswordsListView: View {
-    
+        
     @StateObject var viewModel = PasswordsListViewModel()
-    
     
     var body: some View {
         NavigationView {
@@ -18,7 +17,6 @@ struct PasswordsListView: View {
                 if !viewModel.passwords.isEmpty {
                     List(viewModel.passwords) { password in
                         NavigationLink {
-//                            Text(password.login)
                             PasswordView(password: password)
                         } label: {
                             VStack(alignment: .leading) {

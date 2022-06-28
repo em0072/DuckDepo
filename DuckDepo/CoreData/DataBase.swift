@@ -36,6 +36,8 @@ class DataBase: NSObject, ObservableObject, NSFetchedResultsControllerDelegate {
                 }
             }
             persistenceController.saveContext()
+            Keychain.shared.clear()
+            CredentialIdentityStoreController.shared.removeAll()
         } catch let error {
             print("Error Deleteing everything - \(error)")
         }

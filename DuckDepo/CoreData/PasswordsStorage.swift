@@ -44,7 +44,8 @@ class PasswordsStorage: NSObject {
             ddPassword.update(name: password.name, login: password.login, website: password.website)
             setPasswordValue(password.value, for: password.id)
             database.save()
-            
+            //Update Identiti Store
+            CredentialIdentityStoreController.shared.save(password)
         }
     }
     
@@ -52,13 +53,19 @@ class PasswordsStorage: NSObject {
         let ddPassword = DDPassword(context: database.context)
         ddPassword.id = password.id
         ddPassword.update(name: password.name, login: password.login, website: password.website)
+        //Update Keychain
         setPasswordValue(password.value, for: password.id)
         database.save()
+        //Update Identiti Store
+        CredentialIdentityStoreController.shared.save(password)
     }
     
     func delete(_ password: Password) {
         if let ddPassword = fetch(with: password.id) {
             database.context.delete(ddPassword)
+            database.save()
+            Keychain.shared.delete(password.id.uuidString)
+            CredentialIdentityStoreController.shared.remove(password)
         }
     }
 

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21F79" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
     <entity name="DDDocument" representedClassName="DDDocument" syncable="YES">
+        <attribute name="documentDescription" optional="YES" attributeType="String"/>
+        <attribute name="documentType" optional="YES" attributeType="String"/>
+        <attribute name="documentTypeOrder" optional="YES" attributeType="Integer 16" defaultValueString="100" usesScalarValueType="YES"/>
         <attribute name="identifier" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="order" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
@@ -15,6 +18,7 @@
         <relationship name="section" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DDSection" inverseName="fields" inverseEntity="DDSection"/>
     </entity>
     <entity name="DDPassword" representedClassName="DDPassword" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="login" attributeType="String" defaultValueString="" allowsCloudEncryption="YES"/>
         <attribute name="name" attributeType="String" defaultValueString=""/>
         <attribute name="value" attributeType="String" defaultValueString="" allowsCloudEncryption="YES"/>
@@ -27,9 +31,9 @@
         <relationship name="fields" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="DDField" inverseName="section" inverseEntity="DDField"/>
     </entity>
     <elements>
-        <element name="DDDocument" positionX="-54" positionY="18" width="128" height="104"/>
+        <element name="DDDocument" positionX="-54" positionY="18" width="128" height="149"/>
         <element name="DDField" positionX="-54" positionY="63" width="128" height="104"/>
-        <element name="DDPassword" positionX="-54" positionY="90" width="128" height="89"/>
+        <element name="DDPassword" positionX="-54" positionY="90" width="128" height="104"/>
         <element name="DDSection" positionX="-63" positionY="54" width="128" height="89"/>
     </elements>
 </model>

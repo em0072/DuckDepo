@@ -17,11 +17,12 @@ struct DuckDepoApp: App {
     @AppStorage("manualMigrationV1toV2") private var manualMigrationV1toV2: Bool = true
     @StateObject var migrationManager = ManualMigrationV1toV2()
     
+    
     @ObservedObject var biometricController = BiometricController.shared
 
     var body: some Scene {
         WindowGroup {
-            if manualMigrationV1toV2 {
+            if manualMigrationV1toV2 && DataBase.shared.fetchCount(for: DDPassword.self) > 0 {
                 AppProgressView(progressValue: $migrationManager.progress)
                     .onAppear(perform: {
                         if manualMigrationV1toV2 {
@@ -46,6 +47,7 @@ struct DuckDepoApp: App {
             switch newScenePhase {
             case .active:
                 biometricController.onActiveState()
+                onActiveActions()
             case .inactive:
                 biometricController.onInactiveState()
             case .background:
@@ -57,6 +59,8 @@ struct DuckDepoApp: App {
 
     }
     
-
     
+    func onActiveActions() {
+        CredentialIdentityStoreController.shared.checkState()
+    }    
 }

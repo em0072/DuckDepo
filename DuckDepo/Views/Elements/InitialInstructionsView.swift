@@ -45,9 +45,9 @@ struct InitialInstructionsView: View {
     private var headline: String {
         switch type {
         case .documents:
-            return "You'll find you documents here!"
+            return "ii_headline_documents".localized()
         case .passwords:
-            return "You'll find you passwords here!"
+            return "ii_headline_passwords".localized()
         }
 
     }
@@ -55,9 +55,9 @@ struct InitialInstructionsView: View {
     private var caption: String {
         switch type {
         case .documents:
-            return "Your documents are stored encrypted on your device and your iCloud account, which means that your information is fully encrypted and available only for you."
+            return "ii_caption_documents".localized()
         case .passwords:
-            return "Your passwords are stored encrypted on your device and your iCloud account, which means that your information is fully encrypted and available only for you."
+            return "ii_caption_passwords".localized()
         }
 
     }

@@ -30,6 +30,12 @@
 "Remarks" = "Remarks";
 "Notes" = "Notes";
 
+//InitialInstructionsView
+"ii_headline_documents" = "You'll find you documents here!";
+"ii_headline_passwords" = "You'll find you passwords here!";
+"ii_caption_documents" = "Your documents are stored encrypted on your device and your iCloud account, which means that your information is fully encrypted and available only for you.";
+"ii_caption_passwords" = "Your passwords are stored encrypted on your device and your iCloud account, which means that your information is fully encrypted and available only for you.";
+
 
 // NoDocumentSelectedView 
 "no_doc_view_title" = "Welcome to DuckDepo!";
@@ -167,6 +173,10 @@
 "sv_enable_touchid" = "Enable Touch ID";
 "sv_enable_passcode" = "Enable passcode";
 "sv_storage" = "Storage";
+"sv_help" = "Help";
+"sv_autofill_featute" = "Passwords AutoFill";
+"sv_autofill_feature_text1" = "DuckDepo supports an autofill feature, which lets you autofill passwords in a browser without opening DuckDepo app and copying passwords!";
+"sv_autofill_feature_text2" = "To activate this feature go to your phone **'Settings' -> 'Passwords' -> 'AutoFill Passwords'** and select DuckDepo from the list. Then open the DuckDepo app, and you are ready to autofill passwords while browsing the internet.";
 "sv_content_reset" = "Reset Content";
 "sv_delete_all_button" = "Delete All Data";
 "sv_delete_all_confirm_title" = "Are you sure?";
@@ -177,3 +187,11 @@
 //AppProgressView
 "apv_sorry" = "Sorry!";
 "apv_duckIsBusy" = "The duck is performing some necessary work in the background. Please don't close the app! It will take only a couple of seconds.";
+
+//AutoFill Extension
+"af_nav_title" = "Autofill Password";
+"af_recommended_passwords" = "Recommended Passwords";
+"af_all_passwords" = "All Passwords";
+
+
+

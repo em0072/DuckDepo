@@ -77,39 +77,73 @@ class PersistenceController {
         }
         let privateStoreDescription = container.persistentStoreDescriptions.first!
         let storesURL = privateStoreDescription.url!.deletingLastPathComponent()
-
-        privateStoreDescription.url = storesURL.appendingPathComponent("private.sqlite")
-//        privateStoreDescription.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
+        let defaultURL = storesURL.appendingPathComponent("private.sqlite")
+        
+//        let storeURL = URL.storeURL(for: "group.evgenymitko.duckdepo", databaseName: "DuckDepo")
+        privateStoreDescription.url = defaultURL
+//        privateStoreDescription.url = defaultURL
+//        let url = URL.storeURL(databaseName: "private")
+        
+        privateStoreDescription.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
         privateStoreDescription.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
         privateStoreDescription.setOption(FileProtectionType.complete as NSObject, forKey: NSPersistentStoreFileProtectionKey)
+//        privateStoreDescription.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(containerIdentifier: "iCloud.DuckDepo")
         //Add Shared Database
-        let sharedStoreURL = storesURL.appendingPathComponent("shared.sqlite")
-        guard let sharedStoreDescription = privateStoreDescription.copy() as? NSPersistentStoreDescription else {
-            fatalError("Copying the private store description returned an unexpected value.")
-        }
-        sharedStoreDescription.url = sharedStoreURL
-        
-        if AppDelegate.shared.allowCloudKitSync {
-            let containerIdentifier = privateStoreDescription.cloudKitContainerOptions!.containerIdentifier
-            let sharedStoreOptions = NSPersistentCloudKitContainerOptions(containerIdentifier: containerIdentifier)
-            sharedStoreOptions.databaseScope = .shared
-            sharedStoreDescription.cloudKitContainerOptions = sharedStoreOptions
-        } else {
-            privateStoreDescription.cloudKitContainerOptions = nil
-            sharedStoreDescription.cloudKitContainerOptions = nil
-        }
+//        let sharedStoreURL = storesURL.appendingPathComponent("shared.sqlite")
+//        guard let sharedStoreDescription = privateStoreDescription.copy() as? NSPersistentStoreDescription else {
+//            fatalError("Copying the private store description returned an unexpected value.")
+//        }
+//        sharedStoreDescription.url = sharedStoreURL
 
-        container.persistentStoreDescriptions.append(sharedStoreDescription)
+//        if AppDelegate.shared.allowCloudKitSync {
+//            let containerIdentifier = privateStoreDescription.cloudKitContainerOptions!.containerIdentifier
+//            let sharedStoreOptions = NSPersistentCloudKitContainerOptions(containerIdentifier: containerIdentifier)
+//            sharedStoreOptions.databaseScope = .shared
+//            sharedStoreDescription.cloudKitContainerOptions = sharedStoreOptions
+//        } else {
+//            privateStoreDescription.cloudKitContainerOptions = nil
+//            sharedStoreDescription.cloudKitContainerOptions = nil
+//        }
+
+//        container.persistentStoreDescriptions.append(sharedStoreDescription)
+        
         container.loadPersistentStores(completionHandler: { (loadedStoreDescription, error) in
+            
+            
+//            if defaultURL.absoluteString != storeURL.absoluteString {
+//                let coordinator = self.container.persistentStoreCoordinator
+//                            if let oldStore = coordinator.persistentStore(for: defaultURL) {
+//                                do {
+//                                    try coordinator.migratePersistentStore(oldStore, to: storeURL, options: nil, withType: NSSQLiteStoreType)
+//                                } catch {
+//                                    print("Hey Listen! Error migrating persistent store")
+//                                    print(error.localizedDescription)
+//                                }
+//
+//                                // delete old store
+//                                let fileCoordinator = NSFileCoordinator(filePresenter: nil)
+//                                fileCoordinator.coordinate(writingItemAt: defaultURL, options: .forDeleting, error: nil, byAccessor: { url in
+//                                    do {
+//                                        try FileManager.default.removeItem(at: defaultURL)
+//                                    } catch {
+//                                        print("Hey Listen! Error deleting old persistent store")
+//                                        print(error.localizedDescription)
+//                                    }
+//                                })
+//                            }
+//                        }
+            
+            
             if let loadError = error as NSError? {
                 fatalError("###\(#function): Failed to load persistent stores:\(loadError)")
-            } else if let cloudKitContainerOptions = loadedStoreDescription.cloudKitContainerOptions {
-                if .private == cloudKitContainerOptions.databaseScope {
-                    self._privatePersistentStore = self.container.persistentStoreCoordinator.persistentStore(for: loadedStoreDescription.url!)
-                } else if .shared == cloudKitContainerOptions.databaseScope {
-                    self._sharedPersistentStore = self.container.persistentStoreCoordinator.persistentStore(for: loadedStoreDescription.url!)
-                }
             }
+//            else if let cloudKitContainerOptions = loadedStoreDescription.cloudKitContainerOptions {
+//                if .private == cloudKitContainerOptions.databaseScope {
+//                    self._privatePersistentStore = self.container.persistentStoreCoordinator.persistentStore(for: loadedStoreDescription.url!)
+//                } else if .shared == cloudKitContainerOptions.databaseScope {
+//                    self._sharedPersistentStore = self.container.persistentStoreCoordinator.persistentStore(for: loadedStoreDescription.url!)
+//                }
+//            }
         })
         container.viewContext.mergePolicy = NSMergePolicy.mergeByPropertyStoreTrump
         // Pin the viewContext to the current generation token and set it to keep itself up to date with local changes.
@@ -121,6 +155,7 @@ class PersistenceController {
         }
         
     }
+    
 
         
     public func performBackgroundTask(block: @escaping (NSManagedObjectContext) -> Void) {
@@ -217,4 +252,26 @@ extension PersistenceController {
     func canDelete(object: NSManagedObject) -> Bool {
         return container.canDeleteRecord(forManagedObjectWith: object.objectID)
     }
+}
+
+
+public extension URL {
+
+    /// Returns a URL for the given app group and database pointing to the sqlite database.
+    static func storeURL(for appGroup: String, databaseName: String) -> URL {
+        guard let fileContainer = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroup) else {
+            fatalError("Shared file container could not be created.")
+        }
+
+        return fileContainer.appendingPathComponent("\(databaseName).sqlite")
+    }
+    
+    static func storeURL(databaseName: String) -> URL {
+        guard let fileContainer = FileManager.default.urls(for: .allLibrariesDirectory, in: .allDomainsMask).first else {
+            fatalError("Shared file container could not be created.")
+        }
+
+        return fileContainer.appendingPathComponent("Application Support").appendingPathComponent("\(databaseName).sqlite")
+    }
+
 }

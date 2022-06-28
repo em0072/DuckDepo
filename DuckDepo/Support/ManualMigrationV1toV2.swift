@@ -49,9 +49,10 @@ class ManualMigrationV1toV2: ObservableObject {
         for password in passwords {
             let id = UUID()
             let passwordValue = password.value
+            guard !passwordValue.isEmpty else { continue }
             password.id = id
             keychain.set(passwordValue, forKey: id.uuidString)
-            password.value = ""
+//            password.value = ""
             addToProgress(onePasswordProgress)
         }
     }

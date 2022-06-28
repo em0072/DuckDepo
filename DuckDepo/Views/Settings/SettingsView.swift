@@ -12,6 +12,8 @@ struct SettingsView: View {
     @StateObject private var biometricController = BiometricController.shared
     @State var documentsCount: Int = 0
     @State var passwordsCount: Int = 0
+    
+    @State var showAutofillInfo: Bool = false
 
     private var db: DataBase = DataBase.shared
     
@@ -21,9 +23,12 @@ struct SettingsView: View {
                 BiometricSection(isBiometryEnabled: $biometricController.isBiometryEnabled, biometryDelay: $biometricController.biometricDelay)
 ////                CategorySection()
                 OverviewSection(documentCount: $documentsCount, passwordCount: $passwordsCount)
-//                
+//
+                HelpSection(showAutofillInfo: $showAutofillInfo)
+                
                 DeleteAllSection(onDeleteAction: deleteEverything)
             }.navigationBarTitle(Text("sv_title"))
+                .sheet(isPresented: $showAutofillInfo, content: { AutofillInfoView() })
         }
         .onAppear(perform: updateDocumentsCount)
         .navigationViewStyle(StackNavigationViewStyle())
