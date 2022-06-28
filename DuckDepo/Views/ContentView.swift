@@ -31,8 +31,8 @@ struct ContentView: View {
                 isShowingCopyNotification = true
             }
             .pillNotification(text: $copyNotificationText, show: $isShowingCopyNotification)
-        
     }
+    
     
 }
 

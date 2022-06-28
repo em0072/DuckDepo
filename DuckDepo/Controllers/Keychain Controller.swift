@@ -12,8 +12,8 @@ class Keychain {
         
     static var shared: KeychainSwift = {
         let keychain = KeychainSwift()
-        keychain.accessGroup = "group.evgenymitko.duckdepo" // Use your own access goup
         keychain.synchronizable = true
+        keychain.accessGroup = "65952893XA.group.evgenymitko.duckdepo"
         return keychain
     }()
 

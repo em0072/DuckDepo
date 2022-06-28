@@ -58,6 +58,29 @@
 		756AF0B92726C324001CB821 /* Persistence Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756AF0B82726C324001CB821 /* Persistence Controller.swift */; };
 		7574E8ED272AE66B0079B51C /* OldDocumentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7574E8EC272AE66B0079B51C /* OldDocumentView.swift */; };
 		7580B246273AA99A00F06F23 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7580B245273AA99A00F06F23 /* AppDelegate.swift */; };
+		75821E4A286AFF2E009F8C5E /* DuckDepo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7509CEC92865ABB400C7675F /* DuckDepo.xcdatamodeld */; };
+		75821E4B286AFF31009F8C5E /* Persistence Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756AF0B82726C324001CB821 /* Persistence Controller.swift */; };
+		75821E4C286AFF3E009F8C5E /* DataBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A021F127347E86001484BA /* DataBase.swift */; };
+		75821E4D286AFF43009F8C5E /* PasswordsStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C91B274FA66300551645 /* PasswordsStorage.swift */; };
+		75821E4E286AFF7F009F8C5E /* Password.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C915274F85A600551645 /* Password.swift */; };
+		75821E4F286B01E3009F8C5E /* DDDocument+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D414FC2728021700355AE7 /* DDDocument+CoreDataProperties.swift */; };
+		75821E50286B01E5009F8C5E /* DDPassword+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C90A274F814100551645 /* DDPassword+CoreDataProperties.swift */; };
+		75821E51286B01EB009F8C5E /* Keychain Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7509CEC62865A77900C7675F /* Keychain Controller.swift */; };
+		75821E52286B0205009F8C5E /* DDDocument+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D414FB2728021700355AE7 /* DDDocument+CoreDataClass.swift */; };
+		75821E53286B0209009F8C5E /* DDPassword+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C909274F814100551645 /* DDPassword+CoreDataClass.swift */; };
+		75821E54286B0210009F8C5E /* CredentialIdentityStoreController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A140D42869F5CB004A47A8 /* CredentialIdentityStoreController.swift */; };
+		75821E55286B021F009F8C5E /* CoreData Countable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C923274FC82800551645 /* CoreData Countable.swift */; };
+		75821E56286B0226009F8C5E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7580B245273AA99A00F06F23 /* AppDelegate.swift */; };
+		75821E57286B022D009F8C5E /* DDSection+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753F1FD8272BF5F000804584 /* DDSection+CoreDataClass.swift */; };
+		75821E58286B0232009F8C5E /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755759AA2730450800DA8B9A /* Document.swift */; };
+		75821E59286B0238009F8C5E /* Info Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753F1FE2272C008B00804584 /* Info Options.swift */; };
+		75821E5A286B023E009F8C5E /* DocSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755759A8273044BC00DA8B9A /* DocSection.swift */; };
+		75821E5B286B0246009F8C5E /* Field.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755759A6273044A800DA8B9A /* Field.swift */; };
+		75821E5C286B0257009F8C5E /* String Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753F1FE4272C019700804584 /* String Extension.swift */; };
+		75821E5D286B0265009F8C5E /* DDSection+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753F1FD9272BF5F000804584 /* DDSection+CoreDataProperties.swift */; };
+		75821E5E286B0268009F8C5E /* DDField+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753F1FC1272BF3B500804584 /* DDField+CoreDataProperties.swift */; };
+		75821E5F286B026E009F8C5E /* DDField+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753F1FC0272BF3B500804584 /* DDField+CoreDataClass.swift */; };
+		75821E60286B048E009F8C5E /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75D414EA2726CA6700355AE7 /* CloudKit.framework */; };
 		758AB2B4285B79F400BF94B0 /* FloatingPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758AB2B3285B79F400BF94B0 /* FloatingPickerView.swift */; };
 		758ABD132729828F0074F61A /* EditDocumentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758ABD122729828F0074F61A /* EditDocumentView.swift */; };
 		759257632759047C003C9826 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 759257652759047D003C9826 /* Localizable.stringsdict */; };
@@ -73,6 +96,12 @@
 		75A140CF2869C914004A47A8 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 75A140CE2869C913004A47A8 /* KeychainSwift */; };
 		75A140D12869D25F004A47A8 /* PasswordsListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A140D02869D25F004A47A8 /* PasswordsListViewModel.swift */; };
 		75A140D32869D3F4004A47A8 /* PasswordsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A140D22869D3F4004A47A8 /* PasswordsListView.swift */; };
+		75A140D52869F5CB004A47A8 /* CredentialIdentityStoreController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A140D42869F5CB004A47A8 /* CredentialIdentityStoreController.swift */; };
+		75A140DB2869FD2E004A47A8 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7593B5C72864A129008925E6 /* AuthenticationServices.framework */; };
+		75A140DE2869FD2E004A47A8 /* CredentialProviderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A140DD2869FD2E004A47A8 /* CredentialProviderViewController.swift */; };
+		75A140E12869FD2E004A47A8 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 75A140DF2869FD2E004A47A8 /* MainInterface.storyboard */; };
+		75A140E62869FD2E004A47A8 /* DuckDepoAutoFillExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 75A140DA2869FD2E004A47A8 /* DuckDepoAutoFillExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		75A140EC286AEBA7004A47A8 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 75A140EB286AEBA7004A47A8 /* KeychainSwift */; };
 		75A1C906274F7F2C00551645 /* PasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C905274F7F2C00551645 /* PasswordView.swift */; };
 		75A1C908274F7F8F00551645 /* PasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C907274F7F8F00551645 /* PasswordViewModel.swift */; };
 		75A1C90B274F814100551645 /* DDPassword+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C909274F814100551645 /* DDPassword+CoreDataClass.swift */; };
@@ -107,6 +136,30 @@
 		75E8F82E273981AB00DCF4BD /* EditFoldersViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E8F82D273981AA00DCF4BD /* EditFoldersViewState.swift */; };
 		75ED53B32869A1D6009FE1E2 /* AppProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75ED53B22869A1D6009FE1E2 /* AppProgressView.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		75A140E42869FD2E004A47A8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 756AF0A42726C320001CB821 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 75A140D92869FD2E004A47A8;
+			remoteInfo = DuckDepoAutoFillExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		75A140EA2869FD2F004A47A8 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				75A140E62869FD2E004A47A8 /* DuckDepoAutoFillExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		7502B5EB27312E3C00E9F0C8 /* AddSectionMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSectionMenu.swift; sourceTree = "<group>"; };
@@ -179,6 +232,12 @@
 		75A140CB2869C440004A47A8 /* ManualMigrationV1toV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualMigrationV1toV2.swift; sourceTree = "<group>"; };
 		75A140D02869D25F004A47A8 /* PasswordsListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordsListViewModel.swift; sourceTree = "<group>"; };
 		75A140D22869D3F4004A47A8 /* PasswordsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordsListView.swift; sourceTree = "<group>"; };
+		75A140D42869F5CB004A47A8 /* CredentialIdentityStoreController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialIdentityStoreController.swift; sourceTree = "<group>"; };
+		75A140DA2869FD2E004A47A8 /* DuckDepoAutoFillExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = DuckDepoAutoFillExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		75A140DD2869FD2E004A47A8 /* CredentialProviderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialProviderViewController.swift; sourceTree = "<group>"; };
+		75A140E02869FD2E004A47A8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		75A140E22869FD2E004A47A8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		75A140E32869FD2E004A47A8 /* DuckDepoAutoFillExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DuckDepoAutoFillExtension.entitlements; sourceTree = "<group>"; };
 		75A1C905274F7F2C00551645 /* PasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordView.swift; sourceTree = "<group>"; };
 		75A1C907274F7F8F00551645 /* PasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordViewModel.swift; sourceTree = "<group>"; };
 		75A1C909274F814100551645 /* DDPassword+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DDPassword+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -222,6 +281,16 @@
 				75A140CF2869C914004A47A8 /* KeychainSwift in Frameworks */,
 				7593B5C82864A12A008925E6 /* AuthenticationServices.framework in Frameworks */,
 				75A369D92850F14600196EE2 /* CloudKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		75A140D72869FD2E004A47A8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				75821E60286B048E009F8C5E /* CloudKit.framework in Frameworks */,
+				75A140EC286AEBA7004A47A8 /* KeychainSwift in Frameworks */,
+				75A140DB2869FD2E004A47A8 /* AuthenticationServices.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -325,6 +394,7 @@
 			isa = PBXGroup;
 			children = (
 				756AF0AE2726C320001CB821 /* DuckDepo */,
+				75A140DC2869FD2E004A47A8 /* DuckDepoAutoFillExtension */,
 				756AF0AD2726C320001CB821 /* Products */,
 				75D414E92726CA6700355AE7 /* Frameworks */,
 			);
@@ -334,6 +404,7 @@
 			isa = PBXGroup;
 			children = (
 				756AF0AC2726C320001CB821 /* DuckDepo.app */,
+				75A140DA2869FD2E004A47A8 /* DuckDepoAutoFillExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -451,8 +522,20 @@
 			isa = PBXGroup;
 			children = (
 				75A140CB2869C440004A47A8 /* ManualMigrationV1toV2.swift */,
+				75A140D42869F5CB004A47A8 /* CredentialIdentityStoreController.swift */,
 			);
 			path = Support;
+			sourceTree = "<group>";
+		};
+		75A140DC2869FD2E004A47A8 /* DuckDepoAutoFillExtension */ = {
+			isa = PBXGroup;
+			children = (
+				75A140DD2869FD2E004A47A8 /* CredentialProviderViewController.swift */,
+				75A140DF2869FD2E004A47A8 /* MainInterface.storyboard */,
+				75A140E22869FD2E004A47A8 /* Info.plist */,
+				75A140E32869FD2E004A47A8 /* DuckDepoAutoFillExtension.entitlements */,
+			);
+			path = DuckDepoAutoFillExtension;
 			sourceTree = "<group>";
 		};
 		75A1C8FE274F7EBD00551645 /* PasswordsList */ = {
@@ -545,10 +628,12 @@
 				756AF0A82726C320001CB821 /* Sources */,
 				756AF0A92726C320001CB821 /* Frameworks */,
 				756AF0AA2726C320001CB821 /* Resources */,
+				75A140EA2869FD2F004A47A8 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				75A140E52869FD2E004A47A8 /* PBXTargetDependency */,
 			);
 			name = DuckDepo;
 			packageProductDependencies = (
@@ -558,6 +643,26 @@
 			productReference = 756AF0AC2726C320001CB821 /* DuckDepo.app */;
 			productType = "com.apple.product-type.application";
 		};
+		75A140D92869FD2E004A47A8 /* DuckDepoAutoFillExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 75A140E72869FD2F004A47A8 /* Build configuration list for PBXNativeTarget "DuckDepoAutoFillExtension" */;
+			buildPhases = (
+				75A140D62869FD2E004A47A8 /* Sources */,
+				75A140D72869FD2E004A47A8 /* Frameworks */,
+				75A140D82869FD2E004A47A8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DuckDepoAutoFillExtension;
+			packageProductDependencies = (
+				75A140EB286AEBA7004A47A8 /* KeychainSwift */,
+			);
+			productName = DuckDepoAutoFillExtension;
+			productReference = 75A140DA2869FD2E004A47A8 /* DuckDepoAutoFillExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -565,11 +670,14 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1300;
+				LastSwiftUpdateCheck = 1340;
 				LastUpgradeCheck = 1320;
 				TargetAttributes = {
 					756AF0AB2726C320001CB821 = {
 						CreatedOnToolsVersion = 13.0;
+					};
+					75A140D92869FD2E004A47A8 = {
+						CreatedOnToolsVersion = 13.4.1;
 					};
 				};
 			};
@@ -591,6 +699,7 @@
 			projectRoot = "";
 			targets = (
 				756AF0AB2726C320001CB821 /* DuckDepo */,
+				75A140D92869FD2E004A47A8 /* DuckDepoAutoFillExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -606,6 +715,14 @@
 				756AF0B72726C324001CB821 /* Preview Assets.xcassets in Resources */,
 				756A0D5F2758B99500CD29E0 /* Launch Screen.storyboard in Resources */,
 				756AF0B42726C324001CB821 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		75A140D82869FD2E004A47A8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				75A140E12869FD2E004A47A8 /* MainInterface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -706,10 +823,49 @@
 				755759AD2730455600DA8B9A /* Folder.swift in Sources */,
 				75102F5D285FB36A00464528 /* DocumentView.swift in Sources */,
 				75A1C911274F84B500551645 /* EditPasswordView.swift in Sources */,
+				75A140D52869F5CB004A47A8 /* CredentialIdentityStoreController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		75A140D62869FD2E004A47A8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				75821E57286B022D009F8C5E /* DDSection+CoreDataClass.swift in Sources */,
+				75821E59286B0238009F8C5E /* Info Options.swift in Sources */,
+				75821E53286B0209009F8C5E /* DDPassword+CoreDataClass.swift in Sources */,
+				75821E4E286AFF7F009F8C5E /* Password.swift in Sources */,
+				75821E4D286AFF43009F8C5E /* PasswordsStorage.swift in Sources */,
+				75821E5D286B0265009F8C5E /* DDSection+CoreDataProperties.swift in Sources */,
+				75821E4A286AFF2E009F8C5E /* DuckDepo.xcdatamodeld in Sources */,
+				75821E56286B0226009F8C5E /* AppDelegate.swift in Sources */,
+				75A140DE2869FD2E004A47A8 /* CredentialProviderViewController.swift in Sources */,
+				75821E50286B01E5009F8C5E /* DDPassword+CoreDataProperties.swift in Sources */,
+				75821E5E286B0268009F8C5E /* DDField+CoreDataProperties.swift in Sources */,
+				75821E58286B0232009F8C5E /* Document.swift in Sources */,
+				75821E5B286B0246009F8C5E /* Field.swift in Sources */,
+				75821E5F286B026E009F8C5E /* DDField+CoreDataClass.swift in Sources */,
+				75821E4C286AFF3E009F8C5E /* DataBase.swift in Sources */,
+				75821E52286B0205009F8C5E /* DDDocument+CoreDataClass.swift in Sources */,
+				75821E5A286B023E009F8C5E /* DocSection.swift in Sources */,
+				75821E55286B021F009F8C5E /* CoreData Countable.swift in Sources */,
+				75821E54286B0210009F8C5E /* CredentialIdentityStoreController.swift in Sources */,
+				75821E51286B01EB009F8C5E /* Keychain Controller.swift in Sources */,
+				75821E5C286B0257009F8C5E /* String Extension.swift in Sources */,
+				75821E4B286AFF31009F8C5E /* Persistence Controller.swift in Sources */,
+				75821E4F286B01E3009F8C5E /* DDDocument+CoreDataProperties.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		75A140E52869FD2E004A47A8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 75A140D92869FD2E004A47A8 /* DuckDepoAutoFillExtension */;
+			targetProxy = 75A140E42869FD2E004A47A8 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		756A0D622758BCB800CD29E0 /* Localizable.strings */ = {
@@ -728,6 +884,14 @@
 				759257662759047E003C9826 /* ru */,
 			);
 			name = Localizable.stringsdict;
+			sourceTree = "<group>";
+		};
+		75A140DF2869FD2E004A47A8 /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				75A140E02869FD2E004A47A8 /* Base */,
+			);
+			name = MainInterface.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -854,6 +1018,7 @@
 		756AF0C02726C324001CB821 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
@@ -892,6 +1057,7 @@
 		756AF0C12726C324001CB821 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
@@ -927,6 +1093,62 @@
 			};
 			name = Release;
 		};
+		75A140E82869FD2F004A47A8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = DuckDepoAutoFillExtension/DuckDepoAutoFillExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 65952893XA;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DuckDepoAutoFillExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = DuckDepoAutoFillExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 2.1;
+				PRODUCT_BUNDLE_IDENTIFIER = DuckDepo.DuckDepoAutoFillExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		75A140E92869FD2F004A47A8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = DuckDepoAutoFillExtension/DuckDepoAutoFillExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 65952893XA;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DuckDepoAutoFillExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = DuckDepoAutoFillExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 2.1;
+				PRODUCT_BUNDLE_IDENTIFIER = DuckDepo.DuckDepoAutoFillExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -948,6 +1170,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		75A140E72869FD2F004A47A8 /* Build configuration list for PBXNativeTarget "DuckDepoAutoFillExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				75A140E82869FD2F004A47A8 /* Debug */,
+				75A140E92869FD2F004A47A8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -963,6 +1194,11 @@
 
 /* Begin XCSwiftPackageProductDependency section */
 		75A140CE2869C913004A47A8 /* KeychainSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 75A140CD2869C913004A47A8 /* XCRemoteSwiftPackageReference "keychain-swift" */;
+			productName = KeychainSwift;
+		};
+		75A140EB286AEBA7004A47A8 /* KeychainSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 75A140CD2869C913004A47A8 /* XCRemoteSwiftPackageReference "keychain-swift" */;
 			productName = KeychainSwift;
