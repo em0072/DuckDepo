@@ -21,7 +21,7 @@ struct OverviewSection: View {
             Text(documentCountText)
             Text(passwordCountText)
         } header: {
-            Text("Storage")
+            Text("sv_storage")
         }
     }
     

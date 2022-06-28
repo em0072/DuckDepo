@@ -17,6 +17,7 @@ struct DuckDepoApp: App {
     @AppStorage("manualMigrationV1toV2") private var manualMigrationV1toV2: Bool = true
     @StateObject var migrationManager = ManualMigrationV1toV2()
     
+    
     @ObservedObject var biometricController = BiometricController.shared
 
     var body: some Scene {
@@ -61,7 +62,5 @@ struct DuckDepoApp: App {
     
     func onActiveActions() {
         CredentialIdentityStoreController.shared.checkState()
-    }
-
-    
+    }    
 }
