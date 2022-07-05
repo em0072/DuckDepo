@@ -19,20 +19,25 @@ extension EditDocumentView {
         
 //        @Published var folders: [DDFolder] = [DDFolder]()
         @Published var document: Document = Document()
-        var inputOption: InputOption = InputOption()
+        @Published var shouldCloseView: Bool = false
         
-        var type: DocumentType = .new {
-            didSet {
-                if case .existing(let document) = type {
-                    updateViewWith(document: document)
-                }
-            }
-        }
+        var inputOption: InputOption = InputOption()
+        var type: DocumentType
+//        = .new {
+//            didSet {
+//                if case .existing(let document) = type {
+//                    updateViewWith(document: document)
+//                }
+//            }
+//        }
                 
         var view: EditDocumentView?
         
-        init() {
-//            folders = db.fetchFolder()
+        init(type: DocumentType) {
+            self.type = type
+            if case .existing(let document) = type {
+                updateViewWith(document: document)
+            }
         }
         
         //MARK: -Data Manipulation
@@ -40,23 +45,14 @@ extension EditDocumentView {
             switch type {
             case .new:
                 db.save(document)
-//                db.save(document, in: folders[selectedFolder])
             case .existing(_):
                 db.update(document)
-//                db.update(document, in: folders[selectedFolder])
             }
-            view?.isPresented = false
+            shouldCloseView = true
         }
         
         func updateViewWith(document: Document) {
-//            self.type = .existing(document)
             self.document = document
-//            let docFolder = document.folder
-//            for (i, folder)  in folders.enumerated() {
-//                if folder.name == docFolder {
-//                    selectedFolder = i
-//                }
-//            }
         }
         
         func isShared() -> Bool {
@@ -65,18 +61,9 @@ extension EditDocumentView {
         
         func delete() {
             db.delete(document)
-            view?.isPresented = false
+            shouldCloseView = true
         }
-                        
-//        func setSelectedFolder(_ folderName: String) {
-//            for (i, folder) in folders.enumerated() {
-//                if folder.name == folderName {
-//                    selectedFolder = i
-//                    return
-//                }
-//            }
-//        }
-        
+                                
         //MARK: -Name & Folder
         
         var viewTitle: LocalizedStringKey {
@@ -97,7 +84,7 @@ extension EditDocumentView {
         //MARK: -Photo Section
         //MARK: State
         @Published var showingImageViewer: Bool = false
-        @Published var imageViewerImage: Image?
+        @Published var imageViewerImage: UIImage?
         
         //MARK: Functions
         
@@ -116,11 +103,7 @@ extension EditDocumentView {
         @Published var addButtonisDisabled: Bool = true
         //MARK: Functions
         func addNewDocumentButtonAction() {
-//            if folders[selectedFolder].fetchDocuments().map({ $0.name }).contains(document.name), case .new = type {
-//                view?.showAlert(title: "Duplicate", message: "The document with this name already exsists. Please choose a different name.")
-//            } else {
                 saveDocument()
-//            }
         }
         
         
@@ -139,7 +122,7 @@ extension EditDocumentView.ViewModel: PhotosSectionViewDelegate {
     }
     
     func select(photo: UIImage) {
-        imageViewerImage = Image(uiImage: photo)
+        imageViewerImage = photo
         showingImageViewer = true
     }
     
@@ -224,13 +207,3 @@ extension EditDocumentView.ViewModel: AddSectionMenuDelegate {
     
     
 }
-
-//// MARK: -NSFetchedResultsControllerDelegate
-//extension EditDocumentView.ViewModel: NSFetchedResultsControllerDelegate {
-//    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-//        guard let folders = controller.fetchedObjects as? [DDFolder]
-//        else { return }
-//
-//        self.folders = folders
-//    }
-//}

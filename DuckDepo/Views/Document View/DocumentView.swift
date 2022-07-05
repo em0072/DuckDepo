@@ -20,6 +20,7 @@ struct DocumentView: View {
         List {
             HStack {
                 viewModel.document.documentType.image
+                    .foregroundColor(viewModel.document.documentType.iconColor)
                     .frame(width: 35, height: 35)
                 VStack(alignment: .leading) {
                     Text(viewModel.document.name)
@@ -49,13 +50,6 @@ struct DocumentView: View {
                 }
             }
         }
-//        .overlay(
-//            ZStack {
-//                if viewModel.showingImageViewer {
-//                    ImageViewer(photos: viewModel.document.photos, selectedImage: viewModel.selectedPhoto, showImageViewer: $viewModel.showingImageViewer)
-//                }
-//            }
-//        )
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(content: toolbarView)
@@ -64,18 +58,16 @@ struct DocumentView: View {
             ShareSheetView(items: viewModel.itemsToShare)
         }
         .fullScreenCover(isPresented: $viewModel.showEditDocumentView) {
-            EditDocumentView(isPresented: $viewModel.showEditDocumentView, type: .existing(viewModel.document))
+            EditDocumentView(type: .existing(viewModel.document))
         }
         .fullScreenCover(isPresented: $viewModel.showingImageViewer, onDismiss: nil) {
             if let selctedPhoto = viewModel.selectedPhoto {
             ImageViewer(photos: viewModel.document.photos, selectedImage: selctedPhoto)
             }
         }
-//        .animation(.default, value: viewModel.)
 
     }
     
-//    @ViewBuilder
     private func toolbarView() -> some ToolbarContent {
         ToolbarItemGroup(placement: .navigationBarTrailing) {
             //MARK:  For Now it is not possible to use it - there is a bug in the NSPersistanceCloudKitController that is prevent database of deleteing created earlier share when the user taps "unshare". As a result, even though share is unshared, UI will always be as it is shared. So we wait for the bugfix from Apple.

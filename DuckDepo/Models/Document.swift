@@ -32,6 +32,13 @@ struct Document: Identifiable, Hashable {
         self.sections = sections
         self.folder = folder
     }
+    
+    static var test: Document {
+        let photos = [UIImage(named: "duck")!, UIImage(named: "screen1")!, UIImage(named: "screen2")!]
+        let sections = [DocSection(name: "Document Info", fields: [Field(title: "Number", value: "12312414", type: .string)])]
+        let document = Document(name: "Passport", description: "Evgeny Bobcat", documentType: .identification, photos: photos, sections: sections, folder: nil)
+        return document
+    }
 
     
 }

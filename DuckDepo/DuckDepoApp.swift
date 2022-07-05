@@ -33,6 +33,7 @@ struct DuckDepoApp: App {
                         }
                     })
             } else {
+                
                 ZStack {
                     ContentView()
                         .environment(\.managedObjectContext, PersistenceController.shared.context)
@@ -41,6 +42,7 @@ struct DuckDepoApp: App {
                         .opacity(biometricController.isUnlocked ? 0 : 1)
                 }
                 .animation(.default, value: biometricController.isUnlocked)
+                
             }
         }
         .onChange(of: scenePhase) { (newScenePhase) in

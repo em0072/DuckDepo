@@ -49,11 +49,6 @@ struct EditPasswordView: View {
                 isPresented = false
             }, title: viewModel.saveButtonTitle, isActive: .constant(!viewModel.passwordName.isEmpty))
         }
-//        .blur(radius: 5)
-
-//                PasswordGeneratorView(isPresented: $isShowingPassGenerator, onAction: { generatedPassword in
-//                    viewModel.passwordValue = generatedPassword
-//                })
             }
             
         .navigationTitle(viewModel.viewTitle)

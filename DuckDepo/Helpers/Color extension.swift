@@ -21,10 +21,16 @@ extension Color {
     static let background = Color("background")
     static let duckOverlay = Color("overlayColor")
     static let duckShadow = Color("shadow")
+    
+    static let neumorphicBackground = Color("neumorphicBackground")
+    static let neumorphicTopShadow = Color("neumorphicTopShadow")
+    static let neumorphicBottomShadow = Color("neumorphicBottomShadow")
+    static let neumorphicTopInnerShadow = Color("neumorphicTopInnerShadow")
+    static let neumorphicBottomInnerShadow = Color("neumorphicBottomInnerShadow")
+    static let neumorphicText = Color("neumorphicText")
+    static let neumorphicButtonText = Color("neumorphicButtonText")
 
     
-
-
-
+    
 }
 

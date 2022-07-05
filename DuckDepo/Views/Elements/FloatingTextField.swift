@@ -24,8 +24,9 @@ struct FloatingTextField: View {
 //        List {
             ZStack(alignment: .leading) {
                 if let title = title {
-                        Text(title)
-                        .foregroundColor(textFieldValue.isEmpty ? .gray : Color(white: 0.3))
+                    Text(title.capitalized)
+//                        .foregroundColor(textFieldValue.isEmpty ? .gray : Color(white: 0.3))
+                        .foregroundColor(.neumorphicText)
                         .offset(y: textFieldValue.isEmpty ? -5 : -25)
                         .scaleEffect(textFieldValue.isEmpty ? 1 : 0.8, anchor: .leading)
                 }

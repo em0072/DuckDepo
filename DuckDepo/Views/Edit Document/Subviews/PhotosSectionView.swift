@@ -27,39 +27,39 @@ struct PhotosSectionView: View {
 
     var body: some View {
         Section {
+            ZStack {
             ScrollView(.horizontal) {
-                ScrollViewReader { scrollProxy in
-                    LazyHStack {
-                        AddCell()
-                            .onTapGesture {
-                                showingPhotoChooser = true
-                            }
-
-                        ForEach(images, id: \.self) { image in
-                            ZStack(alignment: .topTrailing) {
-                                PhotoCell(image: image)
-                                    .onTapGesture {
-                                        delegate?.select(photo: image)
-                                    }
-                                Image(systemName: "multiply.circle.fill")
-                                    .background(
-                                      Color.white.mask(Circle())
-                                    )
-                                    .foregroundColor(Color.red)
-                                    .frame(width: 20)
-                                    .offset(x: 5, y: -5)
-                                    .onTapGesture {
-                                        delegate?.delete(photo: image)
-                                    }
-                            }
-                        }
-                        
+                LazyHStack(spacing: 0) {
+                    // Add new photo cell
+                    AddCell() {
+                        showingPhotoChooser = true
                     }
-                    .padding([.top, .bottom], 5)
-                    .frame(height: 75)
+//                    .frame(width: 50, height: 50)
+                    // Photo cells
+                    ForEach(images, id: \.self) { image in
+                        ZStack(alignment: .topTrailing) {
+                            //Photo
+                            PhotoCell(image: image) {
+                                    delegate?.select(photo: image)
+                                }
+                            //Delete photo button
+                            Button {
+                                delegate?.delete(photo: image)
+                            } label: {
+                                Image(systemName: "multiply.circle.fill")
+                                    .foregroundColor(Color.red)
+                            }
+                            .frame(width: 20)
+                            .offset(x: -2, y: 2)
+                            .buttonStyle(NeumorphicCircleButtonStyle())
+                        }
+                    }
+                    
                 }
+                .padding(6)
             }
-            .padding([.leading, .trailing], -15)
+                NeuSectionBackground()
+            }
             .actionSheet(isPresented: $showingPhotoChooser) {
                 ActionSheet(title: Text("psv_photo_selection_body"), buttons: [
                     .default(Text("psv_camera")) {
@@ -79,8 +79,17 @@ struct PhotosSectionView: View {
             }
             
         } header: {
-            Text("psv_photos")
+            HStack {
+                Text("psv_photos")
+                    .font(.footnote)
+                    .foregroundColor(.neumorphicText)
+                    .textCase(.uppercase)
+                Spacer()
+            }
+            .padding(.horizontal, 16)
+//            .padding(.bottom, -13)
         }
+
     }
     
     func onImagePickerAction() {
@@ -96,10 +105,15 @@ struct PhotosSectionView: View {
 }
 
 struct PhotosSectionView_Previews: PreviewProvider {
+    
+    static let images = [UIImage(named: "duck")!, UIImage(named: "duck")!]
+
     static var previews: some View {
-        Form {
-            let images = [UIImage(named: "duck")!, UIImage(named: "duck")!]
-            PhotosSectionView(images: .constant(images))
+//        Form {
+        ScrollView {
+            HStack {
+                PhotosSectionView(images: .constant(PhotosSectionView_Previews.images))
+            }
         }
         
     }

@@ -18,11 +18,13 @@ struct PhotoView: View {
                 ScrollView(.horizontal) {
                     LazyHStack {
                         ForEach(photos, id: \.self) { photo in
-                            Button {
-                                self.selectedPhoto = photo
-                            } label: {
-                                PhotoCell(image: photo)
-                            }                            
+//                            Button {
+//                                self.selectedPhoto = photo
+//                            } label: {
+                                PhotoCell(image: photo) {
+                                    self.selectedPhoto = photo
+                                }
+//                            }                            
                         }
                     }
                     .frame(height: 70)

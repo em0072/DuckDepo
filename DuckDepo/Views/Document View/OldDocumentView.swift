@@ -29,11 +29,6 @@ struct OldDocumentView: View {
                 Text(document.name ?? "")
             }
             .padding(.vertical, 8)
-//            .listRowBackground(Color.transparent)
-//            Section {
-//            } header: {
-//                Text("dv_doc_name")
-//            }
             
             PhotosView(document: document, imageViewerImage: $imageViewerImage, showingImageViewer: $showingImageViewer)
             
@@ -91,7 +86,7 @@ struct OldDocumentView: View {
                 .disabled(!viewModel.canEdit(document))
                 .fullScreenCover(isPresented: $isEditingDocumentView) {
                     let document = document.convert()
-                    EditDocumentView(isPresented: $isEditingDocumentView, type: .existing(document))
+                    EditDocumentView(type: .existing(document))
                 }
             }
         }
@@ -225,8 +220,7 @@ struct PhotosView: View {
                 ScrollView(.horizontal) {
                     LazyHStack {
                         ForEach(photos, id: \.self) { photo in
-                            PhotoCell(image: photo)
-                                .onTapGesture {
+                            PhotoCell(image: photo) {
                                     self.imageViewerImage = Image(uiImage: photo)
                                     self.showingImageViewer = true
                                 }

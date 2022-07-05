@@ -29,43 +29,41 @@ struct SectionView: View {
     
     //MARK: - View Bulding
     var body: some View {
-        List(sections) { section in
+        ForEach(sections) { section in
 //            section(for: section)
             Section {
-                ForEach(section.fields) { field in
-                    FloatingTextField(title: field.title, value: .constant(field.value), id: field.id, delegate: self)
-                }
-                .onDelete { offsets in
-                    guard let index = offsets.first, index < section.fields.count else {return}
-                    let fieldToDelete = section.fields[index]
-                    delegate?.delete(fieldToDelete, in: section)
-                }
+//                ZStack {
+//                    VStack {
+                ZStack {
+                VStack {
+                    ForEach(section.fields) { field in
+                        FloatingTextField(title: field.title, value: .constant(field.value), id: field.id, delegate: self)
+                        Divider()
+                    }
+                    .onDelete { offsets in
+                        guard let index = offsets.first, index < section.fields.count else {return}
+                        let fieldToDelete = section.fields[index]
+                        delegate?.delete(fieldToDelete, in: section)
+                    }
+                    .padding(.bottom, 4)
+                    
                     addField(for: section)
-//                Menu {
-//                    ForEach(possibleFields(for: section.name), id: \.self) { field in
-//                        let dupCheck = delegate?.fieldIsDuplicate(field, in: section) ?? false
-//                        if !dupCheck {
-//                            Button {
-//                                delegate?.addNewFieldWith(name: field, in: section)
-//                            } label: {
-//                                Text(field)
-//                            }
-//                        }
-//                    }
-//                    Button(role: .destructive) {
-//                        customFieldSection = section
-//                        self.showingAddNewFieldView = true
-//                    } label: {
-//                        Text("Custom")
-//                    }
-//                } label: {
-//                    Label("Add Field", systemImage: "plus.circle")
+                        .padding(.vertical, 12)
+                }
+                .padding(16)
+                    
+                    NeuSectionBackground()
+                }
+//                .neumorphicRoundedInner(cornerRadius: 15)
+                FixedSpacer(24)
+//                    }/
+//                NeuSectionBackground()
 //                }
-                .frame(maxWidth: .infinity)
             } header: {
                 sectionHeader(for: section)
             }
             
+                
         }
         .sheet(isPresented: $showingAddNewFieldView) {
             AddNewView(isPresented: $showingAddNewFieldView, duplicateAlertPresented: $showDuplicatedAlert, type: .field, onSave: addCustomField)
@@ -94,22 +92,22 @@ struct SectionView: View {
             customFieldSection = section
             self.showingAddNewFieldView = true
         } label: {
-            Label("sv_add_field", systemImage: "plus.circle")
+            addFieldButtonLabel()
         }
+//        .buttonStyle(NeuRectButtonStyle())
+        .buttonStyle(NeumorphicRoundedButtonStyle(cornerRadius: 15))
     }
     
     @ViewBuilder func menuButton(for section: DocSection) -> some View {
         Menu {
             ForEach(possibleFields(in: section), id: \.self) { field in
-//                let dupCheck = delegate?.fieldIsDuplicate(field, in: section) ?? false
-//                if !dupCheck {
-                    Button {
-                        delegate?.addNewFieldWith(name: field, in: section)
-                    } label: {
-                        Text(field)
-                    }
-//                }
+                Button {
+                    delegate?.addNewFieldWith(name: field, in: section)
+                } label: {
+                    Text(field)
+                }
             }
+            
             Button(role: .destructive) {
                 customFieldSection = section
                 self.showingAddNewFieldView = true
@@ -117,7 +115,24 @@ struct SectionView: View {
                 Text("sv_custom")
             }
         } label: {
-            Label("sv_add_field", systemImage: "plus.circle")
+            addFieldButtonLabel()
+        }
+        .background(Color.neumorphicBackground)
+        .contentShape(Rectangle())
+        .cornerRadius(15)
+        .neumorphicOuter()
+
+//        .menuStyle(MenuSty)
+    }
+    
+    private func addFieldButtonLabel() -> some View {
+        HStack {
+            Spacer()
+            Label("sv_add_field", systemImage: "plus")
+                .font(.callout)
+                .foregroundColor(.neumorphicButtonText)
+                .padding(.vertical, 14)
+            Spacer()
         }
     }
     
@@ -137,21 +152,13 @@ struct SectionView: View {
         return possibleFields
     }
 
-    
-//    func predefinedFields(for section: String) -> [String] {
-//        var possibleFields = [String]()
-//        for sectionOption in options {
-//            if sectionOption.name == section {
-//                possibleFields = sectionOption.fields.map{ $0.name }
-//                break
-//            }
-//        }
-//        return possibleFields
-//    }
-    
     func sectionHeader(for section: DocSection) -> some View {
         return HStack {
             Text(section.name)
+                .font(.footnote)
+                .foregroundColor(.neumorphicText)
+                .textCase(.uppercase)
+                
             Spacer()
             Button {
                 delegate?.delete(section)
@@ -159,7 +166,9 @@ struct SectionView: View {
                 Image(systemName: "multiply.circle.fill")
                     .foregroundColor(Color.red)
             }
+            .buttonStyle(NeumorphicCircleButtonStyle())
         }
+        .padding(.horizontal, 16)
     }
     
     private func addCustomField(_ name: String) {
@@ -194,13 +203,19 @@ extension SectionView: FloatingTextFieldDelegate {
 struct SectionView_Previews: PreviewProvider {
     
     static var doc = Document(name: "Passport", sections:
-                                [DocSection(name: "Ids")
-                                ,DocSection(name: "Transport")]
+                                [DocSection(name: "IDs", fields: [Field(title: "Number", value: "12324311"),
+                                                                  Field(title: "Date", value: "01.01.2022")])
+                                ,DocSection(name: "Transport", fields: [Field(title: "Make", value: "Audi"),
+                                                                         Field(title: "Model")])]
     )
     
     static var previews: some View {
-        Form {
-            SectionView(sections: .constant(doc.sections), options: InputOption().sections)
+        ZStack {
+            Color.neumorphicBackground
+                .ignoresSafeArea()
+            VStack {
+                SectionView(sections: .constant(doc.sections), options: InputOption().sections)
+            }
         }
     }
 }

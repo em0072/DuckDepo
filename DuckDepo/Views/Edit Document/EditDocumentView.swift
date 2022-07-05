@@ -9,9 +9,11 @@ import SwiftUI
 
 struct EditDocumentView: View {
     
-    @ObservedObject var viewModel: ViewModel
-    @Binding var isPresented: Bool
-
+    @Environment(\.dismiss) var dismiss
+    
+    @StateObject var viewModel: ViewModel
+    //    @Binding var isPresented: Bool
+    
     //MARK: Views States
     @State var isShowingAlert: Bool = false
     @State var isShowingDeleteAlert: Bool = false
@@ -20,41 +22,59 @@ struct EditDocumentView: View {
     @State var showingAddNewSectionView = false
     @State var showingAddNewInfoDuplicateWarning = false
     
-    init(isPresented: Binding<Bool>, type: ViewModel.DocumentType = .new) {
-        self.viewModel = ViewModel()
-        _isPresented = isPresented
-        viewModel.type = type
+    init(type: ViewModel.DocumentType = .new) {
+        self._viewModel = StateObject(wrappedValue: ViewModel(type: type))
     }
-                
+    
     var body: some View {
         NavigationView {
-                    Form {
+            ZStack(alignment: .leading) {
+                Color.neumorphicBackground
+                    .ignoresSafeArea()
+                
+                ScrollView(.vertical) {
+                    VStack {
+                        FixedSpacer(35)
                         TitleView(name:  $viewModel.document.name, description: $viewModel.document.description, documentType: $viewModel.document.documentType)
+                        //                        .padding(.top, 35)
+                        //                        .padding(.horizontal, 16)
+                    FixedSpacer(25)
                         PhotosSectionView(images: $viewModel.document.photos, delegate: viewModel)
+                        //                        .padding(.top, 16)
                         
+                        FixedSpacer(25)
                         SectionView(sections: $viewModel.document.sections, options: viewModel.inputOption.sections, delegate: viewModel)
-
-                        AddSectionMenu(menuOptions: .constant(viewModel.inputOption.listOfSectionNames()), delegate: viewModel)
                         
-                        AddButtonView(action: viewModel.addNewDocumentButtonAction, title: viewModel.saveButtonTitle, isActive: .constant(!viewModel.document.name.isEmpty))
+                        AddSectionMenu(menuOptions: .constant(viewModel.inputOption.listOfSectionNames()), delegate: viewModel)
+                        FixedSpacer(25)
                     }
+                    .padding(.horizontal, 16)
+                }
+//                .padding(.top, 16)
+                
+                
+                //                Form {
+                //                    TitleView(name:  $viewModel.document.name, description: $viewModel.document.description, documentType: $viewModel.document.documentType)
+                ////                        .background(Color.red)
+                //                    PhotosSectionView(images: $viewModel.document.photos, delegate: viewModel)
+                //
+                //                    SectionView(sections: $viewModel.document.sections, options: viewModel.inputOption.sections, delegate: viewModel)
+                //
+                //                    AddSectionMenu(menuOptions: .constant(viewModel.inputOption.listOfSectionNames()), delegate: viewModel)
+                //
+                //                    AddButtonView(action: viewModel.addNewDocumentButtonAction, title: viewModel.saveButtonTitle, isActive: .constant(!viewModel.document.name.isEmpty))
+                //                }
+            }
             .navigationTitle(viewModel.viewTitle)
             .navigationBarTitleDisplayMode(.inline)
-            .navigationBarItems(leading: Button {
-                self.isPresented = false
-            } label: {
-                Image(systemName: "xmark")
-            }, trailing:
-                                    Group {
-                if case .existing(_) = viewModel.type {
-                    Button(action: deleteButtonAction) {
-                        Image(systemName: "trash.fill")
-                    }
-                }
-            })
+            .navigationBarItems(leading: closeButton(),
+                                trailing: editButton())
         }
-        .onAppear {
-            viewModel.view = self
+        .onChange(of: viewModel.shouldCloseView, perform: closeAction)
+        .fullScreenCover(isPresented: $viewModel.showingImageViewer, onDismiss: nil) {
+            if let selctedPhoto = viewModel.imageViewerImage {
+                ImageViewer(photos: viewModel.document.photos, selectedImage: selctedPhoto)
+            }
         }
         .alert(alertTitle, isPresented: $isShowingAlert, actions: {
             Button("Ok") {
@@ -70,6 +90,33 @@ struct EditDocumentView: View {
         })
     }
     
+    func closeButton() -> some View {
+        Button {
+            dismiss()
+        } label: {
+            Image(systemName: "xmark")
+                .font(.footnote)
+                .padding(7)
+        }
+        .buttonStyle(NeumorphicCircleButtonStyle())
+    }
+    
+    func editButton() -> some View {
+        Group {
+            if case .existing(_) = viewModel.type {
+                Button(action: deleteButtonAction) {
+                    Image(systemName: "trash.fill")
+                }
+            }
+        }
+    }
+    
+    private func closeAction(_ shouldCloseView: Bool) {
+        if shouldCloseView {
+            dismiss()
+        }
+    }
+    
     func deleteButtonAction() {
         self.isShowingDeleteAlert = true
     }
@@ -77,9 +124,9 @@ struct EditDocumentView: View {
     func deleteAlertAction() {
         self.isShowingDeleteAlert = false
         viewModel.delete()
-
-    }
         
+    }
+    
     func showAlert(title: String, message: String) {
         alertTitle = title
         alertMessage = message
@@ -89,9 +136,10 @@ struct EditDocumentView: View {
 }
 
 struct AddNewDocumentVirew_Previews: PreviewProvider {
-
+    
+    
     static var previews: some View {
-        EditDocumentView(isPresented: .constant(true), type: .new)
+        EditDocumentView(type: .existing(Document.test))
     }
 }
 
