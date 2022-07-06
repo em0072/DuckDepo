@@ -33,9 +33,10 @@ struct DepoListView: View {
                         viewModel.addNewDocumentButtonPressed()
                     }) {
                         Image(systemName: "plus")
-                            .padding(5)
+                            .font(.footnote)
+                            .padding(7)
                     }
-                    .buttonStyle(NeumorphicCircleButtonStyle())
+                    .buttonStyle(NeuCircleButtonStyle())
                 }
             }
 
@@ -50,7 +51,7 @@ struct DepoListView: View {
     
     private func listView() -> some View {
         ScrollView {
-            VStack(spacing: -3) {
+            VStack(spacing: 6) {
                 ForEach(viewModel.documents) { document in
                     NavigationLink(tag: document, selection: $viewModel.selectedDocument) {
                         DocumentView(document: document)
@@ -59,6 +60,7 @@ struct DepoListView: View {
                     }
                     DepoListRowView(document: document, selectedDocument: $viewModel.selectedDocument)
                 }
+                FixedSpacer(16)
             }
         }
     }

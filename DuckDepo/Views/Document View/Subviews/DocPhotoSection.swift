@@ -7,34 +7,39 @@
 
 import SwiftUI
 
-struct PhotoView: View {
+struct DocPhotoSection: View {
     
     var photos: [UIImage]
     @Binding var selectedPhoto: UIImage?
 
     var body: some View {
         Section {
+            ZStack {
             if !photos.isEmpty {
                 ScrollView(.horizontal) {
                     LazyHStack {
                         ForEach(photos, id: \.self) { photo in
-//                            Button {
-//                                self.selectedPhoto = photo
-//                            } label: {
                                 PhotoCell(image: photo) {
                                     self.selectedPhoto = photo
                                 }
-//                            }                            
                         }
                     }
-                    .frame(height: 70)
+                    .padding()
+                    .frame(height: 110)
                 }
-                .padding([.trailing, .leading], -12)
             } else {
-                Text("dv_no_photos")
+                HStack {
+                    Spacer()
+                    Text("dv_no_photos")
+                    Spacer()
+                }
+                .padding()
+            }
+                
+                NeuSectionBackground()
             }
         } header: {
-            Text("dv_photos")
+            NeuSectionTitle(title: "dv_photos")
         }
     }
 }
@@ -42,6 +47,6 @@ struct PhotoView: View {
 struct NewPhotoView_Previews: PreviewProvider {
     
     static var previews: some View {
-        PhotoView(photos: [UIImage(named: "duck")!], selectedPhoto: .constant(nil))
+        DocPhotoSection(photos: [UIImage(named: "duck")!], selectedPhoto: .constant(nil))
     }
 }

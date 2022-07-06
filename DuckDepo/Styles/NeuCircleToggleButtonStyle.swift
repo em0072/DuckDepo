@@ -9,31 +9,34 @@ import SwiftUI
 
 struct NeuCircleToggleButtonStyle: ButtonStyle {
     
-    var isSelected: Bool
+    let shape = Circle()
     
+    var isSelected: Bool
     
     func makeBody(configuration: Configuration) -> some View {
         ZStack {
-            GeometryReader { proxy in
-            if (!configuration.isPressed && !isSelected)  {
-                Image("CircleButton")
-//                    .resizable()
-//                    .aspectRatio(contentMode: .fit)
-//                    .layoutPriority(-1)
-            }
             configuration.label
                 .foregroundColor(.neumorphicButtonText)
-                .padding(.horizontal, proxy.size.width * 0.135)
-                .padding(.vertical, proxy.size.height * 0.135)
-
-            if (configuration.isPressed && !isSelected) || isSelected {
-                Image("CircleButtonPressed")
-//                    .resizable()
-//                    .aspectRatio(contentMode: .fit)
-//                    .layoutPriority(-1)
-                    .allowsTightening(false)
-            }
-        }
+                .background(
+                    Group {
+                        if (!configuration.isPressed && !isSelected)  {
+                            shape
+                                .fill(Color.neumorphicBackground)
+                                .shadow(color: configuration.isPressed ? .clear : .neumorphicTopShadow, radius: 2, x: -2, y: -2)
+                                .shadow(color: configuration.isPressed ? .clear : .neumorphicBottomShadow, radius: 2, x: 2, y: 2)
+                        }
+                    }
+                )
+                .overlay(
+                    Group {
+                        if (configuration.isPressed && !isSelected) || isSelected {
+                            Image("CircleButtonPressed")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .padding(-1)
+                        }
+                    }
+                )
         }
     }
 }
@@ -54,9 +57,9 @@ struct NeuCircleToggleButton_Previews: PreviewProvider {
                     .symbolRenderingMode(SymbolRenderingMode.palette)
                     .foregroundStyle(.white, .red)
             }
-            .frame(width: 200, height: 200)
+            .frame(width: 50, height: 50)
             .buttonStyle(NeuCircleToggleButtonStyle(isSelected: false))
-
+            
         }
         
         

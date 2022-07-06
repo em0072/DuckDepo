@@ -38,7 +38,7 @@ struct EditDocumentView: View {
                         TitleView(name:  $viewModel.document.name, description: $viewModel.document.description, documentType: $viewModel.document.documentType)
                         //                        .padding(.top, 35)
                         //                        .padding(.horizontal, 16)
-                    FixedSpacer(25)
+                        FixedSpacer(25)
                         PhotosSectionView(images: $viewModel.document.photos, delegate: viewModel)
                         //                        .padding(.top, 16)
                         
@@ -47,28 +47,19 @@ struct EditDocumentView: View {
                         
                         AddSectionMenu(menuOptions: .constant(viewModel.inputOption.listOfSectionNames()), delegate: viewModel)
                         FixedSpacer(25)
+                        
+                        AddButtonView(title: viewModel.saveButtonTitle, action: viewModel.addNewDocumentButtonAction)
+                            .disabled(viewModel.document.name.isEmpty)
+                        FixedSpacer(25)
+
                     }
                     .padding(.horizontal, 16)
                 }
-//                .padding(.top, 16)
-                
-                
-                //                Form {
-                //                    TitleView(name:  $viewModel.document.name, description: $viewModel.document.description, documentType: $viewModel.document.documentType)
-                ////                        .background(Color.red)
-                //                    PhotosSectionView(images: $viewModel.document.photos, delegate: viewModel)
-                //
-                //                    SectionView(sections: $viewModel.document.sections, options: viewModel.inputOption.sections, delegate: viewModel)
-                //
-                //                    AddSectionMenu(menuOptions: .constant(viewModel.inputOption.listOfSectionNames()), delegate: viewModel)
-                //
-                //                    AddButtonView(action: viewModel.addNewDocumentButtonAction, title: viewModel.saveButtonTitle, isActive: .constant(!viewModel.document.name.isEmpty))
-                //                }
             }
             .navigationTitle(viewModel.viewTitle)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarItems(leading: closeButton(),
-                                trailing: editButton())
+                                trailing: deleteButton())
         }
         .onChange(of: viewModel.shouldCloseView, perform: closeAction)
         .fullScreenCover(isPresented: $viewModel.showingImageViewer, onDismiss: nil) {
@@ -98,15 +89,18 @@ struct EditDocumentView: View {
                 .font(.footnote)
                 .padding(7)
         }
-        .buttonStyle(NeumorphicCircleButtonStyle())
+        .buttonStyle(NeuCircleButtonStyle())
     }
     
-    func editButton() -> some View {
+    func deleteButton() -> some View {
         Group {
             if case .existing(_) = viewModel.type {
                 Button(action: deleteButtonAction) {
                     Image(systemName: "trash.fill")
+                        .font(.footnote)
+                        .padding(6)
                 }
+                .buttonStyle(NeuCircleButtonStyle())
             }
         }
     }

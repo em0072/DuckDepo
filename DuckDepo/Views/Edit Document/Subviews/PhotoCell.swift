@@ -24,7 +24,6 @@ struct PhotoCell: View {
                         .scaledToFill()
                     )
                 .clipShape(RoundedRectangle(cornerRadius: 11))
-                .padding(10)
 
         }
         .buttonStyle(NeuRectButtonStyle())

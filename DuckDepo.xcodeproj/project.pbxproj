@@ -18,7 +18,7 @@
 		75102F5B285FA6A800464528 /* ListCellButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75102F5A285FA6A800464528 /* ListCellButtonStyle.swift */; };
 		75102F5D285FB36A00464528 /* DocumentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75102F5C285FB36A00464528 /* DocumentView.swift */; };
 		75102F5F285FB37600464528 /* DocumentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75102F5E285FB37600464528 /* DocumentViewModel.swift */; };
-		75102F61286075BF00464528 /* PhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75102F60286075BF00464528 /* PhotoView.swift */; };
+		75102F61286075BF00464528 /* DocPhotoSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75102F60286075BF00464528 /* DocPhotoSection.swift */; };
 		75102F6328607C0800464528 /* ImageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75102F6228607C0800464528 /* ImageViewer.swift */; };
 		7517B5B2285C7F8C00C5B8F5 /* DepoListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7517B5B1285C7F8C00C5B8F5 /* DepoListViewModel.swift */; };
 		751E9B48272AF7B1008D4D26 /* UIImage Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 751E9B47272AF7B1008D4D26 /* UIImage Extension.swift */; };
@@ -34,6 +34,8 @@
 		7542D91D27283C9000DB7A95 /* Alert Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7542D91C27283C9000DB7A95 /* Alert Extension.swift */; };
 		7542D91F272845D600DB7A95 /* CoreDataEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7542D91E272845D600DB7A95 /* CoreDataEntity.swift */; };
 		7542D92127284F4C00DB7A95 /* AddNewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7542D92027284F4B00DB7A95 /* AddNewView.swift */; };
+		7545D775287590C20008FE98 /* NeuRectButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75AF90EF2874734700657490 /* NeuRectButtonStyle.swift */; };
+		7545D7792875B4FF0008FE98 /* DocTitleSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7545D7782875B4FF0008FE98 /* DocTitleSection.swift */; };
 		7551B79A28743F1D003D27D5 /* NeuCircleToggleButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7551B79928743F1D003D27D5 /* NeuCircleToggleButtonStyle.swift */; };
 		755425C9272A98B500733D64 /* AddCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755425C8272A98B500733D64 /* AddCell.swift */; };
 		755425CB272A9C4700733D64 /* VerticalLabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755425CA272A9C4700733D64 /* VerticalLabelStyle.swift */; };
@@ -48,7 +50,7 @@
 		755759AB2730450800DA8B9A /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755759AA2730450800DA8B9A /* Document.swift */; };
 		755759AD2730455600DA8B9A /* Folder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755759AC2730455600DA8B9A /* Folder.swift */; };
 		755759AF273045B900DA8B9A /* CoreDataConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755759AE273045B900DA8B9A /* CoreDataConverter.swift */; };
-		755A0208286EFD97004E499A /* NeumorphicCircleButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755A0207286EFD96004E499A /* NeumorphicCircleButtonStyle.swift */; };
+		755A0208286EFD97004E499A /* NeuCircleButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755A0207286EFD96004E499A /* NeuCircleButtonStyle.swift */; };
 		755EFEBD2871E9F100544321 /* NeumorphicCircleToggleButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755EFEBC2871E9F100544321 /* NeumorphicCircleToggleButtonStyle.swift */; };
 		756A0D5F2758B99500CD29E0 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 756A0D5E2758B99500CD29E0 /* Launch Screen.storyboard */; };
 		756A0D602758BCB800CD29E0 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 756A0D622758BCB800CD29E0 /* Localizable.strings */; };
@@ -121,6 +123,8 @@
 		75A369D92850F14600196EE2 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75D414EA2726CA6700355AE7 /* CloudKit.framework */; };
 		75AB83E12733E2C9000618F1 /* Pill Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75AB83E02733E2C9000618F1 /* Pill Notification.swift */; };
 		75AB83E32733E77D000618F1 /* Notification.Name extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75AB83E22733E77D000618F1 /* Notification.Name extension.swift */; };
+		75ABFE1E2875BC3400AC485B /* DocSectionSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75ABFE1D2875BC3400AC485B /* DocSectionSection.swift */; };
+		75ABFE202875BC9300AC485B /* NeuSectionTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75ABFE1F2875BC9300AC485B /* NeuSectionTitle.swift */; };
 		75AF90EE28746FE300657490 /* NeuSectionBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75AF90ED28746FE300657490 /* NeuSectionBackground.swift */; };
 		75AF90F02874734700657490 /* NeuRectButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75AF90EF2874734700657490 /* NeuRectButtonStyle.swift */; };
 		75B130F82744061B0059F314 /* SizeUnits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B130F72744061B0059F314 /* SizeUnits.swift */; };
@@ -202,7 +206,7 @@
 		75102F5A285FA6A800464528 /* ListCellButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCellButtonStyle.swift; sourceTree = "<group>"; };
 		75102F5C285FB36A00464528 /* DocumentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentView.swift; sourceTree = "<group>"; };
 		75102F5E285FB37600464528 /* DocumentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentViewModel.swift; sourceTree = "<group>"; };
-		75102F60286075BF00464528 /* PhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoView.swift; sourceTree = "<group>"; };
+		75102F60286075BF00464528 /* DocPhotoSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocPhotoSection.swift; sourceTree = "<group>"; };
 		75102F6228607C0800464528 /* ImageViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewer.swift; sourceTree = "<group>"; };
 		7517B5B1285C7F8C00C5B8F5 /* DepoListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepoListViewModel.swift; sourceTree = "<group>"; };
 		751E9B47272AF7B1008D4D26 /* UIImage Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage Extension.swift"; sourceTree = "<group>"; };
@@ -218,6 +222,7 @@
 		7542D91C27283C9000DB7A95 /* Alert Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Alert Extension.swift"; sourceTree = "<group>"; };
 		7542D91E272845D600DB7A95 /* CoreDataEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataEntity.swift; sourceTree = "<group>"; };
 		7542D92027284F4B00DB7A95 /* AddNewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewView.swift; sourceTree = "<group>"; };
+		7545D7782875B4FF0008FE98 /* DocTitleSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocTitleSection.swift; sourceTree = "<group>"; };
 		7551B79928743F1D003D27D5 /* NeuCircleToggleButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeuCircleToggleButtonStyle.swift; sourceTree = "<group>"; };
 		755425C8272A98B500733D64 /* AddCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCell.swift; sourceTree = "<group>"; };
 		755425CA272A9C4700733D64 /* VerticalLabelStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalLabelStyle.swift; sourceTree = "<group>"; };
@@ -232,7 +237,7 @@
 		755759AA2730450800DA8B9A /* Document.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Document.swift; sourceTree = "<group>"; };
 		755759AC2730455600DA8B9A /* Folder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Folder.swift; sourceTree = "<group>"; };
 		755759AE273045B900DA8B9A /* CoreDataConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataConverter.swift; sourceTree = "<group>"; };
-		755A0207286EFD96004E499A /* NeumorphicCircleButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeumorphicCircleButtonStyle.swift; sourceTree = "<group>"; };
+		755A0207286EFD96004E499A /* NeuCircleButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeuCircleButtonStyle.swift; sourceTree = "<group>"; };
 		755EFEBC2871E9F100544321 /* NeumorphicCircleToggleButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeumorphicCircleToggleButtonStyle.swift; sourceTree = "<group>"; };
 		756A0D5E2758B99500CD29E0 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		756A0D612758BCB800CD29E0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -285,6 +290,8 @@
 		75A1C92B2750D65600551645 /* DuckButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuckButtonStyle.swift; sourceTree = "<group>"; };
 		75AB83E02733E2C9000618F1 /* Pill Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Pill Notification.swift"; sourceTree = "<group>"; };
 		75AB83E22733E77D000618F1 /* Notification.Name extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification.Name extension.swift"; sourceTree = "<group>"; };
+		75ABFE1D2875BC3400AC485B /* DocSectionSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocSectionSection.swift; sourceTree = "<group>"; };
+		75ABFE1F2875BC9300AC485B /* NeuSectionTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeuSectionTitle.swift; sourceTree = "<group>"; };
 		75AF90ED28746FE300657490 /* NeuSectionBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeuSectionBackground.swift; sourceTree = "<group>"; };
 		75AF90EF2874734700657490 /* NeuRectButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeuRectButtonStyle.swift; sourceTree = "<group>"; };
 		75B130F72744061B0059F314 /* SizeUnits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeUnits.swift; sourceTree = "<group>"; };
@@ -351,7 +358,7 @@
 				75DD96C82873492000DFC342 /* NeuRowButtonStyle.swift */,
 				75AF90EF2874734700657490 /* NeuRectButtonStyle.swift */,
 				7551B79928743F1D003D27D5 /* NeuCircleToggleButtonStyle.swift */,
-				755A0207286EFD96004E499A /* NeumorphicCircleButtonStyle.swift */,
+				755A0207286EFD96004E499A /* NeuCircleButtonStyle.swift */,
 				755EFEBC2871E9F100544321 /* NeumorphicCircleToggleButtonStyle.swift */,
 				75E178F0286EE43900349050 /* Neumorphic.swift */,
 			);
@@ -401,6 +408,16 @@
 				75DD96C628733CFA00DFC342 /* FixedSpacer.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		7545D7772875B4EE0008FE98 /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				7545D7782875B4FF0008FE98 /* DocTitleSection.swift */,
+				75102F60286075BF00464528 /* DocPhotoSection.swift */,
+				75ABFE1D2875BC3400AC485B /* DocSectionSection.swift */,
+			);
+			path = Subviews;
 			sourceTree = "<group>";
 		};
 		7557599B272FFD8700DA8B9A /* Edit Document */ = {
@@ -544,6 +561,7 @@
 				758AB2B3285B79F400BF94B0 /* FloatingPickerView.swift */,
 				75102F6228607C0800464528 /* ImageViewer.swift */,
 				75AF90ED28746FE300657490 /* NeuSectionBackground.swift */,
+				75ABFE1F2875BC9300AC485B /* NeuSectionTitle.swift */,
 			);
 			path = Elements;
 			sourceTree = "<group>";
@@ -609,8 +627,8 @@
 			isa = PBXGroup;
 			children = (
 				75102F5C285FB36A00464528 /* DocumentView.swift */,
+				7545D7772875B4EE0008FE98 /* Subviews */,
 				75102F5E285FB37600464528 /* DocumentViewModel.swift */,
-				75102F60286075BF00464528 /* PhotoView.swift */,
 				7574E8EC272AE66B0079B51C /* OldDocumentView.swift */,
 				75948C8F2739202D00EB880E /* OldDocumentViewModel.swift */,
 			);
@@ -824,6 +842,7 @@
 				753F1FC4272BF3B500804584 /* DDField+CoreDataClass.swift in Sources */,
 				7517B5B2285C7F8C00C5B8F5 /* DepoListViewModel.swift in Sources */,
 				7509CECB2865ABB400C7675F /* DuckDepo.xcdatamodeld in Sources */,
+				75ABFE1E2875BC3400AC485B /* DocSectionSection.swift in Sources */,
 				755EFEBD2871E9F100544321 /* NeumorphicCircleToggleButtonStyle.swift in Sources */,
 				755425CD272AA02200733D64 /* ImagePickerView.swift in Sources */,
 				7542D91F272845D600DB7A95 /* CoreDataEntity.swift in Sources */,
@@ -847,6 +866,7 @@
 				755759A0273006F700DA8B9A /* AddButtonView.swift in Sources */,
 				75E45300273BDDDF003AF1CE /* TitleView.swift in Sources */,
 				755759A7273044A800DA8B9A /* Field.swift in Sources */,
+				75ABFE202875BC9300AC485B /* NeuSectionTitle.swift in Sources */,
 				75A1C924274FC82800551645 /* CoreData Countable.swift in Sources */,
 				75A021ED27343B53001484BA /* ShareSheetView.swift in Sources */,
 				75E178F1286EE43900349050 /* Neumorphic.swift in Sources */,
@@ -866,6 +886,7 @@
 				7551B79A28743F1D003D27D5 /* NeuCircleToggleButtonStyle.swift in Sources */,
 				755759AF273045B900DA8B9A /* CoreDataConverter.swift in Sources */,
 				756AF0B22726C320001CB821 /* ContentView.swift in Sources */,
+				7545D7792875B4FF0008FE98 /* DocTitleSection.swift in Sources */,
 				756AF0B02726C320001CB821 /* DuckDepoApp.swift in Sources */,
 				755425CF272AA10400733D64 /* PhotoCell.swift in Sources */,
 				75A021F227347E86001484BA /* DataBase.swift in Sources */,
@@ -885,10 +906,10 @@
 				753F1FE3272C008B00804584 /* Info Options.swift in Sources */,
 				75A140D32869D3F4004A47A8 /* PasswordsListView.swift in Sources */,
 				75A1C91A274FA64700551645 /* DocumentsStorage.swift in Sources */,
-				755A0208286EFD97004E499A /* NeumorphicCircleButtonStyle.swift in Sources */,
+				755A0208286EFD97004E499A /* NeuCircleButtonStyle.swift in Sources */,
 				75088874273E913A009A7D3B /* Defaults Controller.swift in Sources */,
 				75A140D12869D25F004A47A8 /* PasswordsListViewModel.swift in Sources */,
-				75102F61286075BF00464528 /* PhotoView.swift in Sources */,
+				75102F61286075BF00464528 /* DocPhotoSection.swift in Sources */,
 				755759AD2730455600DA8B9A /* Folder.swift in Sources */,
 				75102F5D285FB36A00464528 /* DocumentView.swift in Sources */,
 				75A1C911274F84B500551645 /* EditPasswordView.swift in Sources */,
@@ -909,6 +930,7 @@
 				75E178DA286B3FB400349050 /* FormButton.swift in Sources */,
 				75821E4D286AFF43009F8C5E /* PasswordsStorage.swift in Sources */,
 				75E178D6286B3F8A00349050 /* PasswordGeneratorView.swift in Sources */,
+				7545D775287590C20008FE98 /* NeuRectButtonStyle.swift in Sources */,
 				75E178D3286B3F7400349050 /* EditPasswordView.swift in Sources */,
 				75821E5D286B0265009F8C5E /* DDSection+CoreDataProperties.swift in Sources */,
 				75E178E4286B425000349050 /* AutoFillPasswordViewModel.swift in Sources */,

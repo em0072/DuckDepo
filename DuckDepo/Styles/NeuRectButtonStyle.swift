@@ -9,32 +9,35 @@ import SwiftUI
 
 
 struct NeuRectButtonStyle: ButtonStyle {
+    
+    @Environment(\.isEnabled) private var isEnabled: Bool
+    
+    let shape = RoundedRectangle(cornerRadius: 10)
         
     func makeBody(configuration: Configuration) -> some View {
-//        GeometryReader { proxy in
-        ZStack {
-            if !configuration.isPressed {
-                Image("RectButton")
-//                    .resizable()
-//                    .aspectRatio(contentMode: .fit)
-//                    .layoutPriority(-1)
-            }
+        ZStack(alignment: .leading) {
             configuration.label
-//                .background(RoundedRectangle(cornerRadius: 7).fill(Color.red))
-//                    .padding(18)
-//                    .padding(.horizontal, proxy.size.width * 0.0185)
-//                    .padding(.vertical, proxy.size.height * 0.011)
-//                .padding(32)
-            if configuration.isPressed {
-                Image("RectButtonPressed")
-//                    .resizable()
-//                    .aspectRatio(contentMode: .fit)
-//                    .layoutPriority(-1)
-            }
+                .background(
+                    Group {
+                        if !configuration.isPressed {
+                            shape
+                                .fill(Color.neumorphicBackground)
+                                .shadow(color: configuration.isPressed ? .clear : .neumorphicTopShadow, radius: 2, x: -2, y: -2)
+                                .shadow(color: configuration.isPressed ? .clear : .neumorphicBottomShadow, radius: 2, x: 2, y: 2)
+                        }
+                    }
+                )
+                .overlay(
+                    Group {
+                        if configuration.isPressed || !isEnabled {
+                            Image("RectButtonPressed")
+                                .layoutPriority(-1)
+                        }
+                    }
+                )
         }
-//        }
+        .animation(nil, value: configuration.isPressed)
     }
-    
 }
 
 
@@ -60,6 +63,7 @@ struct NeuRectButtonStyle_Preview: PreviewProvider {
             }
 //            .frame(width: 150, height: 150)
             .buttonStyle(NeuRectButtonStyle())
+            .disabled(true)
         }
         
         

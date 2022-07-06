@@ -52,7 +52,7 @@ struct AddSectionMenu: View {
         } label: {
             buttonLabel()
         }
-        .buttonStyle(NeumorphicRoundedButtonStyle(cornerRadius: 15))
+        .buttonStyle(NeuRectButtonStyle())
     }
     
     var menuButton: some View {
@@ -74,7 +74,7 @@ struct AddSectionMenu: View {
         }
         .background(Color.neumorphicBackground)
         .contentShape(Rectangle())
-        .cornerRadius(15)
+        .cornerRadius(10)
         .neumorphicOuter()
     }
     

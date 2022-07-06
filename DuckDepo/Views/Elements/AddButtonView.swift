@@ -9,29 +9,39 @@ import SwiftUI
 
 struct AddButtonView: View {
     
-    var action: (()->())?
+    @Environment(\.isEnabled) private var isEnabled: Bool
+    
     var title: LocalizedStringKey
-    @Binding var isActive: Bool
+    var action: (()->())?
 
     var body: some View {
-            HStack {
-                Spacer()
                 Button {
                     action?()
                 } label: {
+                    ZStack {
+                        if isEnabled {
+                            Color.duckYellow
+                                .layoutPriority(-1)
+                                .cornerRadius(10)
+                        }
+                    HStack {
+                        Spacer()
                     Text(title)
+                            .foregroundColor(isEnabled ? .black : .duckDisabledText)
+                        Spacer()
+                    }
+                    .padding(.vertical, 14)
+                    }
                 }
-                Spacer()
-            }
-            .listRowBackground(!isActive ? Color.duckDisabledButton : Color.duckYellow)
-            .foregroundColor(!isActive ? Color.duckDisabledText : Color.black)
-            .disabled(!isActive)
-
+                .buttonStyle(NeuRectButtonStyle())
+                .disabled(!isEnabled)
     }
 }
 
+
 struct AddDocumentButton_Previews: PreviewProvider {
     static var previews: some View {
-        AddButtonView(title: "Add New Document", isActive: .constant(true))
+        AddButtonView(title: "Add New Document")
+            .disabled(false)
     }
 }

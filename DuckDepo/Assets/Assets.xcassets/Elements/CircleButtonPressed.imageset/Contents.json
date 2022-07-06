@@ -3,20 +3,6 @@
     {
       "filename" : "CircleButtonPressed@1x.png",
       "idiom" : "universal",
-      "resizing" : {
-        "cap-insets" : {
-          "bottom" : 27,
-          "left" : 26,
-          "right" : 27,
-          "top" : 26
-        },
-        "center" : {
-          "height" : 1,
-          "mode" : "tile",
-          "width" : 1
-        },
-        "mode" : "9-part"
-      },
       "scale" : "1x"
     },
     {
@@ -28,39 +14,11 @@
       ],
       "filename" : "CircleButtonPressedDark@1x.png",
       "idiom" : "universal",
-      "resizing" : {
-        "cap-insets" : {
-          "bottom" : 27,
-          "left" : 26,
-          "right" : 27,
-          "top" : 26
-        },
-        "center" : {
-          "height" : 1,
-          "mode" : "tile",
-          "width" : 1
-        },
-        "mode" : "9-part"
-      },
       "scale" : "1x"
     },
     {
       "filename" : "CircleButtonPressed@2x.png",
       "idiom" : "universal",
-      "resizing" : {
-        "cap-insets" : {
-          "bottom" : 41,
-          "left" : 40,
-          "right" : 41,
-          "top" : 40
-        },
-        "center" : {
-          "height" : 1,
-          "mode" : "tile",
-          "width" : 1
-        },
-        "mode" : "9-part"
-      },
       "scale" : "2x"
     },
     {
@@ -72,39 +30,11 @@
       ],
       "filename" : "CircleButtonPressedDark@2x.png",
       "idiom" : "universal",
-      "resizing" : {
-        "cap-insets" : {
-          "bottom" : 41,
-          "left" : 40,
-          "right" : 41,
-          "top" : 40
-        },
-        "center" : {
-          "height" : 1,
-          "mode" : "tile",
-          "width" : 1
-        },
-        "mode" : "9-part"
-      },
       "scale" : "2x"
     },
     {
       "filename" : "CircleButtonPressed@3x.png",
       "idiom" : "universal",
-      "resizing" : {
-        "cap-insets" : {
-          "bottom" : 82,
-          "left" : 81,
-          "right" : 82,
-          "top" : 81
-        },
-        "center" : {
-          "height" : 1,
-          "mode" : "tile",
-          "width" : 1
-        },
-        "mode" : "9-part"
-      },
       "scale" : "3x"
     },
     {
@@ -116,20 +46,6 @@
       ],
       "filename" : "CircleButtonPressedDark@3x.png",
       "idiom" : "universal",
-      "resizing" : {
-        "cap-insets" : {
-          "bottom" : 82,
-          "left" : 81,
-          "right" : 82,
-          "top" : 81
-        },
-        "center" : {
-          "height" : 1,
-          "mode" : "tile",
-          "width" : 1
-        },
-        "mode" : "9-part"
-      },
       "scale" : "3x"
     }
   ],

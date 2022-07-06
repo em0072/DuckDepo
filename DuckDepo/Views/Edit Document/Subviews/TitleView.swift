@@ -34,11 +34,6 @@ struct TitleView: View {
                     categoryPickerView()
                 }
                 NeuSectionBackground()
-//                Image("DocumentEditTitleBG")
-//                    .resizable()
-//                    .allowsHitTesting(false)
-//                    .layoutPriority(-1)
-
             }
         }
     }
@@ -56,7 +51,7 @@ struct TitleView: View {
     
     func categoryPickerView() -> some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 6) {
+            HStack(spacing: 14) {
                 ForEach(DocumentType.allCases) { type in
                     buttonForCategory(type)
                 }
@@ -73,7 +68,7 @@ struct TitleView: View {
             imageForCategory(type, selcted: documentType == type)
         }
         .buttonStyle(NeuCircleToggleButtonStyle(isSelected: documentType == type))
-        .frame(width: 45, height: 45)
+        .frame(width: 35, height: 35)
     }
     
     private func imageForCategory(_ type: DocumentType, selcted: Bool) -> some View {

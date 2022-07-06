@@ -37,14 +37,17 @@ struct SectionView: View {
                 ZStack {
                 VStack {
                     ForEach(section.fields) { field in
+                        HStack {
                         FloatingTextField(title: field.title, value: .constant(field.value), id: field.id, delegate: self)
+                            deleteField(field, in: section)
+                        }
                         Divider()
                     }
-                    .onDelete { offsets in
-                        guard let index = offsets.first, index < section.fields.count else {return}
-                        let fieldToDelete = section.fields[index]
-                        delegate?.delete(fieldToDelete, in: section)
-                    }
+//                    .onDelete { offsets in
+//                        guard let index = offsets.first, index < section.fields.count else {return}
+//                        let fieldToDelete = section.fields[index]
+//                        delegate?.delete(fieldToDelete, in: section)
+//                    }
                     .padding(.bottom, 4)
                     
                     addField(for: section)
@@ -54,11 +57,7 @@ struct SectionView: View {
                     
                     NeuSectionBackground()
                 }
-//                .neumorphicRoundedInner(cornerRadius: 15)
                 FixedSpacer(24)
-//                    }/
-//                NeuSectionBackground()
-//                }
             } header: {
                 sectionHeader(for: section)
             }
@@ -75,6 +74,16 @@ struct SectionView: View {
         }, message: {
             Text("sv_duplicate_body")
         })
+    }
+    
+    private func deleteField(_ field: Field, in section: DocSection) -> some View {
+        Button {
+            delegate?.delete(field, in: section)
+        } label: {
+            Image(systemName: "multiply.circle")
+                .foregroundColor(Color.red)
+        }
+        .buttonStyle(NeuCircleButtonStyle())
     }
     
     @ViewBuilder func addField(for section: DocSection) -> some View {
@@ -94,8 +103,7 @@ struct SectionView: View {
         } label: {
             addFieldButtonLabel()
         }
-//        .buttonStyle(NeuRectButtonStyle())
-        .buttonStyle(NeumorphicRoundedButtonStyle(cornerRadius: 15))
+        .buttonStyle(NeuRectButtonStyle())
     }
     
     @ViewBuilder func menuButton(for section: DocSection) -> some View {
@@ -119,7 +127,7 @@ struct SectionView: View {
         }
         .background(Color.neumorphicBackground)
         .contentShape(Rectangle())
-        .cornerRadius(15)
+        .cornerRadius(10)
         .neumorphicOuter()
 
 //        .menuStyle(MenuSty)
@@ -166,7 +174,7 @@ struct SectionView: View {
                 Image(systemName: "multiply.circle.fill")
                     .foregroundColor(Color.red)
             }
-            .buttonStyle(NeumorphicCircleButtonStyle())
+            .buttonStyle(NeuCircleButtonStyle())
         }
         .padding(.horizontal, 16)
     }

@@ -29,12 +29,11 @@ struct PhotosSectionView: View {
         Section {
             ZStack {
             ScrollView(.horizontal) {
-                LazyHStack(spacing: 0) {
+                LazyHStack(spacing: 16) {
                     // Add new photo cell
                     AddCell() {
                         showingPhotoChooser = true
                     }
-//                    .frame(width: 50, height: 50)
                     // Photo cells
                     ForEach(images, id: \.self) { image in
                         ZStack(alignment: .topTrailing) {
@@ -50,13 +49,13 @@ struct PhotosSectionView: View {
                                     .foregroundColor(Color.red)
                             }
                             .frame(width: 20)
-                            .offset(x: -2, y: 2)
-                            .buttonStyle(NeumorphicCircleButtonStyle())
+                            .offset(x: 7, y: -7)
+                            .buttonStyle(NeuCircleButtonStyle())
                         }
                     }
                     
                 }
-                .padding(6)
+                .padding(16)
             }
                 NeuSectionBackground()
             }
@@ -87,7 +86,6 @@ struct PhotosSectionView: View {
                 Spacer()
             }
             .padding(.horizontal, 16)
-//            .padding(.bottom, -13)
         }
 
     }

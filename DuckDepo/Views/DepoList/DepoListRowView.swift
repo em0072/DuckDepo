@@ -20,8 +20,8 @@ struct DepoListRowView: View {
             } label: {
                 buttonView()
             }
-            .buttonStyle(NeuRowButtonStyle())
-//        .padding(.horizontal)
+            .buttonStyle(NeuRectButtonStyle())
+        .padding(.horizontal, 16)
     }
     
     private func buttonView() -> some View {
@@ -41,6 +41,7 @@ struct DepoListRowView: View {
             .padding(.leading, 5)
             Spacer()
         }
+        .padding(16)
     }
 }
 

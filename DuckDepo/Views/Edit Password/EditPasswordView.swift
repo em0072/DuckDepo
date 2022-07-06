@@ -13,68 +13,69 @@ struct EditPasswordView: View {
     @Binding var isPresented: Bool
     @State var isShowingDeleteAlert: Bool = false
     @State var isShowingPassGenerator: Bool = false
-
+    
     
     init(isPresented: Binding<Bool>, type: ViewModel.PasswordType = .new, delegate: EditPasswordViewModelDelegate? = nil) {
         self.viewModel = ViewModel()
         _isPresented = isPresented
         viewModel.type = type
         viewModel.delegate = delegate
-
+        
     }
-
+    
     var body: some View {
         NavigationView {
             ZStack {
-        Form {
-            NameSection(viewModel: viewModel)
-            Section {
-                BindableFloatingTextField(title: "epv_login".localized(), value: $viewModel.passwordLogin)
-                HStack {
-                    BindableFloatingTextField(title: "epv_password".localized(), value: $viewModel.passwordValue)
-                    FormButton(action: {
-                        isShowingPassGenerator = true
-                    }, imageSystemName: "wand.and.stars.inverse")
+                Form {
+                    NameSection(viewModel: viewModel)
+                    Section {
+                        BindableFloatingTextField(title: "epv_login".localized(), value: $viewModel.passwordLogin)
+                        HStack {
+                            BindableFloatingTextField(title: "epv_password".localized(), value: $viewModel.passwordValue)
+                            FormButton(action: {
+                                isShowingPassGenerator = true
+                            }, imageSystemName: "wand.and.stars.inverse")
+                        }
+                    } header: {
+                        Text("epv_credentials")
+                    }
+                    Section {
+                        BindableFloatingTextField(title: "epv_website".localized(), value: $viewModel.passwordWebsite, keyboardType: .URL)
+                    } header: {
+                        Text("epv_additional_information")
+                    }
+                    AddButtonView(title: viewModel.saveButtonTitle) {
+                        viewModel.addNewPasswordButtonAction()
+                        isPresented = false
+                    }
+                    .disabled(!viewModel.passwordName.isEmpty)
                 }
-            } header: {
-                Text("epv_credentials")
-            }
-            Section {
-                BindableFloatingTextField(title: "epv_website".localized(), value: $viewModel.passwordWebsite, keyboardType: .URL)
-            } header: {
-                Text("epv_additional_information")
-            }
-            AddButtonView(action: {
-                viewModel.addNewPasswordButtonAction()
-                isPresented = false
-            }, title: viewModel.saveButtonTitle, isActive: .constant(!viewModel.passwordName.isEmpty))
-        }
             }
             
-        .navigationTitle(viewModel.viewTitle)
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarItems(leading: Button {
-            self.isPresented = false
-        } label: {
-            Image(systemName: "xmark")
-        }, trailing:
-                                Group {
-            if case .existing(_) = viewModel.type {
-                Button(action: deleteButtonAction) {
-                    Image(systemName: "trash.fill")
+            .navigationTitle(viewModel.viewTitle)
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarItems(leading: Button {
+                self.isPresented = false
+            } label: {
+                Image(systemName: "xmark")
+            }, trailing:
+                                    Group {
+                if case .existing(_) = viewModel.type {
+                    Button(action: deleteButtonAction) {
+                        Image(systemName: "trash.fill")
+                    }
                 }
-            }
-        })
-        .fullScreenCover(isPresented: $isShowingPassGenerator, content: {
-            passGenerationView
-                .background(BackgroundCleanerView())
-        })
-        .alert("epv_delete_alert_title", isPresented: $isShowingDeleteAlert, actions: {
-            Button("epv_delete_alert_delete", role: .destructive, action: deleteAlertAction)
-        }, message: {
-            Text("epv_delete_alert_body")
-        })
-
+            })
+            .fullScreenCover(isPresented: $isShowingPassGenerator, content: {
+                passGenerationView
+                    .background(BackgroundCleanerView())
+            })
+            .alert("epv_delete_alert_title", isPresented: $isShowingDeleteAlert, actions: {
+                Button("epv_delete_alert_delete", role: .destructive, action: deleteAlertAction)
+            }, message: {
+                Text("epv_delete_alert_body")
+            })
+            
         }
         .overlay(isShowingPassGenerator ? Color.duckOverlay : Color.clear)
         .animation(.default, value: isShowingPassGenerator)

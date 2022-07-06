@@ -17,12 +17,11 @@ struct AddCell: View {
             } label: {
                 Image(systemName: "plus")
                     .font(.title)
-                    .padding(30)
+                    .padding(20)
                     .foregroundColor(.neumorphicButtonText)
-//                    .aspectRatio(1, contentMode: .fit)
-//                    .background(Color.red)
             }
             .buttonStyle(NeuRectButtonStyle())
+
     }
 }
 
