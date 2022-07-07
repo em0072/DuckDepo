@@ -17,66 +17,119 @@ struct AutoFillPasswordView: View {
     }
 
     var body: some View {
-        Form {
-            credentialsSection
-            websiteSection
+        ZStack {
+            Color.neumorphicBackground
+                .ignoresSafeArea()
+            
+            contentView()
+                .padding(16)
         }
         .navigationBarTitle(viewModel.password.name)
         .toolbar {
             ToolbarItemGroup(placement: .navigationBarTrailing) {
                 Button(action: editButtonAction) {
                     Image(systemName: "pencil")
+                        .font(.footnote)
+                        .padding(7)
                 }
+                .buttonStyle(NeuCircleButtonStyle())
                 .fullScreenCover(isPresented: $viewModel.isEditingPassword) {
-                    EditPasswordView(isPresented: $viewModel.isEditingPassword, type: .existing(viewModel.password), delegate: viewModel)
+                    EditPasswordView(type: .existing(viewModel.password), delegate: viewModel)
                 }
             }
         }
 
     }
     
-    var credentialsSection: some View {
+    private func contentView() -> some View {
+        ScrollView {
+            credentialsSection()
+            FixedSpacer(25)
+            websiteSection()
+        }
+    }
+
+    
+    private func credentialsSection() -> some View {
         Section {
-            if viewModel.shouldShowCredentialsSection {
-                if viewModel.isLoginExist {
-                    VStack(alignment: .leading, spacing: 5) {
-                        Text("pv_login")
-                            .font(.caption2)
-                            .foregroundColor(Color(uiColor: .systemGray))
-                        Text(viewModel.password.login)
+            ZStack {
+                VStack {
+                    if viewModel.shouldShowCredentialsSection {
+                        loginView()
+                        passwordView()
+                    } else {
+                        Text("pv_empty_credentials")
                     }
                 }
-                if viewModel.isPasswordExist {
-                    HStack {
-                        VStack(alignment: .leading, spacing: 5) {
-                            Text("pv_password")
-                                .font(.caption2)
-                                .foregroundColor(Color(uiColor: .systemGray))
-                            Text(viewModel.passwordValue)
-                        }
-                        Spacer()
-                        FormButton(action: togglePasswordVisibility, imageSystemName: viewModel.isPasswordVisible ? "eye.slash" : "eye")
-                    }
-                }
-            } else {
-                Text("pv_empty_credentials")
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+
+                NeuSectionBackground()
             }
         } header: {
-            Text("pv_credentials")
+            NeuSectionTitle(title: "pv_credentials".localized())
         }
     }
     
-    @ViewBuilder var websiteSection: some View {
-        if viewModel.isWebsiteExist {
-        Section {
+    @ViewBuilder
+    private func loginView() -> some View {
+        if viewModel.isLoginExist {
+            HStack {
             VStack(alignment: .leading, spacing: 5) {
-                Text("pv_website")
+                Text("pv_login")
                     .font(.caption)
-                Text(viewModel.password.website)
+                Text(viewModel.password.login)
             }
-        } header: {
-            Text("pv_additional_information")
+                Spacer()
+            }
         }
+    }
+    
+    @ViewBuilder
+    private func passwordView() -> some View {
+        if viewModel.isPasswordExist {
+            Divider()
+            HStack {
+                
+                VStack(alignment: .leading, spacing: 5) {
+                    Text("pv_password")
+                        .font(.caption)
+                    Text(viewModel.passwordValue)
+                }
+                
+                Spacer()
+                
+                Button(action: togglePasswordVisibility) {
+                    Image(systemName: viewModel.isPasswordVisible ? "eye.slash" : "eye")
+                        .font(.footnote)
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 5)
+                }
+                .buttonStyle(NeuCircleButtonStyle())
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func websiteSection() -> some View {
+        if viewModel.isWebsiteExist {
+            Section {
+                ZStack {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text("pv_website")
+                                .font(.caption)
+                            Text(viewModel.password.website)
+                        }
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 12)
+                        Spacer()
+                    }
+                    NeuSectionBackground()
+                }
+            } header: {
+                NeuSectionTitle(title: "pv_additional_information".localized())
+            }
         }
     }
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
-    <device id="ipad12_9rounded" orientation="portrait" layout="fullscreen" appearance="light"/>
+    <device id="retina6_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
@@ -13,33 +13,23 @@
             <objects>
                 <viewController id="01J-lp-oVM" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
+                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="obG-Y5-kRd">
-                                <rect key="frame" x="0.0" y="1346" width="1024" height="0.0"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchScreenDuck" translatesAutoresizingMaskIntoConstraints="NO" id="SLf-9i-Yz3">
-                                <rect key="frame" x="412" y="585" width="200" height="200"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="DuckForLaunchScreen" translatesAutoresizingMaskIntoConstraints="NO" id="ujU-pf-34m">
+                                <rect key="frame" x="90" y="338" width="248" height="250"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="200" id="G3S-oi-JZY"/>
-                                    <constraint firstAttribute="width" secondItem="SLf-9i-Yz3" secondAttribute="height" multiplier="1:1" id="P60-6m-DFf"/>
+                                    <constraint firstAttribute="width" secondItem="ujU-pf-34m" secondAttribute="height" multiplier="124:125" id="GmF-iZ-o5A"/>
                                 </constraints>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
-                        <color key="backgroundColor" name="background"/>
+                        <color key="backgroundColor" name="neumorphicBackground"/>
                         <constraints>
-                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="centerX" secondItem="obG-Y5-kRd" secondAttribute="centerX" id="5cz-MP-9tL"/>
-                            <constraint firstItem="obG-Y5-kRd" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" constant="20" symbolic="YES" id="SfN-ll-jLj"/>
-                            <constraint firstAttribute="bottom" secondItem="obG-Y5-kRd" secondAttribute="bottom" constant="20" id="Y44-ml-fuU"/>
-                            <constraint firstItem="SLf-9i-Yz3" firstAttribute="centerY" secondItem="Bcu-3y-fUS" secondAttribute="centerY" id="YJg-MT-FeW"/>
-                            <constraint firstItem="SLf-9i-Yz3" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Bcu-3y-fUS" secondAttribute="leading" constant="100" id="j4y-Kt-9Nt"/>
-                            <constraint firstItem="SLf-9i-Yz3" firstAttribute="centerX" secondItem="Bcu-3y-fUS" secondAttribute="centerX" id="orI-Ni-uTl"/>
-                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="SLf-9i-Yz3" secondAttribute="trailing" constant="100" id="wVa-ro-rdN"/>
+                            <constraint firstItem="ujU-pf-34m" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="3BT-da-kMk"/>
+                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="trailing" secondItem="ujU-pf-34m" secondAttribute="trailing" constant="90" id="kMi-5u-qxJ"/>
+                            <constraint firstItem="ujU-pf-34m" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="rvh-K3-UtW"/>
+                            <constraint firstItem="ujU-pf-34m" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" constant="90" id="zpp-SQ-Abe"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -49,9 +39,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="LaunchScreenDuck" width="200" height="200"/>
-        <namedColor name="background">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        <image name="DuckForLaunchScreen" width="250" height="250"/>
+        <namedColor name="neumorphicBackground">
+            <color red="0.92156862745098034" green="0.92156862745098034" blue="0.92156862745098034" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

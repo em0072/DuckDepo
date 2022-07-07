@@ -25,35 +25,29 @@ struct SectionView: View {
     @State var showingAddNewFieldView: Bool = false
     @State var customFieldSection: DocSection?
     @State var showDuplicatedAlert: Bool = false
-
+    
     
     //MARK: - View Bulding
     var body: some View {
         ForEach(sections) { section in
-//            section(for: section)
             Section {
-//                ZStack {
-//                    VStack {
                 ZStack {
-                VStack {
-                    ForEach(section.fields) { field in
-                        HStack {
-                        FloatingTextField(title: field.title, value: .constant(field.value), id: field.id, delegate: self)
-                            deleteField(field, in: section)
+                    VStack {
+                        ForEach(0..<section.fields.count, id: \.self) { index in
+                            let field = section.fields[index]
+                            HStack {
+                                FloatingTextField(title: field.title, value: .constant(field.value), id: field.id, delegate: self)
+                                deleteField(field, in: section)
+                            }
+                            if index != section.fields.count - 1 {
+                                Divider()
+                            }
                         }
-                        Divider()
+                        .padding(.bottom, 4)
+                        addField(for: section)
+//                            .padding(.vertical, 12)
                     }
-//                    .onDelete { offsets in
-//                        guard let index = offsets.first, index < section.fields.count else {return}
-//                        let fieldToDelete = section.fields[index]
-//                        delegate?.delete(fieldToDelete, in: section)
-//                    }
-                    .padding(.bottom, 4)
-                    
-                    addField(for: section)
-                        .padding(.vertical, 12)
-                }
-                .padding(16)
+                    .padding(16)
                     
                     NeuSectionBackground()
                 }
@@ -62,7 +56,7 @@ struct SectionView: View {
                 sectionHeader(for: section)
             }
             
-                
+            
         }
         .sheet(isPresented: $showingAddNewFieldView) {
             AddNewView(isPresented: $showingAddNewFieldView, duplicateAlertPresented: $showDuplicatedAlert, type: .field, onSave: addCustomField)
@@ -87,13 +81,13 @@ struct SectionView: View {
     }
     
     @ViewBuilder func addField(for section: DocSection) -> some View {
-            if possibleFields(in: section).isEmpty {
-                addFieldButton(for: section)
-                    .id(UUID(uuidString: "add"))
-            } else {
-                menuButton(for: section)
-                    .id(UUID(uuidString: "add"))
-            }
+        if possibleFields(in: section).isEmpty {
+            addFieldButton(for: section)
+                .id(UUID(uuidString: "add"))
+        } else {
+            menuButton(for: section)
+                .id(UUID(uuidString: "add"))
+        }
     }
     
     @ViewBuilder func addFieldButton(for section: DocSection) -> some View {
@@ -129,8 +123,8 @@ struct SectionView: View {
         .contentShape(Rectangle())
         .cornerRadius(10)
         .neumorphicOuter()
-
-//        .menuStyle(MenuSty)
+        
+        //        .menuStyle(MenuSty)
     }
     
     private func addFieldButtonLabel() -> some View {
@@ -159,14 +153,14 @@ struct SectionView: View {
         }
         return possibleFields
     }
-
+    
     func sectionHeader(for section: DocSection) -> some View {
         return HStack {
             Text(section.name)
                 .font(.footnote)
                 .foregroundColor(.neumorphicText)
                 .textCase(.uppercase)
-                
+            
             Spacer()
             Button {
                 delegate?.delete(section)
@@ -188,7 +182,7 @@ struct SectionView: View {
             delegate?.addNewFieldWith(name: name, in: customFieldSection)
             showingAddNewFieldView = false
         }
-
+        
     }
     
 }
@@ -213,7 +207,7 @@ struct SectionView_Previews: PreviewProvider {
     static var doc = Document(name: "Passport", sections:
                                 [DocSection(name: "IDs", fields: [Field(title: "Number", value: "12324311"),
                                                                   Field(title: "Date", value: "01.01.2022")])
-                                ,DocSection(name: "Transport", fields: [Field(title: "Make", value: "Audi"),
+                                 ,DocSection(name: "Transport", fields: [Field(title: "Make", value: "Audi"),
                                                                          Field(title: "Model")])]
     )
     

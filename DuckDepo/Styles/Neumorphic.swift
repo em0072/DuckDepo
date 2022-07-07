@@ -15,36 +15,31 @@ extension View {
             .shadow(color:.neumorphicBottomShadow, radius: 2, x: 2, y: 2)
     }
     
-//    func neumorphicRoundedInner(cornerRadius: CGFloat) -> some View {
-//        self
-////            .background(
-////                Group {
-////                    if enabled {
-////                    RoundedRectangle(cornerRadius: cornerRadius)
-//                        .overlay(
-//                            RoundedRectangle(cornerRadius: cornerRadius)
-//                                .stroke(Color.neumorphicTopInnerShadow, lineWidth: 3)
-//                                .blur(radius:1)
-//                                .offset(x: 1, y: 1)
-//                                .mask(
-//                                    RoundedRectangle(cornerRadius: cornerRadius)
-//                                        .fill(LinearGradient(.black, .clear))
-//                                )
-//                        )
-//                        .overlay(
-//                            RoundedRectangle(cornerRadius: cornerRadius)
-//                                .stroke(Color.neumorphicBottomInnerShadow, lineWidth: 3)
-//                                .blur(radius: 1)
-//                                .offset(x: -1, y: -1)
-//                                .mask(
-//                                    RoundedRectangle(cornerRadius: cornerRadius)
+    func neumorphicRoundedInner(cornerRadius: CGFloat) -> some View {
+        self
+                        .overlay(
+                            RoundedRectangle(cornerRadius: cornerRadius)
+                                .stroke(Color.neumorphicTopInnerShadow, lineWidth: 2)
+                                .blur(radius:1)
+                                .offset(x: 1, y: 1)
+                                .mask(
+                                    RoundedRectangle(cornerRadius: cornerRadius)
+                                        .fill(Color.black)
+                                )
+                        )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: cornerRadius)
+                                .stroke(Color.neumorphicBottomInnerShadow, lineWidth: 2)
+                                .blur(radius: 1)
+                                .offset(x: -1, y: -1)
+                                .mask(
+                                    RoundedRectangle(cornerRadius: cornerRadius)
 //                                        .fill(LinearGradient(.clear, .black))
-//                                )
-//                        )
-////                    }
-////                }
-////            )
-//    }
+                                        .fill(Color.black)
+
+                                )
+                        )
+    }
     
 //    func neumorphicCircleInner() -> some View {
 //        self

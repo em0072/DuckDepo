@@ -91,12 +91,12 @@ extension EditDocumentView {
         
         //MARK: -Add Button
         
-        var saveButtonTitle: LocalizedStringKey {
+        var saveButtonTitle: String {
             switch type {
             case .new:
-                return "add_new_doc"
+                return "add_new_doc".localized()
             case .existing(_):
-                return "save_changes"
+                return "save_changes".localized()
             }
         }
         //MARK: State

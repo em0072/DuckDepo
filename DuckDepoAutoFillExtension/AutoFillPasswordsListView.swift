@@ -23,6 +23,9 @@ struct AutoFillPasswordsListView: View {
     var body: some View {
         NavigationView {
             ZStack {
+                Color.neumorphicBackground
+                    .ignoresSafeArea()
+                
                 if let password = viewModel.selectedPassword {
                     NavigationLink(isActive: $viewModel.showPasswordView) {
                         AutoFillPasswordView(password: password)
@@ -30,20 +33,7 @@ struct AutoFillPasswordsListView: View {
                 }
                 
                 if !viewModel.passwords.isEmpty {
-                    List {
-                        if !viewModel.recomendedPasswords.isEmpty {
-                            Section("af_recommended_passwords") {
-                                ForEach(viewModel.recomendedPasswords) { password in
-                                    row(for: password)
-                                }
-                            }
-                        }
-                        Section("All Passwords") {
-                            ForEach(viewModel.passwords) { password in
-                                row(for: password)
-                            }
-                        }
-                    }
+                    listView()
                 } else {
                     InitialInstructionsView(type: .passwords)
                 }
@@ -51,10 +41,8 @@ struct AutoFillPasswordsListView: View {
             .navigationTitle("af_nav_title")
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
+                    NeuNavigationCloseButton() {
                         onClose?()
-                    } label: {
-                        Image(systemName: "xmark")
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -62,40 +50,82 @@ struct AutoFillPasswordsListView: View {
                         viewModel.addNewPasswordButtonPressed()
                     } label: {
                         Image(systemName: "plus")
+                            .font(.footnote)
+                            .padding(7)
                     }
+                    .buttonStyle(NeuCircleButtonStyle())
                 }
             }
             .fullScreenCover(isPresented: $viewModel.isAddingNewPassword) {
-                EditPasswordView(isPresented: $viewModel.isAddingNewPassword, type: .new)
+                EditPasswordView(type: .new)
             }
-
+            
+        }
+    }
+    
+    private func listView() -> some View {
+        ScrollView {
+            VStack(spacing: 12) {
+                Section  {
+                    ForEach(viewModel.recomendedPasswords) { password in
+                        row(for: password)
+                    }
+                } header: {
+                    NeuSectionTitle(title: "af_recommended_passwords".localized())
+                }
+                
+                FixedSpacer(16)
+                Section  {
+                    ForEach(viewModel.passwords) { password in
+                        row(for: password)
+                    }
+                } header: {
+                    NeuSectionTitle(title: "af_all_passwords".localized())
+                }
+                
+            }
+            .padding(16)
         }
     }
     
     func row(for password: Password) -> some View {
-        ZStack(alignment: .leading) {
+        HStack {
             
             Button {
                 onSelect?(password)
             } label: {
-                VStack(alignment: .leading) {
-                    Text(password.name)
-                    if !password.login.isEmpty {
-                        Text(password.login)
-                            .font(.caption)
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text(password.name)
+                            .foregroundColor(.duckText)
+                        if !password.login.isEmpty {
+                            Text(password.login)
+                                .foregroundColor(.duckText)
+                                .font(.caption)
+                        }
                     }
+                    .padding(16)
+                    Spacer()
                 }
             }
-        }
-        .swipeActions {
+            .buttonStyle(NeuRectButtonStyle())
+            .padding(.trailing, 8)
+            
+            
             Button {
                 viewModel.showPassword(password)
             } label: {
-                Image(systemName: "eye")
+                Image(systemName: "info")
+                    .foregroundColor(.neumorphicButtonText)
+                    .font(.footnote)
+                    .padding(.horizontal, 9)
+                    .padding(.vertical, 7)
             }
-            .tint(.blue)
+            .buttonStyle(NeuCircleButtonStyle())
+            
         }
     }
+    
     
 }
 

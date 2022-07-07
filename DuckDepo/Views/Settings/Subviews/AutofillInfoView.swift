@@ -14,26 +14,40 @@ struct AutofillInfoView: View {
     
     var body: some View {
         NavigationView {
-            VStack(spacing: 12) {
+            ZStack {
+                Color.neumorphicBackground
+                    .ignoresSafeArea()
+                
+            VStack {
                 Image("AutoFill_screenshot")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                Text("sv_autofill_feature_text1")
-                Text("sv_autofill_feature_text2")
+                    .cornerRadius(10)
+                    .neumorphicOuter()
+                FixedSpacer(25)
+                ZStack {
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("sv_autofill_feature_text1")
+                        
+                        Text("sv_autofill_feature_text2")
+                    }
+                    .padding(16)
+                    
+                    NeuSectionBackground()
+                }
+                
                 Spacer()
             }
             .padding()
             .toolbar(content: {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
+                    NeuNavigationCloseButton() {
                         dismiss()
-                    } label: {
-                        Image(systemName: "xmark")
                     }
-
                 }
             })
             .navigationTitle("sv_autofill_featute")
+        }
         }
     }
 }

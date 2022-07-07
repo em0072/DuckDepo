@@ -14,24 +14,37 @@ struct DeleteAllSection: View {
     
     var body: some View {
         Section {
-        Button("sv_delete_all_button", role: .destructive, action: showDeleteAllAlert)
+            Button {
+                isShowingDeleteAlert = true
+            } label: {
+                HStack {
+                    Text("sv_delete_all_button")
+                        .bold()
+                    Spacer()
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+            }
+            .foregroundColor(.red)
+            .buttonStyle(NeuRectButtonStyle())
             .confirmationDialog("sv_delete_all_confirm_title", isPresented: $isShowingDeleteAlert, titleVisibility: .visible, actions: {
                 Button("sv_delete_all_confirm_button", role: .destructive, action: {onDeleteAction?()})
             }, message: {
                 Text("sv_delete_all_confirm_body")
             })
+
+            
         } header: {
-            Text("sv_content_reset")
+            NeuSectionTitle(title: "sv_content_reset".localized())
         }
     }
     
-    private func showDeleteAllAlert() {
-        isShowingDeleteAlert = true
-    }
 }
 
 struct DeleteAllSection_Previews: PreviewProvider {
     static var previews: some View {
-        DeleteAllSection()
+        ScrollView {
+            DeleteAllSection()
+        }
     }
 }

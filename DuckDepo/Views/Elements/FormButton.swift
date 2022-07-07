@@ -17,10 +17,10 @@ struct FormButton: View {
             action()
         } label: {
             Image(systemName: imageSystemName)
+                .font(.caption)
                 .padding(8)
         }
-        .buttonStyle(BorderlessButtonStyle())
-        .background(.ultraThinMaterial, in: Circle())
+        .buttonStyle(NeuCircleButtonStyle())
         .aspectRatio(1, contentMode: .fit)
     }
 }

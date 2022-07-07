@@ -11,7 +11,7 @@ struct AddButtonView: View {
     
     @Environment(\.isEnabled) private var isEnabled: Bool
     
-    var title: LocalizedStringKey
+    var title: String
     var action: (()->())?
 
     var body: some View {

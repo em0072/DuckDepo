@@ -67,15 +67,16 @@ struct DocumentView: View {
             //                    .sheet(isPresented: $viewModel.isCloudSharing, content: shareView)
             Button(action: viewModel.shareButtonPressed) {
                 Image(systemName: "square.and.arrow.up")
-                    .font(.footnote)
-                    .padding(6)
+                    .font(.caption)
+                    .padding(.vertical, 6)
+                    .padding(.horizontal, 7)
             }
             .buttonStyle(NeuCircleButtonStyle())
             .padding(.trailing, 5)
             Button(action: viewModel.editButtonPressed) {
                 Image(systemName: "pencil")
                     .font(.footnote)
-                    .padding(6)
+                    .padding(7)
             }
             .buttonStyle(NeuCircleButtonStyle())
             .disabled(!viewModel.editAllowed())

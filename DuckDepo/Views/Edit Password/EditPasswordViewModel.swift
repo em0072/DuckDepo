@@ -26,6 +26,8 @@ extension EditPasswordView {
         @Published var passwordLogin: String = ""
         @Published var passwordValue: String = ""
         @Published var passwordWebsite: String = ""
+        
+        @Published var shouldCloseView: Bool = false
 
         var delegate: EditPasswordViewModelDelegate?
 //        var inputOption: InputOption = InputOption()
@@ -41,21 +43,21 @@ extension EditPasswordView {
             }
         }
         
-        var viewTitle: LocalizedStringKey {
+        var viewTitle: String {
             switch type {
             case .new:
-                return "epv_new_password_title"
+                return "epv_new_password_title".localized()
             case .existing(_):
-                return "epv_edit_password_title"
+                return "epv_edit_password_title".localized()
             }
         }
         
-        var saveButtonTitle: LocalizedStringKey {
+        var saveButtonTitle: String {
             switch type {
             case .new:
-                return "epv_add_new_password_button"
+                return "epv_add_new_password_button".localized()
             case .existing(_):
-                return "epv_edit_password_button"
+                return "epv_edit_password_button".localized()
             }
         }
 
@@ -72,6 +74,7 @@ extension EditPasswordView {
                 storage.update(password)
                 delegate?.passwordUpdated(password)
             }
+            shouldCloseView = true
         }
                 
         
@@ -79,6 +82,7 @@ extension EditPasswordView {
             if case .existing(let password) = type {
                 storage.delete(password)
             }
+            shouldCloseView = true
         }
 
         

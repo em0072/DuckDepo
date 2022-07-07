@@ -81,18 +81,13 @@ struct EditDocumentView: View {
         })
     }
     
-    func closeButton() -> some View {
-        Button {
+    private func closeButton() -> some View {
+        NeuNavigationCloseButton() {
             dismiss()
-        } label: {
-            Image(systemName: "xmark")
-                .font(.footnote)
-                .padding(7)
         }
-        .buttonStyle(NeuCircleButtonStyle())
     }
     
-    func deleteButton() -> some View {
+    private func deleteButton() -> some View {
         Group {
             if case .existing(_) = viewModel.type {
                 Button(action: deleteButtonAction) {

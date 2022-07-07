@@ -15,11 +15,14 @@ struct DocSectionSection: View {
         Section {
             ZStack {
                 VStack {
-                    ForEach(section.fields) { field in
+                    ForEach(0..<section.fields.count, id: \.self) { index in
+                        let field = section.fields[index]
                         if let fieldTitle = field.title, let fieldValue = field.value {
                             VStack {
                                 FloatingTextView(title: fieldTitle, value: fieldValue)
-                                Divider()
+                                if index != section.fields.count - 1 {
+                                    Divider()
+                                }
                             }
 //                            .padding(.horizontal, 16)
 //                            .padding(.vertical, 12)

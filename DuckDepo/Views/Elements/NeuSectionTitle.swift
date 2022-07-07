@@ -12,7 +12,7 @@ struct NeuSectionTitle: View {
     
     var body: some View {
         HStack {
-            Text(title)
+            Text(title.localized())
                 .font(.footnote)
                 .foregroundColor(.neumorphicText)
                 .textCase(.uppercase)
