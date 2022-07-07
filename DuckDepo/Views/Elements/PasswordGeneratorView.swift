@@ -25,39 +25,47 @@ struct PasswordGeneratorView: View {
         VStack {
             Spacer()
                 .opacity(0)
+            
         VStack {
-            title
-            slider
-            params
-            passView
+            titleView()
             Divider()
             
-            Button {
+            sliderView()
+            Divider()
+            
+            paramsView()
+            Divider()
+
+            passView()
+//            Divider()
+            FixedSpacer(25)
+            AddButtonView(title: "pgv_use_button".localized()) {
                 onAction?(generatedPassword)
-            } label: {
-                Text("pgv_use_button")
             }
-            .buttonStyle(DuckButtonStyle())
-            .clipShape(Capsule())
+//            Button {
+//                onAction?(generatedPassword)
+//            } label: {
+//                Text("pgv_use_button")
+//            }
+//            .buttonStyle(NeuRectButtonStyle())
+//            .clipShape(Capsule())
 
         }
         .padding()
-        .background(Color.background)
-        .cornerRadius(20)
+        .background(Color.neumorphicBackground)
+        .cornerRadius(10)
         .padding(30)
-        .shadow(color: .duckShadow, radius: 5, x: 0, y: 0)
-        .onAppear(perform: generatePassword)
+        .neumorphicOuter()
+//        .shadow(color: .duckShadow, radius: 5, x: 0, y: 0)
+            
             Spacer()
                 .opacity(0)
         }
-//        }
-//        .ignoresSafeArea()
+        .onAppear(perform: generatePassword)
 
-
-        
     }
     
-    @ViewBuilder var title: some View {
+    private func titleView() -> some View {
         HStack {
             Text("pgv_title")
                 .font(.title)
@@ -66,33 +74,37 @@ struct PasswordGeneratorView: View {
                 isPresented = false
             }, label: {
                 Image(systemName: "xmark")
+                    .font(.footnote)
+                    .padding(7)
             })
-                .font(.headline)
+            .buttonStyle(NeuCircleButtonStyle())
         }
-        Divider()
     }
     
-    @ViewBuilder var slider: some View {
-        HStack {
-            Text("pgv_num_of_symbols")
-            Spacer()
-            Text("\(Int(numberOfSymbols))")
+    private func sliderView() -> some View {
+        VStack {
+            HStack {
+                Text("pgv_num_of_symbols")
+                Spacer()
+                Text("\(Int(numberOfSymbols))")
+            }
+            Slider(value: $numberOfSymbols, in: 6...20, step: 1, label: {
+                Text("pgv_num_of_symbols")
+            }, minimumValueLabel: {
+                Text("5")
+            }, maximumValueLabel: {
+                Text("20")
+            })
+//            .accentColor(Color.duckYellow)
+            .tint(Color.duckYellow)
+            .onChange(of: numberOfSymbols) { _ in
+                generatePassword()
+            }
         }
-        Slider(value: $numberOfSymbols, in: 6...20, step: 1, label: {
-            Text("pgv_num_of_symbols")
-        }, minimumValueLabel: {
-            Text("5")
-        }, maximumValueLabel: {
-            Text("20")
-        })
-        .accentColor(Color.duckYellow)
-        .onChange(of: numberOfSymbols) { _ in
-            generatePassword()
-        }
-        Divider()
     }
     
-    @ViewBuilder var params: some View {
+    private func paramsView() -> some View {
+        VStack {
         HStack {
         Text("pgv_params")
             Spacer()
@@ -100,17 +112,18 @@ struct PasswordGeneratorView: View {
         HStack {
             VStack(spacing: 5) {
                 Text("123")
-            Toggle("123", isOn: $useNumbers).labelsHidden()
-                    .tint(Color.duckYellow)
+            Toggle("", isOn: $useNumbers).labelsHidden()
+                    .toggleStyle(NeuToggleStyle())
                     .onChange(of: useNumbers) { _ in
                         generatePassword()
                     }
             }
+            
             Spacer()
             VStack(spacing: 5) {
                 Text("aA")
-            Toggle("aA", isOn: $useCapitals).labelsHidden()
-                    .tint(Color.duckYellow)
+            Toggle("", isOn: $useCapitals).labelsHidden()
+                    .toggleStyle(NeuToggleStyle())
                     .onChange(of: useCapitals) { _ in
                         generatePassword()
                     }
@@ -118,26 +131,29 @@ struct PasswordGeneratorView: View {
             Spacer()
             VStack(spacing: 5) {
                 Text("!@#")
-            Toggle("!@#", isOn: $useSymbols).labelsHidden()
-                    .tint(Color.duckYellow)
+            Toggle("", isOn: $useSymbols).labelsHidden()
+                    .toggleStyle(NeuToggleStyle())
                     .onChange(of: useSymbols) { _ in
                         generatePassword()
                     }
             }
         }
         .padding([ .top, .bottom], 3)
-        Divider()
+        }
     }
     
-    @ViewBuilder var passView: some View {
-        HStack {
-        Text(generatedPassword)
-            .font(.system(size: 34, weight: .bold))
-            .lineLimit(1)
-            .minimumScaleFactor(0.5)
-            .frame(height: 55)
-            Spacer()
-            FormButton(action: generatePassword, imageSystemName: "wand.and.rays.inverse")
+    private func passView() -> some View {
+        VStack {
+            HStack {
+                Text(generatedPassword)
+                    .font(.system(size: 34, weight: .bold))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
+                    .frame(height: 55)
+                Spacer()
+                
+                FormButton(action: generatePassword, imageSystemName: "wand.and.rays.inverse")
+            }
         }
     }
     
@@ -150,5 +166,6 @@ struct PasswordGeneratorView: View {
 struct PasswordGeneratorView_Previews: PreviewProvider {
     static var previews: some View {
         PasswordGeneratorView(isPresented: .constant(true))
+            .preferredColorScheme(.dark)
     }
 }

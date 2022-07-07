@@ -50,9 +50,9 @@ struct AddSectionMenu: View {
         Button {
             self.showingAddNewSectionView = true
         } label: {
-            Label("asm_add_section", systemImage: "plus.circle")
+            buttonLabel()
         }
-
+        .buttonStyle(NeuRectButtonStyle())
     }
     
     var menuButton: some View {
@@ -70,8 +70,24 @@ struct AddSectionMenu: View {
                 Text("asm_custom")
             }
         } label: {
-            Label("asm_add_section", systemImage: "plus.circle")
+            buttonLabel()
         }
+        .background(Color.neumorphicBackground)
+        .contentShape(Rectangle())
+        .cornerRadius(10)
+        .neumorphicOuter()
+    }
+    
+    private func buttonLabel() -> some View {
+        HStack {
+            Spacer()
+            Label("asm_add_section", systemImage: "plus")
+                .font(.callout)
+                .foregroundColor(.neumorphicButtonText)
+                .padding(.vertical, 14)
+            Spacer()
+        }
+
     }
     
     var possibleOptions: [String] {

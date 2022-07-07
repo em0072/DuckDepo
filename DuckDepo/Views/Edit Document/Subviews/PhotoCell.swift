@@ -10,29 +10,39 @@ import SwiftUI
 struct PhotoCell: View {
     
     var image: UIImage
+    var action: ()->()
     
     var body: some View {
-        
-        ZStack {
-            GeometryReader { proxy in
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: proxy.size.width)
-            }
+        Button {
+            action()
+        } label: {
+            Color.clear
+                .aspectRatio(1, contentMode: .fit)
+                .overlay(
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                    )
+                .clipShape(RoundedRectangle(cornerRadius: 11))
+
         }
-        .clipped()
-        .aspectRatio(1, contentMode: .fit)
-        .cornerRadius(15)
-        .overlay(
-                RoundedRectangle(cornerRadius: 15)
-                    .stroke(Color(white: 0, opacity: 0), lineWidth: 0.5)
-            )
+        .buttonStyle(NeuRectButtonStyle())
+//        .buttonStyle(NeumorphicRoundedButtonStyle(cornerRadius: 15))
     }
 }
 
 struct PhotoCell_Previews: PreviewProvider {
     static var previews: some View {
-        PhotoCell(image: UIImage(named: "duck")!)
+        HStack {
+            RoundedRectangle(cornerRadius: 15)
+                .fill(Color.red)
+                .frame(width: 90, height: 90)
+            
+        PhotoCell(image: UIImage(named: "duck")!) {
+            
+        }
+        .frame(width: 90, height: 90)
+        }
+
     }
 }

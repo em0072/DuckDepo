@@ -13,40 +13,66 @@ struct PasswordsListView: View {
     
     var body: some View {
         NavigationView {
-            ZStack {
-                if !viewModel.passwords.isEmpty {
-                    List(viewModel.passwords) { password in
-                        NavigationLink {
-                            PasswordView(password: password)
-                        } label: {
-                            VStack(alignment: .leading) {
-                                Text(password.name)
-                                if !password.login.isEmpty {
-                                    Text(password.login)
-                                        .font(.caption)
-                                }
-                            }
+                ZStack {
+                    Color.neumorphicBackground
+                        .ignoresSafeArea()
 
-                        }
+                    if !viewModel.passwords.isEmpty {
+                        listView()
+                    } else {
+                        InitialInstructionsView(type: .passwords)
                     }
-                } else {
-                    InitialInstructionsView(type: .passwords)
                 }
-            }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
+                    Button {
                         viewModel.isAddingNewPassword = true
-                    }) {
-                            Image(systemName: "plus")
-                        }
+                    } label: {
+                        Image(systemName: "plus")
+                            .font(.footnote)
+                            .padding(7)
+                    }
+                    .buttonStyle(NeuCircleButtonStyle())
                 }
             }
             .navigationTitle("plv_title")
             .fullScreenCover(isPresented: $viewModel.isAddingNewPassword) {
-                EditPasswordView(isPresented: $viewModel.isAddingNewPassword, type: .new)
+                EditPasswordView(type: .new)
             }
             NoSelectionViewView(type: .password)
+        }
+    }
+    
+    
+    private func listView() -> some View {
+        ScrollView {
+            VStack(spacing: 6) {
+                    ForEach(viewModel.passwords) { password in
+                        NavigationLink(tag: password, selection: $viewModel.selectedPassword) {
+                            PasswordView(password: password)
+                        } label: {EmptyView()}
+                        
+                        Button {
+                            viewModel.selectedPassword = password
+                        } label: {
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    Text(password.name)
+                                        .foregroundColor(.duckText)
+                                    if !password.login.isEmpty {
+                                        Text(password.login)
+                                            .foregroundColor(.duckText)
+                                            .font(.caption)
+                                    }
+                                }
+                                Spacer()
+                            }
+                            .padding(14)
+                        }
+                        .buttonStyle(NeuRectButtonStyle())
+                    }
+                }
+                .padding(16)
         }
     }
 }

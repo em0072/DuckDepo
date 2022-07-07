@@ -1,8 +1,8 @@
 //
-//  NewDepoListView.swift
+//  NeuDepoListView.swift
 //  DuckDepo
 //
-//  Created by Evgeny Mitko on 17/06/2022.
+//  Created by Evgeny Mitko on 01/07/2022.
 //
 
 import SwiftUI
@@ -10,11 +10,13 @@ import SwiftUI
 struct DepoListView: View {
     
     @StateObject private var viewModel: DepoListViewModel = DepoListViewModel()
-            
+    
+    @State var position: CGSize = CGSize.zero
+    
     var body: some View {
         NavigationView {
             ZStack {
-                Color(UIColor.systemGroupedBackground)
+                Color.neumorphicBackground
                     .ignoresSafeArea()
 
                 if viewModel.documents.isEmpty {
@@ -23,7 +25,6 @@ struct DepoListView: View {
                     listView()
                 }
             }
-            
             .navigationTitle("🦆 Depo")
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
@@ -31,40 +32,42 @@ struct DepoListView: View {
                     Button(action: {
                         viewModel.addNewDocumentButtonPressed()
                     }) {
-                            Image(systemName: "plus")
-                        }
+                        Image(systemName: "plus")
+                            .font(.footnote)
+                            .padding(7)
+                    }
+                    .buttonStyle(NeuCircleButtonStyle())
                 }
             }
 
             NoSelectionViewView(type: .document)
         }
-        
 
         .fullScreenCover(isPresented: $viewModel.isAddingNewDocument) {
-            EditDocumentView(isPresented: $viewModel.isAddingNewDocument, type: .new)
+            EditDocumentView(type: .new)
         }
 
     }
     
     private func listView() -> some View {
         ScrollView {
-            VStack {
+            VStack(spacing: 6) {
                 ForEach(viewModel.documents) { document in
                     NavigationLink(tag: document, selection: $viewModel.selectedDocument) {
                         DocumentView(document: document)
                     } label: {
                         EmptyView()
                     }
-
                     DepoListRowView(document: document, selectedDocument: $viewModel.selectedDocument)
                 }
+                FixedSpacer(16)
             }
         }
     }
-    
 }
 
-struct NewDepoListView_Previews: PreviewProvider {
+
+struct DepoListView_Previews: PreviewProvider {
     static var previews: some View {
         DepoListView()
     }

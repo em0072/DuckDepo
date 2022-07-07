@@ -1,8 +1,8 @@
 //
-//  DepoListRowView.swift
+//  NeuDepoListRowView.swift
 //  DuckDepo
 //
-//  Created by Evgeny Mitko on 17/06/2022.
+//  Created by Evgeny Mitko on 01/07/2022.
 //
 
 import SwiftUI
@@ -20,39 +20,42 @@ struct DepoListRowView: View {
             } label: {
                 buttonView()
             }
-            .buttonStyle(ListCellButtonStyle())
-        .padding(.horizontal)
-        .padding(.vertical, 5)
+            .buttonStyle(NeuRectButtonStyle())
+        .padding(.horizontal, 16)
     }
     
     private func buttonView() -> some View {
-        ZStack(alignment: .leading) {
-            RoundedRectangle(cornerRadius: 15)
-//                .frame(height: 100)
-                .foregroundColor(Color(UIColor.secondarySystemGroupedBackground))
-            
-            HStack {
-                document.documentType.image
-                    .frame(width: 40, height: 40)
-                VStack(alignment: .leading) {
-                    Text(document.name)
-                    if !document.description.isEmpty {
-                        Text(document.description)
-                            .foregroundColor(Color(UIColor.secondaryLabel))
-                    }
-//                    Text("\(document.order ?? 0)")
+        HStack {
+            document.documentType.image
+                .symbolRenderingMode(.palette)
+                .foregroundStyle(.white, document.documentType.iconColor)
+                .frame(width: 40, height: 40)
+                .padding(.trailing, 5)
+            VStack(alignment: .leading) {
+                Text(document.name)
+                if !document.description.isEmpty {
+                    Text(document.description)
+                        .foregroundColor(Color(UIColor.secondaryLabel))
                 }
             }
-            .padding()
+            .padding(.leading, 5)
+            Spacer()
         }
+        .padding(16)
     }
 }
 
-struct DepoListRowView_Previews: PreviewProvider {
+struct NeuDepoListRowView_Previews: PreviewProvider {
     
     static let testDocument = Document(name: "Document", description: "Bob Macron", documentType: .identification, folder: "what is folder?")
-    
+
     static var previews: some View {
-        DepoListRowView(document: DepoListRowView_Previews.testDocument, selectedDocument: .constant(nil))
+        ZStack {
+            Color.neumorphicBackground
+                .ignoresSafeArea()
+            DepoListRowView(document: testDocument, selectedDocument: .constant(nil))
+        }
+            
+            
     }
 }

@@ -14,16 +14,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     static let shared: AppDelegate = AppDelegate()
         
-//    lazy var allowCloudKitSync: Bool = {
-//        let arguments = ProcessInfo.processInfo.arguments
-//        var allow = true
-//        for index in 0..<arguments.count - 1 where arguments[index] == "-CDCKDAllowCloudKitSync" {
-//            allow = arguments.count >= (index + 1) ? arguments[index + 1] == "1" : true
-//            break
-//        }
-//        return allow
-//    }()
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         return true
     }

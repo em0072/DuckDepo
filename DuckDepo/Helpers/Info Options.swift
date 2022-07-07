@@ -122,10 +122,8 @@ enum DocumentType: String, Codable, Identifiable, CaseIterable, Hashable {
         }
     }
     
-    var image: some View {
+    var image: Image {
         return Image(systemName: self.iconName)
             .resizable()
-            .symbolRenderingMode(SymbolRenderingMode.palette)
-            .foregroundStyle(.white, self.iconColor)
     }
 }

@@ -28,9 +28,11 @@ struct Password: Identifiable, Hashable {
         } else {
             self.websiteURL = URL(string: "https://\(website)")
         }
-        
 
     }
 
+    static var test: Password {
+        Password(name: "Google", login: "alpaca@google.com", value: "", website: "https://google.com")
+    }
     
 }

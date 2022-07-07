@@ -63,9 +63,9 @@
 //NameView
 "nv_main_info" = "Основная Информация";
 "nv_add_new_doc" = "Добавить Новый Документ";
-"nv_doc_name" = "Имя Документа";
+"nv_doc_name" = "Название";
 "nv_doc_categoory" = "Категория";
-"nv_doc_description" = "Описание Документа";
+"nv_doc_description" = "Описание";
 
 
 //PhotosSectionView

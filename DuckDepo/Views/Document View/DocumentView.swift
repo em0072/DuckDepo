@@ -17,45 +17,30 @@ struct DocumentView: View {
     }
 
     var body: some View {
-        List {
-            HStack {
-                viewModel.document.documentType.image
-                    .frame(width: 35, height: 35)
-                VStack(alignment: .leading) {
-                    Text(viewModel.document.name)
-                    let description = viewModel.document.description
-                    if !description.isEmpty {
-                        Text(description)
-                            .foregroundColor(Color(UIColor.secondaryLabel))
-                    }
-                }
-            }
-            .padding(.vertical, 8)
+        ZStack {
+            Color.neumorphicBackground
+                .ignoresSafeArea()
             
-            let photos = viewModel.document.photos
-            if !photos.isEmpty {
-                PhotoView(photos: viewModel.document.photos, selectedPhoto: $viewModel.selectedPhoto)
-            }
+//            Color.red
             
-            ForEach(viewModel.document.sections) { section in
-                Section {
-                ForEach(section.fields) { field in
-                    if let fieldTitle = field.title, let fieldValue = field.value {
-                        FloatingTextView(title: fieldTitle, value: fieldValue)
+            ScrollView(.vertical) {
+                VStack {
+                    DocTitleSection(document: viewModel.document)
+                    FixedSpacer(25)
+                                        
+                    DocPhotoSection(photos: viewModel.document.photos, selectedPhoto: $viewModel.selectedPhoto)
+                    FixedSpacer(25)
+                    
+                    ForEach(viewModel.document.sections) { section in
+                        DocSectionSection(section: section)
+                        FixedSpacer(25)
                     }
+                    
                 }
-                } header: {
-                    Text(section.name)
-                }
+                .padding(16)
+
             }
         }
-//        .overlay(
-//            ZStack {
-//                if viewModel.showingImageViewer {
-//                    ImageViewer(photos: viewModel.document.photos, selectedImage: viewModel.selectedPhoto, showImageViewer: $viewModel.showingImageViewer)
-//                }
-//            }
-//        )
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(content: toolbarView)
@@ -64,18 +49,17 @@ struct DocumentView: View {
             ShareSheetView(items: viewModel.itemsToShare)
         }
         .fullScreenCover(isPresented: $viewModel.showEditDocumentView) {
-            EditDocumentView(isPresented: $viewModel.showEditDocumentView, type: .existing(viewModel.document))
+            EditDocumentView(type: .existing(viewModel.document))
         }
         .fullScreenCover(isPresented: $viewModel.showingImageViewer, onDismiss: nil) {
             if let selctedPhoto = viewModel.selectedPhoto {
             ImageViewer(photos: viewModel.document.photos, selectedImage: selctedPhoto)
             }
         }
-//        .animation(.default, value: viewModel.)
 
     }
     
-//    @ViewBuilder
+    
     private func toolbarView() -> some ToolbarContent {
         ToolbarItemGroup(placement: .navigationBarTrailing) {
             //MARK:  For Now it is not possible to use it - there is a bug in the NSPersistanceCloudKitController that is prevent database of deleteing created earlier share when the user taps "unshare". As a result, even though share is unshared, UI will always be as it is shared. So we wait for the bugfix from Apple.
@@ -83,10 +67,18 @@ struct DocumentView: View {
             //                    .sheet(isPresented: $viewModel.isCloudSharing, content: shareView)
             Button(action: viewModel.shareButtonPressed) {
                 Image(systemName: "square.and.arrow.up")
+                    .font(.caption)
+                    .padding(.vertical, 6)
+                    .padding(.horizontal, 7)
             }
+            .buttonStyle(NeuCircleButtonStyle())
+            .padding(.trailing, 5)
             Button(action: viewModel.editButtonPressed) {
                 Image(systemName: "pencil")
+                    .font(.footnote)
+                    .padding(7)
             }
+            .buttonStyle(NeuCircleButtonStyle())
             .disabled(!viewModel.editAllowed())
         }
     }
@@ -119,9 +111,9 @@ struct DocumentView: View {
 
 struct NewDocumentView_Previews: PreviewProvider {
     
-    static let testDocument = Document(name: "Document", description: "Bob Macron", documentType: .identification, photos: [UIImage(named: "duck")!], folder: "what is folder?")
-    
     static var previews: some View {
-        DocumentView(document: NewDocumentView_Previews.testDocument)
+        NavigationView {
+            DocumentView(document: Document.test)
+        }
     }
 }

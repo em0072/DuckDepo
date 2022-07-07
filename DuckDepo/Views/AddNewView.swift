@@ -65,20 +65,28 @@ struct AddNewView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                Color(.systemGroupedBackground)
+                Color.neumorphicBackground
                     .ignoresSafeArea()
-                VStack() {
+                
+                VStack {
+                    FixedSpacer(25)
                     AddFolderForm(folderDoesExsistAlertShown: $folderDoesExsistAlertShown, name: $name, type: type, onSave: onSave)
                 }
+                .padding(16)
             }
             .navigationBarTitleDisplayMode(.inline)
             .navigationTitle(title)
-            .navigationBarItems(leading: Button {
-                self.isPresented = false
-                onDismiss?()
-            } label: {
-                Image(systemName: "xmark")
-            })
+            .navigationBarItems(leading:
+                Button {
+                    self.isPresented = false
+                    onDismiss?()
+                } label: {
+                    Image(systemName: "xmark")
+                        .font(.footnote)
+                        .padding(7)
+                }
+                .buttonStyle(NeuCircleButtonStyle())
+            )
         }
         .navigationViewStyle(StackNavigationViewStyle())
     }
@@ -94,64 +102,62 @@ struct AddFolderForm: View {
     var type: AddNewView.DataType
     var onSave: ((String) -> ())?
     
-    var sectionTitle: LocalizedStringKey {
+    var sectionTitle: String {
         switch type {
         case .editFolder(_), .folder:
-            return "anv_enter_name_folder"
+            return "anv_enter_name_folder".localized()
         case .section:
-            return "anv_enter_name_section"
+            return "anv_enter_name_section".localized()
         case .field:
-            return "anv_enter_name_field"
+            return "anv_enter_name_field".localized()
         }
     }
     
-    var buttonTitle: LocalizedStringKey {
+    var buttonTitle: String {
         switch type {
         case .editFolder(_):
-            return "anv_edit_folder"
+            return "anv_edit_folder".localized()
         case .folder:
-            return "anv_add_new_folder"
+            return "anv_add_new_folder".localized()
         case .section:
-            return "anv_add_new_section"
+            return "anv_add_new_section".localized()
         case .field:
-            return "anv_add_new_field"
+            return "anv_add_new_field".localized()
         }
     }
     
-    var textFieldPrompt: LocalizedStringKey {
+    var textFieldPrompt: String {
         switch type {
         case .editFolder(_), .folder:
-            return "anv_text_filed_new_name_folder"
+            return "anv_text_filed_new_name_folder".localized()
         case .section:
-            return "anv_text_filed_new_name_section"
+            return "anv_text_filed_new_name_section".localized()
         case .field:
-            return "anv_text_filed_new_name_field"
+            return "anv_text_filed_new_name_field".localized()
         }
     }
 
     
     var body: some View {
-        Form {
             Section {
-                TextField(textFieldPrompt, text: $name, prompt: Text(textFieldPrompt))
-            } header: {
-                Text(sectionTitle)
-            }
-            Section {
-                HStack {
-                    Spacer()
-                Button(action: {
-                    self.onSave?(name)
-                }, label: {
-                    Text(buttonTitle)
-                })
-                    .disabled(name.isEmpty)
-                    Spacer()
+                ZStack {
+                    TextField(textFieldPrompt, text: $name, prompt: Text(textFieldPrompt))
+                        .padding(16)
+                    NeuSectionBackground()
                 }
-                .foregroundColor(name.isEmpty ? Color.duckDisabledText : Color.black)
-                .listRowBackground(name.isEmpty ? Color.duckDisabledButton : Color.duckYellow)
+            } header: {
+                NeuSectionTitle(title: sectionTitle)
             }
-        }
+            FixedSpacer(26)
+            Section {
+                
+                AddButtonView(title: buttonTitle) {
+                    self.onSave?(name)
+                }
+                .disabled(name.isEmpty)
+
+            }
+        Spacer()
         .alert("anv_duplicate_title", isPresented: $folderDoesExsistAlertShown, actions: {
             Button("Ok") {
                 self.folderDoesExsistAlertShown = false

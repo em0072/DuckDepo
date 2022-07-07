@@ -19,19 +19,36 @@ struct SettingsView: View {
     
     var body: some View {
         NavigationView {
-            Form {
-                BiometricSection(isBiometryEnabled: $biometricController.isBiometryEnabled, biometryDelay: $biometricController.biometricDelay)
-////                CategorySection()
-                OverviewSection(documentCount: $documentsCount, passwordCount: $passwordsCount)
-//
-                HelpSection(showAutofillInfo: $showAutofillInfo)
+            ZStack {
+                Color.neumorphicBackground
+                    .ignoresSafeArea()
                 
-                DeleteAllSection(onDeleteAction: deleteEverything)
-            }.navigationBarTitle(Text("sv_title"))
-                .sheet(isPresented: $showAutofillInfo, content: { AutofillInfoView() })
+                listView()
+            }
+            .navigationTitle("sv_title")
         }
         .onAppear(perform: updateDocumentsCount)
+        .sheet(isPresented: $showAutofillInfo, content: { AutofillInfoView() })
         .navigationViewStyle(StackNavigationViewStyle())
+    }
+    
+    private func listView() -> some View {
+        ScrollView {
+            VStack {
+                BiometricSection(isBiometryEnabled: $biometricController.isBiometryEnabled, biometryDelay: $biometricController.biometricDelay)
+                FixedSpacer(25)
+                
+                OverviewSection(documentCount: $documentsCount, passwordCount: $passwordsCount)
+                FixedSpacer(25)
+                
+                HelpSection(showAutofillInfo: $showAutofillInfo)
+                FixedSpacer(25)
+                
+                DeleteAllSection(onDeleteAction: deleteEverything)
+                FixedSpacer(25)
+            }
+            .padding(16)
+        }
     }
     
     private func updateDocumentsCount() {
@@ -49,7 +66,9 @@ struct SettingsView: View {
 
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsView()
+//        NavigationView {
+            SettingsView()
+//        }
     }
 }
 

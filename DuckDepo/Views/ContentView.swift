@@ -14,6 +14,10 @@ struct ContentView: View {
     @State var isShowingCopyNotification: Bool = false
     @State var copyNotificationText: String = "Copied"
 
+    init() {
+        UITabBar.appearance().barTintColor = UIColor(Color.neumorphicBackground)
+        UINavigationBar.appearance().barTintColor = UIColor(Color.neumorphicBackground)
+    }
    
     var body: some View {
             TabView {

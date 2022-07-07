@@ -17,6 +17,7 @@ struct InitialInstructionsView: View {
     var type: ViewType
     
     var body: some View {
+        ZStack {
             VStack {
                     VStack {
                         Image(systemName: imageName)
@@ -31,6 +32,10 @@ struct InitialInstructionsView: View {
                     .multilineTextAlignment(.center)
                     .padding([.leading, .trailing], 15)
             }
+            .padding(16)
+            NeuSectionBackground()
+        }
+        .padding(16)
     }
     
     private var imageName: String {
@@ -62,5 +67,12 @@ struct InitialInstructionsView: View {
 
     }
 
+
+}
+
+struct InitialInstructionsView_Preview: PreviewProvider {
+    static var previews: some View {
+        InitialInstructionsView(type: .documents)
+    }
 
 }

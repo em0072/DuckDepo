@@ -8,26 +8,28 @@
 import SwiftUI
 
 struct AddCell: View {
+    
+    var action: (()->())
+    
     var body: some View {
-        ZStack {
-            Rectangle()
-                .foregroundColor(Color.transparent)
-            Image(systemName: "plus.circle")
-        }
-        .cornerRadius(15)
-        .overlay(
-                RoundedRectangle(cornerRadius: 15)
-                    .stroke(Color.duckOutline, lineWidth: 1)
-            )
-        .aspectRatio(1.0, contentMode: .fit)
-        .padding(2)
+            Button {
+                action()
+            } label: {
+                Image(systemName: "plus")
+                    .font(.title)
+                    .padding(20)
+                    .foregroundColor(.neumorphicButtonText)
+            }
+            .buttonStyle(NeuRectButtonStyle())
 
     }
 }
 
 struct AddCell_Previews: PreviewProvider {
     static var previews: some View {
-        AddCell()
-            .frame(height: 50)
+        AddCell() {
+            
+        }
+        .frame(height: 50)
     }
 }

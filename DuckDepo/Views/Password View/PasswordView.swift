@@ -17,68 +17,123 @@ struct PasswordView: View {
     }
 
     var body: some View {
-        Form {
-            credentialsSection
-            websiteSection
+        ZStack {
+            Color.neumorphicBackground
+                .ignoresSafeArea()
+            
+            contentView()
+                .padding(16)
         }
         .navigationBarTitle(viewModel.password.name)
         .toolbar {
             ToolbarItemGroup(placement: .navigationBarTrailing) {
+                
                 Button(action: shareAlert) {
                     Image(systemName: "square.and.arrow.up")
+                        .font(.caption)
+                        .padding(.vertical, 6)
+                        .padding(.horizontal, 7)
                 }
-                .alert("pv_share_alert_title", isPresented: $viewModel.showShareAlert, actions: {
-                    Button("pv_share_alert_button", role: .destructive, action: sharePassword)
-                }, message: {
-                    Text("pv_share_alert_body")
-                })
-                .sheet(isPresented: $viewModel.showShareSheetView, onDismiss: {
-                    viewModel.itemsToShare = nil
-                }) {
-                    if let items = viewModel.itemsToShare {
-                        ShareSheetView(items: items)
-                    }
-                }
+                .buttonStyle(NeuCircleButtonStyle())
+                .padding(.trailing, 5)
+                
                 Button(action: editButtonAction) {
                     Image(systemName: "pencil")
+                        .font(.footnote)
+                        .padding(7)
                 }
-                .fullScreenCover(isPresented: $viewModel.isEditingPassword) {
-                    EditPasswordView(isPresented: $viewModel.isEditingPassword, type: .existing(viewModel.password), delegate: viewModel)
-                }
+                .buttonStyle(NeuCircleButtonStyle())
             }
+            
+        }
+        .alert("pv_share_alert_title", isPresented: $viewModel.showShareAlert, actions: {
+            Button("pv_share_alert_button", role: .destructive, action: sharePassword)
+        }, message: {
+            Text("pv_share_alert_body")
+        })
+        .sheet(isPresented: $viewModel.showShareSheetView, onDismiss: {
+            viewModel.itemsToShare = nil
+        }) {
+            if let items = viewModel.itemsToShare {
+                ShareSheetView(items: items)
+            }
+        }
+        .fullScreenCover(isPresented: $viewModel.isEditingPassword) {
+            EditPasswordView(type: .existing(viewModel.password), delegate: viewModel)
         }
 
     }
     
-    var credentialsSection: some View {
-        Section {
-            if viewModel.shouldShowCredentialsSection {
-                if viewModel.isLoginExist {
-                    FloatingTextView(title: "pv_login".localized(), value: viewModel.password.login)
-                }
-                if viewModel.isPasswordExist {
-                    HStack {
-                        ZStack {
-                            FloatingTextView(title: "pv_password".localized(), value: viewModel.password.value, isVisible: $viewModel.isPasswordVisible)
-                        }
-                        FormButton(action: togglePasswordVisibility, imageSystemName: viewModel.isPasswordVisible ? "eye.slash" : "eye")
-                    }
-                }
-            } else {
-                Text("pv_empty_credentials")
-            }
-        } header: {
-            Text("pv_credentials")
+    private func contentView() -> some View {
+        ScrollView {
+            credentialsSection()
+            FixedSpacer(25)
+            websiteSection()
         }
     }
     
-    @ViewBuilder var websiteSection: some View {
-        if viewModel.isWebsiteExist {
+    private func credentialsSection() -> some View {
         Section {
-            FloatingTextView(title: "pv_website".localized(), value: viewModel.password.website, url: viewModel.password.websiteURL)
+            ZStack {
+                VStack {
+                    if viewModel.shouldShowCredentialsSection {
+                        loginView()
+                        passwordView()
+                    } else {
+                        Text("pv_empty_credentials")
+                    }
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+
+                NeuSectionBackground()
+            }
         } header: {
-            Text("pv_additional_information")
+            NeuSectionTitle(title: "pv_credentials".localized())
         }
+    }
+    
+    @ViewBuilder
+    private func loginView() -> some View {
+        if viewModel.isLoginExist {
+            FloatingTextView(title: "pv_login".localized(), value: viewModel.password.login)
+        }
+    }
+        
+    @ViewBuilder
+    private func passwordView() -> some View {
+        if viewModel.isPasswordExist {
+            Divider()
+            HStack {
+                ZStack {
+                    FloatingTextView(title: "pv_password".localized(), value: viewModel.password.value, isVisible: $viewModel.isPasswordVisible)
+                }
+                Button(action: togglePasswordVisibility) {
+                    Image(systemName: viewModel.isPasswordVisible ? "eye.slash" : "eye")
+                        .font(.footnote)
+                        .padding(.vertical, 10)
+                        .padding(.horizontal, 7)
+                }
+                .buttonStyle(NeuCircleButtonStyle())
+            }
+        }
+    }
+    
+    @ViewBuilder private func websiteSection() -> some View {
+        if viewModel.isWebsiteExist {
+            Section {
+                ZStack {
+                    VStack {
+                    FloatingTextView(title: "pv_website".localized(), value: viewModel.password.website, url: viewModel.password.websiteURL)
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+
+                    NeuSectionBackground()
+                }
+            } header: {
+                NeuSectionTitle(title: "pv_additional_information".localized())
+            }
         }
     }
     
