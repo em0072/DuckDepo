@@ -19,9 +19,6 @@ struct PasswordGeneratorView: View {
     var onAction: ((String)->())?
     
     var body: some View {
-//        ZStack {
-//            Color.clear
-//                .blur(radius: 5)
         VStack {
             Spacer()
                 .opacity(0)
@@ -37,18 +34,10 @@ struct PasswordGeneratorView: View {
             Divider()
 
             passView()
-//            Divider()
             FixedSpacer(25)
             AddButtonView(title: "pgv_use_button".localized()) {
                 onAction?(generatedPassword)
             }
-//            Button {
-//                onAction?(generatedPassword)
-//            } label: {
-//                Text("pgv_use_button")
-//            }
-//            .buttonStyle(NeuRectButtonStyle())
-//            .clipShape(Capsule())
 
         }
         .padding()
@@ -56,7 +45,6 @@ struct PasswordGeneratorView: View {
         .cornerRadius(10)
         .padding(30)
         .neumorphicOuter()
-//        .shadow(color: .duckShadow, radius: 5, x: 0, y: 0)
             
             Spacer()
                 .opacity(0)
@@ -95,7 +83,6 @@ struct PasswordGeneratorView: View {
             }, maximumValueLabel: {
                 Text("20")
             })
-//            .accentColor(Color.duckYellow)
             .tint(Color.duckYellow)
             .onChange(of: numberOfSymbols) { _ in
                 generatePassword()

@@ -34,12 +34,12 @@ struct FloatingTextView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
-            if let title = title {
+//            if let title = title {
                     Text(title)
                     .foregroundColor(Color(white: 0.3))
                     .scaleEffect(0.8, anchor: .leading)
                     .padding(.top, 5)
-            }
+//            }
             HStack {
                 Group {
                     if let url = url, UIApplication.shared.canOpenURL(url) {
@@ -80,12 +80,6 @@ struct FloatingTextView: View {
     var proccessedValue: String {
         return isVisible ? value : String(repeating: "•", count: value.count)
     }
-//    private func open(url: URL) {
-//        guard UIApplication.shared.canOpenURL(url) else { return }
-//        openURL(URL)
-//        UIApplication.shared.open(url)
-
-//    }
 
     
     private func postCopyNotification() {

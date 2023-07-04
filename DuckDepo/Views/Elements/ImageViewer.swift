@@ -8,11 +8,19 @@
 import SwiftUI
 
 struct ImageViewer: View {
-    @Environment(\.dismiss) private var dismiss // Applies to DetailView.
-    
+    @Environment(\.dismiss) private var dismiss
+
     var photos: [UIImage]
-    @State var selectedImage: UIImage
     
+    let minZoomValue: CGFloat = 2.5
+    @State var selectedImage: UIImage
+    @State var scale: CGFloat = 1
+    @State var accumulatedScale: CGFloat = 1
+    @State var offset: CGSize = .zero
+    @State var accumulatedOffset: CGSize = .zero
+    @State var imageSize: CGSize = .zero
+
+    @State var showZoomImage = false
     
     init(photos: [UIImage], selectedImage: UIImage) {
         self.photos = photos
@@ -25,20 +33,21 @@ struct ImageViewer: View {
                 ForEach(photos, id: \.self) { photo in
                     Image(uiImage: photo)
                         .resizable()
+                        .opacity(showZoomImage ? 0 : 1)
                         .aspectRatio(contentMode: .fit)
                         .tag(photo)
                 }
             }
             .tabViewStyle(PageTabViewStyle())
+            .allowsHitTesting(!showZoomImage)
+            
+            if showZoomImage {
+                imageZoomView
+            }
+
         }
-        .gesture(
-            DragGesture(minimumDistance: 10, coordinateSpace: .global)
-                .onEnded { value in
-                    if value.translation.height > 50 {
-                        dismiss()
-                    }
-                }
-        )
+        .gesture(dragGesture)
+        .gesture(magnificationGesture)
         .background(Color.black)
         .ignoresSafeArea()
         .overlay(
@@ -56,6 +65,94 @@ struct ImageViewer: View {
         )
     }
     
+}
+
+extension ImageViewer {
+    
+    var imageZoomView: some View {
+        Image(uiImage: selectedImage)
+            .resizable()
+            .scaleEffect(scale)
+            .offset(offset)
+            .aspectRatio(contentMode: .fit)
+            .overlay {
+                GeometryReader { proxy in
+                    Color.clear
+                        .onAppear {
+                            imageSize = proxy.size
+                        }
+                }
+            }
+    }
+        
+    var magnificationGesture: some Gesture {
+        MagnificationGesture()
+            .onChanged { scale in
+                showZoomImage = true
+                print(accumulatedScale * scale.magnitude)
+                withAnimation(.linear(duration: 0.05)) {
+                    self.scale = accumulatedScale * scale.magnitude
+                }
+            }
+            .onEnded { scale in
+                let totalScale = min(minZoomValue, accumulatedScale * scale.magnitude)
+                self.accumulatedScale = totalScale
+                if accumulatedScale < 1 {
+                    resetZoomedImage()
+                } else {
+                    withAnimation {
+                        self.scale = accumulatedScale
+                    }
+                }
+            }
+    }
+    
+    func resetZoomedImage() {
+        self.accumulatedScale = 1
+        self.accumulatedOffset = .zero
+        withAnimation(.easeInOut(duration: 0.2)) {
+            self.scale = 1
+            self.offset = .zero
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            self.showZoomImage = false
+        }
+
+    }
+    
+    var dragGesture: some Gesture {
+        DragGesture()
+            .onChanged { value in
+                if scale > 1 {
+                    offset.width = accumulatedOffset.width + value.translation.width
+                    offset.height = accumulatedOffset.height + value.translation.height
+                }
+            }
+            .onEnded { value in
+                if scale == 1 && value.translation.height > 50 {
+                    dismiss()
+                } else {
+                    let totalWidthOffset = accumulatedOffset.width + value.translation.width
+                    let totalHeightOffset = accumulatedOffset.height + value.translation.height
+                    let multipliers = CGSize(width: imageSize.width * scale / totalWidthOffset, height: imageSize.height * scale / totalHeightOffset)
+                    var resultOffset = CGSize(width: totalWidthOffset,
+                                              height: totalHeightOffset)
+                    
+                    if abs(multipliers.width) < 3 {
+                        let widthMultiplier: CGFloat = multipliers.width > 0 ? 3 : -3
+                        resultOffset.width = imageSize.width * scale / widthMultiplier
+                    }
+                    if abs(multipliers.height) < 3 {
+                        let heightMultiplier: CGFloat = multipliers.height > 0 ? 3 : -3
+                        resultOffset.height = imageSize.height * scale / heightMultiplier
+                    }
+                    self.accumulatedOffset = resultOffset
+                        withAnimation {
+                            self.offset = resultOffset
+                        }
+                }
+            }
+    }
 }
 
 struct ImageViewer_Previews: PreviewProvider {

@@ -52,7 +52,6 @@ class ManualMigrationV1toV2: ObservableObject {
             guard !passwordValue.isEmpty else { continue }
             password.id = id
             keychain.set(passwordValue, forKey: id.uuidString)
-//            password.value = ""
             addToProgress(onePasswordProgress)
         }
     }

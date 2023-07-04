@@ -22,7 +22,7 @@ struct DepoListView: View {
                 if viewModel.documents.isEmpty {
                     InitialInstructionsView(type: .documents)
                 } else {
-                    listView()
+                    listView
                 }
             }
             .navigationTitle("🦆 Depo")
@@ -48,8 +48,10 @@ struct DepoListView: View {
         }
 
     }
-    
-    private func listView() -> some View {
+}
+
+extension DepoListView {
+    private var listView: some View {
         ScrollView {
             VStack(spacing: 6) {
                 ForEach(viewModel.documents) { document in
@@ -58,7 +60,12 @@ struct DepoListView: View {
                     } label: {
                         EmptyView()
                     }
-                    DepoListRowView(document: document, selectedDocument: $viewModel.selectedDocument)
+                    DepoListRowView(image: document.documentType.image,
+                                    iconColor: document.documentType.iconColor,
+                                    name: document.name,
+                                    description: document.description) {
+                        viewModel.selectedDocument = document
+                    }
                 }
                 FixedSpacer(16)
             }

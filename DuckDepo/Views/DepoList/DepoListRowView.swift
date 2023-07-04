@@ -9,32 +9,37 @@ import SwiftUI
 
 struct DepoListRowView: View {
     
-    var document: Document
-    @Binding var selectedDocument: Document?
+    let image: Image
+    let iconColor: Color
+    let name: String
+    let description: String
     
-//    var pressAction: ((Document)->())?
-    
+    let onTap: () -> ()
+        
     var body: some View {
             Button {
-                selectedDocument = document
+                onTap()
             } label: {
-                buttonView()
+                buttonView
             }
             .buttonStyle(NeuRectButtonStyle())
         .padding(.horizontal, 16)
     }
+}
+
+extension DepoListRowView {
     
-    private func buttonView() -> some View {
+    private var buttonView: some View {
         HStack {
-            document.documentType.image
+            image
                 .symbolRenderingMode(.palette)
-                .foregroundStyle(.white, document.documentType.iconColor)
+                .foregroundStyle(.white, iconColor)
                 .frame(width: 40, height: 40)
                 .padding(.trailing, 5)
             VStack(alignment: .leading) {
-                Text(document.name)
-                if !document.description.isEmpty {
-                    Text(document.description)
+                Text(name)
+                if !description.isEmpty {
+                    Text(description)
                         .foregroundColor(Color(UIColor.secondaryLabel))
                 }
             }
@@ -43,6 +48,7 @@ struct DepoListRowView: View {
         }
         .padding(16)
     }
+    
 }
 
 struct NeuDepoListRowView_Previews: PreviewProvider {
@@ -53,7 +59,11 @@ struct NeuDepoListRowView_Previews: PreviewProvider {
         ZStack {
             Color.neumorphicBackground
                 .ignoresSafeArea()
-            DepoListRowView(document: testDocument, selectedDocument: .constant(nil))
+            DepoListRowView(image: testDocument.documentType.image,
+                            iconColor: testDocument.documentType.iconColor,
+                            name: testDocument.name,
+                            description: testDocument.description,
+                            onTap: {})
         }
             
             
