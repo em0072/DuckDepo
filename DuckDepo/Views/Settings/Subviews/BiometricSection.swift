@@ -26,7 +26,6 @@ struct BiometricSection: View {
                                 .toggleStyle(NeuToggleStyle())
                         }
                         
-//                        if isBiometryEnabled {
                             Divider()
                             HStack {
                                 Text("sv_ask_after")
@@ -36,7 +35,7 @@ struct BiometricSection: View {
                                     RoundedRectangle(cornerRadius: 10)
                                         .fill(Color.neumorphicBackground)
                                         .layoutPriority(-1)
-                                    Picker("sv_ask_after", selection: $biometryDelay) {
+                                    Picker("", selection: $biometryDelay) {
                                         ForEach(BiometricController.BiometricDelay.allCases, id: \.self) { option in
                                             Text(biometricDelayCasesText(option))
                                         }
@@ -105,7 +104,7 @@ struct BiometricSection_Previews: PreviewProvider {
     static var previews: some View {
         ScrollView {
             VStack {
-                BiometricSection(isBiometryEnabled: .constant(false), biometryDelay: .constant(.none))
+                BiometricSection(isBiometryEnabled: .constant(true), biometryDelay: .constant(.none))
             }
         }
         .preferredColorScheme(.dark)

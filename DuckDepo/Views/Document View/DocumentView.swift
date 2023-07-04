@@ -20,9 +20,7 @@ struct DocumentView: View {
         ZStack {
             Color.neumorphicBackground
                 .ignoresSafeArea()
-            
-//            Color.red
-            
+                        
             ScrollView(.vertical) {
                 VStack {
                     DocTitleSection(document: viewModel.document)
@@ -53,7 +51,7 @@ struct DocumentView: View {
         }
         .fullScreenCover(isPresented: $viewModel.showingImageViewer, onDismiss: nil) {
             if let selctedPhoto = viewModel.selectedPhoto {
-            ImageViewer(photos: viewModel.document.photos, selectedImage: selctedPhoto)
+                ImageViewer(photos: viewModel.document.photos, selectedImage: selctedPhoto)
             }
         }
 

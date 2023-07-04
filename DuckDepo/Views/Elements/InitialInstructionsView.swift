@@ -33,7 +33,6 @@ struct InitialInstructionsView: View {
                     .padding([.leading, .trailing], 15)
             }
             .padding(16)
-            NeuSectionBackground()
         }
         .padding(16)
     }

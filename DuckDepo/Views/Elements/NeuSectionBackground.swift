@@ -10,7 +10,6 @@ import SwiftUI
 struct NeuSectionBackground: View {
     var body: some View {
         Image("SectionBG2")
-//            .resizable()
             .allowsHitTesting(false)
             .layoutPriority(-1)
 

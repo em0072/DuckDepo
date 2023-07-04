@@ -15,7 +15,6 @@
 		7508887A273EA21D009A7D3B /* BiometricSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75088879273EA21D009A7D3B /* BiometricSection.swift */; };
 		7509CEC72865A77900C7675F /* Keychain Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7509CEC62865A77900C7675F /* Keychain Controller.swift */; };
 		7509CECB2865ABB400C7675F /* DuckDepo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7509CEC92865ABB400C7675F /* DuckDepo.xcdatamodeld */; };
-		75102F5B285FA6A800464528 /* ListCellButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75102F5A285FA6A800464528 /* ListCellButtonStyle.swift */; };
 		75102F5D285FB36A00464528 /* DocumentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75102F5C285FB36A00464528 /* DocumentView.swift */; };
 		75102F5F285FB37600464528 /* DocumentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75102F5E285FB37600464528 /* DocumentViewModel.swift */; };
 		75102F61286075BF00464528 /* DocPhotoSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75102F60286075BF00464528 /* DocPhotoSection.swift */; };
@@ -29,16 +28,13 @@
 		753F1FDB272BF5F000804584 /* DDSection+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753F1FD9272BF5F000804584 /* DDSection+CoreDataProperties.swift */; };
 		753F1FE3272C008B00804584 /* Info Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753F1FE2272C008B00804584 /* Info Options.swift */; };
 		753F1FE5272C019700804584 /* String Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753F1FE4272C019700804584 /* String Extension.swift */; };
-		753F1FE7272C0A9A00804584 /* CustomButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753F1FE6272C0A9A00804584 /* CustomButtonStyle.swift */; };
 		7542D9162728122E00DB7A95 /* EditFoldersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7542D9152728122D00DB7A95 /* EditFoldersView.swift */; };
-		7542D91D27283C9000DB7A95 /* Alert Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7542D91C27283C9000DB7A95 /* Alert Extension.swift */; };
 		7542D91F272845D600DB7A95 /* CoreDataEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7542D91E272845D600DB7A95 /* CoreDataEntity.swift */; };
 		7542D92127284F4C00DB7A95 /* AddNewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7542D92027284F4B00DB7A95 /* AddNewView.swift */; };
 		7545D775287590C20008FE98 /* NeuRectButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75AF90EF2874734700657490 /* NeuRectButtonStyle.swift */; };
 		7545D7792875B4FF0008FE98 /* DocTitleSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7545D7782875B4FF0008FE98 /* DocTitleSection.swift */; };
 		7551B79A28743F1D003D27D5 /* NeuCircleToggleButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7551B79928743F1D003D27D5 /* NeuCircleToggleButtonStyle.swift */; };
 		755425C9272A98B500733D64 /* AddCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755425C8272A98B500733D64 /* AddCell.swift */; };
-		755425CB272A9C4700733D64 /* VerticalLabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755425CA272A9C4700733D64 /* VerticalLabelStyle.swift */; };
 		755425CD272AA02200733D64 /* ImagePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755425CC272AA02200733D64 /* ImagePickerView.swift */; };
 		755425CF272AA10400733D64 /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755425CE272AA10400733D64 /* PhotoCell.swift */; };
 		755425D7272ACC8D00733D64 /* CameraPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755425D6272ACC8D00733D64 /* CameraPickerView.swift */; };
@@ -49,9 +45,9 @@
 		755759A9273044BC00DA8B9A /* DocSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755759A8273044BC00DA8B9A /* DocSection.swift */; };
 		755759AB2730450800DA8B9A /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755759AA2730450800DA8B9A /* Document.swift */; };
 		755759AD2730455600DA8B9A /* Folder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755759AC2730455600DA8B9A /* Folder.swift */; };
-		755759AF273045B900DA8B9A /* CoreDataConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755759AE273045B900DA8B9A /* CoreDataConverter.swift */; };
 		755A0208286EFD97004E499A /* NeuCircleButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755A0207286EFD96004E499A /* NeuCircleButtonStyle.swift */; };
-		755EFEBD2871E9F100544321 /* NeumorphicCircleToggleButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755EFEBC2871E9F100544321 /* NeumorphicCircleToggleButtonStyle.swift */; };
+		755E4834287D6BEE00DD045D /* DocumentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755E4833287D6BEE00DD045D /* DocumentType.swift */; };
+		755E4835287D6C6900DD045D /* DocumentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755E4833287D6BEE00DD045D /* DocumentType.swift */; };
 		756A0D5F2758B99500CD29E0 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 756A0D5E2758B99500CD29E0 /* Launch Screen.storyboard */; };
 		756A0D602758BCB800CD29E0 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 756A0D622758BCB800CD29E0 /* Localizable.strings */; };
 		756AF0B02726C320001CB821 /* DuckDepoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756AF0AF2726C320001CB821 /* DuckDepoApp.swift */; };
@@ -59,7 +55,6 @@
 		756AF0B42726C324001CB821 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 756AF0B32726C324001CB821 /* Assets.xcassets */; };
 		756AF0B72726C324001CB821 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 756AF0B62726C324001CB821 /* Preview Assets.xcassets */; };
 		756AF0B92726C324001CB821 /* Persistence Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756AF0B82726C324001CB821 /* Persistence Controller.swift */; };
-		7574E8ED272AE66B0079B51C /* OldDocumentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7574E8EC272AE66B0079B51C /* OldDocumentView.swift */; };
 		7580B246273AA99A00F06F23 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7580B245273AA99A00F06F23 /* AppDelegate.swift */; };
 		7581181B2876C84900C3017D /* NeuSectionBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75AF90ED28746FE300657490 /* NeuSectionBackground.swift */; };
 		7581181C2876D00F00C3017D /* NeuCircleButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755A0207286EFD96004E499A /* NeuCircleButtonStyle.swift */; };
@@ -93,11 +88,9 @@
 		75821E5E286B0268009F8C5E /* DDField+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753F1FC1272BF3B500804584 /* DDField+CoreDataProperties.swift */; };
 		75821E5F286B026E009F8C5E /* DDField+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753F1FC0272BF3B500804584 /* DDField+CoreDataClass.swift */; };
 		75821E60286B048E009F8C5E /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75D414EA2726CA6700355AE7 /* CloudKit.framework */; };
-		758AB2B4285B79F400BF94B0 /* FloatingPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758AB2B3285B79F400BF94B0 /* FloatingPickerView.swift */; };
 		758ABD132729828F0074F61A /* EditDocumentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758ABD122729828F0074F61A /* EditDocumentView.swift */; };
 		759257632759047C003C9826 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 759257652759047D003C9826 /* Localizable.stringsdict */; };
 		7593B5C82864A12A008925E6 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7593B5C72864A129008925E6 /* AuthenticationServices.framework */; };
-		75948C902739202D00EB880E /* OldDocumentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75948C8F2739202D00EB880E /* OldDocumentViewModel.swift */; };
 		75973027273A7D2600A105A7 /* Predefiened Field Options.json in Resources */ = {isa = PBXBuildFile; fileRef = 75973026273A7D2600A105A7 /* Predefiened Field Options.json */; };
 		75A021ED27343B53001484BA /* ShareSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A021EC27343B53001484BA /* ShareSheetView.swift */; };
 		75A021F027343E48001484BA /* Biometric Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A021EF27343E48001484BA /* Biometric Controller.swift */; };
@@ -128,7 +121,6 @@
 		75A1C926274FD0F400551645 /* PasswordGeneratorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C925274FD0F400551645 /* PasswordGeneratorView.swift */; };
 		75A1C928274FDE2000551645 /* Password Generator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C927274FDE1F00551645 /* Password Generator.swift */; };
 		75A1C92A274FEB9F00551645 /* BackgroundCleanerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C929274FEB9F00551645 /* BackgroundCleanerView.swift */; };
-		75A1C92C2750D65700551645 /* DuckButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C92B2750D65600551645 /* DuckButtonStyle.swift */; };
 		75A369D92850F14600196EE2 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75D414EA2726CA6700355AE7 /* CloudKit.framework */; };
 		75AB83E12733E2C9000618F1 /* Pill Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75AB83E02733E2C9000618F1 /* Pill Notification.swift */; };
 		75AB83E32733E77D000618F1 /* Notification.Name extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75AB83E22733E77D000618F1 /* Notification.Name extension.swift */; };
@@ -136,7 +128,6 @@
 		75ABFE202875BC9300AC485B /* NeuSectionTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75ABFE1F2875BC9300AC485B /* NeuSectionTitle.swift */; };
 		75AF90EE28746FE300657490 /* NeuSectionBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75AF90ED28746FE300657490 /* NeuSectionBackground.swift */; };
 		75AF90F02874734700657490 /* NeuRectButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75AF90EF2874734700657490 /* NeuRectButtonStyle.swift */; };
-		75B130F82744061B0059F314 /* SizeUnits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B130F72744061B0059F314 /* SizeUnits.swift */; };
 		75C5CFBD272C7C9200C90C3C /* FloatingTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C5CFBC272C7C9200C90C3C /* FloatingTextField.swift */; };
 		75D414FD2728021700355AE7 /* DDDocument+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D414FB2728021700355AE7 /* DDDocument+CoreDataClass.swift */; };
 		75D414FE2728021700355AE7 /* DDDocument+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D414FC2728021700355AE7 /* DDDocument+CoreDataProperties.swift */; };
@@ -146,7 +137,6 @@
 		75D430832743EA7900D4EE2A /* VisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D430822743EA7900D4EE2A /* VisualEffectView.swift */; };
 		75D792A42744FFC600396535 /* NoDocumentSelectedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D792A32744FFC500396535 /* NoDocumentSelectedView.swift */; };
 		75DD96C728733CFA00DFC342 /* FixedSpacer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DD96C628733CFA00DFC342 /* FixedSpacer.swift */; };
-		75DD96C92873492000DFC342 /* NeuRowButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DD96C82873492000DFC342 /* NeuRowButtonStyle.swift */; };
 		75E178CE286B32EB00349050 /* AutoFillPasswordsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E178CD286B32EB00349050 /* AutoFillPasswordsListView.swift */; };
 		75E178D0286B336500349050 /* AutoFillPasswordsListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E178CF286B336500349050 /* AutoFillPasswordsListViewModel.swift */; };
 		75E178D1286B3D2C00349050 /* InitialInstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C90D274F825200551645 /* InitialInstructionsView.swift */; };
@@ -156,7 +146,6 @@
 		75E178D5286B3F8100349050 /* BackgroundCleanerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C929274FEB9F00551645 /* BackgroundCleanerView.swift */; };
 		75E178D6286B3F8A00349050 /* PasswordGeneratorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C925274FD0F400551645 /* PasswordGeneratorView.swift */; };
 		75E178D7286B3F8F00349050 /* BindableFloatingTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C917274F8C7400551645 /* BindableFloatingTextField.swift */; };
-		75E178D8286B3F9A00349050 /* DuckButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C92B2750D65600551645 /* DuckButtonStyle.swift */; };
 		75E178D9286B3FA900349050 /* Color Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753F1FBE272BE56400804584 /* Color Extension.swift */; };
 		75E178DA286B3FB400349050 /* FormButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C91D274FAD5400551645 /* FormButton.swift */; };
 		75E178DB286B3FB900349050 /* Password Generator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C927274FDE1F00551645 /* Password Generator.swift */; };
@@ -171,8 +160,6 @@
 		75E178ED286EE29B00349050 /* DepoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E178EC286EE29B00349050 /* DepoListView.swift */; };
 		75E178EF286EE3EB00349050 /* DepoListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E178EE286EE3EB00349050 /* DepoListRowView.swift */; };
 		75E178F1286EE43900349050 /* Neumorphic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E178F0286EE43900349050 /* Neumorphic.swift */; };
-		75E178F3286EE8F500349050 /* NeumorphicRoundedButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E178F2286EE8F500349050 /* NeumorphicRoundedButtonStyle.swift */; };
-		75E178F5286EECE500349050 /* LinearGradient Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E178F4286EECE500349050 /* LinearGradient Extension.swift */; };
 		75E45300273BDDDF003AF1CE /* TitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E452FF273BDDDF003AF1CE /* TitleView.swift */; };
 		75E8F82C2739544300DCF4BD /* CloudSharingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E8F82B2739544300DCF4BD /* CloudSharingView.swift */; };
 		75E8F82E273981AB00DCF4BD /* EditFoldersViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E8F82D273981AA00DCF4BD /* EditFoldersViewState.swift */; };
@@ -212,7 +199,6 @@
 		75088879273EA21D009A7D3B /* BiometricSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricSection.swift; sourceTree = "<group>"; };
 		7509CEC62865A77900C7675F /* Keychain Controller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Keychain Controller.swift"; sourceTree = "<group>"; };
 		7509CECA2865ABB400C7675F /* DuckDepo.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DuckDepo.xcdatamodel; sourceTree = "<group>"; };
-		75102F5A285FA6A800464528 /* ListCellButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCellButtonStyle.swift; sourceTree = "<group>"; };
 		75102F5C285FB36A00464528 /* DocumentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentView.swift; sourceTree = "<group>"; };
 		75102F5E285FB37600464528 /* DocumentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentViewModel.swift; sourceTree = "<group>"; };
 		75102F60286075BF00464528 /* DocPhotoSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocPhotoSection.swift; sourceTree = "<group>"; };
@@ -226,15 +212,12 @@
 		753F1FD9272BF5F000804584 /* DDSection+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DDSection+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		753F1FE2272C008B00804584 /* Info Options.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Info Options.swift"; sourceTree = "<group>"; };
 		753F1FE4272C019700804584 /* String Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String Extension.swift"; sourceTree = "<group>"; };
-		753F1FE6272C0A9A00804584 /* CustomButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButtonStyle.swift; sourceTree = "<group>"; };
 		7542D9152728122D00DB7A95 /* EditFoldersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFoldersView.swift; sourceTree = "<group>"; };
-		7542D91C27283C9000DB7A95 /* Alert Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Alert Extension.swift"; sourceTree = "<group>"; };
 		7542D91E272845D600DB7A95 /* CoreDataEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataEntity.swift; sourceTree = "<group>"; };
 		7542D92027284F4B00DB7A95 /* AddNewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewView.swift; sourceTree = "<group>"; };
 		7545D7782875B4FF0008FE98 /* DocTitleSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocTitleSection.swift; sourceTree = "<group>"; };
 		7551B79928743F1D003D27D5 /* NeuCircleToggleButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeuCircleToggleButtonStyle.swift; sourceTree = "<group>"; };
 		755425C8272A98B500733D64 /* AddCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCell.swift; sourceTree = "<group>"; };
-		755425CA272A9C4700733D64 /* VerticalLabelStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalLabelStyle.swift; sourceTree = "<group>"; };
 		755425CC272AA02200733D64 /* ImagePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerView.swift; sourceTree = "<group>"; };
 		755425CE272AA10400733D64 /* PhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
 		755425D6272ACC8D00733D64 /* CameraPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPickerView.swift; sourceTree = "<group>"; };
@@ -245,9 +228,8 @@
 		755759A8273044BC00DA8B9A /* DocSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocSection.swift; sourceTree = "<group>"; };
 		755759AA2730450800DA8B9A /* Document.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Document.swift; sourceTree = "<group>"; };
 		755759AC2730455600DA8B9A /* Folder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Folder.swift; sourceTree = "<group>"; };
-		755759AE273045B900DA8B9A /* CoreDataConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataConverter.swift; sourceTree = "<group>"; };
 		755A0207286EFD96004E499A /* NeuCircleButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeuCircleButtonStyle.swift; sourceTree = "<group>"; };
-		755EFEBC2871E9F100544321 /* NeumorphicCircleToggleButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeumorphicCircleToggleButtonStyle.swift; sourceTree = "<group>"; };
+		755E4833287D6BEE00DD045D /* DocumentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentType.swift; sourceTree = "<group>"; };
 		756A0D5E2758B99500CD29E0 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		756A0D612758BCB800CD29E0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		756A0D642758BCCA00CD29E0 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -259,16 +241,13 @@
 		756AF0B82726C324001CB821 /* Persistence Controller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Persistence Controller.swift"; sourceTree = "<group>"; };
 		756AF0C22726C4B6001CB821 /* DuckDepo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DuckDepo.entitlements; sourceTree = "<group>"; };
 		756AF0C32726C4CD001CB821 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7574E8EC272AE66B0079B51C /* OldDocumentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OldDocumentView.swift; sourceTree = "<group>"; };
 		7580B245273AA99A00F06F23 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		758118202876E04C00C3017D /* NeuToggleStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeuToggleStyle.swift; sourceTree = "<group>"; };
 		7581182428770BF000C3017D /* NeuNavigationCloseButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeuNavigationCloseButton.swift; sourceTree = "<group>"; };
-		758AB2B3285B79F400BF94B0 /* FloatingPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingPickerView.swift; sourceTree = "<group>"; };
 		758ABD122729828F0074F61A /* EditDocumentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDocumentView.swift; sourceTree = "<group>"; };
 		759257642759047D003C9826 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		759257662759047E003C9826 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ru; path = ru.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		7593B5C72864A129008925E6 /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
-		75948C8F2739202D00EB880E /* OldDocumentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OldDocumentViewModel.swift; sourceTree = "<group>"; };
 		75973026273A7D2600A105A7 /* Predefiened Field Options.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Predefiened Field Options.json"; sourceTree = "<group>"; };
 		75A021EC27343B53001484BA /* ShareSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheetView.swift; sourceTree = "<group>"; };
 		75A021EF27343E48001484BA /* Biometric Controller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Biometric Controller.swift"; sourceTree = "<group>"; };
@@ -298,14 +277,12 @@
 		75A1C925274FD0F400551645 /* PasswordGeneratorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordGeneratorView.swift; sourceTree = "<group>"; };
 		75A1C927274FDE1F00551645 /* Password Generator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Password Generator.swift"; sourceTree = "<group>"; };
 		75A1C929274FEB9F00551645 /* BackgroundCleanerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundCleanerView.swift; sourceTree = "<group>"; };
-		75A1C92B2750D65600551645 /* DuckButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuckButtonStyle.swift; sourceTree = "<group>"; };
 		75AB83E02733E2C9000618F1 /* Pill Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Pill Notification.swift"; sourceTree = "<group>"; };
 		75AB83E22733E77D000618F1 /* Notification.Name extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notification.Name extension.swift"; sourceTree = "<group>"; };
 		75ABFE1D2875BC3400AC485B /* DocSectionSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocSectionSection.swift; sourceTree = "<group>"; };
 		75ABFE1F2875BC9300AC485B /* NeuSectionTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeuSectionTitle.swift; sourceTree = "<group>"; };
 		75AF90ED28746FE300657490 /* NeuSectionBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeuSectionBackground.swift; sourceTree = "<group>"; };
 		75AF90EF2874734700657490 /* NeuRectButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeuRectButtonStyle.swift; sourceTree = "<group>"; };
-		75B130F72744061B0059F314 /* SizeUnits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeUnits.swift; sourceTree = "<group>"; };
 		75C5CFBC272C7C9200C90C3C /* FloatingTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingTextField.swift; sourceTree = "<group>"; };
 		75D414EA2726CA6700355AE7 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		75D414FB2728021700355AE7 /* DDDocument+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DDDocument+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -316,7 +293,6 @@
 		75D430822743EA7900D4EE2A /* VisualEffectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualEffectView.swift; sourceTree = "<group>"; };
 		75D792A32744FFC500396535 /* NoDocumentSelectedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoDocumentSelectedView.swift; sourceTree = "<group>"; };
 		75DD96C628733CFA00DFC342 /* FixedSpacer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedSpacer.swift; sourceTree = "<group>"; };
-		75DD96C82873492000DFC342 /* NeuRowButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeuRowButtonStyle.swift; sourceTree = "<group>"; };
 		75E178CC286B302C00349050 /* DuckDepo 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "DuckDepo 2.xcdatamodel"; sourceTree = "<group>"; };
 		75E178CD286B32EB00349050 /* AutoFillPasswordsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoFillPasswordsListView.swift; sourceTree = "<group>"; };
 		75E178CF286B336500349050 /* AutoFillPasswordsListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoFillPasswordsListViewModel.swift; sourceTree = "<group>"; };
@@ -327,8 +303,6 @@
 		75E178EC286EE29B00349050 /* DepoListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepoListView.swift; sourceTree = "<group>"; };
 		75E178EE286EE3EB00349050 /* DepoListRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepoListRowView.swift; sourceTree = "<group>"; };
 		75E178F0286EE43900349050 /* Neumorphic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Neumorphic.swift; sourceTree = "<group>"; };
-		75E178F2286EE8F500349050 /* NeumorphicRoundedButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeumorphicRoundedButtonStyle.swift; sourceTree = "<group>"; };
-		75E178F4286EECE500349050 /* LinearGradient Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LinearGradient Extension.swift"; sourceTree = "<group>"; };
 		75E452FF273BDDDF003AF1CE /* TitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleView.swift; sourceTree = "<group>"; };
 		75E8F82B2739544300DCF4BD /* CloudSharingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSharingView.swift; sourceTree = "<group>"; };
 		75E8F82D273981AA00DCF4BD /* EditFoldersViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFoldersViewState.swift; sourceTree = "<group>"; };
@@ -363,15 +337,10 @@
 			isa = PBXGroup;
 			children = (
 				75088876273E9736009A7D3B /* ColorfulIconLabelStyle.swift */,
-				75A1C92B2750D65600551645 /* DuckButtonStyle.swift */,
-				75102F5A285FA6A800464528 /* ListCellButtonStyle.swift */,
-				75E178F2286EE8F500349050 /* NeumorphicRoundedButtonStyle.swift */,
-				75DD96C82873492000DFC342 /* NeuRowButtonStyle.swift */,
 				75AF90EF2874734700657490 /* NeuRectButtonStyle.swift */,
 				7551B79928743F1D003D27D5 /* NeuCircleToggleButtonStyle.swift */,
 				758118202876E04C00C3017D /* NeuToggleStyle.swift */,
 				755A0207286EFD96004E499A /* NeuCircleButtonStyle.swift */,
-				755EFEBC2871E9F100544321 /* NeumorphicCircleToggleButtonStyle.swift */,
 				75E178F0286EE43900349050 /* Neumorphic.swift */,
 			);
 			path = Styles;
@@ -394,6 +363,7 @@
 				755759AA2730450800DA8B9A /* Document.swift */,
 				755759AC2730455600DA8B9A /* Folder.swift */,
 				75A1C915274F85A600551645 /* Password.swift */,
+				755E4833287D6BEE00DD045D /* DocumentType.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -401,18 +371,12 @@
 		7542D917272819A100DB7A95 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				7542D91C27283C9000DB7A95 /* Alert Extension.swift */,
-				755425CA272A9C4700733D64 /* VerticalLabelStyle.swift */,
 				751E9B47272AF7B1008D4D26 /* UIImage Extension.swift */,
 				753F1FE4272C019700804584 /* String Extension.swift */,
 				753F1FBE272BE56400804584 /* Color Extension.swift */,
 				753F1FE2272C008B00804584 /* Info Options.swift */,
-				753F1FE6272C0A9A00804584 /* CustomButtonStyle.swift */,
-				755759AE273045B900DA8B9A /* CoreDataConverter.swift */,
 				75AB83E22733E77D000618F1 /* Notification.Name extension.swift */,
-				75B130F72744061B0059F314 /* SizeUnits.swift */,
 				75A1C927274FDE1F00551645 /* Password Generator.swift */,
-				75E178F4286EECE500349050 /* LinearGradient Extension.swift */,
 				75DD96C628733CFA00DFC342 /* FixedSpacer.swift */,
 			);
 			path = Helpers;
@@ -578,7 +542,6 @@
 				75AB83E02733E2C9000618F1 /* Pill Notification.swift */,
 				75A1C90D274F825200551645 /* InitialInstructionsView.swift */,
 				75A1C925274FD0F400551645 /* PasswordGeneratorView.swift */,
-				758AB2B3285B79F400BF94B0 /* FloatingPickerView.swift */,
 				75102F6228607C0800464528 /* ImageViewer.swift */,
 				75AF90ED28746FE300657490 /* NeuSectionBackground.swift */,
 				75ABFE1F2875BC9300AC485B /* NeuSectionTitle.swift */,
@@ -650,8 +613,6 @@
 				75102F5C285FB36A00464528 /* DocumentView.swift */,
 				7545D7772875B4EE0008FE98 /* Subviews */,
 				75102F5E285FB37600464528 /* DocumentViewModel.swift */,
-				7574E8EC272AE66B0079B51C /* OldDocumentView.swift */,
-				75948C8F2739202D00EB880E /* OldDocumentViewModel.swift */,
 			);
 			path = "Document View";
 			sourceTree = "<group>";
@@ -853,8 +814,6 @@
 				755425C9272A98B500733D64 /* AddCell.swift in Sources */,
 				7509CEC72865A77900C7675F /* Keychain Controller.swift in Sources */,
 				7580B246273AA99A00F06F23 /* AppDelegate.swift in Sources */,
-				7574E8ED272AE66B0079B51C /* OldDocumentView.swift in Sources */,
-				75102F5B285FA6A800464528 /* ListCellButtonStyle.swift in Sources */,
 				75A1C90E274F825200551645 /* InitialInstructionsView.swift in Sources */,
 				75D430832743EA7900D4EE2A /* VisualEffectView.swift in Sources */,
 				75E178EB286B4DD500349050 /* AutofillInfoView.swift in Sources */,
@@ -864,19 +823,16 @@
 				7517B5B2285C7F8C00C5B8F5 /* DepoListViewModel.swift in Sources */,
 				7509CECB2865ABB400C7675F /* DuckDepo.xcdatamodeld in Sources */,
 				75ABFE1E2875BC3400AC485B /* DocSectionSection.swift in Sources */,
-				755EFEBD2871E9F100544321 /* NeumorphicCircleToggleButtonStyle.swift in Sources */,
 				755425CD272AA02200733D64 /* ImagePickerView.swift in Sources */,
 				7542D91F272845D600DB7A95 /* CoreDataEntity.swift in Sources */,
 				753F1FC5272BF3B500804584 /* DDField+CoreDataProperties.swift in Sources */,
 				75A1C906274F7F2C00551645 /* PasswordView.swift in Sources */,
 				753F1FE5272C019700804584 /* String Extension.swift in Sources */,
-				758AB2B4285B79F400BF94B0 /* FloatingPickerView.swift in Sources */,
 				75A1C908274F7F8F00551645 /* PasswordViewModel.swift in Sources */,
 				75A1C918274F8C7400551645 /* BindableFloatingTextField.swift in Sources */,
 				75A1C916274F85A600551645 /* Password.swift in Sources */,
 				75A1C926274FD0F400551645 /* PasswordGeneratorView.swift in Sources */,
 				75E178ED286EE29B00349050 /* DepoListView.swift in Sources */,
-				75A1C92C2750D65700551645 /* DuckButtonStyle.swift in Sources */,
 				75AF90EE28746FE300657490 /* NeuSectionBackground.swift in Sources */,
 				755759A22730242600DA8B9A /* PhotosSectionView.swift in Sources */,
 				75A1C913274F84C600551645 /* EditPasswordViewModel.swift in Sources */,
@@ -895,36 +851,29 @@
 				75D4307F2743BE6000D4EE2A /* OverviewSection.swift in Sources */,
 				756AF0B92726C324001CB821 /* Persistence Controller.swift in Sources */,
 				7542D92127284F4C00DB7A95 /* AddNewView.swift in Sources */,
-				75948C902739202D00EB880E /* OldDocumentViewModel.swift in Sources */,
-				75DD96C92873492000DFC342 /* NeuRowButtonStyle.swift in Sources */,
 				75A1C90B274F814100551645 /* DDPassword+CoreDataClass.swift in Sources */,
 				75A1C91E274FAD5400551645 /* FormButton.swift in Sources */,
 				7508887A273EA21D009A7D3B /* BiometricSection.swift in Sources */,
-				7542D91D27283C9000DB7A95 /* Alert Extension.swift in Sources */,
-				75E178F3286EE8F500349050 /* NeumorphicRoundedButtonStyle.swift in Sources */,
 				751E9B48272AF7B1008D4D26 /* UIImage Extension.swift in Sources */,
 				75D414FD2728021700355AE7 /* DDDocument+CoreDataClass.swift in Sources */,
 				7551B79A28743F1D003D27D5 /* NeuCircleToggleButtonStyle.swift in Sources */,
 				758118212876E04C00C3017D /* NeuToggleStyle.swift in Sources */,
-				755759AF273045B900DA8B9A /* CoreDataConverter.swift in Sources */,
 				756AF0B22726C320001CB821 /* ContentView.swift in Sources */,
 				7545D7792875B4FF0008FE98 /* DocTitleSection.swift in Sources */,
 				756AF0B02726C320001CB821 /* DuckDepoApp.swift in Sources */,
 				755425CF272AA10400733D64 /* PhotoCell.swift in Sources */,
 				75A021F227347E86001484BA /* DataBase.swift in Sources */,
 				75ED53B32869A1D6009FE1E2 /* AppProgressView.swift in Sources */,
-				75B130F82744061B0059F314 /* SizeUnits.swift in Sources */,
 				75E178E9286B4CD000349050 /* HelpSection.swift in Sources */,
+				755E4834287D6BEE00DD045D /* DocumentType.swift in Sources */,
 				75A021F027343E48001484BA /* Biometric Controller.swift in Sources */,
 				75102F5F285FB37600464528 /* DocumentViewModel.swift in Sources */,
 				7542D9162728122E00DB7A95 /* EditFoldersView.swift in Sources */,
-				753F1FE7272C0A9A00804584 /* CustomButtonStyle.swift in Sources */,
 				755425D7272ACC8D00733D64 /* CameraPickerView.swift in Sources */,
 				75088877273E9736009A7D3B /* ColorfulIconLabelStyle.swift in Sources */,
 				75A1C91C274FA66300551645 /* PasswordsStorage.swift in Sources */,
 				753F1FDA272BF5F000804584 /* DDSection+CoreDataClass.swift in Sources */,
 				7581182528770BF000C3017D /* NeuNavigationCloseButton.swift in Sources */,
-				755425CB272A9C4700733D64 /* VerticalLabelStyle.swift in Sources */,
 				75D4150427280F6400355AE7 /* SettingsView.swift in Sources */,
 				753F1FE3272C008B00804584 /* Info Options.swift in Sources */,
 				75A140D32869D3F4004A47A8 /* PasswordsListView.swift in Sources */,
@@ -937,7 +886,6 @@
 				75102F5D285FB36A00464528 /* DocumentView.swift in Sources */,
 				75A1C911274F84B500551645 /* EditPasswordView.swift in Sources */,
 				75A140D52869F5CB004A47A8 /* CredentialIdentityStoreController.swift in Sources */,
-				75E178F5286EECE500349050 /* LinearGradient Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -950,7 +898,6 @@
 				75821E53286B0209009F8C5E /* DDPassword+CoreDataClass.swift in Sources */,
 				758118222876E0A700C3017D /* NeuToggleStyle.swift in Sources */,
 				75821E4E286AFF7F009F8C5E /* Password.swift in Sources */,
-				75E178D8286B3F9A00349050 /* DuckButtonStyle.swift in Sources */,
 				75E178DA286B3FB400349050 /* FormButton.swift in Sources */,
 				75821E4D286AFF43009F8C5E /* PasswordsStorage.swift in Sources */,
 				75E178D6286B3F8A00349050 /* PasswordGeneratorView.swift in Sources */,
@@ -976,6 +923,7 @@
 				75821E5F286B026E009F8C5E /* DDField+CoreDataClass.swift in Sources */,
 				75E178E2286B41A700349050 /* Notification.Name extension.swift in Sources */,
 				75821E4C286AFF3E009F8C5E /* DataBase.swift in Sources */,
+				755E4835287D6C6900DD045D /* DocumentType.swift in Sources */,
 				75E178CE286B32EB00349050 /* AutoFillPasswordsListView.swift in Sources */,
 				75821E52286B0205009F8C5E /* DDDocument+CoreDataClass.swift in Sources */,
 				75821E5A286B023E009F8C5E /* DocSection.swift in Sources */,
@@ -1183,7 +1131,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.3;
+				MARKETING_VERSION = 2.4;
 				PRODUCT_BUNDLE_IDENTIFIER = DuckDepo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = NO;
@@ -1222,7 +1170,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.3;
+				MARKETING_VERSION = 2.4;
 				PRODUCT_BUNDLE_IDENTIFIER = DuckDepo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = NO;

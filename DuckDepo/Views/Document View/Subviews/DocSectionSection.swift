@@ -17,17 +17,12 @@ struct DocSectionSection: View {
                 VStack {
                     ForEach(0..<section.fields.count, id: \.self) { index in
                         let field = section.fields[index]
-                        if let fieldTitle = field.title, let fieldValue = field.value {
                             VStack {
-                                FloatingTextView(title: fieldTitle, value: fieldValue)
+                                FloatingTextView(title: field.title, value: field.value)
                                 if index != section.fields.count - 1 {
                                     Divider()
                                 }
                             }
-//                            .padding(.horizontal, 16)
-//                            .padding(.vertical, 12)
-
-                        }
                     }
                 }
                 .padding(.horizontal, 16)
