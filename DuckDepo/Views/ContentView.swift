@@ -21,16 +21,20 @@ struct ContentView: View {
    
     var body: some View {
             TabView {
-                DepoListView().tabItem {
-                    Label("Depo", systemImage: "archivebox")
-                }.tag(1)
-                PasswordsListView().tabItem {
-                    Label("Passwords", systemImage: "key.fill")
-                }.tag(2)
-                SettingsView().tabItem {
-                    Label("Settings", systemImage: "gear")
-                }.tag(3)
+                DepoListView(viewModel: DepoListViewModel())
+                    .tabItem {
+                        Label("Depo", systemImage: "archivebox")
+                    }.tag(1)
+                PasswordsListView(viewModel: PasswordsListViewModel())
+                    .tabItem {
+                        Label("Passwords", systemImage: "key.fill")
+                    }.tag(2)
+                SettingsView()
+                    .tabItem {
+                        Label("Settings", systemImage: "gear")
+                    }.tag(3)
             }
+            .tint(.duckYellow)
             .onReceive(NotificationCenter.default.publisher(for: .floatingTextFieldCopyNotification)) { _ in
                 isShowingCopyNotification = true
             }

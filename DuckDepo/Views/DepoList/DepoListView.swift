@@ -9,16 +9,11 @@ import SwiftUI
 
 struct DepoListView: View {
     
-    @StateObject private var viewModel: DepoListViewModel = DepoListViewModel()
-    
-    @State var position: CGSize = CGSize.zero
+    @StateObject var viewModel: DepoListViewModel
     
     var body: some View {
-        NavigationView {
+        NavigationSplitView {
             ZStack {
-                Color.neumorphicBackground
-                    .ignoresSafeArea()
-
                 if viewModel.documents.isEmpty {
                     InitialInstructionsView(type: .documents)
                 } else {
@@ -26,56 +21,52 @@ struct DepoListView: View {
                 }
             }
             .navigationTitle("🦆 Depo")
-            .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        viewModel.addNewDocumentButtonPressed()
-                    }) {
+                    Button(action: viewModel.addNewDocumentButtonPressed) {
                         Image(systemName: "plus")
-                            .font(.footnote)
-                            .padding(7)
                     }
-                    .buttonStyle(NeuCircleButtonStyle())
                 }
             }
-
+        } detail: {
             NoSelectionViewView(type: .document)
         }
-
         .fullScreenCover(isPresented: $viewModel.isAddingNewDocument) {
             EditDocumentView(type: .new)
         }
-
     }
+
 }
 
 extension DepoListView {
+    
     private var listView: some View {
-        ScrollView {
+        List(viewModel.documents) { document in
             VStack(spacing: 6) {
-                ForEach(viewModel.documents) { document in
-                    NavigationLink(tag: document, selection: $viewModel.selectedDocument) {
+                    NavigationLink(value: document) {
+                        DepoListRowView(icon: document.documentType.image,
+                                        iconColor: document.documentType.iconColor,
+                                        name: document.name,
+                                        description: document.description)
+                    }
+                    .navigationDestination(for: Document.self) { document in
                         DocumentView(document: document)
-                    } label: {
-                        EmptyView()
                     }
-                    DepoListRowView(image: document.documentType.image,
-                                    iconColor: document.documentType.iconColor,
-                                    name: document.name,
-                                    description: document.description) {
-                        viewModel.selectedDocument = document
-                    }
-                }
-                FixedSpacer(16)
             }
         }
     }
+    
 }
 
-
 struct DepoListView_Previews: PreviewProvider {
+    
+    static var viewModel: DepoListViewModel {
+        let viewModel = DepoListViewModel()
+        viewModel.documents = Array(repeating: Document.test, count: 2)
+        return viewModel
+    }
+    
     static var previews: some View {
-        DepoListView()
+        DepoListView(viewModel: Self.viewModel)
     }
 }

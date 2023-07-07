@@ -15,47 +15,40 @@ struct BiometricSection: View {
     
     var body: some View {
         Section {
-            ZStack {
                 VStack {
                     if BiometricController.shared.deviceHasPasscode() {
                         HStack {
                             Label(biometricToggleTitle, systemImage: biometricToggleImage)
                                 .labelStyle(ColorfulIconLabelStyle(color: .green, size: size))
-                            Spacer()
+
                             Toggle("", isOn: $isBiometryEnabled)
-                                .toggleStyle(NeuToggleStyle())
+                                .tint(.duckYellow)
                         }
                         
+                        VStack {
                             Divider()
                             HStack {
                                 Text("sv_ask_after")
                                     .opacity(isBiometryEnabled ? 1 : 0.4)
-                                Spacer()
+                                
                                 ZStack {
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .fill(Color.neumorphicBackground)
-                                        .layoutPriority(-1)
                                     Picker("", selection: $biometryDelay) {
                                         ForEach(BiometricController.BiometricDelay.allCases, id: \.self) { option in
                                             Text(biometricDelayCasesText(option))
                                         }
                                     }
-                                    .padding(.horizontal, 8)
+                                    .pickerStyle(.menu)
                                 }
-                                .neumorphicOuter()
                             }
-                            .padding(.top, 8)
                             .disabled(!isBiometryEnabled)
+                        }
                     } else {
                         Text("sv_passcode_not_set")
                             .font(.caption)
                     }
                 }
-                .padding(16)
-                NeuSectionBackground()
-            }
         } header: {
-            NeuSectionTitle(title: "sv_security".localized())
+            Text("sv_security")
         }
     }
     
@@ -101,11 +94,10 @@ struct BiometricSection: View {
 }
 
 struct BiometricSection_Previews: PreviewProvider {
+    
     static var previews: some View {
-        ScrollView {
-            VStack {
-                BiometricSection(isBiometryEnabled: .constant(true), biometryDelay: .constant(.none))
-            }
+        List {
+            BiometricSection(isBiometryEnabled: .constant(true), biometryDelay: .constant(.none))
         }
         .preferredColorScheme(.dark)
     }

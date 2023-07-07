@@ -13,25 +13,10 @@ struct AutoFillPasswordsListView: View {
     @StateObject var viewModel: AutoFillPasswordsListViewModel
     var onClose: (()->())?
     var onSelect: ((Password)->())?
-    
-    init(identifiers: [String], onClose: (()->())?, onSelect: ((Password)->())?) {
-        self._viewModel = StateObject(wrappedValue: AutoFillPasswordsListViewModel(identifiers: identifiers))
-        self.onClose = onClose
-        self.onSelect = onSelect
-    }
-    
+        
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ZStack {
-                Color.neumorphicBackground
-                    .ignoresSafeArea()
-                
-                if let password = viewModel.selectedPassword {
-                    NavigationLink(isActive: $viewModel.showPasswordView) {
-                        AutoFillPasswordView(password: password)
-                    } label: { EmptyView() }
-                }
-                
                 if !viewModel.passwords.isEmpty {
                     listView()
                 } else {
@@ -41,7 +26,7 @@ struct AutoFillPasswordsListView: View {
             .navigationTitle("af_nav_title")
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    NeuNavigationCloseButton() {
+                    CloseButton() {
                         onClose?()
                     }
                 }
@@ -50,79 +35,61 @@ struct AutoFillPasswordsListView: View {
                         viewModel.addNewPasswordButtonPressed()
                     } label: {
                         Image(systemName: "plus")
-                            .font(.footnote)
-                            .padding(7)
                     }
-                    .buttonStyle(NeuCircleButtonStyle())
                 }
             }
             .fullScreenCover(isPresented: $viewModel.isAddingNewPassword) {
                 EditPasswordView(type: .new)
             }
-            
+            .sheet(item: $viewModel.selectedPassword) { password in
+                NavigationStack {
+                    PasswordView(password: password)
+                }
+                    .presentationDragIndicator(.visible)
+            }
         }
+        .tint(.duckYellow)
     }
     
     private func listView() -> some View {
-        ScrollView {
-            VStack(spacing: 12) {
+        List {
+            if !viewModel.recomendedPasswords.isEmpty {
                 Section  {
                     ForEach(viewModel.recomendedPasswords) { password in
                         row(for: password)
                     }
                 } header: {
-                    NeuSectionTitle(title: "af_recommended_passwords".localized())
+                    Text("af_recommended_passwords")
                 }
-                
-                FixedSpacer(16)
-                Section  {
-                    ForEach(viewModel.passwords) { password in
-                        row(for: password)
-                    }
-                } header: {
-                    NeuSectionTitle(title: "af_all_passwords".localized())
-                }
-                
             }
-            .padding(16)
+            Section  {
+                ForEach(viewModel.passwords) { password in
+                    row(for: password)
+                }
+            } header: {
+                Text("af_all_passwords")
+            }
         }
     }
     
     func row(for password: Password) -> some View {
         HStack {
-            
             Button {
                 onSelect?(password)
             } label: {
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text(password.name)
-                            .foregroundColor(.duckText)
-                        if !password.login.isEmpty {
-                            Text(password.login)
-                                .foregroundColor(.duckText)
-                                .font(.caption)
-                        }
-                    }
-                    .padding(16)
-                    Spacer()
-                }
+                PasswordRow(name: password.name, login: password.login)
             }
-            .buttonStyle(NeuRectButtonStyle())
-            .padding(.trailing, 8)
             
+            Spacer()
             
             Button {
                 viewModel.showPassword(password)
             } label: {
                 Image(systemName: "info")
-                    .foregroundColor(.neumorphicButtonText)
-                    .font(.footnote)
-                    .padding(.horizontal, 9)
-                    .padding(.vertical, 7)
+                    .foregroundColor(.duckYellow)
+                    .bold()
             }
-            .buttonStyle(NeuCircleButtonStyle())
-            
+            .buttonStyle(.plain)
         }
     }
     
@@ -130,7 +97,14 @@ struct AutoFillPasswordsListView: View {
 }
 
 struct AutoFillPasswordsListView_Previews: PreviewProvider {
+    
+    static var viewModel: AutoFillPasswordsListViewModel {
+        let viewModel = AutoFillPasswordsListViewModel(identifiers: [])
+        viewModel.passwords = Array(repeating: Password.test, count: 2)
+        return viewModel
+    }
+    
     static var previews: some View {
-        AutoFillPasswordsListView(identifiers: [String](), onClose: nil, onSelect: nil)
+        AutoFillPasswordsListView(viewModel: viewModel, onClose: nil, onSelect: nil)
     }
 }

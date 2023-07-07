@@ -24,21 +24,17 @@ struct EditPasswordView: View {
     
     var body: some View {
         NavigationView {
-            ZStack {
-                Color.neumorphicBackground
-                    .ignoresSafeArea()
-                
-                contentView()
-            }
+                contentView
             .onChange(of: viewModel.shouldCloseView, perform: closeAction)
             .navigationTitle(viewModel.viewTitle)
             .navigationBarTitleDisplayMode(.inline)
-            .navigationBarItems(leading: closeButton(),
-                                trailing: deleteButton())
-            .fullScreenCover(isPresented: $isShowingPassGenerator, content: {
+            .navigationBarItems(leading: closeButton,
+                                trailing: deleteButton)
+            .sheet(isPresented: $isShowingPassGenerator) {
                 passGenerationView
-                    .background(BackgroundCleanerView())
-            })
+                    .presentationDragIndicator(.visible)
+                    .presentationDetents([.height(350)])
+            }
             .alert("epv_delete_alert_title", isPresented: $isShowingDeleteAlert, actions: {
                 Button("epv_delete_alert_delete", role: .destructive, action: deleteAlertAction)
             }, message: {
@@ -46,107 +42,7 @@ struct EditPasswordView: View {
             })
             
         }
-        .overlay(isShowingPassGenerator ? Color.neumorphicBackground.opacity(0.8) : Color.clear)
         .animation(.default, value: isShowingPassGenerator)
-    }
-    
-    private func contentView() -> some View {
-        ScrollView {
-            VStack {
-                nameSection()
-                FixedSpacer(25)
-                credentialsSection()
-                FixedSpacer(25)
-                websiteSection()
-                FixedSpacer(25)
-                AddButtonView(title: viewModel.saveButtonTitle) {
-                    viewModel.addNewPasswordButtonAction()
-                }
-                .disabled(viewModel.passwordName.isEmpty)
-            }
-            .padding(16)
-        }
-        
-    }
-    
-    private func nameSection() -> some View {
-        Section {
-            ZStack {
-                BindableFloatingTextField(title: "epv_name".localized(), value: $viewModel.passwordName)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
-
-                NeuSectionBackground()
-            }
-        } header: {
-            NeuSectionTitle(title: "epv_general_information".localized())
-        }
-    }
-    
-    private func credentialsSection() -> some View {
-        Section {
-            ZStack {
-                VStack {
-                    BindableFloatingTextField(title: "epv_login".localized(), value: $viewModel.passwordLogin)
-                    Divider()
-                    HStack {
-                        BindableFloatingTextField(title: "epv_password".localized(), value: $viewModel.passwordValue)
-                        FormButton(action: {
-                            isShowingPassGenerator = true
-                        }, imageSystemName: "wand.and.stars.inverse")
-                    }
-                }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
-
-                NeuSectionBackground()
-            }
-        } header: {
-            NeuSectionTitle(title: "epv_credentials".localized())
-        }
-    }
-    
-    private func websiteSection() -> some View {
-        Section {
-            ZStack {
-                VStack {
-                    BindableFloatingTextField(title: "epv_website".localized(), value: $viewModel.passwordWebsite, keyboardType: .URL)
-                }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
-
-                NeuSectionBackground()
-            }
-        } header: {
-            NeuSectionTitle(title: "epv_additional_information".localized())
-        }
-    }
-    
-    var passGenerationView: some View {
-        PasswordGeneratorView(isPresented: $isShowingPassGenerator, onAction: { generatedPassword in
-            viewModel.passwordValue = generatedPassword
-            isShowingPassGenerator = false
-        })
-        
-    }
-    
-    private func closeButton() -> some View {
-        NeuNavigationCloseButton() {
-            dismiss()
-        }
-    }
-    
-    private func deleteButton() -> some View {
-        Group {
-            if case .existing(_) = viewModel.type {
-                Button(action: deleteButtonAction) {
-                    Image(systemName: "trash.fill")
-                        .font(.footnote)
-                        .padding(6)
-                }
-                .buttonStyle(NeuCircleButtonStyle())
-            }
-        }
     }
     
     func deleteButtonAction() {
@@ -163,19 +59,95 @@ struct EditPasswordView: View {
             dismiss()
         }
     }
-
+    
 }
 
+extension EditPasswordView {
+    
+    private var contentView: some View {
+        List {
+            nameSection
+            
+            credentialsSection
+            
+            websiteSection
+            
+            AddButtonView(title: viewModel.saveButtonTitle) {
+                viewModel.addNewPasswordButtonAction()
+            }
+            .disabled(viewModel.passwordName.isEmpty)
+        }
+        .listStyle(.insetGrouped)
+    }
+    
+    private var nameSection: some View {
+        Section {
+            BindableFloatingTextField(title: "epv_name".localized(), value: $viewModel.passwordName)
+        } header: {
+            Text("epv_general_information")
+        }
+    }
+    
+    private var credentialsSection: some View {
+        Section {
+                VStack {
+                    BindableFloatingTextField(title: "epv_login".localized(), value: $viewModel.passwordLogin)
+                    
+                    Divider()
+                    
+                    HStack {
+                        BindableFloatingTextField(title: "epv_password".localized(), value: $viewModel.passwordValue)
+                        
+                        Button {
+                            isShowingPassGenerator = true
+                        } label: {
+                            Image(systemName: "wand.and.stars.inverse")
+                                .foregroundColor(.duckYellow)
+                                .bold()
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+        } header: {
+            Text("epv_credentials")
+        }
+    }
+    
+    private var websiteSection: some View {
+        Section {
+                VStack {
+                    BindableFloatingTextField(title: "epv_website".localized(), value: $viewModel.passwordWebsite, keyboardType: .URL)
+                }
+        } header: {
+            Text("epv_additional_information")
+        }
+    }
+    
+    private var closeButton: some View {
+        CloseButton {
+            dismiss()
+        }
+    }
+    
+    @ViewBuilder
+    private var deleteButton: some View {
+        if case .existing(_) = viewModel.type {
+            Button(action: deleteButtonAction) {
+                Image(systemName: "trash.fill")
+            }
+        }
+    }
+    
+    private var passGenerationView: some View {
+        PasswordGeneratorView(isPresented: $isShowingPassGenerator) { generatedPassword in
+            viewModel.passwordValue = generatedPassword
+            isShowingPassGenerator = false
+        }
+        .padding(.top, 20)
+        .padding()
+    }
 
-
-//struct NameSection: View {
-//
-//    @ObservedObject var viewModel: EditPasswordView.ViewModel
-//
-//    var body: some View {
-//
-//    }
-//}
+}
 
 struct EditPasswordView_Previews: PreviewProvider {
     static var previews: some View {

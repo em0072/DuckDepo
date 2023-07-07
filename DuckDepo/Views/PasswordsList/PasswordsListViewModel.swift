@@ -33,5 +33,4 @@ class PasswordsListViewModel: ObservableObject {
         isAddingNewPassword = true
     }
 
-    
 }

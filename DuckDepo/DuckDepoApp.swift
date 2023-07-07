@@ -37,9 +37,10 @@ struct DuckDepoApp: App {
                 ZStack {
                     ContentView()
                         .environment(\.managedObjectContext, PersistenceController.shared.context)
-                    VisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
-                        .ignoresSafeArea()
-                        .opacity(biometricController.isUnlocked ? 0 : 1)
+                        .overlay(
+                            .ultraThinMaterial
+                            .opacity(biometricController.isUnlocked ? 0 : 1)
+                        )
                 }
                 .animation(.default, value: biometricController.isUnlocked)
                 

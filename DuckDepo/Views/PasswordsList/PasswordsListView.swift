@@ -9,76 +9,69 @@ import SwiftUI
 
 struct PasswordsListView: View {
         
-    @StateObject var viewModel = PasswordsListViewModel()
+    @StateObject var viewModel: PasswordsListViewModel
     
     var body: some View {
-        NavigationView {
-                ZStack {
-                    Color.neumorphicBackground
-                        .ignoresSafeArea()
-
-                    if !viewModel.passwords.isEmpty {
-                        listView()
-                    } else {
-                        InitialInstructionsView(type: .passwords)
-                    }
-                }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        viewModel.isAddingNewPassword = true
-                    } label: {
-                        Image(systemName: "plus")
-                            .font(.footnote)
-                            .padding(7)
-                    }
-                    .buttonStyle(NeuCircleButtonStyle())
+        NavigationSplitView {
+            ZStack {
+                if viewModel.passwords.isEmpty {
+                    InitialInstructionsView(type: .passwords)
+                } else {
+                    listView
                 }
             }
             .navigationTitle("plv_title")
-            .fullScreenCover(isPresented: $viewModel.isAddingNewPassword) {
-                EditPasswordView(type: .new)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: viewModel.addNewPasswordButtonPressed) {
+                        Image(systemName: "plus")
+                    }
+                }
             }
+        } detail: {
             NoSelectionViewView(type: .password)
+        }
+        .fullScreenCover(isPresented: $viewModel.isAddingNewPassword) {
+            EditPasswordView(type: .new)
         }
     }
     
-    
-    private func listView() -> some View {
-        ScrollView {
-            VStack(spacing: 6) {
-                    ForEach(viewModel.passwords) { password in
-                        NavigationLink(tag: password, selection: $viewModel.selectedPassword) {
-                            PasswordView(password: password)
-                        } label: {EmptyView()}
-                        
-                        Button {
-                            viewModel.selectedPassword = password
-                        } label: {
-                            HStack {
-                                VStack(alignment: .leading) {
-                                    Text(password.name)
-                                        .foregroundColor(.duckText)
-                                    if !password.login.isEmpty {
-                                        Text(password.login)
-                                            .foregroundColor(.duckText)
-                                            .font(.caption)
-                                    }
-                                }
-                                Spacer()
-                            }
-                            .padding(14)
-                        }
-                        .buttonStyle(NeuRectButtonStyle())
-                    }
-                }
-                .padding(16)
+}
+
+extension PasswordsListView {
+    private var listView: some View {
+        List(viewModel.passwords) { password in
+            NavigationLink(value: password) {
+                PasswordRow(name: password.name, login: password.login)
+            }
+            .navigationDestination(for: Password.self) { password in
+                PasswordView(password: password)
+            }
         }
+    }
+    
+    private func passwordRowView(name: String, login: String) -> some View {
+        VStack(alignment: .leading) {
+            Text(name)
+                .foregroundColor(.primary)
+            if !login.isEmpty {
+                Text(login)
+                    .foregroundColor(.secondary)
+                    .font(.caption)
+            }
+        }
+        .padding(.vertical, 2)
     }
 }
 
 struct NewPasswordsListView_Previews: PreviewProvider {
+    static var viewModel: PasswordsListViewModel {
+        let viewModel = PasswordsListViewModel()
+        viewModel.passwords = Array(repeating: Password(name: "Name", login: "@login"), count: 2)
+        return viewModel
+    }
+    
     static var previews: some View {
-        PasswordsListView()
+        PasswordsListView(viewModel: Self.viewModel)
     }
 }

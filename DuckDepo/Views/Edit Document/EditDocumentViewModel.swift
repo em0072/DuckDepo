@@ -17,19 +17,12 @@ extension EditDocumentView {
                         
         private let db: DataBase = DataBase.shared
         
-//        @Published var folders: [DDFolder] = [DDFolder]()
         @Published var document: Document = Document()
+        
         @Published var shouldCloseView: Bool = false
         
         var inputOption: InputOption = InputOption()
         var type: DocumentType
-//        = .new {
-//            didSet {
-//                if case .existing(let document) = type {
-//                    updateViewWith(document: document)
-//                }
-//            }
-//        }
                 
         var view: EditDocumentView?
         
@@ -64,8 +57,7 @@ extension EditDocumentView {
             shouldCloseView = true
         }
                                 
-        //MARK: -Name & Folder
-        
+        //MARK: - Name & Folder
         var viewTitle: LocalizedStringKey {
             switch type {
             case .new:
@@ -81,7 +73,7 @@ extension EditDocumentView {
         //MARK: Functions
 
         
-        //MARK: -Photo Section
+        //MARK: - Photo Section
         //MARK: State
         @Published var showingImageViewer: Bool = false
         @Published var imageViewerImage: UIImage?
@@ -89,8 +81,7 @@ extension EditDocumentView {
         //MARK: Functions
         
         
-        //MARK: -Add Button
-        
+        //MARK: - Add Button
         var saveButtonTitle: String {
             switch type {
             case .new:
@@ -110,7 +101,7 @@ extension EditDocumentView {
     }
 }
 
-// MARK: -PhotosSectionViewDelegate
+// MARK: -  PhotosSectionViewDelegate
 extension EditDocumentView.ViewModel: PhotosSectionViewDelegate {
     
     func delete(photo: UIImage) {
@@ -138,7 +129,7 @@ extension EditDocumentView.ViewModel: PhotosSectionViewDelegate {
 }
 
 
-// MARK: -SectionsViewDelegate
+// MARK: - SectionsViewDelegate
 extension EditDocumentView.ViewModel: SectionViewDelegate {
     func valueChanged(for field: Field, newValue: String) {
         for i in 0..<document.sections.count {
@@ -181,8 +172,6 @@ extension EditDocumentView.ViewModel: SectionViewDelegate {
         }
     }
     
-    
-    
 }
 
 
@@ -204,6 +193,5 @@ extension EditDocumentView.ViewModel: AddSectionMenuDelegate {
         }
         return false
     }
-    
     
 }

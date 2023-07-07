@@ -17,37 +17,28 @@ struct PasswordView: View {
     }
 
     var body: some View {
-        ZStack {
-            Color.neumorphicBackground
-                .ignoresSafeArea()
-            
-            contentView()
-                .padding(16)
+        List {
+            credentialsSection
+
+            websiteSection
         }
         .navigationBarTitle(viewModel.password.name)
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItemGroup(placement: .navigationBarTrailing) {
                 
                 Button(action: shareAlert) {
                     Image(systemName: "square.and.arrow.up")
-                        .font(.caption)
-                        .padding(.vertical, 6)
-                        .padding(.horizontal, 7)
                 }
-                .buttonStyle(NeuCircleButtonStyle())
-                .padding(.trailing, 5)
                 
                 Button(action: editButtonAction) {
                     Image(systemName: "pencil")
-                        .font(.footnote)
-                        .padding(7)
                 }
-                .buttonStyle(NeuCircleButtonStyle())
             }
             
         }
         .alert("pv_share_alert_title", isPresented: $viewModel.showShareAlert, actions: {
-            Button("pv_share_alert_button", role: .destructive, action: sharePassword)
+            Button("pv_share_alert_button", role: .destructive, action: viewModel.sharePassword)
         }, message: {
             Text("pv_share_alert_body")
         })
@@ -61,118 +52,11 @@ struct PasswordView: View {
         .fullScreenCover(isPresented: $viewModel.isEditingPassword) {
             EditPasswordView(type: .existing(viewModel.password), delegate: viewModel)
         }
-
     }
-    
-    private func contentView() -> some View {
-        ScrollView {
-            credentialsSection()
-            FixedSpacer(25)
-            websiteSection()
-        }
-    }
-    
-    private func credentialsSection() -> some View {
-        Section {
-            ZStack {
-                VStack {
-                    if viewModel.shouldShowCredentialsSection {
-                        loginView()
-                        passwordView()
-                    } else {
-                        Text("pv_empty_credentials")
-                    }
-                }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
-
-                NeuSectionBackground()
-            }
-        } header: {
-            NeuSectionTitle(title: "pv_credentials".localized())
-        }
-    }
-    
-    @ViewBuilder
-    private func loginView() -> some View {
-        if viewModel.isLoginExist {
-            FloatingTextView(title: "pv_login".localized(), value: viewModel.password.login)
-        }
-    }
-        
-    @ViewBuilder
-    private func passwordView() -> some View {
-        if viewModel.isPasswordExist {
-            Divider()
-            HStack {
-                ZStack {
-                    FloatingTextView(title: "pv_password".localized(), value: viewModel.password.value, isVisible: $viewModel.isPasswordVisible)
-                }
-                Button(action: togglePasswordVisibility) {
-                    Image(systemName: viewModel.isPasswordVisible ? "eye.slash" : "eye")
-                        .font(.footnote)
-                        .padding(.vertical, 10)
-                        .padding(.horizontal, 7)
-                }
-                .buttonStyle(NeuCircleButtonStyle())
-            }
-        }
-    }
-    
-    @ViewBuilder private func websiteSection() -> some View {
-        if viewModel.isWebsiteExist {
-            Section {
-                ZStack {
-                    VStack {
-                    FloatingTextView(title: "pv_website".localized(), value: viewModel.password.website, url: viewModel.password.websiteURL)
-                    }
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
-
-                    NeuSectionBackground()
-                }
-            } header: {
-                NeuSectionTitle(title: "pv_additional_information".localized())
-            }
-        }
-    }
-    
-    private func sharePassword() {
-        var shareString: String = ""
-        if viewModel.isNameExist {
-            shareString.append("pv_share_details_title".localized())
-            shareString.append(viewModel.password.name)
-            shareString.append("\n\n")
-        }
-        if viewModel.isLoginExist {
-            shareString.append("Login: ")
-            shareString.append(viewModel.password.login)
-            shareString.append("\n\n")
-        }
-        if viewModel.isPasswordExist {
-            shareString.append("Password: ")
-            shareString.append(viewModel.password.value)
-            shareString.append("\n\n")
-        }
-        if viewModel.isWebsiteExist {
-            shareString.append("Website: ")
-            shareString.append(viewModel.password.website)
-            shareString.append("\n\n")
-        }
-
-        shareString.append("pv_share_caption".localized())
-        shareString.append("\n")
-        shareString.append("https://DuckDepo.com")
-        share(items: [shareString])
-    }
+                    
     
     private func shareAlert() {
         viewModel.showShareAlert = true
-    }
-    
-    private func share(items: [Any]) {
-        viewModel.itemsToShare = items
-        viewModel.showShareSheetView = true
     }
 
     
@@ -190,16 +74,72 @@ struct PasswordView: View {
     }
 }
 
+extension PasswordView {
+
+    private var credentialsSection: some View {
+        Section {
+                VStack {
+                    if viewModel.shouldShowCredentialsSection {
+                        loginView
+                        if viewModel.isLoginExist && viewModel.isPasswordExist {
+                            Divider()
+                        }
+                        passwordView
+                    } else {
+                        Text("pv_empty_credentials")
+                    }
+                }
+        } header: {
+            Text("pv_credentials")
+        }
+    }
+    
+    @ViewBuilder
+    private var loginView: some View {
+        if viewModel.isLoginExist {
+            FloatingTextView(title: "pv_login".localized(), value: viewModel.password.login)
+        }
+    }
+
+    @ViewBuilder
+    private var passwordView: some View {
+        if viewModel.isPasswordExist {
+            HStack {
+                ZStack {
+                    FloatingTextView(title: "pv_password".localized(), value: viewModel.password.value, isVisible: $viewModel.isPasswordVisible)
+                }
+                Button(action: togglePasswordVisibility) {
+                    Image(systemName: viewModel.isPasswordVisible ? "eye.slash" : "eye")
+                }
+                .tint(.duckYellow)
+                .buttonStyle(.plain)
+            }
+        }
+    }
+
+    @ViewBuilder
+        private var websiteSection: some View {
+        if viewModel.isWebsiteExist {
+            Section {
+                FloatingTextView(title: "pv_website".localized(), value: viewModel.password.website, url: viewModel.password.websiteURL)
+            } header: {
+                Text("pv_additional_information")
+            }
+        }
+    }
+
+}
+
 struct PasswordView_Previews: PreviewProvider {
     
     static var demoPassword: Password {
         let id = UUID()
-        let pass = Password(id: id, name: "Demo Name", login: "login@login.com", value: "sTr0nG Pa$$w0rD", website: "apple.com")
+        let pass = Password(id: id, name: "Demo Name", login: "login@website.com", value: "sTr0nG Pa$$w0rD", website: "apple.com")
         return pass
     }
     
     static var previews: some View {
-        NavigationView {
+        NavigationStack {
             PasswordView(password: PasswordView_Previews.demoPassword)
         }
     }

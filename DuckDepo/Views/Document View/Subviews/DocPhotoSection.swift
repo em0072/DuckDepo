@@ -14,32 +14,27 @@ struct DocPhotoSection: View {
 
     var body: some View {
         Section {
-            ZStack {
-            if !photos.isEmpty {
-                ScrollView(.horizontal) {
-                    LazyHStack {
-                        ForEach(photos, id: \.self) { photo in
+                if !photos.isEmpty {
+                    ScrollView(.horizontal) {
+                        LazyHStack {
+                            ForEach(photos, id: \.self) { photo in
                                 PhotoCell(image: photo) {
                                     self.selectedPhoto = photo
                                 }
+                            }
                         }
+                        .frame(height: 110)
+                    }
+                } else {
+                    HStack {
+                        Spacer()
+                        Text("dv_no_photos")
+                        Spacer()
                     }
                     .padding()
-                    .frame(height: 110)
                 }
-            } else {
-                HStack {
-                    Spacer()
-                    Text("dv_no_photos")
-                    Spacer()
-                }
-                .padding()
-            }
-                
-                NeuSectionBackground()
-            }
         } header: {
-            NeuSectionTitle(title: "dv_photos")
+            Text("dv_photos")
         }
     }
 }
@@ -47,6 +42,8 @@ struct DocPhotoSection: View {
 struct NewPhotoView_Previews: PreviewProvider {
     
     static var previews: some View {
-        DocPhotoSection(photos: [UIImage(named: "duck")!], selectedPhoto: .constant(nil))
+        List {
+            DocPhotoSection(photos: Document.test.photos, selectedPhoto: .constant(nil))
+        }
     }
 }

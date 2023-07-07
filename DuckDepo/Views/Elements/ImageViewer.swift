@@ -12,13 +12,14 @@ struct ImageViewer: View {
 
     var photos: [UIImage]
     
-    let minZoomValue: CGFloat = 2.5
+    let maxZoomValue: CGFloat = 2.5
     @State var selectedImage: UIImage
     @State var scale: CGFloat = 1
-    @State var accumulatedScale: CGFloat = 1
     @State var offset: CGSize = .zero
-    @State var accumulatedOffset: CGSize = .zero
-    @State var imageSize: CGSize = .zero
+
+    @State private var accumulatedScale: CGFloat = 1
+    @State private var accumulatedOffset: CGSize = .zero
+    @State private var imageSize: CGSize = .zero
 
     @State var showZoomImage = false
     
@@ -37,6 +38,7 @@ struct ImageViewer: View {
                         .aspectRatio(contentMode: .fit)
                         .tag(photo)
                 }
+
             }
             .tabViewStyle(PageTabViewStyle())
             .allowsHitTesting(!showZoomImage)
@@ -47,6 +49,7 @@ struct ImageViewer: View {
 
         }
         .gesture(dragGesture)
+        .gesture(doubleTapGesture)
         .gesture(magnificationGesture)
         .background(Color.black)
         .ignoresSafeArea()
@@ -69,7 +72,7 @@ struct ImageViewer: View {
 
 extension ImageViewer {
     
-    var imageZoomView: some View {
+    private var imageZoomView: some View {
         Image(uiImage: selectedImage)
             .resizable()
             .scaleEffect(scale)
@@ -85,7 +88,7 @@ extension ImageViewer {
             }
     }
         
-    var magnificationGesture: some Gesture {
+    private var magnificationGesture: some Gesture {
         MagnificationGesture()
             .onChanged { scale in
                 showZoomImage = true
@@ -95,7 +98,7 @@ extension ImageViewer {
                 }
             }
             .onEnded { scale in
-                let totalScale = min(minZoomValue, accumulatedScale * scale.magnitude)
+                let totalScale = min(maxZoomValue, accumulatedScale * scale.magnitude)
                 self.accumulatedScale = totalScale
                 if accumulatedScale < 1 {
                     resetZoomedImage()
@@ -107,7 +110,22 @@ extension ImageViewer {
             }
     }
     
-    func resetZoomedImage() {
+    private var doubleTapGesture: some Gesture {
+        TapGesture(count: 2)
+            .onEnded { _ in
+                if scale <= 1 {
+                    showZoomImage = true
+                    accumulatedScale = maxZoomValue
+                    withAnimation {
+                        scale = maxZoomValue
+                    }
+                } else {
+                    resetZoomedImage()
+                }
+            }
+    }
+    
+    private func resetZoomedImage() {
         self.accumulatedScale = 1
         self.accumulatedOffset = .zero
         withAnimation(.easeInOut(duration: 0.2)) {
@@ -120,7 +138,7 @@ extension ImageViewer {
 
     }
     
-    var dragGesture: some Gesture {
+    private var dragGesture: some Gesture {
         DragGesture()
             .onChanged { value in
                 if scale > 1 {

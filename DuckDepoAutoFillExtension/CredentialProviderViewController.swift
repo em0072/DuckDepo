@@ -18,7 +18,8 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
      prioritize the most relevant credentials in the list.
     */
     override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
-        let swiftUIView = AutoFillPasswordsListView(identifiers: prepareIdentifiers(serviceIdentifiers)) {
+        let viewModel = AutoFillPasswordsListViewModel(identifiers: prepareIdentifiers(serviceIdentifiers))
+        let swiftUIView = AutoFillPasswordsListView(viewModel: viewModel) {
             self.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code: ASExtensionError.userCanceled.rawValue))
         } onSelect: { password in
             let passwordCredential = ASPasswordCredential(user: password.login, password: password.value)

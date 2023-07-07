@@ -46,18 +46,16 @@ struct PhotosSectionView: View {
                                 delegate?.delete(photo: image)
                             } label: {
                                 Image(systemName: "multiply.circle.fill")
-                                    .foregroundColor(Color.red)
+                                    .foregroundStyle(.white, Color.red)
                             }
                             .frame(width: 20)
                             .offset(x: 7, y: -7)
-                            .buttonStyle(NeuCircleButtonStyle())
                         }
                     }
                     
                 }
                 .padding(16)
             }
-                NeuSectionBackground()
             }
             .actionSheet(isPresented: $showingPhotoChooser) {
                 ActionSheet(title: Text("psv_photo_selection_body"), buttons: [
@@ -107,11 +105,8 @@ struct PhotosSectionView_Previews: PreviewProvider {
     static let images = [UIImage(named: "duck")!, UIImage(named: "duck")!]
 
     static var previews: some View {
-//        Form {
-        ScrollView {
-            HStack {
-                PhotosSectionView(images: .constant(PhotosSectionView_Previews.images))
-            }
+        List {
+            PhotosSectionView(images: .constant(PhotosSectionView_Previews.images))
         }
         
     }

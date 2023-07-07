@@ -22,16 +22,12 @@ struct DocSectionSection: View {
                                 if index != section.fields.count - 1 {
                                     Divider()
                                 }
-                            }
+                        }
                     }
                 }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
-
-                NeuSectionBackground()
             }
         } header: {
-            NeuSectionTitle(title: section.name)
+            Text(section.name)
         }
     }
 }

@@ -16,24 +16,17 @@ struct HelpSection: View {
             Button {
                 showAutofillInfo.toggle()
             } label: {
-                HStack {
-                    Text("sv_autofill_featute")
-                    Spacer()
-                }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
+                Text("sv_autofill_featute")
             }
-            .foregroundColor(.neumorphicButtonText)
-            .buttonStyle(NeuRectButtonStyle())
         } header: {
-            NeuSectionTitle(title: "sv_help".localized())
+            Text("sv_help")
         }
     }
 }
 
 struct HelpSection_Previews: PreviewProvider {
     static var previews: some View {
-        ScrollView {
+        List {
             HelpSection(showAutofillInfo: .constant(false))
         }
     }

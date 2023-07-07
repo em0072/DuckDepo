@@ -9,36 +9,40 @@ import SwiftUI
 
 struct TitleView: View {
     
-    
     @Binding var name: String
     @Binding var description: String
     @Binding var documentType: DocumentType
     
-    
     var body: some View {
-        
         Section {
             ZStack {
                 VStack(spacing: 0) {
                     VStack {
                         FloatingTextField(title: "nv_doc_name".localized(), value: $name)
+                        
                         Divider()
+                        
                         FloatingTextField(title: "nv_doc_description".localized(), value: $description)
                             .padding(.top, 4)
+                        
                         Divider()
-                        categoryTextField()
+                        
+                        categoryTextField
                             .padding(.top, 4)
                     }
                     .padding(.top, 12)
                     .padding(.horizontal, 16)
-                    categoryPickerView()
+                    
+                    categoryPickerView
                 }
-                NeuSectionBackground()
             }
         }
     }
     
-    func categoryTextField() -> some View {
+}
+
+extension TitleView {
+    private var categoryTextField: some View {
         HStack {
             Text("nv_doc_categoory".localized())
                 .foregroundColor(.neumorphicText)
@@ -49,7 +53,7 @@ struct TitleView: View {
         }
     }
     
-    func categoryPickerView() -> some View {
+    private var categoryPickerView: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 14) {
                 ForEach(DocumentType.allCases) { type in
@@ -67,7 +71,6 @@ struct TitleView: View {
         } label: {
             imageForCategory(type, selcted: documentType == type)
         }
-        .buttonStyle(NeuCircleToggleButtonStyle(isSelected: documentType == type))
         .frame(width: 35, height: 35)
     }
     
