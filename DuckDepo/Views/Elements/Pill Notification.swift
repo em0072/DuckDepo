@@ -9,7 +9,7 @@ import SwiftUI
 
 struct Pill_Notification: ViewModifier {
     
-    @Binding var text: String
+    let text: String
     @Binding var show: Bool
 
     func body(content: Content) -> some View {
@@ -51,7 +51,7 @@ struct Pill_Notification: ViewModifier {
 }
 
 extension View {
-    func pillNotification(text: Binding<String>, show: Binding<Bool>) -> some View {
+    func pillNotification(text: String, show: Binding<Bool>) -> some View {
         self.modifier(Pill_Notification(text: text, show: show))
     }
 }

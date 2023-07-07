@@ -15,6 +15,7 @@ class PasswordViewModel: ObservableObject {
     @Published var showShareSheetView = false
     @Published var isEditingPassword = false
     @Published var isPasswordVisible = false
+    @Published var shouldDismissView = false
     
     var itemsToShare: [Any]?
     
@@ -78,11 +79,14 @@ class PasswordViewModel: ObservableObject {
 
 }
 
-
 extension PasswordViewModel: EditPasswordViewModelDelegate {
     
     func passwordUpdated(_ password: Password) {
         self.password = password
+    }
+    
+    func passwordDeleted() {
+        shouldDismissView = true
     }
     
 }

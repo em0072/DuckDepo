@@ -13,10 +13,12 @@ class DocumentViewModel: ObservableObject {
     private var db = DataBase.shared
     @Published var document: Document
     
-    @Published var showShareActionSheet: Bool = false
-    @Published var showShareSheetView: Bool = false
-    @Published var showEditDocumentView: Bool = false
-    @Published var showingImageViewer: Bool = false
+    @Published var showShareActionSheet = false
+    @Published var showShareSheetView = false
+    @Published var showEditDocumentView = false
+    @Published var showingImageViewer = false
+    @Published var shouldDismissView = false
+    
     @Published var selectedPhoto: UIImage? {
         didSet {
             if selectedPhoto != nil {
@@ -34,6 +36,18 @@ class DocumentViewModel: ObservableObject {
         self.document = document
     }
     
+    var editDocumentViewModel: EditDocumentViewModel {
+        let viewModel = EditDocumentViewModel(type: .existing(document)) { [weak self] document in
+            guard let self else { return }
+            guard let document else {
+                shouldDismissView = true
+                return
+            }
+            self.document = document
+        }
+        return viewModel
+    }
+
     func shareButtonPressed() {
         if document.photos.isEmpty {
             shareTextButtonPressed()

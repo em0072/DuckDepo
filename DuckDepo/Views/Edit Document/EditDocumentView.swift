@@ -9,21 +9,17 @@ import SwiftUI
 
 struct EditDocumentView: View {
     
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.dismiss) private var dismiss
     
-    @StateObject var viewModel: ViewModel
+    @StateObject var viewModel: EditDocumentViewModel
     
     //MARK: Views States
-    @State var isShowingAlert: Bool = false
-    @State var isShowingDeleteAlert: Bool = false
-    @State var alertTitle: String = ""
-    @State var alertMessage: String = ""
-    @State var showingAddNewSectionView = false
-    @State var showingAddNewInfoDuplicateWarning = false
-    
-    init(type: ViewModel.DocumentType = .new) {
-        self._viewModel = StateObject(wrappedValue: ViewModel(type: type))
-    }
+    @State private var isShowingAlert: Bool = false
+    @State private var isShowingDeleteAlert: Bool = false
+    @State private var alertTitle: String = ""
+    @State private var alertMessage: String = ""
+    @State private var showingAddNewSectionView = false
+    @State private var showingAddNewInfoDuplicateWarning = false
     
     var body: some View {
         NavigationView {
@@ -98,11 +94,10 @@ struct EditDocumentView: View {
     }
 }
 
-struct AddNewDocumentVirew_Previews: PreviewProvider {
-    
+struct AddNewDocumentView_Previews: PreviewProvider {
     
     static var previews: some View {
-        EditDocumentView(type: .existing(Document.test))
+        EditDocumentView(viewModel: EditDocumentViewModel(type: .existing(Document.test)))
     }
 }
 

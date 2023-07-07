@@ -32,7 +32,7 @@ struct DepoListView: View {
             NoSelectionViewView(type: .document)
         }
         .fullScreenCover(isPresented: $viewModel.isAddingNewDocument) {
-            EditDocumentView(type: .new)
+            EditDocumentView(viewModel: viewModel.editDocumentViewModel)
         }
     }
 

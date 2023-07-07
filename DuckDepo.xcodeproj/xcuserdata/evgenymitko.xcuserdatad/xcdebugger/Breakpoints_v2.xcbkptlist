@@ -510,8 +510,8 @@
             filePath = "DuckDepo/Views/Edit Document/EditDocumentViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "149"
-            endingLineNumber = "149"
+            startingLineNumber = "153"
+            endingLineNumber = "153"
             landmarkName = "addNewFieldWith(name:in:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -526,8 +526,8 @@
             filePath = "DuckDepo/Views/DepoList/DepoListViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "36"
-            endingLineNumber = "36">
+            startingLineNumber = "37"
+            endingLineNumber = "37">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -700,8 +700,10 @@
             filePath = "DuckDepo/Views/DepoList/DepoListViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "43"
-            endingLineNumber = "43">
+            startingLineNumber = "36"
+            endingLineNumber = "36"
+            landmarkName = "addNewDocumentButtonPressed()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1144,8 +1146,8 @@
             filePath = "DuckDepo/Views/Edit Document/EditDocumentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "92"
-            endingLineNumber = "92"
+            startingLineNumber = "88"
+            endingLineNumber = "88"
             landmarkName = "deleteButtonAction()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1416,8 +1418,8 @@
             filePath = "DuckDepo/Views/Edit Password/EditPasswordViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "65"
-            endingLineNumber = "65"
+            startingLineNumber = "64"
+            endingLineNumber = "64"
             landmarkName = "addNewPasswordButtonAction()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1528,8 +1530,8 @@
             filePath = "DuckDepo/Views/Edit Document/EditDocumentViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "38"
-            endingLineNumber = "38"
+            startingLineNumber = "41"
+            endingLineNumber = "41"
             landmarkName = "saveDocument()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1656,8 +1658,8 @@
             filePath = "DuckDepo/Views/Password View/PasswordViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "38"
-            endingLineNumber = "38"
+            startingLineNumber = "39"
+            endingLineNumber = "39"
             landmarkName = "isPasswordExist"
             landmarkType = "24">
          </BreakpointContent>
@@ -1666,6 +1668,22 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "DA5DAE18-FE04-453B-85B4-6575817228AD"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DuckDepo/Views/Password View/PasswordViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "36"
+            endingLineNumber = "36"
+            landmarkName = "isLoginExist"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "531A0DBB-C6F6-4C6C-A519-E62EE35A215E"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
@@ -1681,22 +1699,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "531A0DBB-C6F6-4C6C-A519-E62EE35A215E"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DuckDepo/Views/Password View/PasswordViewModel.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "34"
-            endingLineNumber = "34"
-            landmarkName = "isLoginExist"
-            landmarkType = "24">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "18F1B692-35E9-4BE6-981D-87D48CAFE4C1"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -1704,8 +1706,8 @@
             filePath = "DuckDepo/Views/Password View/PasswordView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "15"
-            endingLineNumber = "15"
+            startingLineNumber = "17"
+            endingLineNumber = "17"
             landmarkName = "init(password:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1720,8 +1722,8 @@
             filePath = "DuckDepo/Views/Edit Password/EditPasswordViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "67"
-            endingLineNumber = "67"
+            startingLineNumber = "66"
+            endingLineNumber = "66"
             landmarkName = "addNewPasswordButtonAction()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1736,8 +1738,8 @@
             filePath = "DuckDepo/Views/Edit Password/EditPasswordViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "70"
-            endingLineNumber = "70"
+            startingLineNumber = "69"
+            endingLineNumber = "69"
             landmarkName = "addNewPasswordButtonAction()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1912,8 +1914,8 @@
             filePath = "DuckDepo/Views/Edit Password/EditPasswordViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "73"
-            endingLineNumber = "73"
+            startingLineNumber = "72"
+            endingLineNumber = "72"
             landmarkName = "addNewPasswordButtonAction()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2072,8 +2074,8 @@
             filePath = "DuckDepo/Views/Edit Document/EditDocumentViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "116"
-            endingLineNumber = "116"
+            startingLineNumber = "120"
+            endingLineNumber = "120"
             landmarkName = "select(photo:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2088,8 +2090,8 @@
             filePath = "DuckDepo/Views/Edit Document/EditDocumentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "40"
-            endingLineNumber = "40"
+            startingLineNumber = "36"
+            endingLineNumber = "36"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -2104,8 +2106,8 @@
             filePath = "DuckDepo/Views/Edit Document/EditDocumentViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "144"
-            endingLineNumber = "144"
+            startingLineNumber = "148"
+            endingLineNumber = "148"
             landmarkName = "delete(_:)"
             landmarkType = "7">
             <Locations>
@@ -2152,8 +2154,8 @@
             filePath = "DuckDepo/Views/Edit Document/EditDocumentViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "170"
-            endingLineNumber = "170"
+            startingLineNumber = "174"
+            endingLineNumber = "174"
             landmarkName = "delete(_:in:)"
             landmarkType = "7">
             <Locations>
