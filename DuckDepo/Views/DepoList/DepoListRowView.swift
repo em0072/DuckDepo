@@ -34,6 +34,7 @@ struct DepoListRowView: View {
         }
         .padding(.vertical, 2)
     }
+    
 }
 
 struct NeuDepoListRowView_Previews: PreviewProvider {
