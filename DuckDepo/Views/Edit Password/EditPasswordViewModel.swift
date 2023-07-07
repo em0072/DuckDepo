@@ -10,10 +10,10 @@ import SwiftUI
 
 protocol EditPasswordViewModelDelegate {
     func passwordUpdated(_ password: Password)
+    func passwordDeleted()
 }
 
-extension EditPasswordView {
-    class ViewModel: ObservableObject {
+    class EditPasswordViewModel: ObservableObject {
         
         enum PasswordType {
             case new
@@ -30,7 +30,6 @@ extension EditPasswordView {
         @Published var shouldCloseView: Bool = false
 
         var delegate: EditPasswordViewModelDelegate?
-//        var inputOption: InputOption = InputOption()
         
         var type: PasswordType = .new {
             didSet {
@@ -82,10 +81,10 @@ extension EditPasswordView {
             if case .existing(let password) = type {
                 storage.delete(password)
             }
+            delegate?.passwordDeleted()
             shouldCloseView = true
         }
 
         
         
     }
-}

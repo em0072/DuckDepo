@@ -485,8 +485,8 @@
 				75D792A32744FFC500396535 /* NoDocumentSelectedView.swift */,
 				756AF0B12726C320001CB821 /* ContentView.swift */,
 				75E8F830273A64E100DCF4BD /* DepoList */,
-				7557599B272FFD8700DA8B9A /* Edit Document */,
 				75A1C901274F7EE700551645 /* Document View */,
+				7557599B272FFD8700DA8B9A /* Edit Document */,
 				75A1C8FE274F7EBD00551645 /* PasswordsList */,
 				75A1C90F274F847B00551645 /* Edit Password */,
 				75A1C904274F7F1300551645 /* Password View */,
@@ -589,8 +589,8 @@
 			isa = PBXGroup;
 			children = (
 				75102F5C285FB36A00464528 /* DocumentView.swift */,
-				7545D7772875B4EE0008FE98 /* Subviews */,
 				75102F5E285FB37600464528 /* DocumentViewModel.swift */,
+				7545D7772875B4EE0008FE98 /* Subviews */,
 			);
 			path = "Document View";
 			sourceTree = "<group>";

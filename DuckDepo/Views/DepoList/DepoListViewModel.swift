@@ -18,12 +18,15 @@ class DepoListViewModel: ObservableObject {
     private var cancellable = Set<AnyCancellable>()
     private var dataStorage = DocumentsStorage()
     
-
     
     init() {
         dataStorage.documents.sink { documents in
             self.documents = documents
         }.store(in: &cancellable)
+    }
+    
+    var editDocumentViewModel: EditDocumentViewModel {
+        return EditDocumentViewModel(type: .new)
     }
     
     func addNewDocumentButtonPressed() {

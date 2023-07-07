@@ -9,6 +9,8 @@ import SwiftUI
 
 struct PasswordView: View {
     
+    @Environment(\.dismiss) private var dismiss
+
     @StateObject var viewModel: PasswordViewModel
         
     init(password: Password) {
@@ -52,8 +54,14 @@ struct PasswordView: View {
         .fullScreenCover(isPresented: $viewModel.isEditingPassword) {
             EditPasswordView(type: .existing(viewModel.password), delegate: viewModel)
         }
+        .onChange(of: viewModel.shouldDismissView, perform: dismissAction)
     }
-                    
+                  
+    private func dismissAction(_ shouldDismissView: Bool) {
+        if shouldDismissView {
+            dismiss()
+        }
+    }
     
     private func shareAlert() {
         viewModel.showShareAlert = true

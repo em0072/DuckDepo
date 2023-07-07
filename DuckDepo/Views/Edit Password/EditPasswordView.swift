@@ -10,13 +10,13 @@ import SwiftUI
 struct EditPasswordView: View {
     @Environment(\.dismiss) var dismiss
 
-    @ObservedObject var viewModel: ViewModel
+    @ObservedObject var viewModel: EditPasswordViewModel
     @State var isShowingDeleteAlert: Bool = false
     @State var isShowingPassGenerator: Bool = false
     
     
-    init(type: ViewModel.PasswordType = .new, delegate: EditPasswordViewModelDelegate? = nil) {
-        self.viewModel = ViewModel()
+    init(type: EditPasswordViewModel.PasswordType = .new, delegate: EditPasswordViewModelDelegate? = nil) {
+        self.viewModel = EditPasswordViewModel()
         viewModel.type = type
         viewModel.delegate = delegate
         

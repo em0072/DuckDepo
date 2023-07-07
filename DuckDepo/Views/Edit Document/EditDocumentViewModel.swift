@@ -7,8 +7,7 @@
 
 import SwiftUI
 
-extension EditDocumentView {
-    class ViewModel: ObservableObject {
+    class EditDocumentViewModel: ObservableObject {
         
         enum DocumentType {
             case new
@@ -17,19 +16,23 @@ extension EditDocumentView {
                         
         private let db: DataBase = DataBase.shared
         
-        @Published var document: Document = Document()
-        
+        @Published var document: Document
         @Published var shouldCloseView: Bool = false
         
+        let type: DocumentType
+
         var inputOption: InputOption = InputOption()
-        var type: DocumentType
-                
-        var view: EditDocumentView?
         
-        init(type: DocumentType) {
+        private let onDismiss: ((Document?) -> Void)?
+                        
+        init(type: DocumentType, onDismiss: ((Document?) -> Void)? = nil) {
             self.type = type
-            if case .existing(let document) = type {
-                updateViewWith(document: document)
+            self.onDismiss = onDismiss
+            switch type {
+                case .new:
+                    document = .init()
+                case .existing(let document):
+                    self.document = document
             }
         }
         
@@ -41,12 +44,13 @@ extension EditDocumentView {
             case .existing(_):
                 db.update(document)
             }
+            onDismiss?(document)
             shouldCloseView = true
         }
         
-        func updateViewWith(document: Document) {
-            self.document = document
-        }
+//        func updateViewWith(document: Document) {
+//            self.document = document
+//        }
         
         func isShared() -> Bool {
             db.isShared(document)
@@ -54,6 +58,7 @@ extension EditDocumentView {
         
         func delete() {
             db.delete(document)
+            onDismiss?(nil)
             shouldCloseView = true
         }
                                 
@@ -99,10 +104,9 @@ extension EditDocumentView {
         
         
     }
-}
 
 // MARK: -  PhotosSectionViewDelegate
-extension EditDocumentView.ViewModel: PhotosSectionViewDelegate {
+extension EditDocumentViewModel: PhotosSectionViewDelegate {
     
     func delete(photo: UIImage) {
         if let index = document.photos.firstIndex(of: photo) {
@@ -130,7 +134,7 @@ extension EditDocumentView.ViewModel: PhotosSectionViewDelegate {
 
 
 // MARK: - SectionsViewDelegate
-extension EditDocumentView.ViewModel: SectionViewDelegate {
+extension EditDocumentViewModel: SectionViewDelegate {
     func valueChanged(for field: Field, newValue: String) {
         for i in 0..<document.sections.count {
             if let index = document.sections[i].fields.firstIndex(of: field) {
@@ -176,7 +180,7 @@ extension EditDocumentView.ViewModel: SectionViewDelegate {
 
 
 // MARK: -AddSectionMenuDelegate
-extension EditDocumentView.ViewModel: AddSectionMenuDelegate {
+extension EditDocumentViewModel: AddSectionMenuDelegate {
     
     func addNewSection(_ name: String) {
         let section = DocSection(name: name)
