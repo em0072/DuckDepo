@@ -23,15 +23,16 @@ struct DepoListRowView: View {
                 .padding(.trailing, 5)
             VStack(alignment: .leading) {
                 Text(name)
+                    .foregroundColor(.primary)
                 if !description.isEmpty {
                     Text(description)
-                        .foregroundColor(Color(UIColor.secondaryLabel))
+                        .foregroundColor(Color.secondary)
                 }
             }
             .padding(.leading, 5)
             Spacer()
         }
-        .padding(16)
+        .padding(.vertical, 2)
     }
 }
 
@@ -40,15 +41,11 @@ struct NeuDepoListRowView_Previews: PreviewProvider {
     static let testDocument = Document(name: "Document", description: "Bob Macron", documentType: .identification, folder: "what is folder?")
 
     static var previews: some View {
-        ZStack {
-            Color.neumorphicBackground
-                .ignoresSafeArea()
+        List {
             DepoListRowView(icon: Self.testDocument.documentType.image,
                             iconColor: Self.testDocument.documentType.iconColor,
                             name: Self.testDocument.name,
                             description: Self.testDocument.description)
         }
-            
-            
     }
 }

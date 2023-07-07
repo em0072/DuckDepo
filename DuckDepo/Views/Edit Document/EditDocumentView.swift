@@ -12,7 +12,6 @@ struct EditDocumentView: View {
     @Environment(\.dismiss) var dismiss
     
     @StateObject var viewModel: ViewModel
-    //    @Binding var isPresented: Bool
     
     //MARK: Views States
     @State var isShowingAlert: Bool = false
@@ -28,34 +27,19 @@ struct EditDocumentView: View {
     
     var body: some View {
         NavigationView {
-            ZStack(alignment: .leading) {
-                Color.neumorphicBackground
-                    .ignoresSafeArea()
+            List {
+                TitleView(name:  $viewModel.document.name, description: $viewModel.document.description, documentType: $viewModel.document.documentType)
                 
-                ScrollView(.vertical) {
-                    VStack {
-                        FixedSpacer(35)
-                        TitleView(name:  $viewModel.document.name, description: $viewModel.document.description, documentType: $viewModel.document.documentType)
-                        //                        .padding(.top, 35)
-                        //                        .padding(.horizontal, 16)
-                        FixedSpacer(25)
-                        PhotosSectionView(images: $viewModel.document.photos, delegate: viewModel)
-                        //                        .padding(.top, 16)
-                        
-                        FixedSpacer(25)
-                        SectionView(sections: $viewModel.document.sections, options: viewModel.inputOption.sections, delegate: viewModel)
-                        
-                        AddSectionMenu(menuOptions: .constant(viewModel.inputOption.listOfSectionNames()), delegate: viewModel)
-                        FixedSpacer(25)
-                        
-                        AddButtonView(title: viewModel.saveButtonTitle, action: viewModel.addNewDocumentButtonAction)
-                            .disabled(viewModel.document.name.isEmpty)
-                        FixedSpacer(25)
-
-                    }
-                    .padding(.horizontal, 16)
-                }
+                PhotosSectionView(images: $viewModel.document.photos, delegate: viewModel)
+                
+                SectionView(sections: $viewModel.document.sections, options: viewModel.inputOption.sections, delegate: viewModel)
+                
+                AddSectionMenu(menuOptions: .constant(viewModel.inputOption.listOfSectionNames()), delegate: viewModel)
+                
+                AddButtonView(title: viewModel.saveButtonTitle, action: viewModel.addNewDocumentButtonAction)
+                    .disabled(viewModel.document.name.isEmpty)
             }
+            .listStyle(.insetGrouped)
             .navigationTitle(viewModel.viewTitle)
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarItems(leading: closeButton(),
@@ -82,7 +66,7 @@ struct EditDocumentView: View {
     }
     
     private func closeButton() -> some View {
-        NeuNavigationCloseButton() {
+        CloseButton() {
             dismiss()
         }
     }
@@ -92,10 +76,7 @@ struct EditDocumentView: View {
             if case .existing(_) = viewModel.type {
                 Button(action: deleteButtonAction) {
                     Image(systemName: "trash.fill")
-                        .font(.footnote)
-                        .padding(6)
                 }
-                .buttonStyle(NeuCircleButtonStyle())
             }
         }
     }
@@ -115,13 +96,6 @@ struct EditDocumentView: View {
         viewModel.delete()
         
     }
-    
-    func showAlert(title: String, message: String) {
-        alertTitle = title
-        alertMessage = message
-        isShowingAlert = true
-    }
-    
 }
 
 struct AddNewDocumentVirew_Previews: PreviewProvider {

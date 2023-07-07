@@ -40,7 +40,7 @@ struct FloatingTextView: View {
                 .padding(.top, 5)
             HStack {
                 Group {
-                    if let url = url, UIApplication.shared.canOpenURL(url) {
+                    if let url = url {
                         Link(proccessedValue, destination: url)
                     } else {
                         Text(proccessedValue)
@@ -55,13 +55,12 @@ struct FloatingTextView: View {
                             Text("Copy to clipboard")
                             Image(systemName: "doc.on.doc")
                         }
-                    if let url = url, UIApplication.shared.canOpenURL(url) {
+                    if let url = url {
                         Button(action: {
                             openURL(url)
                         }) {
                             Text("Open website")
                             Image(systemName: "network")
-
                         }
                     }
                      }
@@ -78,13 +77,6 @@ struct FloatingTextView: View {
     var proccessedValue: String {
         return isVisible ? value : String(repeating: "•", count: value.count)
     }
-//    private func open(url: URL) {
-//        guard UIApplication.shared.canOpenURL(url) else { return }
-//        openURL(URL)
-//        UIApplication.shared.open(url)
-
-//    }
-
     
     private func postCopyNotification() {
         NotificationCenter.default.post(name: .floatingTextFieldCopyNotification, object: nil, userInfo: nil)

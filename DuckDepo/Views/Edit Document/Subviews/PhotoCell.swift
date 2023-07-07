@@ -26,8 +26,6 @@ struct PhotoCell: View {
                 .clipShape(RoundedRectangle(cornerRadius: 11))
 
         }
-        .buttonStyle(NeuRectButtonStyle())
-//        .buttonStyle(NeumorphicRoundedButtonStyle(cornerRadius: 15))
     }
 }
 

@@ -19,36 +19,15 @@ struct SettingsView: View {
     
     var body: some View {
         NavigationView {
-            ZStack {
-                Color.neumorphicBackground
-                    .ignoresSafeArea()
-                
-                listView()
-            }
-            .navigationTitle("sv_title")
+            listView
+                .navigationTitle("sv_title")
         }
         .onAppear(perform: updateDocumentsCount)
-        .sheet(isPresented: $showAutofillInfo, content: { AutofillInfoView() })
+        .sheet(isPresented: $showAutofillInfo, content: {
+            AutofillInfoView()
+                .presentationDragIndicator(.visible)
+        })
         .navigationViewStyle(StackNavigationViewStyle())
-    }
-    
-    private func listView() -> some View {
-        ScrollView {
-            VStack {
-                BiometricSection(isBiometryEnabled: $biometricController.isBiometryEnabled, biometryDelay: $biometricController.biometricDelay)
-                FixedSpacer(25)
-                
-                OverviewSection(documentCount: $documentsCount, passwordCount: $passwordsCount)
-                FixedSpacer(25)
-                
-                HelpSection(showAutofillInfo: $showAutofillInfo)
-                FixedSpacer(25)
-                
-                DeleteAllSection(onDeleteAction: deleteEverything)
-                FixedSpacer(25)
-            }
-            .padding(16)
-        }
     }
     
     private func updateDocumentsCount() {
@@ -61,6 +40,20 @@ struct SettingsView: View {
         updateDocumentsCount()
     }
 
+}
+
+extension SettingsView {
+    private var listView: some View {
+        List {
+            BiometricSection(isBiometryEnabled: $biometricController.isBiometryEnabled, biometryDelay: $biometricController.biometricDelay)
+            
+            OverviewSection(documentCount: $documentsCount, passwordCount: $passwordsCount)
+            
+            HelpSection(showAutofillInfo: $showAutofillInfo)
+            
+            DeleteAllSection(onDeleteAction: deleteEverything)
+        }
+    }
 }
 
 

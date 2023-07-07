@@ -14,27 +14,18 @@ struct DepoListView: View {
     var body: some View {
         NavigationSplitView {
             ZStack {
-                Color.neumorphicBackground
-                    .ignoresSafeArea()
-                
                 if viewModel.documents.isEmpty {
                     InitialInstructionsView(type: .documents)
                 } else {
-                    listView()
+                    listView
                 }
             }
             .navigationTitle("🦆 Depo")
-            .toolbarBackground(Color.neumorphicBackground, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        viewModel.addNewDocumentButtonPressed()
-                    }) {
+                    Button(action: viewModel.addNewDocumentButtonPressed) {
                         Image(systemName: "plus")
-                            .font(.footnote)
-                            .padding(7)
                     }
-                    .buttonStyle(NeuCircleButtonStyle())
                 }
             }
         } detail: {
@@ -43,13 +34,15 @@ struct DepoListView: View {
         .fullScreenCover(isPresented: $viewModel.isAddingNewDocument) {
             EditDocumentView(type: .new)
         }
-        
     }
+
+}
+
+extension DepoListView {
     
-    private func listView() -> some View {
-        ScrollView {
+    private var listView: some View {
+        List(viewModel.documents) { document in
             VStack(spacing: 6) {
-                ForEach(viewModel.documents) { document in
                     NavigationLink(value: document) {
                         DepoListRowView(icon: document.documentType.image,
                                         iconColor: document.documentType.iconColor,
@@ -59,29 +52,17 @@ struct DepoListView: View {
                     .navigationDestination(for: Document.self) { document in
                         DocumentView(document: document)
                     }
-                    .buttonStyle(NeuRectButtonStyle())
-                    .padding()
-                    
-                }
             }
         }
-        .listStyle(.plain)
     }
+    
 }
 
 struct DepoListView_Previews: PreviewProvider {
     
     static var viewModel: DepoListViewModel {
         let viewModel = DepoListViewModel()
-        viewModel.documents = [
-            Document(id: .init(),
-                     name: "Name",
-                     description: "Description",
-                     documentType: .identification,
-                     photos: [],
-                     sections: [],
-                     folder: nil),
-        ]
+        viewModel.documents = Array(repeating: Document.test, count: 2)
         return viewModel
     }
     

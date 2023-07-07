@@ -19,53 +19,35 @@ struct PasswordGeneratorView: View {
     var onAction: ((String)->())?
     
     var body: some View {
-//        ZStack {
-//            Color.clear
-//                .blur(radius: 5)
-        VStack {
-            Spacer()
-                .opacity(0)
-            
-        VStack {
-            titleView()
+        VStack(spacing: 10) {
+            sliderView
             Divider()
             
-            sliderView()
-            Divider()
-            
-            paramsView()
+            paramsView
             Divider()
 
-            passView()
-//            Divider()
-            FixedSpacer(25)
+            passView
+
             AddButtonView(title: "pgv_use_button".localized()) {
                 onAction?(generatedPassword)
             }
-//            Button {
-//                onAction?(generatedPassword)
-//            } label: {
-//                Text("pgv_use_button")
-//            }
-//            .buttonStyle(NeuRectButtonStyle())
-//            .clipShape(Capsule())
-
-        }
-        .padding()
-        .background(Color.neumorphicBackground)
-        .cornerRadius(10)
-        .padding(30)
-        .neumorphicOuter()
-//        .shadow(color: .duckShadow, radius: 5, x: 0, y: 0)
-            
-            Spacer()
-                .opacity(0)
+            .padding()
+            .background {
+                Color.duckYellow
+            }
+            .cornerRadius(10)
         }
         .onAppear(perform: generatePassword)
 
     }
     
-    private func titleView() -> some View {
+    private func generatePassword() {
+        generatedPassword = PasswordGenerator.sharedInstance.generatePassword(includeNumbers: useNumbers, includeCapitals: useCapitals, includeSymbols: useSymbols, length: Int(numberOfSymbols))
+    }
+}
+
+extension PasswordGeneratorView {
+    private var titleView: some View {
         HStack {
             Text("pgv_title")
                 .font(.title)
@@ -77,11 +59,10 @@ struct PasswordGeneratorView: View {
                     .font(.footnote)
                     .padding(7)
             })
-            .buttonStyle(NeuCircleButtonStyle())
         }
     }
     
-    private func sliderView() -> some View {
+    private var sliderView: some View {
         VStack {
             HStack {
                 Text("pgv_num_of_symbols")
@@ -95,7 +76,6 @@ struct PasswordGeneratorView: View {
             }, maximumValueLabel: {
                 Text("20")
             })
-//            .accentColor(Color.duckYellow)
             .tint(Color.duckYellow)
             .onChange(of: numberOfSymbols) { _ in
                 generatePassword()
@@ -103,46 +83,45 @@ struct PasswordGeneratorView: View {
         }
     }
     
-    private func paramsView() -> some View {
+    private var paramsView: some View {
         VStack {
-        HStack {
-        Text("pgv_params")
-            Spacer()
-        }
-        HStack {
-            VStack(spacing: 5) {
-                Text("123")
-            Toggle("", isOn: $useNumbers).labelsHidden()
-                    .toggleStyle(NeuToggleStyle())
-                    .onChange(of: useNumbers) { _ in
-                        generatePassword()
-                    }
+            HStack {
+                Text("pgv_params")
+                Spacer()
             }
             
-            Spacer()
-            VStack(spacing: 5) {
-                Text("aA")
-            Toggle("", isOn: $useCapitals).labelsHidden()
-                    .toggleStyle(NeuToggleStyle())
-                    .onChange(of: useCapitals) { _ in
-                        generatePassword()
-                    }
+            HStack {
+                VStack(spacing: 5) {
+                    Text("123")
+                    Toggle("", isOn: $useNumbers).labelsHidden()
+                        .onChange(of: useNumbers) { _ in
+                            generatePassword()
+                        }
+                }
+                
+                Spacer()
+                VStack(spacing: 5) {
+                    Text("aA")
+                    Toggle("", isOn: $useCapitals).labelsHidden()
+                        .onChange(of: useCapitals) { _ in
+                            generatePassword()
+                        }
+                }
+                Spacer()
+                VStack(spacing: 5) {
+                    Text("!@#")
+                    Toggle("", isOn: $useSymbols).labelsHidden()
+                        .onChange(of: useSymbols) { _ in
+                            generatePassword()
+                        }
+                }
             }
-            Spacer()
-            VStack(spacing: 5) {
-                Text("!@#")
-            Toggle("", isOn: $useSymbols).labelsHidden()
-                    .toggleStyle(NeuToggleStyle())
-                    .onChange(of: useSymbols) { _ in
-                        generatePassword()
-                    }
-            }
-        }
-        .padding([ .top, .bottom], 3)
+            .tint(.duckYellow)
+            .padding([ .top, .bottom], 3)
         }
     }
     
-    private func passView() -> some View {
+    private var passView: some View {
         VStack {
             HStack {
                 Text(generatedPassword)
@@ -152,14 +131,12 @@ struct PasswordGeneratorView: View {
                     .frame(height: 55)
                 Spacer()
                 
-                FormButton(action: generatePassword, imageSystemName: "wand.and.rays.inverse")
+                Button(action: generatePassword) {
+                    Image(systemName: "wand.and.rays.inverse")
+                }
+                .tint(.duckYellow)
             }
         }
-    }
-    
-    private func generatePassword() {
-        generatedPassword = PasswordGenerator.sharedInstance.generatePassword(includeNumbers: useNumbers, includeCapitals: useCapitals, includeSymbols: useSymbols, length: Int(numberOfSymbols))
-        
     }
 }
 

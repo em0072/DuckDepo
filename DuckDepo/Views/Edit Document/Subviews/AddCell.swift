@@ -18,10 +18,12 @@ struct AddCell: View {
                 Image(systemName: "plus")
                     .font(.title)
                     .padding(20)
-                    .foregroundColor(.neumorphicButtonText)
+                    .foregroundColor(.duckYellow)
             }
-            .buttonStyle(NeuRectButtonStyle())
-
+            .background {
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color.duckYellow, lineWidth: 3)
+            }
     }
 }
 

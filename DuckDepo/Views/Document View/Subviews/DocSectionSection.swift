@@ -25,13 +25,9 @@ struct DocSectionSection: View {
                         }
                     }
                 }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
-
-                NeuSectionBackground()
             }
         } header: {
-            NeuSectionTitle(title: section.name)
+            Text(section.name)
         }
     }
 }

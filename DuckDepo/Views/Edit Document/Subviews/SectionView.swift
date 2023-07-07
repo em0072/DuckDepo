@@ -26,12 +26,10 @@ struct SectionView: View {
     @State var customFieldSection: DocSection?
     @State var showDuplicatedAlert: Bool = false
     
-    
     //MARK: - View Bulding
     var body: some View {
         ForEach(sections) { section in
             Section {
-                ZStack {
                     VStack {
                         ForEach(0..<section.fields.count, id: \.self) { index in
                             let field = section.fields[index]
@@ -45,13 +43,7 @@ struct SectionView: View {
                         }
                         .padding(.bottom, 4)
                         addField(for: section)
-//                            .padding(.vertical, 12)
                     }
-                    .padding(16)
-                    
-                    NeuSectionBackground()
-                }
-                FixedSpacer(24)
             } header: {
                 sectionHeader(for: section)
             }
@@ -60,6 +52,8 @@ struct SectionView: View {
         }
         .sheet(isPresented: $showingAddNewFieldView) {
             AddNewView(isPresented: $showingAddNewFieldView, duplicateAlertPresented: $showDuplicatedAlert, type: .field, onSave: addCustomField)
+                .presentationDetents([.height(250)])
+                .presentationDragIndicator(.visible)
         }
         .alert("sv_duplicate_title", isPresented: $showDuplicatedAlert, actions: {
             Button("Ok") {
@@ -77,7 +71,7 @@ struct SectionView: View {
             Image(systemName: "multiply.circle")
                 .foregroundColor(Color.red)
         }
-        .buttonStyle(NeuCircleButtonStyle())
+        .buttonStyle(.plain)
     }
     
     @ViewBuilder func addField(for section: DocSection) -> some View {
@@ -97,7 +91,7 @@ struct SectionView: View {
         } label: {
             addFieldButtonLabel()
         }
-        .buttonStyle(NeuRectButtonStyle())
+        .buttonStyle(RoundedRectYellowButtonStyle())
     }
     
     @ViewBuilder func menuButton(for section: DocSection) -> some View {
@@ -119,12 +113,7 @@ struct SectionView: View {
         } label: {
             addFieldButtonLabel()
         }
-        .background(Color.neumorphicBackground)
-        .contentShape(Rectangle())
-        .cornerRadius(10)
-        .neumorphicOuter()
-        
-        //        .menuStyle(MenuSty)
+        .menuStyle(RoundedRectYellowMenuStyle())
     }
     
     private func addFieldButtonLabel() -> some View {
@@ -132,7 +121,8 @@ struct SectionView: View {
             Spacer()
             Label("sv_add_field", systemImage: "plus")
                 .font(.callout)
-                .foregroundColor(.neumorphicButtonText)
+                .bold()
+                .foregroundColor(.duckYellow)
                 .padding(.vertical, 14)
             Spacer()
         }
@@ -166,9 +156,8 @@ struct SectionView: View {
                 delegate?.delete(section)
             } label: {
                 Image(systemName: "multiply.circle.fill")
-                    .foregroundColor(Color.red)
+                    .foregroundStyle(.white, .red)
             }
-            .buttonStyle(NeuCircleButtonStyle())
         }
         .padding(.horizontal, 16)
     }
@@ -182,13 +171,12 @@ struct SectionView: View {
             delegate?.addNewFieldWith(name: name, in: customFieldSection)
             showingAddNewFieldView = false
         }
-        
     }
     
 }
 
-
 extension SectionView: FloatingTextFieldDelegate {
+    
     func valueChangedForField(with id: UUID, newValue: String) {
         for section in sections {
             if let foundField = section.fields.first(where: { $0.id == id }) {
@@ -196,9 +184,6 @@ extension SectionView: FloatingTextFieldDelegate {
             }
         }
     }
-    
-    
-    
     
 }
 
@@ -212,12 +197,9 @@ struct SectionView_Previews: PreviewProvider {
     )
     
     static var previews: some View {
-        ZStack {
-            Color.neumorphicBackground
-                .ignoresSafeArea()
-            VStack {
+            List {
                 SectionView(sections: .constant(doc.sections), options: InputOption().sections)
             }
-        }
+            .listStyle(.insetGrouped)
     }
 }

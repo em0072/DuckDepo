@@ -40,10 +40,6 @@ struct DocTitleSection: View {
                     }
                     Spacer()
                 }
-                //            .padding(.vertical, 0)
-                .padding(16)
-                
-                NeuSectionBackground()
             }
         }
     }

@@ -14,7 +14,6 @@ protocol AddSectionMenuDelegate {
 
 struct AddSectionMenu: View {
     
-    
     @State var showingAddNewSectionView: Bool = false
     @State var showDuplicatedAlert: Bool = false
     @Binding var menuOptions: [String]
@@ -26,6 +25,8 @@ struct AddSectionMenu: View {
             .frame(maxWidth: .infinity)
             .sheet(isPresented: $showingAddNewSectionView) {
                 AddNewView(isPresented: $showingAddNewSectionView, duplicateAlertPresented: $showDuplicatedAlert, type: .section, onSave: addSection)
+                    .presentationDetents([.height(250)])
+                    .presentationDragIndicator(.visible)
             }
             .alert("asm_duplicate_title", isPresented: $showDuplicatedAlert, actions: {
                 Button("Ok") {
@@ -36,7 +37,6 @@ struct AddSectionMenu: View {
             })
         }
     }
-    
     
     @ViewBuilder var addButton: some View {
         if possibleOptions.isEmpty {
@@ -50,9 +50,9 @@ struct AddSectionMenu: View {
         Button {
             self.showingAddNewSectionView = true
         } label: {
-            buttonLabel()
+            buttonLabel
         }
-        .buttonStyle(NeuRectButtonStyle())
+        .buttonStyle(RoundedRectYellowButtonStyle())
     }
     
     var menuButton: some View {
@@ -70,20 +70,18 @@ struct AddSectionMenu: View {
                 Text("asm_custom")
             }
         } label: {
-            buttonLabel()
+            buttonLabel
         }
-        .background(Color.neumorphicBackground)
-        .contentShape(Rectangle())
-        .cornerRadius(10)
-        .neumorphicOuter()
+        .menuStyle(RoundedRectYellowMenuStyle())
     }
     
-    private func buttonLabel() -> some View {
+    private var buttonLabel: some View {
         HStack {
             Spacer()
             Label("asm_add_section", systemImage: "plus")
                 .font(.callout)
-                .foregroundColor(.neumorphicButtonText)
+                .bold()
+                .foregroundColor(.duckYellow)
                 .padding(.vertical, 14)
             Spacer()
         }

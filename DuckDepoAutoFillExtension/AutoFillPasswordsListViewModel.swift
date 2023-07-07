@@ -13,12 +13,7 @@ class AutoFillPasswordsListViewModel: ObservableObject {
     
     @Published var passwords = [Password]()
     @Published var recomendedPasswords = [Password]()
-    @Published var selectedPassword: Password? {
-        didSet {
-            showPasswordView = selectedPassword != nil
-        }
-    }
-    @Published var showPasswordView: Bool = false
+    @Published var selectedPassword: Password?
     @Published var isAddingNewPassword: Bool = false
 
     let identifiers: [String]

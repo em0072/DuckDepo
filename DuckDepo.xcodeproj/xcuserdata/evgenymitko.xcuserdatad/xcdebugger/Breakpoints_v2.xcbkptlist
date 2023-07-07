@@ -295,22 +295,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "E5EA4286-4961-48D0-98A8-03894963A606"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DuckDepo/Views/AddNewView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "148"
-            endingLineNumber = "148"
-            landmarkName = "body"
-            landmarkType = "24">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "72F5B6E6-9F3B-47E6-9C7D-09717510DF64"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
@@ -494,8 +478,8 @@
             filePath = "DuckDepo/Views/Edit Document/Subviews/SectionView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "142"
-            endingLineNumber = "142"
+            startingLineNumber = "132"
+            endingLineNumber = "132"
             landmarkName = "possibleFields(in:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -510,8 +494,8 @@
             filePath = "DuckDepo/Views/Edit Document/Subviews/SectionView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "107"
-            endingLineNumber = "107"
+            startingLineNumber = "101"
+            endingLineNumber = "101"
             landmarkName = "menuButton(for:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -526,8 +510,8 @@
             filePath = "DuckDepo/Views/Edit Document/EditDocumentViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "158"
-            endingLineNumber = "158"
+            startingLineNumber = "149"
+            endingLineNumber = "149"
             landmarkName = "addNewFieldWith(name:in:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1160,9 +1144,9 @@
             filePath = "DuckDepo/Views/Edit Document/EditDocumentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "111"
-            endingLineNumber = "111"
-            landmarkName = "closeAction(_:)"
+            startingLineNumber = "92"
+            endingLineNumber = "92"
+            landmarkName = "deleteButtonAction()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1441,22 +1425,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "CDED12F2-58B9-4722-BBA2-40B0A2EE85BB"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DuckDepo/Views/Password View/PasswordView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "174"
-            endingLineNumber = "174"
-            landmarkName = "share(items:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "D5B52640-EF7A-4D09-8455-921DE0F1AC70"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -1560,8 +1528,8 @@
             filePath = "DuckDepo/Views/Edit Document/EditDocumentViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "45"
-            endingLineNumber = "45"
+            startingLineNumber = "38"
+            endingLineNumber = "38"
             landmarkName = "saveDocument()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1880,8 +1848,8 @@
             filePath = "DuckDepo/Views/Password View/PasswordViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "51"
-            endingLineNumber = "51"
+            startingLineNumber = "85"
+            endingLineNumber = "85"
             landmarkName = "passwordUpdated(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1896,8 +1864,8 @@
             filePath = "DuckDepoAutoFillExtension/CredentialProviderViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "53"
-            endingLineNumber = "53"
+            startingLineNumber = "54"
+            endingLineNumber = "54"
             landmarkName = "provideCredentialWithoutUserInteraction(for:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1992,8 +1960,8 @@
             filePath = "DuckDepoAutoFillExtension/CredentialProviderViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "21"
-            endingLineNumber = "21"
+            startingLineNumber = "22"
+            endingLineNumber = "22"
             landmarkName = "prepareCredentialList(for:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2008,8 +1976,8 @@
             filePath = "DuckDepoAutoFillExtension/CredentialProviderViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "52"
-            endingLineNumber = "52"
+            startingLineNumber = "53"
+            endingLineNumber = "53"
             landmarkName = "provideCredentialWithoutUserInteraction(for:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2104,26 +2072,10 @@
             filePath = "DuckDepo/Views/Edit Document/EditDocumentViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "125"
-            endingLineNumber = "125"
+            startingLineNumber = "116"
+            endingLineNumber = "116"
             landmarkName = "select(photo:)"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "6FB63931-9ADE-4390-AB6D-EEA5CB1270B4"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DuckDepo/Views/Elements/AddButtonView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "23"
-            endingLineNumber = "23"
-            landmarkName = "body"
-            landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2136,10 +2088,122 @@
             filePath = "DuckDepo/Views/Edit Document/EditDocumentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "52"
-            endingLineNumber = "52"
+            startingLineNumber = "40"
+            endingLineNumber = "40"
             landmarkName = "body"
             landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B35578F5-645A-4555-976B-E01E5573E91F"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DuckDepo/Views/Edit Document/EditDocumentViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "144"
+            endingLineNumber = "144"
+            landmarkName = "delete(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "B35578F5-645A-4555-976B-E01E5573E91F - 3ce1c83199f4392f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; () in DuckDepo.EditDocumentView.ViewModel.delete(DuckDepo.DocSection) -&gt; ()"
+                  moduleName = "DuckDepo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/evgenymitko/Documents/Repositories/DuckDepo/DuckDepo/Views/Edit%20Document/EditDocumentViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "154"
+                  endingLineNumber = "154"
+                  offsetFromSymbolStart = "148">
+               </Location>
+               <Location
+                  uuid = "B35578F5-645A-4555-976B-E01E5573E91F - b20318310c8c9d63"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (DuckDepo.DocSection) -&gt; Swift.Bool in closure #1 () -&gt; () in DuckDepo.EditDocumentView.ViewModel.delete(DuckDepo.DocSection) -&gt; ()"
+                  moduleName = "DuckDepo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/evgenymitko/Documents/Repositories/DuckDepo/DuckDepo/Views/Edit%20Document/EditDocumentViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "154"
+                  endingLineNumber = "154"
+                  offsetFromSymbolStart = "40">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D181D4F4-724B-4461-83B1-FB08FA3696FC"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DuckDepo/Views/Edit Document/EditDocumentViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "170"
+            endingLineNumber = "170"
+            landmarkName = "delete(_:in:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "D181D4F4-724B-4461-83B1-FB08FA3696FC - 3b0784175c013ce3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; () in DuckDepo.EditDocumentView.ViewModel.delete(_: DuckDepo.Field, in: DuckDepo.DocSection) -&gt; ()"
+                  moduleName = "DuckDepo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/evgenymitko/Documents/Repositories/DuckDepo/DuckDepo/Views/Edit%20Document/EditDocumentViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "180"
+                  endingLineNumber = "180"
+                  offsetFromSymbolStart = "164">
+               </Location>
+               <Location
+                  uuid = "D181D4F4-724B-4461-83B1-FB08FA3696FC - 22528bf3f9c382ef"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (DuckDepo.Field) -&gt; Swift.Bool in closure #1 () -&gt; () in DuckDepo.EditDocumentView.ViewModel.delete(_: DuckDepo.Field, in: DuckDepo.DocSection) -&gt; ()"
+                  moduleName = "DuckDepo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/evgenymitko/Documents/Repositories/DuckDepo/DuckDepo/Views/Edit%20Document/EditDocumentViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "180"
+                  endingLineNumber = "180"
+                  offsetFromSymbolStart = "40">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CD24C97D-91BF-48E5-AEAE-AFA188A90CFA"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DuckDepo/Views/Edit Document/Subviews/SectionView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "69"
+            endingLineNumber = "69"
+            landmarkName = "deleteField(_:in:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

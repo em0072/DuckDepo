@@ -42,6 +42,40 @@ class PasswordViewModel: ObservableObject {
         return !password.website.isEmpty
     }
     
+    func sharePassword() {
+        var shareString: String = ""
+        if isNameExist {
+            shareString.append("pv_share_details_title".localized())
+            shareString.append(password.name)
+            shareString.append("\n\n")
+        }
+        if isLoginExist {
+            shareString.append("Login: ")
+            shareString.append(password.login)
+            shareString.append("\n\n")
+        }
+        if isPasswordExist {
+            shareString.append("Password: ")
+            shareString.append(password.value)
+            shareString.append("\n\n")
+        }
+        if isWebsiteExist {
+            shareString.append("Website: ")
+            shareString.append(password.website)
+            shareString.append("\n\n")
+        }
+
+        shareString.append("pv_share_caption".localized())
+        shareString.append("\n")
+        shareString.append("https://DuckDepo.com")
+        share(items: [shareString])
+    }
+
+    private func share(items: [Any]) {
+        itemsToShare = items
+        showShareSheetView = true
+    }
+
 }
 
 

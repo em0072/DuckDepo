@@ -15,7 +15,6 @@ struct OverviewSection: View {
 
     var body: some View {
         Section {
-            ZStack {
                 HStack {
                     VStack(alignment: .leading, spacing: 16) {
                         Text(documentCountText)
@@ -24,12 +23,8 @@ struct OverviewSection: View {
                     }
                     Spacer()
                 }
-                .padding()
-                
-                NeuSectionBackground()
-            }
         } header: {
-            NeuSectionTitle(title: "sv_storage".localized())
+            Text("sv_storage")
         }
     }
         
@@ -46,10 +41,8 @@ struct OverviewSection: View {
 
 struct OverviewSection_Previews: PreviewProvider {
     static var previews: some View {
-        ScrollView {
-            VStack {
-                OverviewSection(documentCount: .constant(5), passwordCount: .constant(0))
-            }
+        List {
+            OverviewSection(documentCount: .constant(5), passwordCount: .constant(0))
         }
     }
 }
