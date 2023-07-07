@@ -64,7 +64,10 @@ struct NeumorphicRoundedButtonStyle_Previews: PreviewProvider {
         ZStack {
             Color.neumorphicBackground
                 .ignoresSafeArea()
-            DepoListRowView(document: testDocument, selectedDocument: .constant(nil))
+            DepoListRowView(icon: Self.testDocument.documentType.image,
+                            iconColor: Self.testDocument.documentType.iconColor,
+                            name: Self.testDocument.name,
+                            description: Self.testDocument.description)
         }
         
         

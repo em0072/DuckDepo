@@ -34,12 +34,10 @@ struct FloatingTextView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
-            if let title = title {
-                    Text(title)
-                    .foregroundColor(Color(white: 0.3))
-                    .scaleEffect(0.8, anchor: .leading)
-                    .padding(.top, 5)
-            }
+            Text(title)
+                .foregroundColor(Color(white: 0.3))
+                .scaleEffect(0.8, anchor: .leading)
+                .padding(.top, 5)
             HStack {
                 Group {
                     if let url = url, UIApplication.shared.canOpenURL(url) {

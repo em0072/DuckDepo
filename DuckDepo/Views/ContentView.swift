@@ -21,7 +21,7 @@ struct ContentView: View {
    
     var body: some View {
             TabView {
-                DepoListView().tabItem {
+                DepoListView(viewModel: DepoListViewModel()).tabItem {
                     Label("Depo", systemImage: "archivebox")
                 }.tag(1)
                 PasswordsListView().tabItem {

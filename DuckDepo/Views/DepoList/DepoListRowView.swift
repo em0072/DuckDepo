@@ -9,32 +9,22 @@ import SwiftUI
 
 struct DepoListRowView: View {
     
-    var document: Document
-    @Binding var selectedDocument: Document?
-    
-//    var pressAction: ((Document)->())?
+    var icon: Image
+    var iconColor: Color
+    var name: String
+    var description: String
     
     var body: some View {
-            Button {
-                selectedDocument = document
-            } label: {
-                buttonView()
-            }
-            .buttonStyle(NeuRectButtonStyle())
-        .padding(.horizontal, 16)
-    }
-    
-    private func buttonView() -> some View {
         HStack {
-            document.documentType.image
+            icon
                 .symbolRenderingMode(.palette)
-                .foregroundStyle(.white, document.documentType.iconColor)
+                .foregroundStyle(.white, iconColor)
                 .frame(width: 40, height: 40)
                 .padding(.trailing, 5)
             VStack(alignment: .leading) {
-                Text(document.name)
-                if !document.description.isEmpty {
-                    Text(document.description)
+                Text(name)
+                if !description.isEmpty {
+                    Text(description)
                         .foregroundColor(Color(UIColor.secondaryLabel))
                 }
             }
@@ -53,7 +43,10 @@ struct NeuDepoListRowView_Previews: PreviewProvider {
         ZStack {
             Color.neumorphicBackground
                 .ignoresSafeArea()
-            DepoListRowView(document: testDocument, selectedDocument: .constant(nil))
+            DepoListRowView(icon: Self.testDocument.documentType.image,
+                            iconColor: Self.testDocument.documentType.iconColor,
+                            name: Self.testDocument.name,
+                            description: Self.testDocument.description)
         }
             
             

@@ -19,24 +19,19 @@ struct FloatingTextField: View {
     @State var textFieldValue: String = ""
     var id: UUID = UUID()
     var delegate: FloatingTextFieldDelegate?
-
+    
     var body: some View {
-//        List {
-            ZStack(alignment: .leading) {
-                if let title = title {
-                    Text(title.capitalized)
-//                        .foregroundColor(textFieldValue.isEmpty ? .gray : Color(white: 0.3))
-                        .foregroundColor(.neumorphicText)
-                        .offset(y: textFieldValue.isEmpty ? -5 : -25)
-                        .scaleEffect(textFieldValue.isEmpty ? 1 : 0.8, anchor: .leading)
-                }
-                TextField("", text: $textFieldValue)
-                    .offset(y: textFieldValue.isEmpty ? -5 : 0)
-            }
-            .padding(.top, 15)
-            .padding(.bottom, 5)
-            .animation(.easeInOut(duration: 0.2), value: textFieldValue)
-//        }
+        ZStack(alignment: .leading) {
+            Text(title.capitalized)
+                .foregroundColor(.neumorphicText)
+                .offset(y: textFieldValue.isEmpty ? -5 : -25)
+                .scaleEffect(textFieldValue.isEmpty ? 1 : 0.8, anchor: .leading)
+            TextField("", text: $textFieldValue)
+                .offset(y: textFieldValue.isEmpty ? -5 : 0)
+        }
+        .padding(.top, 15)
+        .padding(.bottom, 5)
+        .animation(.easeInOut(duration: 0.2), value: textFieldValue)
         .onAppear {
             textFieldValue = value
         }
