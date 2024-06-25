@@ -24,8 +24,11 @@ struct PhotoCell: View {
                         .scaledToFill()
                     )
                 .clipShape(RoundedRectangle(cornerRadius: 11))
-
         }
+        .contextMenu {
+            ContextMenuView(type: .image(value: image))
+        }
+
     }
 }
 

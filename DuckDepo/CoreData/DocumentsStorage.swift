@@ -12,15 +12,23 @@ import Combine
 
 class DocumentsStorage: NSObject {
     
+    var folders = CurrentValueSubject<[Folder], Never>([])
     var documents = CurrentValueSubject<[Document], Never>([])
     private var fetchedRequestController: NSFetchedResultsController<DDDocument>
-    
+//    private var fetchedFoldersRequestController: NSFetchedResultsController<DDFolder>
+
     override init() {
 
         let fetchRequest = DDDocument.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \DDDocument.documentTypeOrder, ascending: true),
                                         NSSortDescriptor(keyPath: \DDDocument.order, ascending: true)]
         fetchedRequestController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: DataBase.shared.context, sectionNameKeyPath: nil, cacheName: nil)
+        
+//        let fetchRequestFolders = DDFolder.fetchRequest()
+//        fetchRequestFolders.sortDescriptors = [NSSortDescriptor(keyPath: \DDFolder.name, ascending: true),
+//                                        NSSortDescriptor(keyPath: \DDDocument.order, ascending: true)]
+//        fetchedFoldersRequestController = NSFetchedResultsController(fetchRequest: fetchRequestFolders, managedObjectContext: DataBase.shared.context, sectionNameKeyPath: nil, cacheName: nil)
+
         super.init()
         
         fetchedRequestController.delegate = self
@@ -31,15 +39,31 @@ class DocumentsStorage: NSObject {
         } catch {
             print("Oops, could not fetch documents")
         }
-    }    
+        
+//        fetchedFoldersRequestController.delegate = self
+//        do {
+//            try fetchedFoldersRequestController.performFetch()
+//            controllerDidChangeContent(fetchedFoldersRequestController as! NSFetchedResultsController<NSFetchRequestResult>)
+//            
+//        } catch {
+//            print("Oops, could not fetch documents")
+//        }
+    }
 }
 
 extension DocumentsStorage: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        
         guard let documents = controller.fetchedObjects as? [DDDocument] else {
             return
         }
         self.documents.value = documents.map({ $0.convert() })
+        
+//        guard let folders = controller.fetchedObjects as? [DDFolder] else {
+//            return
+//        }
+//        self.folders.value = folders.map({ $0.convert() })
+
     }
 }
 

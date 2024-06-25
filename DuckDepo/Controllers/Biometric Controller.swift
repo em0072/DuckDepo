@@ -17,6 +17,7 @@ class BiometricController: ObservableObject {
         case none
         case touch
         case face
+        case opticId
     }
     
     enum BiometricDelay: Int, CaseIterable {
@@ -100,6 +101,8 @@ class BiometricController: ObservableObject {
                 return .touch
             case .faceID:
                 return .face
+            case .opticID:
+                return .opticId
             @unknown default:
                 return .unknown
             }

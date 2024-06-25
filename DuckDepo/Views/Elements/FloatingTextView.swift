@@ -13,8 +13,6 @@ protocol FloatingTextViewDelegate {
 }
 
 struct FloatingTextView: View {
-    
-    @Environment(\.openURL) var openURL
 
     var title: String
     var value: String
@@ -48,28 +46,17 @@ struct FloatingTextView: View {
                 }
                 .padding(.bottom, 5)
                 .contextMenu {
-                        Button(action: {
-                            postCopyNotification()
-                            UIPasteboard.general.string = value
-                        }) {
-                            Text("Copy to clipboard")
-                            Image(systemName: "doc.on.doc")
-                        }
-                    if let url = url {
-                        Button(action: {
-                            openURL(url)
-                        }) {
-                            Text("Open website")
-                            Image(systemName: "network")
-                        }
+                    if let url {
+                        ContextMenuView(type: .link(value: url))
+                    } else {
+                        ContextMenuView(type: .string(value: value))
                     }
-                     }
+                }
                 Spacer()
             }
             .contentShape(Rectangle())
             .onTapGesture(count: 2) {
-                postCopyNotification()
-                UIPasteboard.general.string = value
+                ClipboardController.shared.copy(string: value)
             }
         }
     }
@@ -78,9 +65,6 @@ struct FloatingTextView: View {
         return isVisible ? value : String(repeating: "•", count: value.count)
     }
     
-    private func postCopyNotification() {
-        NotificationCenter.default.post(name: .floatingTextFieldCopyNotification, object: nil, userInfo: nil)
-    }
 }
 
 struct FloatingTextView_Previews: PreviewProvider {

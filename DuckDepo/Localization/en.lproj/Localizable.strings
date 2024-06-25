@@ -117,6 +117,10 @@
 "dv_share_caption" = "Shared with 🦆 DuckDepo.";
 "dv_photos" = "Photos";
 "dv_no_photos" = "No Photos";
+"dv_copy_to_clipboard" = "Copy to clipboard";
+"dv_open_website" = "Open website";
+
+
 
 //PasswordsListView
 "plv_title" = "Passwords";
@@ -167,6 +171,7 @@
 "sv_1_min" = "After 1 minute";
 "sv_5_min" = "After 5 minute";
 "sv_15_min" = "After 15 minute";
+"sv_enable_opticid" = "Enable Optic ID";
 "sv_enable_faceid" = "Enable Face ID";
 "sv_enable_touchid" = "Enable Touch ID";
 "sv_enable_passcode" = "Enable passcode";

@@ -19,32 +19,21 @@ struct DocumentView: View {
     }
     
     var body: some View {
-        ZStack {
-            List {
-                DocPhotoSection(photos: viewModel.document.photos, selectedPhoto: $viewModel.selectedPhoto)
-                
-                ForEach(viewModel.document.sections) { section in
-                    DocSectionSection(section: section)
-                }
-            }
-            .listStyle(.insetGrouped)
-        }
-        .toolbar {
-            ToolbarItem(placement: .principal) {
-                HStack {
-                    viewModel.document.documentType.image
-                        .symbolRenderingMode(.palette)
-                        .foregroundStyle(.white, viewModel.document.documentType.iconColor)
-                        .frame(width: 35, height: 35)
-                    
-                    VStack {
-                        Text(viewModel.document.name)
-                            .foregroundColor(.primary)
-                            .bold()
-                        Text(viewModel.document.description)
-                            .foregroundColor(.secondary)
+        
+                List {
+                    DocPhotoSection(photos: viewModel.document.photos, selectedPhoto: $viewModel.selectedPhoto)
+                                            
+                    ForEach(viewModel.document.sections) { section in
+                        DocSectionSection(section: section)
                     }
                 }
+            .listStyle(.insetGrouped)
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                DocumentToolbarTitleView(icon: viewModel.document.documentType.image,
+                                         iconColor: viewModel.document.documentType.iconColor,
+                                         name: viewModel.document.name,
+                                         description: viewModel.document.description)
             }
         }
         .navigationBarTitleDisplayMode(.inline)
@@ -63,7 +52,6 @@ struct DocumentView: View {
             }
         }
         .onChange(of: viewModel.shouldDismissView, perform: dismissAction)
-        
     }
     
     private func dismissAction(_ shouldDismissView: Bool) {
@@ -84,6 +72,31 @@ struct DocumentView: View {
     //        return CloudSharingView(container: container, share: share)
     //    }
     
+}
+
+private struct DocumentToolbarTitleView: View {
+    
+    let icon: Image
+    let iconColor: Color
+    let name: String
+    let description: String
+    
+    var body: some View {
+        HStack {
+            icon
+                .symbolRenderingMode(.palette)
+                .foregroundStyle(.white, iconColor)
+                .frame(width: 35, height: 35)
+            
+            VStack {
+                Text(name)
+                    .foregroundColor(.primary)
+                    .bold()
+                Text(description)
+                    .foregroundColor(.secondary)
+            }
+        }
+    }
 }
 
 extension DocumentView {

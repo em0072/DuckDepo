@@ -1,4 +1,5 @@
 {
+  "originHash" : "f8af498687298baa536b705757aaec16ba6edf30336cbb41900ed21511cfd3fd",
   "pins" : [
     {
       "identity" : "keychain-swift",
@@ -6,9 +7,18 @@
       "location" : "https://github.com/evgenyneu/keychain-swift.git",
       "state" : {
         "branch" : "master",
-        "revision" : "32a99b537d1c6f3529a08257c28a5feb70c0c5af"
+        "revision" : "5e1b02b6a9dac2a759a1d5dbc175c86bd192a608"
+      }
+    },
+    {
+      "identity" : "sfsafesymbols",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SFSafeSymbols/SFSafeSymbols",
+      "state" : {
+        "revision" : "e2e28f4e56e1769c2ec3c61c9355fc64eb7a535a",
+        "version" : "5.3.0"
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }
