@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21F79" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22758" systemVersion="23A344" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
     <entity name="DDDocument" representedClassName="DDDocument" syncable="YES">
         <attribute name="documentDescription" optional="YES" attributeType="String"/>
         <attribute name="documentType" optional="YES" attributeType="String"/>
@@ -8,6 +8,7 @@
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="order" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="photoData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" allowsCloudEncryption="YES"/>
+        <relationship name="folder" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DDFolder" inverseName="documents" inverseEntity="DDFolder"/>
         <relationship name="sections" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="DDSection" inverseName="document" inverseEntity="DDSection"/>
     </entity>
     <entity name="DDField" representedClassName="DDField" syncable="YES">
@@ -16,6 +17,12 @@
         <attribute name="type" optional="YES" attributeType="String"/>
         <attribute name="value" optional="YES" attributeType="String" allowsCloudEncryption="YES"/>
         <relationship name="section" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DDSection" inverseName="fields" inverseEntity="DDSection"/>
+    </entity>
+    <entity name="DDFolder" representedClassName="DDFolder" syncable="YES">
+        <attribute name="icon" optional="YES" attributeType="Binary"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="order" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="documents" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DDDocument" inverseName="folder" inverseEntity="DDDocument"/>
     </entity>
     <entity name="DDPassword" representedClassName="DDPassword" syncable="YES">
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
@@ -30,10 +37,4 @@
         <relationship name="document" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DDDocument" inverseName="sections" inverseEntity="DDDocument"/>
         <relationship name="fields" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="DDField" inverseName="section" inverseEntity="DDField"/>
     </entity>
-    <elements>
-        <element name="DDDocument" positionX="-54" positionY="18" width="128" height="149"/>
-        <element name="DDField" positionX="-54" positionY="63" width="128" height="104"/>
-        <element name="DDPassword" positionX="-54" positionY="90" width="128" height="104"/>
-        <element name="DDSection" positionX="-63" positionY="54" width="128" height="89"/>
-    </elements>
 </model>

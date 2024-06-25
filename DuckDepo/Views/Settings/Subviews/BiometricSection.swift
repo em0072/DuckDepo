@@ -6,50 +6,102 @@
 //
 
 import SwiftUI
+import SFSafeSymbols
 
 struct BiometricSection: View {
     
-    @ScaledMetric private var size: CGFloat = 1
     @Binding var isBiometryEnabled: Bool
     @Binding var biometryDelay: BiometricController.BiometricDelay
     
     var body: some View {
         Section {
-                VStack {
-                    if BiometricController.shared.deviceHasPasscode() {
-                        HStack {
-                            Label(biometricToggleTitle, systemImage: biometricToggleImage)
-                                .labelStyle(ColorfulIconLabelStyle(color: .green, size: size))
-
-                            Toggle("", isOn: $isBiometryEnabled)
-                                .tint(.duckYellow)
-                        }
-                        
-                        VStack {
-                            Divider()
-                            HStack {
-                                Text("sv_ask_after")
-                                    .opacity(isBiometryEnabled ? 1 : 0.4)
-                                
-                                ZStack {
-                                    Picker("", selection: $biometryDelay) {
-                                        ForEach(BiometricController.BiometricDelay.allCases, id: \.self) { option in
-                                            Text(biometricDelayCasesText(option))
-                                        }
-                                    }
-                                    .pickerStyle(.menu)
-                                }
-                            }
-                            .disabled(!isBiometryEnabled)
-                        }
-                    } else {
-                        Text("sv_passcode_not_set")
-                            .font(.caption)
-                    }
+            VStack {
+                if BiometricController.shared.deviceHasPasscode() {
+                    BiometricToggleView(isBiometryEnabled: $isBiometryEnabled)
+                    
+                    Divider()
+                    
+                    BiometricAskAfterView(isBiometryEnabled: isBiometryEnabled, biometryDelay: $biometryDelay)
+                } else {
+                    Text("sv_passcode_not_set")
+                        .font(.caption)
                 }
+            }
+            .animation(.default, value: isBiometryEnabled)
         } header: {
             Text("sv_security")
         }
+    }
+}
+
+private struct BiometricToggleView: View {
+    
+    @Binding var isBiometryEnabled: Bool
+    @ScaledMetric private var size: CGFloat = 1
+
+    var body: some View {
+        Toggle(isOn: $isBiometryEnabled, label: {
+            Label(biometricToggleTitle, systemSymbol: biometricToggleSymbol)
+                .labelStyle(ColorfulIconLabelStyle(color: .green, size: size))
+        })
+        .tint(.duckYellow)
+    }
+    
+    private var biometricToggleTitle: String {
+        let type = BiometricController.shared.biometricType()
+        switch type {
+        case .opticId:
+            return "sv_enable_opticid".localized()
+        case .face:
+            return "sv_enable_faceid".localized()
+        case .touch:
+            return "sv_enable_touchid".localized()
+        default:
+            return "sv_enable_passcode".localized()
+        }
+    }
+    
+    
+    private var biometricToggleSymbol: SFSymbol {
+        let type = BiometricController.shared.biometricType()
+        switch type {
+        case .opticId:
+            if #available(iOS 17.0, *) {
+                return SFSymbol.opticid
+            } else {
+                return SFSymbol.eye
+            }
+        case .face:
+            return SFSymbol.faceid
+        case .touch:
+            return SFSymbol.touchid
+        default:
+            return SFSymbol._123Rectangle
+        }
+    }
+}
+
+
+private struct BiometricAskAfterView: View {
+    
+    var isBiometryEnabled: Bool
+    @Binding var biometryDelay: BiometricController.BiometricDelay
+    
+    var body: some View {
+        
+        HStack {
+            Picker(selection: $biometryDelay, content: {
+                ForEach(BiometricController.BiometricDelay.allCases, id: \.self) { option in
+                    Text(biometricDelayCasesText(option))
+                }
+            }, label: {
+                Text("sv_ask_after")
+                    .opacity(isBiometryEnabled ? 1 : 0.4)
+            })
+                .pickerStyle(.menu)
+                .tint(.duckYellow)
+        }
+        .disabled(!isBiometryEnabled)
     }
     
     private func biometricDelayCasesText(_ delay: BiometricController.BiometricDelay) -> String {
@@ -68,37 +120,20 @@ struct BiometricSection: View {
             return "sv_15_min".localized()
         }
     }
-    
-    private var biometricToggleTitle: String {
-        let type = BiometricController.shared.biometricType()
-        if case .face = type {
-            return "sv_enable_faceid".localized()
-        } else if case .touch = type {
-            return "sv_enable_touchid".localized()
-        } else {
-            return "sv_enable_passcode".localized()
-        }
-    }
-    
-    
-    private var biometricToggleImage: String {
-        let type = BiometricController.shared.biometricType()
-        if case .face = type {
-            return "faceid"
-        } else if case .touch = type {
-            return "touchid"
-        } else {
-            return "123.rectangle"
-        }
-    }
 }
 
-struct BiometricSection_Previews: PreviewProvider {
+#Preview {
     
-    static var previews: some View {
-        List {
-            BiometricSection(isBiometryEnabled: .constant(true), biometryDelay: .constant(.none))
+    struct PreviewWrapper: View {
+        @State var value: Bool = true
+        
+        var body: some View {
+            List {
+                BiometricSection(isBiometryEnabled: $value, biometryDelay: .constant(.none))
+            }
+            .preferredColorScheme(.dark)
         }
-        .preferredColorScheme(.dark)
     }
+    
+    return PreviewWrapper()
 }

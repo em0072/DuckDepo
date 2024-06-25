@@ -13,12 +13,11 @@ struct AppProgressView: View {
     
     var body: some View {
         VStack(alignment: .center) {
-            Image("LaunchScreenDuck")
+            Image(.duckForLaunchScreen)
             Text("apv_sorry")
                 .font(.title)
             Text("apv_duckIsBusy")
                 .font(.body)
-                
                 .padding()
             ProgressView(value: progressValue, total: 1)
                 .padding()

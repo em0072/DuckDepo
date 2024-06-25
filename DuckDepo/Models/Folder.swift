@@ -6,11 +6,19 @@
 //
 
 import Foundation
+import UIKit
 
-//struct Folder {
+struct Folder {
+    public var icon: UIImage?
+    public var name: String
+    public var order: Int
+    public var documnets: [DDDocument]
     
-//    public var name: String
-//    public var order: Int
-//    public var documnets: [DDDocument]
+}
+
+extension Folder {
     
-//}
+    static var empty: Folder {
+        Folder(icon: nil, name: "", order: 0, documnets: [])
+    }
+}

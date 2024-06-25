@@ -13,18 +13,9 @@ struct DocSectionSection: View {
     
     var body: some View {
         Section {
-            ZStack {
-                VStack {
-                    ForEach(0..<section.fields.count, id: \.self) { index in
-                        let field = section.fields[index]
-                            VStack {
-                                FloatingTextView(title: field.title, value: field.value)
-                                if index != section.fields.count - 1 {
-                                    Divider()
-                                }
-                        }
-                    }
-                }
+                ForEach(0..<section.fields.count, id: \.self) { index in
+                    let field = section.fields[index]
+                        FloatingTextView(title: field.title, value: field.value)
             }
         } header: {
             Text(section.name)
@@ -34,7 +25,7 @@ struct DocSectionSection: View {
 
 struct DocSectionSection_Previews: PreviewProvider {
     static var previews: some View {
-        ScrollView {
+        List {
             DocSectionSection(section: Document.test.sections.first!)
         }
     }

@@ -16,7 +16,7 @@ struct DocPhotoSection: View {
         Section {
                 if !photos.isEmpty {
                     ScrollView(.horizontal) {
-                        LazyHStack {
+                        HStack {
                             ForEach(photos, id: \.self) { photo in
                                 PhotoCell(image: photo) {
                                     self.selectedPhoto = photo

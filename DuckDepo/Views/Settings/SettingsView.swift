@@ -56,15 +56,17 @@ extension SettingsView {
     }
 }
 
-
-struct SettingsView_Previews: PreviewProvider {
-    static var previews: some View {
-//        NavigationView {
+#Preview {
+    
+    struct PreviewWrapper: View {
+        var body: some View {
             SettingsView()
-//        }
+                .preferredColorScheme(.dark)
+        }
     }
+    
+    return SettingsView()
 }
-
 
 
 

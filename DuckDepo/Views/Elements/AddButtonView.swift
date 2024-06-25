@@ -22,7 +22,7 @@ struct AddButtonView: View {
                     Spacer()
                     
                     Text(title)
-                        .foregroundColor(isEnabled ? .black : .duckDisabledText)
+                        .foregroundColor(isEnabled ? .black : .disabledText)
                     
                     Spacer()
                 }
