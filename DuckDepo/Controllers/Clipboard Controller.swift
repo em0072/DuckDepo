@@ -13,21 +13,20 @@ final class ClipboardController {
 
     static let shared = ClipboardController()
 
-    /// How long copied text stays on the clipboard.
-    static let textLifetime: TimeInterval = 60
-    /// How long a copied photo stays on the clipboard.
-    static let imageLifetime: TimeInterval = 120
-
     private let pasteboard: UIPasteboard
+    private let lifetime: () -> TimeInterval
 
-    init(pasteboard: UIPasteboard = .general) {
+    /// `lifetime` is how long a copy stays on the clipboard; the user picks it in Settings.
+    init(pasteboard: UIPasteboard = .general,
+         lifetime: @escaping () -> TimeInterval = { TimeInterval(DefaultsController.shared.clipboardLifetime) }) {
         self.pasteboard = pasteboard
+        self.lifetime = lifetime
     }
 
     func copy(string: String) {
         pasteboard.setItems(
             [[UTType.utf8PlainText.identifier: string]],
-            options: Self.options(lifetime: Self.textLifetime)
+            options: Self.options(lifetime: lifetime())
         )
         postCopyNotification()
     }
@@ -36,7 +35,7 @@ final class ClipboardController {
         guard let data = image.jpegData(compressionQuality: 0.9) else { return }
         pasteboard.setItems(
             [[UTType.jpeg.identifier: data]],
-            options: Self.options(lifetime: Self.imageLifetime)
+            options: Self.options(lifetime: lifetime())
         )
         postCopyNotification()
     }
@@ -48,5 +47,26 @@ final class ClipboardController {
 
     private func postCopyNotification() {
         NotificationCenter.default.post(name: .floatingTextFieldCopyNotification, object: nil, userInfo: nil)
+    }
+}
+
+/// How long a copied value stays on the clipboard.
+enum ClipboardLifetime: Int, CaseIterable, Identifiable {
+    case thirtySeconds = 30
+    case oneMinute = 60
+    case twoMinutes = 120
+    case fiveMinutes = 300
+
+    static let `default` = ClipboardLifetime.oneMinute
+
+    var id: Int { rawValue }
+
+    var title: String {
+        switch self {
+        case .thirtySeconds: String(localized: "clipboard_after_30_seconds")
+        case .oneMinute: String(localized: "clipboard_after_1_minute")
+        case .twoMinutes: String(localized: "clipboard_after_2_minutes")
+        case .fiveMinutes: String(localized: "clipboard_after_5_minutes")
+        }
     }
 }

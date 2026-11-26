@@ -27,10 +27,12 @@ struct DocumentView: View {
         List {
             if !viewModel.document.photos.isEmpty {
                 Section {
-                    PhotoCarousel(photos: viewModel.document.photos, selection: $currentPhotoID, namespace: photoNamespace) {
+                    PhotoGallery(photos: viewModel.document.photos, selection: $currentPhotoID, namespace: photoNamespace) {
                         isShowingPhotoViewer = true
                     }
+                    // On the page itself, not on a card.
                     .listRowInsets(EdgeInsets())
+                    .listRowBackground(Color.clear)
                 }
             }
             if let expiryDate = viewModel.document.expiryDate {

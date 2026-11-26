@@ -29,7 +29,7 @@ struct PhotosSectionView: View {
     @State private var cameraImages: [UIImage]?
     @State private var isProcessing = false
 
-    @ScaledMetric(relativeTo: .body) private var cellSize: CGFloat = 84
+    @ScaledMetric(relativeTo: .body) private var cellSize: CGFloat = 96
 
     var body: some View {
         Section {
@@ -49,7 +49,7 @@ struct PhotosSectionView: View {
                             delegate?.select(photo: photo)
                         }
                         .matchedTransitionSource(id: photo.id, in: namespace)
-                        .frame(width: cellSize, height: cellSize)
+                        .frame(width: width(of: photo), height: cellSize)
                         .overlay(alignment: .topTrailing) {
                             Button {
                                 delegate?.delete(photo: photo)
@@ -93,6 +93,13 @@ struct PhotosSectionView: View {
         } header: {
             Text("psv_photos")
         }
+    }
+
+    /// The photo's own shape at the strip's height, as on the document's page.
+    private func width(of photo: DocumentPhoto) -> CGFloat {
+        let size = photo.image.size
+        guard size.height > 0 else { return cellSize }
+        return min(max(cellSize * size.width / size.height, cellSize * 0.6), cellSize * 1.8)
     }
 
     private func loadPickedItems(_ items: [PhotosPickerItem]) {

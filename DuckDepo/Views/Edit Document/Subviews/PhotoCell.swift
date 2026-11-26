@@ -8,6 +8,7 @@
 import SwiftUI
 
 /// A square photo thumbnail that fills the frame it's given.
+/// A photo in the editor's strip, cropped to the cell, which has about the photo's own shape.
 struct PhotoCell: View {
 
     var image: UIImage

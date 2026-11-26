@@ -307,6 +307,312 @@
         }
       }
     },
+    "autofill_how_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "How It Works"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Как это работает"
+          }
+        }
+      }
+    },
+    "autofill_illustration_label" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Example: on a sign-in form, DuckDepo suggests a login above the keyboard."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пример: в форме входа DuckDepo предлагает логин над клавиатурой."
+          }
+        }
+      }
+    },
+    "autofill_illustration_source" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "from DuckDepo"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "из DuckDepo"
+          }
+        }
+      }
+    },
+    "autofill_off_body" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Turn on DuckDepo in Settings to fill in your passwords in apps and websites."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Включите DuckDepo в Настройках, чтобы подставлять пароли в приложениях и на сайтах."
+          }
+        }
+      }
+    },
+    "autofill_off_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AutoFill Is Off"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Автозаполнение выключено"
+          }
+        }
+      }
+    },
+    "autofill_on_body" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DuckDepo offers your passwords when you sign in to apps and websites."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DuckDepo предлагает ваши пароли, когда вы входите в приложения и на сайты."
+          }
+        }
+      }
+    },
+    "autofill_on_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AutoFill Is On"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Автозаполнение включено"
+          }
+        }
+      }
+    },
+    "autofill_step_list_body" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap the key above the keyboard and choose DuckDepo to see all your passwords, with that site’s at the top."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нажмите на ключ над клавиатурой и выберите DuckDepo: откроются все пароли, пароли этого сайта — сверху."
+          }
+        }
+      }
+    },
+    "autofill_step_list_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pick Any Password"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выберите любой пароль"
+          }
+        }
+      }
+    },
+    "autofill_step_lock_body" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "With the app lock on, DuckDepo asks for Face ID before it fills anything in."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Если блокировка включена, DuckDepo запросит Face ID, прежде чем что-то подставить."
+          }
+        }
+      }
+    },
+    "autofill_step_lock_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unlock with Face ID"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Разблокируйте Face ID"
+          }
+        }
+      }
+    },
+    "autofill_step_new_body" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Signing up somewhere new? Add the password right from that list."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Регистрируетесь на новом сайте? Добавьте пароль прямо из этого списка."
+          }
+        }
+      }
+    },
+    "autofill_step_new_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save New Logins"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сохраняйте новые логины"
+          }
+        }
+      }
+    },
+    "autofill_step_suggest_body" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap a login field in an app or on a website, and DuckDepo suggests the matching login above the keyboard."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нажмите на поле входа в приложении или на сайте, и DuckDepo предложит подходящий логин над клавиатурой."
+          }
+        }
+      }
+    },
+    "autofill_step_suggest_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign In as Usual"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Входите как обычно"
+          }
+        }
+      }
+    },
+    "autofill_step_turn_on_body" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Settings › General › AutoFill & Passwords, turn on DuckDepo."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "В Настройках › Основные › Автозаполнение и пароли включите DuckDepo."
+          }
+        }
+      }
+    },
+    "autofill_step_turn_on_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Turn On DuckDepo"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Включите DuckDepo"
+          }
+        }
+      }
+    },
+    "autofill_turn_on" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Turn On in Settings"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Включить в Настройках"
+          }
+        }
+      }
+    },
     "cancel_button" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -320,6 +626,74 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Отмена"
+          }
+        }
+      }
+    },
+    "clipboard_after_1_minute" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "After 1 minute"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Через 1 минуту"
+          }
+        }
+      }
+    },
+    "clipboard_after_2_minutes" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "After 2 minutes"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Через 2 минуты"
+          }
+        }
+      }
+    },
+    "clipboard_after_30_seconds" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "After 30 seconds"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Через 30 секунд"
+          }
+        }
+      }
+    },
+    "clipboard_after_5_minutes" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "After 5 minutes"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Через 5 минут"
           }
         }
       }
@@ -1397,23 +1771,6 @@
         }
       }
     },
-    "icloud_section_title" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iCloud"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iCloud"
-          }
-        }
-      }
-    },
     "icloud_status_error" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2264,6 +2621,210 @@
         }
       }
     },
+    "privacy_clipboard_body" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copies stay on this device, never on the clipboard of your other devices, and are cleared after the time you choose."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скопированное остаётся только на этом устройстве, не попадает в буфер обмена других ваших устройств и удаляется через выбранное время."
+          }
+        }
+      }
+    },
+    "privacy_clipboard_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copied Values"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скопированное"
+          }
+        }
+      }
+    },
+    "privacy_device_body" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Documents and photos are stored with the device’s data protection, and DuckDepo can lock with Face ID or Touch ID."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Документы и фото хранятся под защитой данных устройства, а DuckDepo можно заблокировать с Face ID или Touch ID."
+          }
+        }
+      }
+    },
+    "privacy_device_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On Your Devices"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "На ваших устройствах"
+          }
+        }
+      }
+    },
+    "privacy_icloud_body" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Documents sync through your private iCloud database, which only your Apple Account can open. With Advanced Data Protection on, it’s end-to-end encrypted."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Документы синхронизируются через вашу личную базу iCloud, доступную только вашему Apple ID. С включённой Расширенной защитой данных она зашифрована сквозным шифрованием."
+          }
+        }
+      }
+    },
+    "privacy_icloud_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Your iCloud"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "В вашем iCloud"
+          }
+        }
+      }
+    },
+    "privacy_passwords_body" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Password values are kept in iCloud Keychain, which is end-to-end encrypted."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пароли хранятся в Связке ключей iCloud со сквозным шифрованием."
+          }
+        }
+      }
+    },
+    "privacy_passwords_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Passwords"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пароли"
+          }
+        }
+      }
+    },
+    "privacy_scan_body" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Text is read from your photos on this device, using Apple’s on-device model. Nothing is sent to a server."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Текст с фото распознаётся на этом устройстве моделью Apple, работающей на устройстве. На серверы ничего не отправляется."
+          }
+        }
+      }
+    },
+    "privacy_scan_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scanning"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сканирование"
+          }
+        }
+      }
+    },
+    "privacy_tracking_body" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DuckDepo has no ads, analytics or accounts of its own."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "В DuckDepo нет рекламы, аналитики и собственных аккаунтов."
+          }
+        }
+      }
+    },
+    "privacy_tracking_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Tracking"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Без слежки"
+          }
+        }
+      }
+    },
     "psv_add_photo" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2617,6 +3178,74 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ремарки"
+          }
+        }
+      }
+    },
+    "reminder_schedule_30" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "30, 7 days"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "30, 7 дней"
+          }
+        }
+      }
+    },
+    "reminder_schedule_7" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "7 days"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "7 дней"
+          }
+        }
+      }
+    },
+    "reminder_schedule_90" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "90, 30, 7 days"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "90, 30, 7 дней"
+          }
+        }
+      }
+    },
+    "reminder_untitled_document" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Document"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Документ"
           }
         }
       }
@@ -3103,7 +3732,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "After 15 minute"
+            "value" : "After 15 minutes"
           }
         },
         "ru" : {
@@ -3154,7 +3783,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "After 5 minute"
+            "value" : "After 5 minutes"
           }
         },
         "ru" : {
@@ -3182,6 +3811,23 @@
         }
       }
     },
+    "sv_about" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "About"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "О приложении"
+          }
+        }
+      }
+    },
     "sv_add_field" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3205,7 +3851,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ask after"
+            "value" : "Ask After"
           }
         },
         "ru" : {
@@ -3216,47 +3862,13 @@
         }
       }
     },
-    "sv_autofill_feature_text1" : {
+    "sv_autofill" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "DuckDepo supports an autofill feature, which lets you autofill passwords in a browser without opening DuckDepo app and copying passwords!"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "DuckDepo поддерживает функцию автозаполнения, которая позволяет автоматически заполнять пароли в браузере, не открывая приложение DuckDepo и не копируя пароли!"
-          }
-        }
-      }
-    },
-    "sv_autofill_feature_text2" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "To activate this feature go to your phone **'Settings' -> 'Passwords' -> 'AutoFill Passwords'** and select DuckDepo from the list. Then open the DuckDepo app, and you are ready to autofill passwords while browsing the internet."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Чтобы активировать эту функцию, в телефоне перейдите в ** «Настройки» -> «Пароли» -> «Автозаполнение паролей» ** и выберите DuckDepo из списка. Затем откройте приложение DuckDepo, и вы готовы автоматически вводить пароли во время работы в Интернете."
-          }
-        }
-      }
-    },
-    "sv_autofill_featute" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Passwords AutoFill"
+            "value" : "Password AutoFill"
           }
         },
         "ru" : {
@@ -3267,19 +3879,36 @@
         }
       }
     },
-    "sv_content_reset" : {
+    "sv_clipboard" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Reset Content"
+            "value" : "Clear Copied Values"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Сбросить контент"
+            "value" : "Очищать скопированное"
+          }
+        }
+      }
+    },
+    "sv_clipboard_footer" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copied values stay on this device and are removed from the clipboard after this time."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скопированное остаётся только на этом устройстве и удаляется из буфера обмена через это время."
           }
         }
       }
@@ -3369,67 +3998,19 @@
         }
       }
     },
-    "sv_document_count" : {
+    "sv_delete_all_footer" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "1 document"
-                }
-              },
-              "zero" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "No documents"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%u documents"
-                }
-              }
-            }
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deletes every document and password here and on your other devices."
           }
         },
         "ru" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "1 документ"
-                }
-              },
-              "few" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%u документа"
-                }
-              },
-              "many" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%u документов"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%u документа"
-                }
-              },
-              "zero" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "Нет документов"
-                }
-              }
-            }
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Удаляет все документы и пароли здесь и на других ваших устройствах."
           }
         }
       }
@@ -3536,19 +4117,19 @@
         }
       }
     },
-    "sv_help" : {
+    "sv_expiry_reminders" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Help"
+            "value" : "Expiry Reminders"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Помощь"
+            "value" : "Напоминать о сроке"
           }
         }
       }
@@ -3570,6 +4151,91 @@
         }
       }
     },
+    "sv_notifications_off" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notifications are off for DuckDepo. Turn them on in Settings."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Уведомления для DuckDepo выключены. Включите их в Настройках."
+          }
+        }
+      }
+    },
+    "sv_off" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Off"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выкл."
+          }
+        }
+      }
+    },
+    "sv_on" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вкл."
+          }
+        }
+      }
+    },
+    "sv_overview_subtitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kept on your devices and in your iCloud"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Хранится на ваших устройствах и в вашем iCloud"
+          }
+        }
+      }
+    },
+    "sv_overview_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your Depo"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ваш Depo"
+          }
+        }
+      }
+    },
     "sv_passcode_not_set" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3582,72 +4248,75 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Включите использования пароля в настройках устройства, чтобы обеспечить безопастность доступа к приложению DuckDepo."
+            "value" : "Включите использование пароля в настройках устройства, чтобы обеспечить безопастность доступа к приложению DuckDepo."
           }
         }
       }
     },
-    "sv_password_count" : {
+    "sv_privacy" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "1 password"
-                }
-              },
-              "zero" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "No passwords"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%u passwords"
-                }
-              }
-            }
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privacy"
           }
         },
         "ru" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "1 пароль"
-                }
-              },
-              "few" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%u пароля"
-                }
-              },
-              "many" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%u паролей"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%u пароля"
-                }
-              },
-              "zero" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "Нет паролей"
-                }
-              }
-            }
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Конфиденциальность"
+          }
+        }
+      }
+    },
+    "sv_remind_me" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remind Me Before"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Напоминать за"
+          }
+        }
+      }
+    },
+    "sv_reminders" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reminders"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Напоминания"
+          }
+        }
+      }
+    },
+    "sv_reminders_footer" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A notification in the morning before a document expires, and on the day itself. It shows only the document’s name."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Уведомление утром перед окончанием срока документа и в сам день. В нём только название документа."
           }
         }
       }
@@ -3664,24 +4333,75 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Безопастность"
+            "value" : "Безопасность"
           }
         }
       }
     },
-    "sv_storage" : {
+    "sv_stat_documents" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Storage"
+            "value" : "Documents"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Хранилище"
+            "value" : "Документы"
+          }
+        }
+      }
+    },
+    "sv_stat_passwords" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Passwords"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пароли"
+          }
+        }
+      }
+    },
+    "sv_stat_renewal" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To Renew"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Продлить"
+          }
+        }
+      }
+    },
+    "sv_sync_autofill" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sync and AutoFill"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Синхронизация и автозаполнение"
           }
         }
       }
@@ -3699,6 +4419,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Настройки"
+          }
+        }
+      }
+    },
+    "sv_version" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Версия"
           }
         }
       }
