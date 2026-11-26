@@ -5,25 +5,39 @@
 
 import SwiftUI
 
-/// Shows whether iCloud sync is working, so a silent failure doesn't look like lost data.
-struct ICloudSection: View {
+/// iCloud sync status and Password AutoFill.
+struct SyncSection: View {
 
     let monitor: SyncMonitor
+    let viewModel: SettingsViewModel
 
     var body: some View {
         Section {
             LabeledContent {
                 statusView
             } label: {
-                Label("icloud_sync", systemImage: "icloud")
+                Label("icloud_sync", systemImage: "icloud.fill")
+                    .labelStyle(.tile(.blue))
             }
             if let error = monitor.lastErrorDescription, monitor.accountStatus == .available {
                 Text(error)
                     .font(.footnote)
                     .foregroundStyle(.red)
             }
+            NavigationLink {
+                AutoFillView(viewModel: viewModel)
+            } label: {
+                LabeledContent {
+                    if let isEnabled = viewModel.isAutoFillEnabled {
+                        Text(isEnabled ? "sv_on" : "sv_off")
+                    }
+                } label: {
+                    Label("sv_autofill", systemImage: "key.fill")
+                        .labelStyle(.tile(.indigo))
+                }
+            }
         } header: {
-            Text("icloud_section_title")
+            Text("sv_sync_autofill")
         } footer: {
             Text("icloud_keychain_footer")
         }
@@ -45,7 +59,13 @@ struct ICloudSection: View {
                 Text("icloud_status_error")
                     .foregroundStyle(.red)
             } else if let date = monitor.lastSyncDate {
-                Text("icloud_status_synced \(date.formatted(.relative(presentation: .named)))")
+                Label {
+                    Text("icloud_status_synced \(date.formatted(.relative(presentation: .named)))")
+                } icon: {
+                    Image(systemName: "circle.fill")
+                        .font(.system(size: 7))
+                        .foregroundStyle(.green)
+                }
             } else {
                 Text("icloud_status_on")
             }
@@ -60,7 +80,9 @@ struct ICloudSection: View {
 }
 
 #Preview {
-    List {
-        ICloudSection(monitor: SyncMonitor())
+    NavigationStack {
+        List {
+            SyncSection(monitor: SyncMonitor(), viewModel: SettingsViewModel())
+        }
     }
 }

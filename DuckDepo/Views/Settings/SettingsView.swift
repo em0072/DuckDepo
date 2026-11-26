@@ -2,51 +2,46 @@
 //  SettingsView.swift
 //  DuckDepo
 //
-//  Created by Evgeny Mitko on 26/10/2021.
-//
 
 import SwiftUI
 
 struct SettingsView: View {
 
+    @State private var viewModel = SettingsViewModel()
     @Bindable private var biometricController = BiometricController.shared
-    private var syncMonitor = SyncMonitor.shared
-    @State private var documentsCount = 0
-    @State private var passwordsCount = 0
-    @State private var showAutofillInfo = false
-
-    private let db = DataBase.shared
+    private let syncMonitor = SyncMonitor.shared
+    @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
         NavigationStack {
             List {
-                BiometricSection(isBiometryEnabled: $biometricController.isBiometryEnabled,
-                                 biometryDelay: $biometricController.biometricDelay)
-                ICloudSection(monitor: syncMonitor)
-                OverviewSection(documentCount: $documentsCount, passwordCount: $passwordsCount)
-                HelpSection(showAutofillInfo: $showAutofillInfo)
-                DeleteAllSection(onDeleteAction: deleteEverything)
+                Section {
+                    OverviewCard(documentCount: viewModel.documentCount,
+                                 passwordCount: viewModel.passwordCount,
+                                 renewalCount: viewModel.renewalCount)
+                }
+                SecuritySection(isBiometryEnabled: $biometricController.isBiometryEnabled,
+                                biometryDelay: $biometricController.biometricDelay,
+                                clipboardLifetime: $viewModel.clipboardLifetime)
+                RemindersSection(viewModel: viewModel)
+                SyncSection(monitor: syncMonitor, viewModel: viewModel)
+                AboutSection(version: viewModel.version)
+                DeleteAllSection(onDeleteAction: viewModel.deleteEverything)
             }
             .navigationTitle("sv_title")
         }
-        .onAppear(perform: updateCounts)
-        .onReceive(NotificationCenter.default.publisher(for: .NSManagedObjectContextObjectsDidChange, object: db.context)) { _ in
-            updateCounts()
+        .onAppear(perform: viewModel.start)
+        .task {
+            await viewModel.refreshSystemState()
         }
-        .sheet(isPresented: $showAutofillInfo) {
-            AutofillInfoView()
-                .presentationDragIndicator(.visible)
+        .onChange(of: scenePhase) { _, phase in
+            // The user may have turned AutoFill or notifications on or off in Settings.
+            if phase == .active {
+                Task {
+                    await viewModel.refreshSystemState()
+                }
+            }
         }
-    }
-
-    private func updateCounts() {
-        documentsCount = db.fetchDocumentCount()
-        passwordsCount = db.fetchCount(for: DDPassword.self)
-    }
-
-    private func deleteEverything() {
-        db.deleteEverything()
-        updateCounts()
     }
 }
 

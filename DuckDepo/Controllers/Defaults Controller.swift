@@ -16,6 +16,9 @@ final class DefaultsController {
         static let biometricDelay = "biometricDelay"
         static let isSharedStoreReady = "sharedStoreReady"
         static let didMigrateStandardDefaults = "didMigrateStandardDefaults"
+        static let clipboardLifetime = "clipboardLifetime"
+        static let areExpiryRemindersEnabled = "expiryRemindersEnabled"
+        static let reminderSchedule = "reminderSchedule"
         static func historyToken(_ author: String) -> String { "historyToken.\(author)" }
 
         /// Keys from older versions that are no longer used.
@@ -50,6 +53,27 @@ final class DefaultsController {
     var biometricDelay: Int {
         get { defaults.integer(forKey: Keys.biometricDelay) }
         set { defaults.set(newValue, forKey: Keys.biometricDelay) }
+    }
+
+    // MARK: - Clipboard
+
+    /// Seconds a copied value stays on the clipboard. The extension copies too, so it's shared.
+    var clipboardLifetime: Int {
+        get { defaults.object(forKey: Keys.clipboardLifetime) as? Int ?? ClipboardLifetime.default.rawValue }
+        set { defaults.set(newValue, forKey: Keys.clipboardLifetime) }
+    }
+
+    // MARK: - Reminders
+
+    var areExpiryRemindersEnabled: Bool {
+        get { defaults.bool(forKey: Keys.areExpiryRemindersEnabled) }
+        set { defaults.set(newValue, forKey: Keys.areExpiryRemindersEnabled) }
+    }
+
+    /// A `ReminderSchedule` raw value.
+    var reminderSchedule: Int {
+        get { defaults.integer(forKey: Keys.reminderSchedule) }
+        set { defaults.set(newValue, forKey: Keys.reminderSchedule) }
     }
 
     // MARK: - Store

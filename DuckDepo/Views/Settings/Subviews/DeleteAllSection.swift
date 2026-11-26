@@ -2,41 +2,35 @@
 //  DeleteAllSection.swift
 //  DuckDepo
 //
-//  Created by Evgeny Mitko on 16/11/2021.
-//
 
 import SwiftUI
 
+/// Deletes every document and password, after asking.
 struct DeleteAllSection: View {
-    
-    @State private var isShowingDeleteAlert: Bool = false
-    var onDeleteAction: (()->())?
-    
+
+    var onDeleteAction: () -> Void
+
+    @State private var isShowingDeleteAlert = false
+
     var body: some View {
         Section {
-            Button {
+            Button("sv_delete_all_button", role: .destructive) {
                 isShowingDeleteAlert = true
-            } label: {
-                Text("sv_delete_all_button")
             }
-            .foregroundColor(.red)
-            .bold()
+            .frame(maxWidth: .infinity)
             .confirmationDialog("sv_delete_all_confirm_title", isPresented: $isShowingDeleteAlert, titleVisibility: .visible) {
-                Button("sv_delete_all_confirm_button", role: .destructive, action: {onDeleteAction?()})
+                Button("sv_delete_all_confirm_button", role: .destructive, action: onDeleteAction)
             } message: {
                 Text("sv_delete_all_confirm_body")
             }
-        } header: {
-            Text("sv_content_reset")
+        } footer: {
+            Text("sv_delete_all_footer")
         }
     }
-    
 }
 
-struct DeleteAllSection_Previews: PreviewProvider {
-    static var previews: some View {
-        List {
-            DeleteAllSection()
-        }
+#Preview {
+    List {
+        DeleteAllSection {}
     }
 }

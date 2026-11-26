@@ -61,7 +61,8 @@ xcodebuild -project DuckDepo.xcodeproj -scheme DuckDepo clean
 - Tab-based main interface (`Tab` API): Depo (Documents), Passwords, Settings, plus a search tab (`Tab(role: .search)` with `.tabViewSearchActivation(.searchTabSelection)`, the separate button at the end of the tab bar) that searches documents and passwords together (`SearchView`)
 - Each list is a selection-based `NavigationSplitView` (sidebar list, detail column on iPad, push on iPhone), with swipe actions and context menus
 - Editors are sheets with close/confirm toolbar buttons (`Button(role: .close)` / `.confirm`) and a discard confirmation
-- Photos open in `PhotoViewer` (full screen, zoom transition from the tapped photo)
+- Photos open in `PhotoViewer` (full screen, zoom transition from the tapped photo); on the document they show in `PhotoGallery` (a row at each photo's own shape, or one photo at full width)
+- Settings: an overview card (counts, documents to renew), rows with `ColorfulIconLabelStyle` tiles (`.labelStyle(.tile(color))`), Security (lock, clipboard), Reminders, Sync and AutoFill (status from `ASCredentialIdentityStore`), About (Privacy page, version)
 
 ## Key Components
 
@@ -73,7 +74,8 @@ xcodebuild -project DuckDepo.xcodeproj -scheme DuckDepo clean
 ### Controllers
 - `BiometricController`: Authentication state management
 - `DefaultsController`: UserDefaults wrapper with proper key management
-- `ClipboardController`: Copies are local-only (no Universal Clipboard) and expire after 60 s (text) / 120 s (images)
+- `ClipboardController`: Copies are local-only (no Universal Clipboard) and expire after the user's `ClipboardLifetime` (default 1 min, shared with the extension through `DefaultsController`)
+- `ExpiryReminders`: local notifications 90/30/7 days before and on the expiry day (`ReminderSchedule`), 9:00 local, only the document's name shown; watches documents and reschedules on any change (nearest 60 pending)
 
 ### UI Components
 - Standard iOS 26 look (insetGrouped lists, forms, glass toolbars); `duckYellow` is the accent (deep amber #9E6C00 in light mode for contrast, bright #FBC531 in dark, plus Increase Contrast variants); labels on a yellow fill use `onDuckYellow`
