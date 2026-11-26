@@ -3,6 +3,7 @@
 //  DuckDepo
 //
 
+import CoreImage
 import ImageIO
 import PDFKit
 import UIKit
@@ -24,6 +25,19 @@ enum DocumentReader {
         } catch {
             return []
         }
+    }
+
+    /// The text of the QR codes in a picture (a screenshot of a setup code, say). Core Image rather than
+    /// Vision: Vision's barcode detector can't be created in the simulator.
+    static func qrCodes(in image: UIImage) async -> [String] {
+        guard let cgImage = image.cgImage else { return [] }
+        let orientation = CGImagePropertyOrientation(image.imageOrientation)
+        return await Task.detached(priority: .userInitiated) {
+            let detector = CIDetector(ofType: CIDetectorTypeQRCode, context: nil,
+                                      options: [CIDetectorAccuracy: CIDetectorAccuracyHigh])
+            let picture = CIImage(cgImage: cgImage).oriented(orientation)
+            return (detector?.features(in: picture) ?? []).compactMap { ($0 as? CIQRCodeFeature)?.messageString }
+        }.value
     }
 
     /// The first pages of a PDF as images, large enough to read.

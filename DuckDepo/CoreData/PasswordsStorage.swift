@@ -84,6 +84,16 @@ final class PasswordsStorage: NSObject {
         keychain.string(forKey: id.uuidString) ?? ""
     }
 
+    /// The `otpauth://` link of the password's one-time codes, or empty.
+    func oneTimeCode(for id: UUID) -> String {
+        keychain.string(forKey: Self.oneTimeCodeKey(for: id)) ?? ""
+    }
+
+    /// Next to the password's own keychain item, so it syncs through iCloud Keychain the same way.
+    static func oneTimeCodeKey(for id: UUID) -> String {
+        id.uuidString + ".otp"
+    }
+
     /// Inserts or updates the record and its keychain value. Returns `false` if nothing was saved.
     @discardableResult
     func save(_ password: Password) -> Bool {
@@ -95,7 +105,7 @@ final class PasswordsStorage: NSObject {
             object.id = password.id
         }
         object.update(name: password.name, login: password.login, website: password.website)
-        guard keychain.set(password.value, forKey: password.id.uuidString) else {
+        guard keychain.set(password.value, forKey: password.id.uuidString), saveOneTimeCode(of: password) else {
             context.rollback()
             return false
         }
@@ -103,7 +113,7 @@ final class PasswordsStorage: NSObject {
             context.rollback()
             return false
         }
-        identityStore?.refresh(context: context)
+        identityStore?.refresh(context: context, keychain: keychain)
         return true
     }
 
@@ -112,8 +122,18 @@ final class PasswordsStorage: NSObject {
         context.delete(object)
         if database.save() {
             keychain.delete(password.id.uuidString)
-            identityStore?.refresh(context: context)
+            keychain.delete(Self.oneTimeCodeKey(for: password.id))
+            identityStore?.refresh(context: context, keychain: keychain)
         }
+    }
+
+    private func saveOneTimeCode(of password: Password) -> Bool {
+        let key = Self.oneTimeCodeKey(for: password.id)
+        if password.oneTimeCode.isEmpty {
+            keychain.delete(key)
+            return true
+        }
+        return keychain.set(password.oneTimeCode, forKey: key)
     }
 
     func count() -> Int {

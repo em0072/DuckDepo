@@ -23,6 +23,16 @@ final class CredentialProviderViewController: ASCredentialProviderViewController
         }))
     }
 
+    /// A site asked for a one-time code and the user opened the list.
+    override func prepareOneTimeCodeCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
+        let viewModel = AutoFillPasswordsListViewModel(identifiers: serviceIdentifiers.map(\.identifier), mode: .oneTimeCodes)
+        show(AutoFillPasswordsListView(viewModel: viewModel, onClose: { [weak self] in
+            self?.cancel(.userCanceled)
+        }, onSelectCode: { [weak self] code in
+            self?.extensionContext.completeOneTimeCodeRequest(using: ASOneTimeCodeCredential(code: code), completionHandler: nil)
+        }))
+    }
+
     /// The user picked a suggestion in the QuickType bar. Without the app lock we can fill right away;
     /// with it, ask the system to show our UI so the user can authenticate first.
     override func provideCredentialWithoutUserInteraction(for credentialRequest: any ASCredentialRequest) {
@@ -69,11 +79,20 @@ final class CredentialProviderViewController: ASCredentialProviderViewController
 
     private func complete(_ request: any ASCredentialRequest) {
         let identity = request.credentialIdentity
+        if request.type == .oneTimeCode {
+            guard let recordID = identity.recordIdentifier, let id = UUID(uuidString: recordID),
+                  let code = Keychain.shared.string(forKey: PasswordsStorage.oneTimeCodeKey(for: id)).flatMap(OneTimeCode.init(text:)) else {
+                cancel(.credentialIdentityNotFound)
+                return
+            }
+            extensionContext.completeOneTimeCodeRequest(using: ASOneTimeCodeCredential(code: code.code()), completionHandler: nil)
+            return
+        }
         guard let recordID = identity.recordIdentifier, let value = Keychain.shared.string(forKey: recordID) else {
             cancel(.credentialIdentityNotFound)
             return
         }
-        let credential = ASPasswordCredential(user: identity.user, password: value)
+        let credential = ASPasswordCredential(user: (identity as? ASPasswordCredentialIdentity)?.user ?? "", password: value)
         extensionContext.completeRequest(withSelectedCredential: credential, completionHandler: nil)
     }
 

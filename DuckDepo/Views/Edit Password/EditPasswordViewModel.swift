@@ -28,6 +28,10 @@ final class EditPasswordViewModel {
     var passwordLogin = ""
     var passwordValue = ""
     var passwordWebsite = ""
+    /// The `otpauth://` link of the one-time codes, or empty.
+    var oneTimeCodeURI = ""
+    /// A setup key or QR code that isn't one.
+    var oneTimeCodeError = false
 
     private(set) var shouldCloseView = false
     var saveFailed = false
@@ -60,6 +64,34 @@ final class EditPasswordViewModel {
         let value = storage.value(for: password.id)
         original.value = value
         passwordValue = value
+        let oneTimeCode = storage.oneTimeCode(for: password.id)
+        original.oneTimeCode = oneTimeCode
+        oneTimeCodeURI = oneTimeCode
+    }
+
+    // MARK: - One-time codes
+
+    var oneTimeCode: OneTimeCode? {
+        OneTimeCode(text: oneTimeCodeURI)
+    }
+
+    /// From a setup key or the text of a setup QR code. Fills in an empty name and login from it.
+    func setUpOneTimeCode(from text: String) {
+        guard let code = OneTimeCode(text: text) else {
+            oneTimeCodeError = true
+            return
+        }
+        oneTimeCodeURI = code.uri
+        if passwordName.trimmingCharacters(in: .whitespaces).isEmpty, let issuer = code.issuer {
+            passwordName = issuer
+        }
+        if passwordLogin.trimmingCharacters(in: .whitespaces).isEmpty, let account = code.account {
+            passwordLogin = account
+        }
+    }
+
+    func removeOneTimeCode() {
+        oneTimeCodeURI = ""
     }
 
     var isNew: Bool {
@@ -73,6 +105,7 @@ final class EditPasswordViewModel {
         password.login = passwordLogin.trimmingCharacters(in: .whitespacesAndNewlines)
         password.value = passwordValue
         password.website = passwordWebsite.trimmingCharacters(in: .whitespacesAndNewlines)
+        password.oneTimeCode = oneTimeCodeURI
         return password
     }
 

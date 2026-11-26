@@ -79,6 +79,11 @@ extension PasswordView {
                     FieldValueRow(title: "pv_password".localized(), value: viewModel.password.value,
                                   isSecret: true, isMonospaced: true)
                 }
+                if let code = viewModel.oneTimeCode {
+                    OneTimeCodeRow(code: code) { value in
+                        ClipboardController.shared.copy(string: value)
+                    }
+                }
             } else {
                 Text("pv_empty_credentials")
                     .foregroundStyle(.secondary)

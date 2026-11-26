@@ -32,6 +32,7 @@ final class PasswordViewModel {
         guard !isLoaded else { return }
         isLoaded = true
         password.value = storage.value(for: password.id)
+        password.oneTimeCode = storage.oneTimeCode(for: password.id)
     }
 
     /// The list's copy changed (edited here, or synced from another device): show its name, login and
@@ -42,10 +43,15 @@ final class PasswordViewModel {
         password.login = listItem.login
         password.website = listItem.website
         password.value = storage.value(for: password.id)
+        password.oneTimeCode = storage.oneTimeCode(for: password.id)
     }
 
     var shouldShowCredentialsSection: Bool {
-        isLoginExist || isPasswordExist
+        isLoginExist || isPasswordExist || oneTimeCode != nil
+    }
+
+    var oneTimeCode: OneTimeCode? {
+        OneTimeCode(text: password.oneTimeCode)
     }
 
     var isNameExist: Bool {

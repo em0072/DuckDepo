@@ -187,6 +187,12 @@
 		4D64B73A62E6B935EDAE86D6 /* PhotoTextIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A0C6460E160858611BFA8C /* PhotoTextIndex.swift */; };
 		722488C6ABDC3A5D7D0530A1 /* PhotoIndexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44201520F1F76D60AA402180 /* PhotoIndexer.swift */; };
 		3937FD628A1749AAF3D4E9AE /* PhotoSearchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA96E14BD30AC74754478FA /* PhotoSearchTests.swift */; };
+		89C8F41F06F174B401B3AC67 /* OneTimeCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795B61DCEDD69935C9583E61 /* OneTimeCode.swift */; };
+		80EB48B25D0BB576BAAAF79D /* OneTimeCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795B61DCEDD69935C9583E61 /* OneTimeCode.swift */; };
+		B2E0692ED072B885DE81FD3A /* OneTimeCodeViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA578F9FADF491B2770BE84 /* OneTimeCodeViews.swift */; };
+		0C5ADA3FA4B2BB87C1FB3930 /* OneTimeCodeViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA578F9FADF491B2770BE84 /* OneTimeCodeViews.swift */; };
+		22DAB4B2F753788341B840F7 /* OneTimeCodeSetupSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6231B3A9706E7506E8E0A8A /* OneTimeCodeSetupSection.swift */; };
+		EFF43D162E946D5CECFEFE41 /* OneTimeCodeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED4B936F2E4E1B4487B15588 /* OneTimeCodeTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -357,6 +363,10 @@
 		92A0C6460E160858611BFA8C /* PhotoTextIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoTextIndex.swift; sourceTree = "<group>"; };
 		44201520F1F76D60AA402180 /* PhotoIndexer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoIndexer.swift; sourceTree = "<group>"; };
 		4EA96E14BD30AC74754478FA /* PhotoSearchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSearchTests.swift; sourceTree = "<group>"; };
+		795B61DCEDD69935C9583E61 /* OneTimeCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneTimeCode.swift; sourceTree = "<group>"; };
+		3EA578F9FADF491B2770BE84 /* OneTimeCodeViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneTimeCodeViews.swift; sourceTree = "<group>"; };
+		A6231B3A9706E7506E8E0A8A /* OneTimeCodeSetupSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneTimeCodeSetupSection.swift; sourceTree = "<group>"; };
+		ED4B936F2E4E1B4487B15588 /* OneTimeCodeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneTimeCodeTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -421,6 +431,7 @@
 				0288592DAE338FEAC9918B55 /* FieldDate.swift */,
 				06BBFF171146202E2AA25BFE /* ExpiryStatus.swift */,
 				83EB2D1E0EF75CE039DA965F /* DocumentSearch.swift */,
+				795B61DCEDD69935C9583E61 /* OneTimeCode.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -610,6 +621,7 @@
 				DA17517026B6AAAF71429620 /* FieldValueRow.swift */,
 				6E43818E514A28222916E2C4 /* LabeledTextField.swift */,
 				303BE5E91EE4EAD9E1A17872 /* PhotoViewer.swift */,
+				3EA578F9FADF491B2770BE84 /* OneTimeCodeViews.swift */,
 			);
 			path = Elements;
 			sourceTree = "<group>";
@@ -695,6 +707,7 @@
 			children = (
 				75A1C910274F84B500551645 /* EditPasswordView.swift */,
 				75A1C912274F84C600551645 /* EditPasswordViewModel.swift */,
+				A6231B3A9706E7506E8E0A8A /* OneTimeCodeSetupSection.swift */,
 			);
 			path = "Edit Password";
 			sourceTree = "<group>";
@@ -757,6 +770,7 @@
 				C7C1DD455E4C69711182B406 /* ScanPipelineTests.swift */,
 				8DA416B3A01EA0856B1EE275 /* RemindersAndSettingsTests.swift */,
 				4EA96E14BD30AC74754478FA /* PhotoSearchTests.swift */,
+				ED4B936F2E4E1B4487B15588 /* OneTimeCodeTests.swift */,
 			);
 			path = DuckDepoTests;
 			sourceTree = "<group>";
@@ -1033,6 +1047,9 @@
 				FE372F4723B3F8ADAF3E6D64 /* ExpiryReminders.swift in Sources */,
 				4D64B73A62E6B935EDAE86D6 /* PhotoTextIndex.swift in Sources */,
 				722488C6ABDC3A5D7D0530A1 /* PhotoIndexer.swift in Sources */,
+				89C8F41F06F174B401B3AC67 /* OneTimeCode.swift in Sources */,
+				B2E0692ED072B885DE81FD3A /* OneTimeCodeViews.swift in Sources */,
+				22DAB4B2F753788341B840F7 /* OneTimeCodeSetupSection.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1089,6 +1106,8 @@
 				F823A163B993D0D0D9943110 /* DDPhoto+CoreDataProperties.swift in Sources */,
 				D2D49F926B1F18048DE9CAA4 /* FieldValueRow.swift in Sources */,
 				BBE5C126871D78ADBFCCD016 /* LabeledTextField.swift in Sources */,
+				80EB48B25D0BB576BAAAF79D /* OneTimeCode.swift in Sources */,
+				0C5ADA3FA4B2BB87C1FB3930 /* OneTimeCodeViews.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1111,6 +1130,7 @@
 				17B2B60F7F7D2BA1E062A27D /* ScanPipelineTests.swift in Sources */,
 				A41698958879786997F8BCFD /* RemindersAndSettingsTests.swift in Sources */,
 				3937FD628A1749AAF3D4E9AE /* PhotoSearchTests.swift in Sources */,
+				EFF43D162E946D5CECFEFE41 /* OneTimeCodeTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

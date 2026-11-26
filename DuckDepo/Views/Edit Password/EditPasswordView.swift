@@ -15,6 +15,9 @@ struct EditPasswordView: View {
     @State private var isShowingDeleteAlert = false
     @State private var isShowingPassGenerator = false
     @State private var isShowingDiscardDialog = false
+    #if !AUTOFILL_EXTENSION
+    @State private var codeSetup = OneTimeCodeSetup()
+    #endif
 
     init(type: EditPasswordViewModel.PasswordType = .new, delegate: EditPasswordViewModelDelegate? = nil) {
         _viewModel = State(initialValue: EditPasswordViewModel(type: type, delegate: delegate))
@@ -22,7 +25,7 @@ struct EditPasswordView: View {
 
     var body: some View {
         NavigationStack {
-            form
+            formWithPresentations
                 .onAppear(perform: viewModel.load)
                 .navigationTitle(viewModel.viewTitle)
                 .navigationBarTitleDisplayMode(.inline)
@@ -75,6 +78,15 @@ struct EditPasswordView: View {
 
 extension EditPasswordView {
 
+    @ViewBuilder
+    private var formWithPresentations: some View {
+        #if AUTOFILL_EXTENSION
+        form
+        #else
+        form.oneTimeCodeSetupPresentations(codeSetup, viewModel: viewModel)
+        #endif
+    }
+
     private var form: some View {
         Form {
             Section {
@@ -98,6 +110,9 @@ extension EditPasswordView {
             } header: {
                 Text("epv_credentials")
             }
+            #if !AUTOFILL_EXTENSION
+            OneTimeCodeSetupSection(viewModel: viewModel, setup: codeSetup)
+            #endif
             Section {
                 LabeledTextField(title: "epv_website".localized(), value: $viewModel.passwordWebsite, kind: .url)
             } header: {
