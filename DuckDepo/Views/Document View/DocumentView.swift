@@ -1,5 +1,5 @@
 //
-//  NewDocumentView.swift
+//  DocumentView.swift
 //  DuckDepo
 //
 //  Created by Evgeny Mitko on 19/06/2022.
@@ -10,32 +10,56 @@ import SwiftUI
 struct DocumentView: View {
 
     @Environment(\.dismiss) private var dismiss
+    @State private var viewModel: DocumentViewModel
+    /// The list's copy, to notice changes that arrive from iCloud.
+    private let document: Document
 
-    @State var viewModel: DocumentViewModel
+    @State private var currentPhotoID: DocumentPhoto.ID?
+    @State private var isShowingPhotoViewer = false
+    @Namespace private var photoNamespace
 
     init(document: Document) {
+        self.document = document
         _viewModel = State(initialValue: DocumentViewModel(document: document))
     }
 
     var body: some View {
         List {
-            DocPhotoSection(photos: viewModel.document.photos, selectedPhoto: $viewModel.selectedPhoto)
+            if !viewModel.document.photos.isEmpty {
+                Section {
+                    PhotoCarousel(photos: viewModel.document.photos, selection: $currentPhotoID, namespace: photoNamespace) {
+                        isShowingPhotoViewer = true
+                    }
+                    .listRowInsets(EdgeInsets())
+                }
+            }
+            if let expiryDate = viewModel.document.expiryDate {
+                Section {
+                    ExpiryRow(expiryDate: expiryDate)
+                }
+            }
             ForEach(viewModel.document.sectionsWithValues) { section in
                 DocSectionSection(section: section)
             }
         }
         .listStyle(.insetGrouped)
+        .navigationTitle(viewModel.document.name)
+        .navigationSubtitle(viewModel.document.description)
+        .navigationBarTitleDisplayMode(.inline)
         .onAppear(perform: viewModel.load)
+        .onChange(of: document) {
+            viewModel.reload()
+        }
         .toolbar {
-            ToolbarItem(placement: .principal) {
-                DocumentToolbarTitleView(icon: viewModel.document.documentType.image,
-                                         iconColor: viewModel.document.documentType.iconColor,
-                                         name: viewModel.document.name,
-                                         description: viewModel.document.description)
+            ToolbarItemGroup(placement: .primaryAction) {
+                Button(action: viewModel.shareButtonPressed) {
+                    Label("dv_share_doc_title", systemImage: "square.and.arrow.up")
+                }
+                Button(action: viewModel.editButtonPressed) {
+                    Label("edit_button", systemImage: "pencil")
+                }
             }
         }
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar { toolbarView }
         .confirmationDialog("dv_share_doc_title", isPresented: $viewModel.showShareOptions, titleVisibility: .visible) {
             Button("dv_share_photo_and_text", action: viewModel.sharePhotosAndTextButtonPressed)
             Button("dv_share_photo", action: viewModel.sharePhotosButtonPressed)
@@ -47,13 +71,12 @@ struct DocumentView: View {
             ShareSheetView(items: viewModel.itemsToShare)
                 .presentationDetents([.medium, .large])
         }
-        .fullScreenCover(isPresented: $viewModel.showEditDocumentView) {
+        .sheet(isPresented: $viewModel.showEditDocumentView) {
             EditDocumentView(viewModel: viewModel.editDocumentViewModel)
         }
-        .fullScreenCover(isPresented: $viewModel.showingImageViewer, onDismiss: { viewModel.selectedPhoto = nil }) {
-            if let selectedPhoto = viewModel.selectedPhoto {
-                ImageViewer(photos: viewModel.document.photos.map(\.image), selectedImage: selectedPhoto.image)
-            }
+        .fullScreenCover(isPresented: $isShowingPhotoViewer) {
+            PhotoViewer(photos: viewModel.document.photos, currentPhotoID: $currentPhotoID)
+                .navigationTransition(.zoom(sourceID: currentPhotoID, in: photoNamespace))
         }
         .onChange(of: viewModel.shouldDismissView) { _, shouldDismiss in
             if shouldDismiss {
@@ -63,43 +86,22 @@ struct DocumentView: View {
     }
 }
 
-private struct DocumentToolbarTitleView: View {
+/// When the document expires, flagged when that's soon or past.
+private struct ExpiryRow: View {
 
-    let icon: Image
-    let iconColor: Color
-    let name: String
-    let description: String
+    let expiryDate: Date
 
     var body: some View {
-        HStack {
-            icon
-                .symbolRenderingMode(.palette)
-                .foregroundStyle(.white, iconColor)
-                .frame(width: 35, height: 35)
-                .accessibilityHidden(true)
-            VStack {
-                Text(name)
-                    .foregroundStyle(.primary)
-                    .bold()
-                if !description.isEmpty {
-                    Text(description)
-                        .foregroundStyle(.secondary)
-                }
+        let status = ExpiryStatus(expiryDate: expiryDate)
+        LabeledContent {
+            Text(FieldDate.displayString(forUTCDay: expiryDate))
+        } label: {
+            Label {
+                Text(status.badgeText ?? String(localized: "expiry_valid"))
+            } icon: {
+                Image(systemName: status.systemImage)
+                    .foregroundStyle(status.color)
             }
-        }
-    }
-}
-
-extension DocumentView {
-    private var toolbarView: some ToolbarContent {
-        ToolbarItemGroup(placement: .topBarTrailing) {
-            Button(action: viewModel.shareButtonPressed) {
-                Label("dv_share_doc_title", systemImage: "square.and.arrow.up")
-            }
-            Button(action: viewModel.editButtonPressed) {
-                Label("edit_button", systemImage: "pencil")
-            }
-            .disabled(!viewModel.editAllowed())
         }
     }
 }

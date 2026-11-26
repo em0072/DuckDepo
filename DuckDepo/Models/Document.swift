@@ -23,6 +23,22 @@ struct Document: Identifiable, Hashable {
     /// Set by the store. Nil for documents created before version 2.7.
     var createdAt: Date?
     var updatedAt: Date?
+    /// The first photo's small preview, so lists don't load full photos.
+    var thumbnail: Thumbnail?
+
+    struct Thumbnail: Hashable {
+        /// The photo's ID, which changes with its content.
+        let id: UUID
+        let data: Data
+
+        static func == (lhs: Thumbnail, rhs: Thumbnail) -> Bool {
+            lhs.id == rhs.id
+        }
+
+        func hash(into hasher: inout Hasher) {
+            hasher.combine(id)
+        }
+    }
 
     init(id: UUID = UUID(), name: String = "", description: String = "",
          documentType: DocumentType = .identification, photos: [DocumentPhoto] = [],

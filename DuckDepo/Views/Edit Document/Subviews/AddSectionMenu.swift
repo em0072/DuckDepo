@@ -2,7 +2,7 @@
 //  AddSectionMenu.swift
 //  DuckDepo
 //
-//  Created by Evgeny Mitko on 02/11/2021.
+//  Created by Evgeny Mitko on 03/07/2022.
 //
 
 import SwiftUI
@@ -18,17 +18,18 @@ struct AddSectionMenu: View {
     let availableSections: [SectionKey]
     var delegate: AddSectionMenuDelegate?
 
-    @State private var showingAddNewSectionView = false
+    @State private var isAddingCustomSection = false
+    @State private var customSectionName = ""
     @State private var showDuplicatedAlert = false
 
     var body: some View {
         Section {
             addButton
-                .frame(maxWidth: .infinity)
-                .sheet(isPresented: $showingAddNewSectionView) {
-                    AddNewView(isPresented: $showingAddNewSectionView, duplicateAlertPresented: $showDuplicatedAlert, type: .section, onSave: addCustomSection)
-                        .presentationDetents([.height(250)])
-                        .presentationDragIndicator(.visible)
+                .alert("anv_new_section", isPresented: $isAddingCustomSection) {
+                    TextField("anv_text_filed_new_name_section", text: $customSectionName)
+                    Button("add_button", action: addCustomSection)
+                        .disabled(customSectionName.trimmingCharacters(in: .whitespaces).isEmpty)
+                    Button("cancel_button", role: .cancel) {}
                 }
                 .alert("asm_duplicate_title", isPresented: $showDuplicatedAlert) {
                     Button("Ok", role: .cancel) {}
@@ -41,12 +42,9 @@ struct AddSectionMenu: View {
     @ViewBuilder
     private var addButton: some View {
         if availableSections.isEmpty {
-            Button {
-                showingAddNewSectionView = true
-            } label: {
+            Button(action: startCustomSection) {
                 buttonLabel
             }
-            .buttonStyle(RoundedRectYellowButtonStyle())
         } else {
             Menu {
                 ForEach(availableSections, id: \.self) { key in
@@ -54,31 +52,30 @@ struct AddSectionMenu: View {
                         delegate?.addNewSection(key.makeSection())
                     }
                 }
-                Button("asm_custom") {
-                    showingAddNewSectionView = true
-                }
+                Divider()
+                Button("asm_custom", action: startCustomSection)
             } label: {
                 buttonLabel
             }
-            .menuStyle(RoundedRectYellowMenuStyle())
         }
     }
 
     private var buttonLabel: some View {
-        Label("asm_add_section", systemImage: "plus")
-            .font(.callout)
-            .bold()
-            .foregroundStyle(Color.duckYellow)
-            .padding(.vertical, 14)
-            .frame(maxWidth: .infinity)
+        Label("asm_add_section", systemImage: "plus.rectangle.on.rectangle")
     }
 
-    private func addCustomSection(_ name: String) {
+    private func startCustomSection() {
+        customSectionName = ""
+        isAddingCustomSection = true
+    }
+
+    private func addCustomSection() {
+        let name = customSectionName.trimmingCharacters(in: .whitespaces)
+        guard !name.isEmpty else { return }
         if delegate?.sectionIsDuplicate(named: name) ?? false {
             showDuplicatedAlert = true
         } else {
             delegate?.addNewSection(DocSection(name: name))
-            showingAddNewSectionView = false
         }
     }
 }

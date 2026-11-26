@@ -48,8 +48,8 @@ final class CredentialProviderViewController: ASCredentialProviderViewController
         show(NavigationStack {
             AutoFillUnlockView(onUnlock: authenticateAndFill)
                 .toolbar {
-                    ToolbarItem(placement: .topBarLeading) {
-                        CloseButton { [weak self] in
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button(role: .close) { [weak self] in
                             self?.cancel(.userCanceled)
                         }
                     }

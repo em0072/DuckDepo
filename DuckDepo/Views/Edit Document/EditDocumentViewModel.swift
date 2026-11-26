@@ -27,8 +27,8 @@ final class EditDocumentViewModel {
     private(set) var shouldCloseView = false
     var saveFailed = false
 
-    var showingImageViewer = false
-    var imageViewerPhoto: DocumentPhoto?
+    var isShowingPhotoViewer = false
+    var viewerPhotoID: DocumentPhoto.ID?
 
     init(type: Mode, database: DataBase = .shared, onDismiss: ((Document?) -> Void)? = nil) {
         self.type = type
@@ -75,10 +75,6 @@ final class EditDocumentViewModel {
         }
     }
 
-    var saveButtonTitle: String {
-        isNew ? "add_new_doc".localized() : "save_changes".localized()
-    }
-
     // MARK: - Actions
 
     func save() {
@@ -112,8 +108,8 @@ final class EditDocumentViewModel {
 extension EditDocumentViewModel: PhotosSectionViewDelegate {
 
     func select(photo: DocumentPhoto) {
-        imageViewerPhoto = photo
-        showingImageViewer = true
+        viewerPhotoID = photo.id
+        isShowingPhotoViewer = true
     }
 
     func add(photos: [DocumentPhoto]) {

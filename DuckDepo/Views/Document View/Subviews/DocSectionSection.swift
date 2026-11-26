@@ -2,7 +2,7 @@
 //  DocSectionSection.swift
 //  DuckDepo
 //
-//  Created by Evgeny Mitko on 06/07/2022.
+//  Created by Evgeny Mitko on 19/06/2022.
 //
 
 import SwiftUI
@@ -14,7 +14,7 @@ struct DocSectionSection: View {
     var body: some View {
         Section {
             ForEach(section.fields) { field in
-                FloatingTextView(title: field.displayTitle, value: field.displayValue)
+                FieldValueRow(title: field.displayTitle, value: field.displayValue, isSecret: field.isSensitive)
             }
         } header: {
             Text(section.displayName)

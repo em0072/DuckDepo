@@ -44,8 +44,9 @@ enum SectionKey: String, CaseIterable {
         }
     }
 
+    /// A new section with its usual fields, empty, ready to fill in.
     func makeSection() -> DocSection {
-        DocSection(key: rawValue, name: localizedName)
+        DocSection(key: rawValue, name: localizedName, fields: fields.map { $0.makeField() })
     }
 }
 

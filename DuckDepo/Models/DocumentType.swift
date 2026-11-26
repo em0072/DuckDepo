@@ -94,4 +94,18 @@ enum DocumentType: String, Codable, Identifiable, CaseIterable, Hashable {
         return Image(systemName: self.iconName)
             .resizable()
     }
+
+    /// A glyph for drawing on a colored tile (`iconName` includes its own circle).
+    var symbolName: String {
+        switch self {
+        case .identification: "person.text.rectangle.fill"
+        case .transport: "car.fill"
+        case .government: "building.columns.fill"
+        case .work: "briefcase.fill"
+        case .medicine: "cross.case.fill"
+        case .education: "graduationcap.fill"
+        case .leisure: "film.fill"
+        case .other: "tray.fill"
+        }
+    }
 }

@@ -2,14 +2,14 @@
 //  EditPasswordView.swift
 //  DuckDepo
 //
-//  Created by Evgeny Mitko on 25/11/2021.
+//  Created by Evgeny Mitko on 26/06/2022.
 //
 
 import SwiftUI
 
 struct EditPasswordView: View {
-    @Environment(\.dismiss) private var dismiss
 
+    @Environment(\.dismiss) private var dismiss
     /// `@State`, so typed values survive the parent redrawing (e.g. when iCloud delivers changes).
     @State private var viewModel: EditPasswordViewModel
     @State private var isShowingDeleteAlert = false
@@ -22,13 +22,13 @@ struct EditPasswordView: View {
 
     var body: some View {
         NavigationStack {
-            contentView
+            form
                 .onAppear(perform: viewModel.load)
                 .navigationTitle(viewModel.viewTitle)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
-                    ToolbarItem(placement: .topBarLeading) {
-                        CloseButton(action: closeButtonAction)
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button(role: .close, action: closeButtonAction)
                             .confirmationDialog("discard_changes_title", isPresented: $isShowingDiscardDialog, titleVisibility: .visible) {
                                 Button("discard_changes_button", role: .destructive) {
                                     dismiss()
@@ -36,20 +36,14 @@ struct EditPasswordView: View {
                                 Button("keep_editing_button", role: .cancel) {}
                             }
                     }
-                    if !viewModel.isNew {
-                        ToolbarItem(placement: .topBarTrailing) {
-                            Button {
-                                isShowingDeleteAlert = true
-                            } label: {
-                                Label("epv_delete_alert_delete", systemImage: "trash")
-                            }
-                        }
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button(role: .confirm, action: viewModel.save)
+                            .disabled(!viewModel.canSave)
                     }
                 }
                 .sheet(isPresented: $isShowingPassGenerator) {
                     passGenerationView
-                        .presentationDragIndicator(.visible)
-                        .presentationDetents([.height(350)])
+                        .presentationDetents([.medium, .large])
                 }
                 .alert("epv_delete_alert_title", isPresented: $isShowingDeleteAlert) {
                     Button("epv_delete_alert_delete", role: .destructive, action: viewModel.delete)
@@ -81,42 +75,43 @@ struct EditPasswordView: View {
 
 extension EditPasswordView {
 
-    private var contentView: some View {
-        List {
+    private var form: some View {
+        Form {
             Section {
-                FloatingTextField(title: "epv_name".localized(), value: $viewModel.passwordName, kind: .name)
+                LabeledTextField(title: "epv_name".localized(), value: $viewModel.passwordName, kind: .name)
             } header: {
                 Text("epv_general_information")
             }
-
             Section {
-                FloatingTextField(title: "epv_login".localized(), value: $viewModel.passwordLogin, kind: .login)
+                LabeledTextField(title: "epv_login".localized(), value: $viewModel.passwordLogin, kind: .login)
                 HStack {
-                    FloatingTextField(title: "epv_password".localized(), value: $viewModel.passwordValue, kind: .password)
+                    LabeledTextField(title: "epv_password".localized(), value: $viewModel.passwordValue, kind: .password)
                     Button {
                         isShowingPassGenerator = true
                     } label: {
-                        Image(systemName: "wand.and.stars.inverse")
-                            .foregroundStyle(Color.duckYellow)
-                            .bold()
+                        Image(systemName: "wand.and.stars")
+                            .font(.title3)
                     }
-                    .buttonStyle(.plain)
+                    .buttonStyle(.borderless)
                     .accessibilityLabel(Text("pgv_title"))
                 }
             } header: {
                 Text("epv_credentials")
             }
-
             Section {
-                FloatingTextField(title: "epv_website".localized(), value: $viewModel.passwordWebsite, kind: .url)
+                LabeledTextField(title: "epv_website".localized(), value: $viewModel.passwordWebsite, kind: .url)
             } header: {
                 Text("epv_additional_information")
             }
-
-            AddButtonView(title: viewModel.saveButtonTitle, action: viewModel.save)
-                .disabled(!viewModel.canSave)
+            if !viewModel.isNew {
+                Section {
+                    Button("delete_password", role: .destructive) {
+                        isShowingDeleteAlert = true
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+            }
         }
-        .listStyle(.insetGrouped)
     }
 
     private var passGenerationView: some View {
@@ -124,8 +119,6 @@ extension EditPasswordView {
             viewModel.passwordValue = generatedPassword
             isShowingPassGenerator = false
         }
-        .padding(.top, 20)
-        .padding()
     }
 }
 

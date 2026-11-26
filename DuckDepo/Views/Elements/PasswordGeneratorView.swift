@@ -8,141 +8,79 @@
 import SwiftUI
 
 struct PasswordGeneratorView: View {
-    
+
     @Binding var isPresented: Bool
-    @State var numberOfSymbols = 13.0
-    @State var useNumbers = true
-    @State var useCapitals = true
-    @State var useSymbols = true
-    @State var generatedPassword: String = "1232ewr@#$r"
+    var onAction: ((String) -> Void)?
 
-    var onAction: ((String)->())?
-    
+    @State private var length = 16.0
+    @State private var useNumbers = true
+    @State private var useCapitals = true
+    @State private var useSymbols = true
+    @State private var generatedPassword = ""
+
     var body: some View {
-        VStack(spacing: 10) {
-            sliderView
-            Divider()
-            
-            paramsView
-            Divider()
-
-            passView
-
-            AddButtonView(title: "pgv_use_button".localized()) {
-                onAction?(generatedPassword)
+        NavigationStack {
+            Form {
+                Section {
+                    HStack {
+                        Text(verbatim: generatedPassword)
+                            .font(.title3.monospaced().weight(.semibold))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.5)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        Button(action: generatePassword) {
+                            Image(systemName: "arrow.clockwise")
+                        }
+                        .buttonStyle(.borderless)
+                        .accessibilityLabel(Text("pgv_regenerate"))
+                    }
+                }
+                Section {
+                    VStack(alignment: .leading) {
+                        LabeledContent("pgv_num_of_symbols") {
+                            Text(Int(length), format: .number)
+                                .monospacedDigit()
+                        }
+                        Slider(value: $length, in: 8...32, step: 1) {
+                            Text("pgv_num_of_symbols")
+                        }
+                    }
+                    Toggle("pgv_numbers", isOn: $useNumbers)
+                    Toggle("pgv_capitals", isOn: $useCapitals)
+                    Toggle("pgv_symbols", isOn: $useSymbols)
+                }
             }
-            .padding()
-            .background {
-                Color.duckYellow
+            .navigationTitle("pgv_title")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button(role: .close) {
+                        isPresented = false
+                    }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button(role: .confirm) {
+                        onAction?(generatedPassword)
+                    }
+                    .accessibilityLabel(Text("pgv_use_button"))
+                }
             }
-            .cornerRadius(10)
         }
         .onAppear(perform: generatePassword)
-
+        .onChange(of: length) { generatePassword() }
+        .onChange(of: useNumbers) { generatePassword() }
+        .onChange(of: useCapitals) { generatePassword() }
+        .onChange(of: useSymbols) { generatePassword() }
     }
-    
+
     private func generatePassword() {
-        generatedPassword = PasswordGenerator.sharedInstance.generatePassword(includeNumbers: useNumbers, includeCapitals: useCapitals, includeSymbols: useSymbols, length: Int(numberOfSymbols))
+        generatedPassword = PasswordGenerator.sharedInstance.generatePassword(includeNumbers: useNumbers,
+                                                                              includeCapitals: useCapitals,
+                                                                              includeSymbols: useSymbols,
+                                                                              length: Int(length))
     }
 }
 
-extension PasswordGeneratorView {
-    private var titleView: some View {
-        HStack {
-            Text("pgv_title")
-                .font(.title)
-            Spacer()
-            Button(action: {
-                isPresented = false
-            }, label: {
-                Image(systemName: "xmark")
-                    .font(.footnote)
-                    .padding(7)
-            })
-        }
-    }
-    
-    private var sliderView: some View {
-        VStack {
-            HStack {
-                Text("pgv_num_of_symbols")
-                Spacer()
-                Text("\(Int(numberOfSymbols))")
-            }
-            Slider(value: $numberOfSymbols, in: 6...20, step: 1, label: {
-                Text("pgv_num_of_symbols")
-            }, minimumValueLabel: {
-                Text("6")
-            }, maximumValueLabel: {
-                Text("20")
-            })
-            .tint(Color.duckYellow)
-            .onChange(of: numberOfSymbols) {
-                generatePassword()
-            }
-        }
-    }
-    
-    private var paramsView: some View {
-        VStack {
-            HStack {
-                Text("pgv_params")
-                Spacer()
-            }
-            
-            HStack {
-                VStack(spacing: 5) {
-                    Text("123")
-                    Toggle("", isOn: $useNumbers).labelsHidden()
-                        .onChange(of: useNumbers) {
-                            generatePassword()
-                        }
-                }
-                
-                Spacer()
-                VStack(spacing: 5) {
-                    Text("aA")
-                    Toggle("", isOn: $useCapitals).labelsHidden()
-                        .onChange(of: useCapitals) {
-                            generatePassword()
-                        }
-                }
-                Spacer()
-                VStack(spacing: 5) {
-                    Text("!@#")
-                    Toggle("", isOn: $useSymbols).labelsHidden()
-                        .onChange(of: useSymbols) {
-                            generatePassword()
-                        }
-                }
-            }
-            .tint(.duckYellow)
-            .padding([ .top, .bottom], 3)
-        }
-    }
-    
-    private var passView: some View {
-        VStack {
-            HStack {
-                Text(generatedPassword)
-                    .font(.system(size: 34, weight: .bold))
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.5)
-                    .frame(height: 55)
-                Spacer()
-                
-                Button(action: generatePassword) {
-                    Image(systemName: "wand.and.rays.inverse")
-                }
-                .tint(.duckYellow)
-            }
-        }
-    }
-}
-
-struct PasswordGeneratorView_Previews: PreviewProvider {
-    static var previews: some View {
-        PasswordGeneratorView(isPresented: .constant(true))
-            .preferredColorScheme(.dark)
-    }
+#Preview {
+    PasswordGeneratorView(isPresented: .constant(true))
 }

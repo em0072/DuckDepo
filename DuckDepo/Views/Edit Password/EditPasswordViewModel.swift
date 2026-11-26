@@ -88,10 +88,6 @@ final class EditPasswordViewModel {
         isNew ? "epv_new_password_title".localized() : "epv_edit_password_title".localized()
     }
 
-    var saveButtonTitle: String {
-        isNew ? "epv_add_new_password_button".localized() : "epv_edit_password_button".localized()
-    }
-
     func save() {
         guard canSave else { return }
         let password = edited

@@ -233,6 +233,11 @@ extension DDDocument {
         document.order = Int(order)
         document.createdAt = createdAt
         document.updatedAt = updatedAt
+        // From the records even when 2.6 changed `photoData` since: checking that means reading every
+        // document's photos. The migration updates the records at the next launch.
+        if let first = photoRecordList().first, let id = first.identifier, let data = first.thumbnailData {
+            document.thumbnail = Document.Thumbnail(id: id, data: data)
+        }
         return document
     }
 

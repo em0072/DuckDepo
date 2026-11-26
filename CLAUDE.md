@@ -53,9 +53,10 @@ xcodebuild -project DuckDepo.xcodeproj -scheme DuckDepo clean
 - **LegacyDataMigration**: idempotent repair of v1 data, runs on every activation
 
 ### Navigation Structure
-- Tab-based main interface: Depo (Documents), Passwords, Settings
-- Modal presentations for editing workflows
-- Context menus for list item interactions
+- Tab-based main interface (`Tab` API): Depo (Documents), Passwords, Settings
+- Each list is a selection-based `NavigationSplitView` (sidebar list, detail column on iPad, push on iPhone), with search, swipe actions and context menus
+- Editors are sheets with close/confirm toolbar buttons (`Button(role: .close)` / `.confirm`) and a discard confirmation
+- Photos open in `PhotoViewer` (full screen, zoom transition from the tapped photo)
 
 ## Key Components
 
@@ -70,9 +71,10 @@ xcodebuild -project DuckDepo.xcodeproj -scheme DuckDepo clean
 - `ClipboardController`: Copies are local-only (no Universal Clipboard) and expire after 60 s (text) / 120 s (images)
 
 ### UI Components
-- Custom neumorphic design system with adaptive dark/light themes
-- Reusable components in `Views/Elements/`
-- Custom button styles: `RoundedRectYellowButtonStyle`
+- Standard iOS 26 look (insetGrouped lists, forms, glass toolbars); `duckYellow` is the accent (deep amber #9E6C00 in light mode for contrast, bright #FBC531 in dark, plus Increase Contrast variants); labels on a yellow fill use `onDuckYellow`
+- Reusable components in `Views/Elements/`: `FieldValueRow` (value with copy and show/hide buttons), `LabeledTextField` (editor field with its title above), `PhotoViewer`
+- List rows: `DocumentRow` (thumbnail or type tile, `ExpiryBadge`), `PasswordRow` (monogram)
+- Expiry: `ExpiryStatus` (expired / expires within 90 days / valid) from `Document.expiryDate`; list search in `DocumentSearch`
 
 ## Dependencies
 
@@ -107,7 +109,7 @@ Target `DuckDepoTests` (Swift Testing, hosted by the app). The app skips its dat
 - Use `@State` for view models (see MVVM above) and `@Bindable` for bindings into shared `@Observable` controllers
 - Environment injection for Core Data context
 - Storage classes publish lists with Combine; view models subscribe in `start()`
-- Custom view modifiers for consistent styling
+- List items carry no photos (only `Document.thumbnail`); detail screens load the full document in `load()` and reload when the list item changes (sync)
 
 ## File Organization
 

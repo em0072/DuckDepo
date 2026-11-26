@@ -24,7 +24,7 @@ final class DocumentsStorage: NSObject {
         let fetchRequest = DDDocument.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \DDDocument.documentTypeOrder, ascending: true),
                                         NSSortDescriptor(keyPath: \DDDocument.order, ascending: true)]
-        fetchRequest.relationshipKeyPathsForPrefetching = ["sections", "sections.fields"]
+        fetchRequest.relationshipKeyPathsForPrefetching = ["sections", "sections.fields", "photoRecords"]
         fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
                                                               managedObjectContext: database.context,
                                                               sectionNameKeyPath: nil,

@@ -45,4 +45,14 @@ struct Field: Identifiable, Equatable, Hashable {
     var displayValue: String {
         type == .date ? FieldDate.displayString(for: value) : value
     }
+
+    /// Hidden until revealed when viewing a document, like a password.
+    var isSensitive: Bool {
+        fieldKey == .number
+    }
+
+    /// Long free text, edited over several lines.
+    var isMultiline: Bool {
+        fieldKey == .remarks || fieldKey == .notes
+    }
 }

@@ -29,6 +29,13 @@ struct Password: Identifiable, Hashable {
         return URL(string: trimmed.contains("://") ? trimmed : "https://\(trimmed)")
     }
 
+    /// Search by name, login or website, ignoring case and diacritics.
+    func matches(_ query: String) -> Bool {
+        let query = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !query.isEmpty else { return true }
+        return [name, login, website].contains { $0.localizedStandardContains(query) }
+    }
+
     static var test: Password {
         Password(name: "Google", login: "alpaca@google.com", value: "", website: "https://google.com")
     }

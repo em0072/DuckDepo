@@ -1,8 +1,8 @@
 //
-//  AddNewDocumentView.swift
+//  EditDocumentView.swift
 //  DuckDepo
 //
-//  Created by Evgeny Mitko on 27/10/2021.
+//  Created by Evgeny Mitko on 03/07/2022.
 //
 
 import SwiftUI
@@ -10,31 +10,35 @@ import SwiftUI
 struct EditDocumentView: View {
 
     @Environment(\.dismiss) private var dismiss
-
     @State var viewModel: EditDocumentViewModel
-
     @State private var isShowingDeleteAlert = false
     @State private var isShowingDiscardDialog = false
+    @Namespace private var photoNamespace
 
     var body: some View {
         NavigationStack {
-            List {
+            Form {
                 TitleView(name: $viewModel.document.name,
                           description: $viewModel.document.description,
                           documentType: $viewModel.document.documentType)
-                PhotosSectionView(photos: viewModel.document.photos, delegate: viewModel)
+                PhotosSectionView(photos: viewModel.document.photos, namespace: photoNamespace, delegate: viewModel)
                 SectionView(sections: $viewModel.document.sections, delegate: viewModel)
                 AddSectionMenu(availableSections: viewModel.availableSections, delegate: viewModel)
-                AddButtonView(title: viewModel.saveButtonTitle, action: viewModel.save)
-                    .disabled(!viewModel.canSave)
+                if !viewModel.isNew {
+                    Section {
+                        Button("delete_document", role: .destructive) {
+                            isShowingDeleteAlert = true
+                        }
+                        .frame(maxWidth: .infinity)
+                    }
+                }
             }
-            .listStyle(.insetGrouped)
             .onAppear(perform: viewModel.load)
             .navigationTitle(viewModel.viewTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    CloseButton(action: closeButtonAction)
+                ToolbarItem(placement: .cancellationAction) {
+                    Button(role: .close, action: closeButtonAction)
                         .confirmationDialog("discard_changes_title", isPresented: $isShowingDiscardDialog, titleVisibility: .visible) {
                             Button("discard_changes_button", role: .destructive) {
                                 dismiss()
@@ -42,14 +46,9 @@ struct EditDocumentView: View {
                             Button("keep_editing_button", role: .cancel) {}
                         }
                 }
-                if !viewModel.isNew {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button {
-                            isShowingDeleteAlert = true
-                        } label: {
-                            Label("delete", systemImage: "trash")
-                        }
-                    }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button(role: .confirm, action: viewModel.save)
+                        .disabled(!viewModel.canSave)
                 }
             }
         }
@@ -59,10 +58,9 @@ struct EditDocumentView: View {
                 dismiss()
             }
         }
-        .fullScreenCover(isPresented: $viewModel.showingImageViewer) {
-            if let photo = viewModel.imageViewerPhoto {
-                ImageViewer(photos: viewModel.document.photos.map(\.image), selectedImage: photo.image)
-            }
+        .fullScreenCover(isPresented: $viewModel.isShowingPhotoViewer) {
+            PhotoViewer(photos: viewModel.document.photos, currentPhotoID: $viewModel.viewerPhotoID)
+                .navigationTransition(.zoom(sourceID: viewModel.viewerPhotoID, in: photoNamespace))
         }
         .alert("save_failed_title", isPresented: $viewModel.saveFailed) {
             Button("Ok", role: .cancel) {}
