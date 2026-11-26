@@ -84,6 +84,7 @@ struct SettingsCountTests {
     private let database = TestStack.makeDatabase()
 
     @Test func countsDocumentsPasswordsAndThoseToRenew() {
+        let passkeys = PasskeyStorage(keychain: InMemoryKeychain())
         func document(_ name: String, expiring storedValue: String?) -> Document {
             guard let storedValue else { return Document(name: name) }
             var field = FieldKey.expiryDate.makeField()
@@ -97,10 +98,27 @@ struct SettingsCountTests {
                     document("No expiry", expiring: nil)] {
             #expect(database.save(doc))
         }
-        let viewModel = SettingsViewModel(database: database)
+        let viewModel = SettingsViewModel(database: database, passkeyStorage: passkeys)
         viewModel.start()
         #expect(viewModel.documentCount == 5)
         #expect(viewModel.renewalCount == 3)
         #expect(viewModel.passwordCount == 0)
+    }
+
+    @Test func passkeysCountAsPasswords() async {
+        let keychain = InMemoryKeychain()
+        let passkeys = PasskeyStorage(keychain: keychain)
+        let passwords = PasswordsStorage(database: database, keychain: keychain, identityStore: nil)
+        #expect(passwords.save(Password(name: "GitHub", login: "jane", value: "secret", website: "github.com")))
+        #expect(passkeys.save(Passkey.make(relyingParty: "github.com", userName: "jane", userHandle: Data([1]))))
+        let viewModel = SettingsViewModel(database: database, passkeyStorage: passkeys)
+        viewModel.start()
+        // A password and a passkey for the same site are still two.
+        #expect(viewModel.passwordCount == 2)
+
+        // One made through AutoFill shows up the next time Settings refreshes.
+        #expect(passkeys.save(Passkey.make(relyingParty: "example.com", userName: "joe", userHandle: Data([2]))))
+        await viewModel.refreshSystemState()
+        #expect(viewModel.passwordCount == 3)
     }
 }

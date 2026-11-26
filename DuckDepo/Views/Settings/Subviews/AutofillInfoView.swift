@@ -66,6 +66,7 @@ private struct AutoFillStep {
         AutoFillStep(title: "autofill_step_list_title", body: "autofill_step_list_body"),
         AutoFillStep(title: "autofill_step_lock_title", body: "autofill_step_lock_body"),
         AutoFillStep(title: "autofill_step_new_title", body: "autofill_step_new_body"),
+        AutoFillStep(title: "autofill_step_passkey_title", body: "autofill_step_passkey_body"),
     ]
 }
 

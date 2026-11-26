@@ -12,7 +12,9 @@ struct PasswordsListView: View {
     @State var viewModel: PasswordsListViewModel
     @State private var selection: Password.ID?
     @State private var passwordToDelete: Password?
+    @State private var passkeyToDelete: Passkey?
     @Environment(\.openURL) private var openURL
+    @Environment(\.scenePhase) private var scenePhase
     private var syncMonitor = SyncMonitor.shared
 
     init(viewModel: PasswordsListViewModel) {
@@ -36,6 +38,11 @@ struct PasswordsListView: View {
             if let password = viewModel.password(with: selection) {
                 PasswordView(password: password)
                     .id(password.id)
+            } else if let passkey = viewModel.passkey(with: selection) {
+                PasskeyView(passkey: passkey) {
+                    passkeyToDelete = passkey
+                }
+                .id(passkey.id)
             } else {
                 ContentUnavailableView("pl_no_selection_title",
                                        systemImage: "key",
@@ -52,16 +59,36 @@ struct PasswordsListView: View {
         } message: { _ in
             Text("epv_delete_alert_body")
         }
-        .onChange(of: viewModel.passwords) { _, passwords in
-            if let selection, !passwords.contains(where: { $0.id == selection }) {
-                self.selection = nil
+        .alert("passkey_delete_title", isPresented: isConfirmingPasskeyDelete, presenting: passkeyToDelete) { passkey in
+            Button("delete", role: .destructive) {
+                viewModel.delete(passkey)
             }
+        } message: { passkey in
+            Text("passkey_delete_body \(passkey.relyingParty)")
+        }
+        .onChange(of: viewModel.passwords) {
+            clearDeletedSelection()
+        }
+        .onChange(of: viewModel.passkeys) {
+            clearDeletedSelection()
+        }
+        // Passkeys are made in AutoFill, another process; look again when coming back.
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active {
+                viewModel.reloadPasskeys()
+            }
+        }
+    }
+
+    private func clearDeletedSelection() {
+        if viewModel.password(with: selection) == nil && viewModel.passkey(with: selection) == nil {
+            selection = nil
         }
     }
 
     @ViewBuilder
     private var sidebar: some View {
-        if viewModel.passwords.isEmpty {
+        if viewModel.passwords.isEmpty && viewModel.passkeys.isEmpty {
             if syncMonitor.showsActivity && syncMonitor.isDownloading {
                 DownloadingFromICloudView(type: .passwords)
             } else {
@@ -81,37 +108,68 @@ struct PasswordsListView: View {
     }
 
     private var listView: some View {
-        List(viewModel.passwords, selection: $selection) { password in
-            PasswordRow(name: password.name, login: password.login)
-                .tag(password.id)
-                .swipeActions(edge: .leading) {
-                    Button {
-                        viewModel.copyValue(of: password)
-                    } label: {
-                        Label("copy_password", systemImage: "key.fill")
-                    }
-                    .tint(.indigo)
-                    if !password.login.isEmpty {
-                        Button {
-                            viewModel.copyLogin(of: password)
-                        } label: {
-                            Label("copy_login", systemImage: "person.fill")
-                        }
-                        .tint(.gray)
+        List(selection: $selection) {
+            Section {
+                ForEach(viewModel.passwords) { password in
+                    passwordRow(password)
+                }
+            }
+            if !viewModel.passkeys.isEmpty {
+                Section("pl_passkeys") {
+                    ForEach(viewModel.passkeys) { passkey in
+                        PasskeyRow(passkey: passkey)
+                            .tag(passkey.id)
+                            .swipeActions(edge: .trailing) {
+                                Button {
+                                    passkeyToDelete = passkey
+                                } label: {
+                                    Label("delete", systemImage: "trash")
+                                }
+                                .tint(.red)
+                            }
+                            .contextMenu {
+                                Button(role: .destructive) {
+                                    passkeyToDelete = passkey
+                                } label: {
+                                    Label("delete", systemImage: "trash")
+                                }
+                            }
                     }
                 }
-                .swipeActions(edge: .trailing) {
-                    Button {
-                        passwordToDelete = password
-                    } label: {
-                        Label("delete", systemImage: "trash")
-                    }
-                    .tint(.red)
-                }
-                .contextMenu {
-                    contextMenu(for: password)
-                }
+            }
         }
+    }
+
+    private func passwordRow(_ password: Password) -> some View {
+        PasswordRow(name: password.name, login: password.login)
+            .tag(password.id)
+            .swipeActions(edge: .leading) {
+                Button {
+                    viewModel.copyValue(of: password)
+                } label: {
+                    Label("copy_password", systemImage: "key.fill")
+                }
+                .tint(.indigo)
+                if !password.login.isEmpty {
+                    Button {
+                        viewModel.copyLogin(of: password)
+                    } label: {
+                        Label("copy_login", systemImage: "person.fill")
+                    }
+                    .tint(.gray)
+                }
+            }
+            .swipeActions(edge: .trailing) {
+                Button {
+                    passwordToDelete = password
+                } label: {
+                    Label("delete", systemImage: "trash")
+                }
+                .tint(.red)
+            }
+            .contextMenu {
+                contextMenu(for: password)
+            }
     }
 
     @ViewBuilder
@@ -140,6 +198,16 @@ struct PasswordsListView: View {
             passwordToDelete = password
         } label: {
             Label("delete", systemImage: "trash")
+        }
+    }
+
+    private var isConfirmingPasskeyDelete: Binding<Bool> {
+        Binding {
+            passkeyToDelete != nil
+        } set: { isPresented in
+            if !isPresented {
+                passkeyToDelete = nil
+            }
         }
     }
 

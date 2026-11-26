@@ -193,6 +193,18 @@
 		0C5ADA3FA4B2BB87C1FB3930 /* OneTimeCodeViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EA578F9FADF491B2770BE84 /* OneTimeCodeViews.swift */; };
 		22DAB4B2F753788341B840F7 /* OneTimeCodeSetupSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6231B3A9706E7506E8E0A8A /* OneTimeCodeSetupSection.swift */; };
 		EFF43D162E946D5CECFEFE41 /* OneTimeCodeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED4B936F2E4E1B4487B15588 /* OneTimeCodeTests.swift */; };
+		7340516AE178B6EC6488C915 /* Passkey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BFD6E1DCC790CCBC9B3B96 /* Passkey.swift */; };
+		E46281A34914FAD878AAD0F7 /* Passkey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87BFD6E1DCC790CCBC9B3B96 /* Passkey.swift */; };
+		92FDDB672A37D8F902D0FC46 /* PasskeyAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3829385DE10191B3BB514C5 /* PasskeyAuthenticator.swift */; };
+		F13C79C3620D85D3F326A0D4 /* PasskeyAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3829385DE10191B3BB514C5 /* PasskeyAuthenticator.swift */; };
+		70192388278E0957587D66CB /* PasskeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7863A4605FE81DB4902FBE5 /* PasskeyTests.swift */; };
+		636548C5A43D7A2637BE1EA7 /* UserVerification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B91E9F9E4C5B6B54B1ABA2 /* UserVerification.swift */; };
+		0705128B989D64A197A0C893 /* UserVerification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B91E9F9E4C5B6B54B1ABA2 /* UserVerification.swift */; };
+		DF46D05E22B1CB49F72AF0C7 /* PasskeyRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D9E429AE6F34417F2F67676 /* PasskeyRow.swift */; };
+		417A9EADD103EAEEA6843A36 /* PasskeyRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D9E429AE6F34417F2F67676 /* PasskeyRow.swift */; };
+		41C34986265A1DE7D1F9CF97 /* PasskeyViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73356F4CB6D0C5E72D2BE890 /* PasskeyViews.swift */; };
+		62D48BDF197564B0C09A1C5C /* PasskeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73DD99B0C14AACDD7FE8C156 /* PasskeyView.swift */; };
+		6A0CF3BE97F690C6514400AC /* ColorfulIconLabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75088876273E9736009A7D3B /* ColorfulIconLabelStyle.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -367,6 +379,13 @@
 		3EA578F9FADF491B2770BE84 /* OneTimeCodeViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneTimeCodeViews.swift; sourceTree = "<group>"; };
 		A6231B3A9706E7506E8E0A8A /* OneTimeCodeSetupSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneTimeCodeSetupSection.swift; sourceTree = "<group>"; };
 		ED4B936F2E4E1B4487B15588 /* OneTimeCodeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneTimeCodeTests.swift; sourceTree = "<group>"; };
+		87BFD6E1DCC790CCBC9B3B96 /* Passkey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Passkey.swift; sourceTree = "<group>"; };
+		C3829385DE10191B3BB514C5 /* PasskeyAuthenticator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasskeyAuthenticator.swift; sourceTree = "<group>"; };
+		D7863A4605FE81DB4902FBE5 /* PasskeyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasskeyTests.swift; sourceTree = "<group>"; };
+		42B91E9F9E4C5B6B54B1ABA2 /* UserVerification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserVerification.swift; sourceTree = "<group>"; };
+		4D9E429AE6F34417F2F67676 /* PasskeyRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasskeyRow.swift; sourceTree = "<group>"; };
+		73356F4CB6D0C5E72D2BE890 /* PasskeyViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasskeyViews.swift; sourceTree = "<group>"; };
+		73DD99B0C14AACDD7FE8C156 /* PasskeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasskeyView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -538,6 +557,7 @@
 				75A140CA2869C41A004A47A8 /* Support */,
 				756AF0B52726C324001CB821 /* Preview Content */,
 				8B323570D6AE7973FF27D8E8 /* Scanning */,
+				4413A337421FF3CA7951F1D0 /* Passkeys */,
 			);
 			path = DuckDepo;
 			sourceTree = "<group>";
@@ -669,6 +689,7 @@
 				75A140DF2869FD2E004A47A8 /* MainInterface.storyboard */,
 				75A140E22869FD2E004A47A8 /* Info.plist */,
 				75A140E32869FD2E004A47A8 /* DuckDepoAutoFillExtension.entitlements */,
+				73356F4CB6D0C5E72D2BE890 /* PasskeyViews.swift */,
 			);
 			path = DuckDepoAutoFillExtension;
 			sourceTree = "<group>";
@@ -679,6 +700,7 @@
 				75A140D22869D3F4004A47A8 /* PasswordsListView.swift */,
 				75A140D02869D25F004A47A8 /* PasswordsListViewModel.swift */,
 				757DB2B92A582300008B8A54 /* Subviews */,
+				73DD99B0C14AACDD7FE8C156 /* PasskeyView.swift */,
 			);
 			path = PasswordsList;
 			sourceTree = "<group>";
@@ -771,6 +793,7 @@
 				8DA416B3A01EA0856B1EE275 /* RemindersAndSettingsTests.swift */,
 				4EA96E14BD30AC74754478FA /* PhotoSearchTests.swift */,
 				ED4B936F2E4E1B4487B15588 /* OneTimeCodeTests.swift */,
+				D7863A4605FE81DB4902FBE5 /* PasskeyTests.swift */,
 			);
 			path = DuckDepoTests;
 			sourceTree = "<group>";
@@ -798,6 +821,17 @@
 				44201520F1F76D60AA402180 /* PhotoIndexer.swift */,
 			);
 			path = Scanning;
+			sourceTree = "<group>";
+		};
+		4413A337421FF3CA7951F1D0 /* Passkeys */ = {
+			isa = PBXGroup;
+			children = (
+				87BFD6E1DCC790CCBC9B3B96 /* Passkey.swift */,
+				C3829385DE10191B3BB514C5 /* PasskeyAuthenticator.swift */,
+				42B91E9F9E4C5B6B54B1ABA2 /* UserVerification.swift */,
+				4D9E429AE6F34417F2F67676 /* PasskeyRow.swift */,
+			);
+			path = Passkeys;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1050,6 +1084,11 @@
 				89C8F41F06F174B401B3AC67 /* OneTimeCode.swift in Sources */,
 				B2E0692ED072B885DE81FD3A /* OneTimeCodeViews.swift in Sources */,
 				22DAB4B2F753788341B840F7 /* OneTimeCodeSetupSection.swift in Sources */,
+				7340516AE178B6EC6488C915 /* Passkey.swift in Sources */,
+				92FDDB672A37D8F902D0FC46 /* PasskeyAuthenticator.swift in Sources */,
+				636548C5A43D7A2637BE1EA7 /* UserVerification.swift in Sources */,
+				DF46D05E22B1CB49F72AF0C7 /* PasskeyRow.swift in Sources */,
+				62D48BDF197564B0C09A1C5C /* PasskeyView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1108,6 +1147,12 @@
 				BBE5C126871D78ADBFCCD016 /* LabeledTextField.swift in Sources */,
 				80EB48B25D0BB576BAAAF79D /* OneTimeCode.swift in Sources */,
 				0C5ADA3FA4B2BB87C1FB3930 /* OneTimeCodeViews.swift in Sources */,
+				E46281A34914FAD878AAD0F7 /* Passkey.swift in Sources */,
+				F13C79C3620D85D3F326A0D4 /* PasskeyAuthenticator.swift in Sources */,
+				0705128B989D64A197A0C893 /* UserVerification.swift in Sources */,
+				417A9EADD103EAEEA6843A36 /* PasskeyRow.swift in Sources */,
+				41C34986265A1DE7D1F9CF97 /* PasskeyViews.swift in Sources */,
+				6A0CF3BE97F690C6514400AC /* ColorfulIconLabelStyle.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1131,6 +1176,7 @@
 				A41698958879786997F8BCFD /* RemindersAndSettingsTests.swift in Sources */,
 				3937FD628A1749AAF3D4E9AE /* PhotoSearchTests.swift in Sources */,
 				EFF43D162E946D5CECFEFE41 /* OneTimeCodeTests.swift in Sources */,
+				70192388278E0957587D66CB /* PasskeyTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

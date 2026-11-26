@@ -29,6 +29,10 @@ final class InMemoryKeychain: KeychainStoring {
         items.removeValue(forKey: key) != nil
     }
 
+    func allKeys() -> [String] {
+        Array(items.keys)
+    }
+
     @discardableResult
     func clear() -> Bool {
         items.removeAll()

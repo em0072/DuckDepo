@@ -28,6 +28,8 @@ final class CredentialIdentityStoreController {
             // One-time codes are offered on their own, when a site asks for a code.
             identities += passwords.compactMap { Self.oneTimeCodeIdentity(for: $0, keychain: keychain) }
         }
+        // Passkeys aren't in Core Data, but replacing the identities would drop them if they weren't here.
+        identities += PasskeyStorage(keychain: keychain).all().map(Self.identity(for:))
         let store = ASCredentialIdentityStore.shared
         store.getState { [logger] state in
             guard state.isEnabled else { return }
@@ -53,6 +55,25 @@ final class CredentialIdentityStoreController {
         let service = ASCredentialServiceIdentifier(identifier: host, type: .domain)
         let label = !password.login.isEmpty ? password.login : (password.name.isEmpty ? host : password.name)
         return ASOneTimeCodeCredentialIdentity(serviceIdentifier: service, label: label, recordIdentifier: id.uuidString)
+    }
+
+    static func identity(for passkey: Passkey) -> ASPasskeyCredentialIdentity {
+        ASPasskeyCredentialIdentity(relyingPartyIdentifier: passkey.relyingParty, userName: passkey.userName,
+                                    credentialID: passkey.credentialID, userHandle: passkey.userHandle,
+                                    recordIdentifier: passkey.id.uuidString)
+    }
+
+    /// Adds one passkey without waiting for the next full refresh, which only the app does.
+    func add(_ passkey: Passkey) {
+        let identity = Self.identity(for: passkey)
+        ASCredentialIdentityStore.shared.getState { [logger] state in
+            guard state.isEnabled else { return }
+            ASCredentialIdentityStore.shared.saveCredentialIdentities([identity]) { _, error in
+                if let error {
+                    logger.error("Saving a passkey identity failed: \(String(describing: error), privacy: .public)")
+                }
+            }
+        }
     }
 
     static func identity(for password: DDPassword) -> ASPasswordCredentialIdentity? {

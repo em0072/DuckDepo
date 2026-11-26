@@ -12,7 +12,11 @@ import Foundation
 final class SettingsViewModel {
 
     private(set) var documentCount = 0
-    private(set) var passwordCount = 0
+    /// Saved passwords and passkeys together: each is something you sign in with.
+    var passwordCount: Int { savedPasswordCount + passkeyCount }
+    private var savedPasswordCount = 0
+    /// Passkeys live in the keychain, so they're recounted whenever the screen shows (AutoFill may have added one).
+    private var passkeyCount = 0
     /// Documents that have expired or expire soon.
     private(set) var renewalCount = 0
 
@@ -33,13 +37,16 @@ final class SettingsViewModel {
     @ObservationIgnored private let database: DataBase
     @ObservationIgnored private let defaults: DefaultsController
     @ObservationIgnored private let reminders: ExpiryReminders
+    @ObservationIgnored private let passkeyStorage: PasskeyStorage
     @ObservationIgnored private var storage: DocumentsStorage?
     @ObservationIgnored private var cancellables = Set<AnyCancellable>()
 
-    init(database: DataBase = .shared, defaults: DefaultsController = .shared, reminders: ExpiryReminders = .shared) {
+    init(database: DataBase = .shared, defaults: DefaultsController = .shared, reminders: ExpiryReminders = .shared,
+         passkeyStorage: PasskeyStorage = PasskeyStorage()) {
         self.database = database
         self.defaults = defaults
         self.reminders = reminders
+        self.passkeyStorage = passkeyStorage
         clipboardLifetime = ClipboardLifetime(rawValue: defaults.clipboardLifetime) ?? .default
         areRemindersEnabled = reminders.isEnabled
         reminderSchedule = reminders.schedule
@@ -61,6 +68,7 @@ final class SettingsViewModel {
             }
             .store(in: &cancellables)
         countPasswords()
+        passkeyCount = passkeyStorage.count()
     }
 
     private func update(with documents: [Document]) {
@@ -74,7 +82,7 @@ final class SettingsViewModel {
     }
 
     private func countPasswords() {
-        passwordCount = database.fetchCount(for: DDPassword.self)
+        savedPasswordCount = database.fetchCount(for: DDPassword.self)
     }
 
     // MARK: - Reminders
@@ -95,13 +103,16 @@ final class SettingsViewModel {
 
     // MARK: - System state
 
-    /// AutoFill and notification permissions can change in Settings while the app is in the background.
+    /// AutoFill and notification permissions can change in Settings while the app is in the background,
+    /// and passkeys can be added through AutoFill or arrive from other devices.
     func refreshSystemState() async {
         let autoFill = await ASCredentialIdentityStore.shared.state().isEnabled
         let blocked = reminders.isEnabled ? !(await reminders.isAuthorized()) : false
+        let passkeys = passkeyStorage.count()
         await MainActor.run {
             isAutoFillEnabled = autoFill
             areNotificationsBlocked = blocked
+            passkeyCount = passkeys
         }
     }
 
@@ -126,5 +137,6 @@ final class SettingsViewModel {
         database.deleteEverything()
         PhotoTextIndex.shared.removeAll()
         countPasswords()
+        passkeyCount = passkeyStorage.count()
     }
 }

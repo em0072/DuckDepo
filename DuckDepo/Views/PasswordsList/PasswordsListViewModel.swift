@@ -12,14 +12,19 @@ import Foundation
 final class PasswordsListViewModel {
 
     var passwords: [Password] = []
+    /// Read from the keychain, which tells nobody when it changes: reload when coming back to the app.
+    private(set) var passkeys: [Passkey] = []
     var isAddingNewPassword = false
 
     @ObservationIgnored private var cancellables = Set<AnyCancellable>()
     @ObservationIgnored private var dataStorage: PasswordsStorage?
     @ObservationIgnored private let makeStorage: () -> PasswordsStorage
+    @ObservationIgnored private let passkeyStorage: PasskeyStorage
 
-    init(makeStorage: @escaping () -> PasswordsStorage = { PasswordsStorage() }) {
+    init(makeStorage: @escaping () -> PasswordsStorage = { PasswordsStorage() },
+         passkeyStorage: PasskeyStorage = PasskeyStorage()) {
         self.makeStorage = makeStorage
+        self.passkeyStorage = passkeyStorage
     }
 
     /// Starts fetching passwords. Safe to call more than once.
@@ -28,6 +33,7 @@ final class PasswordsListViewModel {
         let storage = makeStorage()
         dataStorage = storage
         storage.startObserving()
+        reloadPasskeys()
         storage.passwords
             .sink { [weak self] passwords in
                 self?.passwords = passwords
@@ -56,5 +62,25 @@ final class PasswordsListViewModel {
 
     func delete(_ password: Password) {
         dataStorage?.delete(password)
+    }
+
+    // MARK: - Passkeys
+
+    func reloadPasskeys() {
+        let passkeys = passkeyStorage.all()
+        if passkeys != self.passkeys {
+            self.passkeys = passkeys
+        }
+    }
+
+    func passkey(with id: Passkey.ID?) -> Passkey? {
+        guard let id else { return nil }
+        return passkeys.first { $0.id == id }
+    }
+
+    func delete(_ passkey: Passkey) {
+        passkeyStorage.delete(passkey)
+        CredentialIdentityStoreController.shared.refresh()
+        reloadPasskeys()
     }
 }
