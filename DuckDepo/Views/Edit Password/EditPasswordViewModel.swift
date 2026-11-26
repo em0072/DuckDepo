@@ -6,85 +6,97 @@
 //
 
 import Foundation
-import SwiftUI
 
-protocol EditPasswordViewModelDelegate {
+protocol EditPasswordViewModelDelegate: AnyObject {
     func passwordUpdated(_ password: Password)
     func passwordDeleted()
 }
 
-    class EditPasswordViewModel: ObservableObject {
-        
-        enum PasswordType {
-            case new
-            case existing(Password)
-        }
-                        
-        private let storage = PasswordsStorage()
-        
-        @Published var passwordName: String = ""
-        @Published var passwordLogin: String = ""
-        @Published var passwordValue: String = ""
-        @Published var passwordWebsite: String = ""
-        
-        @Published var shouldCloseView: Bool = false
+final class EditPasswordViewModel: ObservableObject {
 
-        var delegate: EditPasswordViewModelDelegate?
-        
-        var type: PasswordType = .new {
-            didSet {
-                if case .existing(let password) = type {
-                    passwordName = password.name
-                    passwordLogin = password.login
-                    passwordValue = password.value
-                    passwordWebsite = password.website
-                }
-            }
-        }
-        
-        var viewTitle: String {
-            switch type {
-            case .new:
-                return "epv_new_password_title".localized()
-            case .existing(_):
-                return "epv_edit_password_title".localized()
-            }
-        }
-        
-        var saveButtonTitle: String {
-            switch type {
-            case .new:
-                return "epv_add_new_password_button".localized()
-            case .existing(_):
-                return "epv_edit_password_button".localized()
-            }
-        }
-
-        func addNewPasswordButtonAction() {
-            switch type {
-            case .new:
-                let password = Password(name: passwordName, login: passwordLogin, value: passwordValue, website: passwordWebsite)
-                storage.saveNewPassword(password)
-            case .existing(var password):
-                password.name = passwordName
-                password.login = passwordLogin
-                password.value = passwordValue
-                password.website = passwordWebsite
-                storage.update(password)
-                delegate?.passwordUpdated(password)
-            }
-            shouldCloseView = true
-        }
-                
-        
-        func delete() {
-            if case .existing(let password) = type {
-                storage.delete(password)
-            }
-            delegate?.passwordDeleted()
-            shouldCloseView = true
-        }
-
-        
-        
+    enum PasswordType {
+        case new
+        case existing(Password)
     }
+
+    let type: PasswordType
+    weak var delegate: EditPasswordViewModelDelegate?
+
+    @Published var passwordName = ""
+    @Published var passwordLogin = ""
+    @Published var passwordValue = ""
+    @Published var passwordWebsite = ""
+
+    @Published private(set) var shouldCloseView = false
+    @Published var saveFailed = false
+
+    private let storage: PasswordsStorage
+    private var original: Password
+
+    init(type: PasswordType, delegate: EditPasswordViewModelDelegate? = nil, storage: PasswordsStorage = PasswordsStorage()) {
+        self.type = type
+        self.delegate = delegate
+        self.storage = storage
+        switch type {
+        case .new:
+            original = Password()
+        case .existing(let password):
+            // Read the value from the keychain: the caller's copy may be stale or a list item without a value.
+            original = password
+            original.value = storage.value(for: password.id)
+        }
+        passwordName = original.name
+        passwordLogin = original.login
+        passwordValue = original.value
+        passwordWebsite = original.website
+    }
+
+    var isNew: Bool {
+        if case .new = type { return true }
+        return false
+    }
+
+    private var edited: Password {
+        var password = original
+        password.name = passwordName.trimmingCharacters(in: .whitespacesAndNewlines)
+        password.login = passwordLogin.trimmingCharacters(in: .whitespacesAndNewlines)
+        password.value = passwordValue
+        password.website = passwordWebsite.trimmingCharacters(in: .whitespacesAndNewlines)
+        return password
+    }
+
+    var hasChanges: Bool {
+        edited != original
+    }
+
+    var canSave: Bool {
+        !edited.name.isEmpty
+    }
+
+    var viewTitle: String {
+        isNew ? "epv_new_password_title".localized() : "epv_edit_password_title".localized()
+    }
+
+    var saveButtonTitle: String {
+        isNew ? "epv_add_new_password_button".localized() : "epv_edit_password_button".localized()
+    }
+
+    func save() {
+        guard canSave else { return }
+        let password = edited
+        guard storage.save(password) else {
+            saveFailed = true
+            return
+        }
+        delegate?.passwordUpdated(password)
+        shouldCloseView = true
+    }
+
+    func delete() {
+        if case .existing(let password) = type {
+            storage.delete(password)
+        }
+        delegate?.passwordDeleted()
+        shouldCloseView = true
+    }
+}

@@ -7,194 +7,186 @@
 
 import Foundation
 import LocalAuthentication
-import SwiftUI
 
+/// App lock state.
+///
+/// - The app always starts locked when the lock is on. Lock state is never persisted, so a crash
+///   or a kill can't leave the app unlocked.
+/// - `isObscured` hides the content whenever the app isn't active (app switcher snapshot, Control Center).
+/// - The "ask after" delay counts from the moment the app went to the background.
+final class BiometricController: ObservableObject {
 
-class BiometricController: ObservableObject {
-    
     enum BiometricType {
-        case unknown
         case none
         case touch
         case face
         case opticId
     }
-    
+
+    /// Raw values are persisted; don't reorder.
     enum BiometricDelay: Int, CaseIterable {
         case none
         case fiveSeconds
-        case fiveteenSeconds
+        case fifteenSeconds
         case minute
         case fiveMinutes
-        case fiveteenMinutes
-        
-        func numberOfSeconds() -> TimeInterval {
+        case fifteenMinutes
+
+        var seconds: TimeInterval {
             switch self {
-            case .none:
-                return 0
-            case .fiveSeconds:
-                return 5
-            case .fiveteenSeconds:
-                return 15
-            case .minute:
-                return 60
-            case .fiveMinutes:
-                return 60 * 5
-            case .fiveteenMinutes:
-                return 60 * 15
+            case .none: return 0
+            case .fiveSeconds: return 5
+            case .fifteenSeconds: return 15
+            case .minute: return 60
+            case .fiveMinutes: return 60 * 5
+            case .fifteenMinutes: return 60 * 15
             }
         }
     }
 
-    enum BiometricError: Error {
-        case noBiometricAvailable
-    }
-    
+    /// Calls the completion on the main queue with `true` when the user authenticated.
+    typealias Authenticator = (_ reason: String, _ completion: @escaping (Bool) -> Void) -> Void
+
     static let shared = BiometricController()
-    
-    private init(){
-        isUnlocked = defaultController.isUnlocked
-        isBiometryEnabled = defaultController.isBiometryEnabled
-        biometricDelay = BiometricDelay(rawValue: defaultController.biometricDelay) ?? .none
-    }
-    
-    private let defaultController = DefaultsController.shared
-    @Published var isBiometryEnabled = false {
-        didSet {
-            defaultController.isBiometryEnabled = isBiometryEnabled
-            // need to set isUnlocked in userDefaults to make sure password will be asked if isBiometricEnabled is set to true and then quit the app immediatley
-            if !isBiometryEnabled {
-                defaultController.isUnlocked = !isBiometryEnabled
-            }
-        }
-    }
-    @Published var isUnlocked = true {
-        didSet {
-            print("isUnlocked - \(isUnlocked)")
-            defaultController.isUnlocked = isUnlocked
-        }
-    }
-    @Published var biometricDelay: BiometricDelay = .none {
-        didSet {
-            defaultController.biometricDelay = biometricDelay.rawValue
-        }
-    }
-    private var lastAuthenticate: Double {
-        get {
-            return defaultController.lastAuthenticate
-        }
-        set {
-            defaultController.lastAuthenticate = newValue
-        }
-    }
-    private var authenticationInProgress = false
-    private var isBackgroundState = false
 
-    
-    func biometricType() -> BiometricType {
-        let authContext = LAContext()
-        let _ = authContext.canEvaluatePolicy(.deviceOwnerAuthentication, error: nil)
-            switch(authContext.biometryType) {
-            case .none:
-                return .none
-            case .touchID:
-                return .touch
-            case .faceID:
-                return .face
-            case .opticID:
-                return .opticId
-            @unknown default:
-                return .unknown
+    @Published var isBiometryEnabled: Bool {
+        didSet {
+            defaults.isBiometryEnabled = isBiometryEnabled
+            if !isBiometryEnabled {
+                isLocked = false
+                isObscured = false
             }
+        }
     }
-    
-    public func onActiveState() {
-        isBackgroundState = false
-        print("Check if biometric enabled - \(defaultController.isBiometryEnabled) & device Has passcode - \(deviceHasPasscode())")
-        guard defaultController.isBiometryEnabled && deviceHasPasscode() else {
-            print("set isUnlocked to true")
-            isUnlocked = true
+
+    @Published var biometricDelay: BiometricDelay {
+        didSet {
+            defaults.biometricDelay = biometricDelay.rawValue
+        }
+    }
+
+    @Published private(set) var isLocked: Bool
+    @Published private(set) var isObscured = false
+    @Published private(set) var isAuthenticating = false
+
+    /// `true` while content must be hidden.
+    var isContentHidden: Bool {
+        isLocked || isObscured
+    }
+
+    private let defaults: DefaultsController
+    private let now: () -> Date
+    private let canAuthenticate: () -> Bool
+    private let authenticator: Authenticator
+    private var backgroundedAt: Date?
+
+    init(
+        defaults: DefaultsController = .shared,
+        now: @escaping () -> Date = Date.init,
+        canAuthenticate: @escaping () -> Bool = BiometricController.deviceCanAuthenticate,
+        authenticator: @escaping Authenticator = BiometricController.systemAuthenticate
+    ) {
+        self.defaults = defaults
+        self.now = now
+        self.canAuthenticate = canAuthenticate
+        self.authenticator = authenticator
+        let enabled = defaults.isBiometryEnabled
+        isBiometryEnabled = enabled
+        biometricDelay = BiometricDelay(rawValue: defaults.biometricDelay) ?? .none
+        isLocked = enabled && canAuthenticate()
+    }
+
+    /// The lock only applies when the device has a passcode; without one there is nothing to authenticate with.
+    var isLockRequired: Bool {
+        isBiometryEnabled && canAuthenticate()
+    }
+
+    // MARK: - Scene phases
+
+    func sceneDidBecomeActive() {
+        isObscured = false
+        if let backgroundedAt, isLockRequired, now().timeIntervalSince(backgroundedAt) >= biometricDelay.seconds {
+            isLocked = true
+        }
+        backgroundedAt = nil
+        if !isLockRequired {
+            isLocked = false
+        }
+        if isLocked {
+            unlock()
+        }
+    }
+
+    func sceneWillResignActive() {
+        // The Face ID sheet itself makes the app inactive; don't cover it.
+        guard isLockRequired, !isAuthenticating else { return }
+        isObscured = true
+    }
+
+    func sceneDidEnterBackground() {
+        guard isLockRequired else { return }
+        isObscured = true
+        if backgroundedAt == nil {
+            backgroundedAt = now()
+        }
+        if biometricDelay == .none {
+            isLocked = true
+        }
+    }
+
+    // MARK: - Authentication
+
+    func unlock() {
+        guard isLocked, !isAuthenticating else { return }
+        guard isLockRequired else {
+            isLocked = false
             return
         }
-        guard !authenticationInProgress else { return }
-        // Check if app should be locked based on the biometricDelay
-        print("Now is \(Date().timeIntervalSinceReferenceDate)")
-        print("lastAuthenticate is \(lastAuthenticate)")
-        print("biometricDelay.numberOfSeconds is \(biometricDelay.numberOfSeconds())")
-        if Date().timeIntervalSinceReferenceDate - lastAuthenticate >= biometricDelay.numberOfSeconds() && biometricDelay != .none {
-            isUnlocked = false
+        isAuthenticating = true
+        authenticator(String(localized: "lock_auth_reason")) { [weak self] success in
+            guard let self else { return }
+            self.isAuthenticating = false
+            if success {
+                self.isLocked = false
+            }
         }
+    }
 
-        if !isUnlocked {
-            runAuthentication()
-        }
+    /// One-off check, e.g. in the AutoFill extension, independent of the app's lock state.
+    func authenticate(completion: @escaping (Bool) -> Void) {
+        authenticator(String(localized: "lock_auth_reason"), completion)
     }
-    
-    public func onInactiveState() {
-        guard defaultController.isBiometryEnabled && deviceHasPasscode() && !authenticationInProgress && !isBackgroundState else { return }
-        if biometricDelay == .none {
-            isUnlocked = false
-        } else {
-            updateLastAuthenticated()
-        }
-    }
-    
-    public func onBackgroundState() {
-        isBackgroundState = true
-    }
-    
-    public func deviceHasPasscode() -> Bool {
-        let secret = "Device has passcode set?".data(using: String.Encoding.utf8, allowLossyConversion: false)
-        let attributes = [kSecClass as String:kSecClassGenericPassword, kSecAttrService as String:"LocalDeviceServices", kSecAttrAccount as String:"NoAccount", kSecValueData as String:secret!, kSecAttrAccessible as String:kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly] as [String : Any]
 
-        let status = SecItemAdd(attributes as CFDictionary, nil)
-        if status == 0 {
-            SecItemDelete(attributes as CFDictionary)
-            return true
-        }
+    // MARK: - Device capabilities
 
-        return false
-    }
-    
-    public func authenicate(completion: @escaping (Result<Bool, Error>) -> Void) {
-        authenticationInProgress = true
+    func biometricType() -> BiometricType {
         let context = LAContext()
-        var error: NSError?
-
-        // check whether biometric authentication is possible
-        if context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error) {
-            // it's possible, so go ahead and use it
-            let reason = "We need to unlock your data."
-
-            context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: reason) { success, authenticationError in
-                // authentication has now completed
-                DispatchQueue.main.async {
-                    completion(.success(success))
-                    self.authenticationInProgress = false
-                }
-            }
-        } else {
-            // no biometrics
-            completion(.failure(BiometricError.noBiometricAvailable))
-            self.authenticationInProgress = false
-        }
-
-    }
-
-    
-    private func runAuthentication() {
-        //Check if authentication needs to be performed due to the biometric Delay
-        authenicate { result in
-            if case .success(let successfully) = result {
-                self.isUnlocked = successfully
-                self.updateLastAuthenticated()
-            }
+        _ = context.canEvaluatePolicy(.deviceOwnerAuthentication, error: nil)
+        switch context.biometryType {
+        case .touchID: return .touch
+        case .faceID: return .face
+        case .opticID: return .opticId
+        default: return .none
         }
     }
 
-    private func updateLastAuthenticated() {
-        lastAuthenticate = Date().timeIntervalSinceReferenceDate
+    /// `true` when the device has a passcode (with or without biometrics).
+    static func deviceCanAuthenticate() -> Bool {
+        LAContext().canEvaluatePolicy(.deviceOwnerAuthentication, error: nil)
     }
 
+    func deviceHasPasscode() -> Bool {
+        canAuthenticate()
+    }
 
+    static func systemAuthenticate(reason: String, completion: @escaping (Bool) -> Void) {
+        let context = LAContext()
+        guard context.canEvaluatePolicy(.deviceOwnerAuthentication, error: nil) else {
+            DispatchQueue.main.async { completion(false) }
+            return
+        }
+        context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: reason) { success, _ in
+            DispatchQueue.main.async { completion(success) }
+        }
+    }
 }

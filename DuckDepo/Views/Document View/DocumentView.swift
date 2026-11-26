@@ -8,26 +8,23 @@
 import SwiftUI
 
 struct DocumentView: View {
-    
+
     @Environment(\.dismiss) private var dismiss
 
     @StateObject var viewModel: DocumentViewModel
-    
+
     init(document: Document) {
-        let viewModel = DocumentViewModel(document: document)
-        self._viewModel = StateObject(wrappedValue: viewModel)
+        _viewModel = StateObject(wrappedValue: DocumentViewModel(document: document))
     }
-    
+
     var body: some View {
-        
-                List {
-                    DocPhotoSection(photos: viewModel.document.photos, selectedPhoto: $viewModel.selectedPhoto)
-                                            
-                    ForEach(viewModel.document.sections) { section in
-                        DocSectionSection(section: section)
-                    }
-                }
-            .listStyle(.insetGrouped)
+        List {
+            DocPhotoSection(photos: viewModel.document.photos, selectedPhoto: $viewModel.selectedPhoto)
+            ForEach(viewModel.document.sectionsWithValues) { section in
+                DocSectionSection(section: section)
+            }
+        }
+        .listStyle(.insetGrouped)
         .toolbar {
             ToolbarItem(placement: .principal) {
                 DocumentToolbarTitleView(icon: viewModel.document.documentType.image,
@@ -38,62 +35,55 @@ struct DocumentView: View {
         }
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbarView }
-        .actionSheet(isPresented: $viewModel.showShareActionSheet) { shareActionSheetView }
+        .confirmationDialog("dv_share_doc_title", isPresented: $viewModel.showShareOptions, titleVisibility: .visible) {
+            Button("dv_share_photo_and_text", action: viewModel.sharePhotosAndTextButtonPressed)
+            Button("dv_share_photo", action: viewModel.sharePhotosButtonPressed)
+            Button("dv_share_text", action: viewModel.shareTextButtonPressed)
+        } message: {
+            Text("dv_share_doc_body")
+        }
         .sheet(isPresented: $viewModel.showShareSheetView, onDismiss: viewModel.onShareSheetDismiss) {
             ShareSheetView(items: viewModel.itemsToShare)
-                .presentationDetents([.medium,.large])
+                .presentationDetents([.medium, .large])
         }
         .fullScreenCover(isPresented: $viewModel.showEditDocumentView) {
             EditDocumentView(viewModel: viewModel.editDocumentViewModel)
         }
-        .fullScreenCover(isPresented: $viewModel.showingImageViewer, onDismiss: nil) {
-            if let selctedPhoto = viewModel.selectedPhoto {
-                ImageViewer(photos: viewModel.document.photos, selectedImage: selctedPhoto)
+        .fullScreenCover(isPresented: $viewModel.showingImageViewer, onDismiss: { viewModel.selectedPhoto = nil }) {
+            if let selectedPhoto = viewModel.selectedPhoto {
+                ImageViewer(photos: viewModel.document.photos.map(\.image), selectedImage: selectedPhoto.image)
             }
         }
-        .onChange(of: viewModel.shouldDismissView, perform: dismissAction)
-    }
-    
-    private func dismissAction(_ shouldDismissView: Bool) {
-        if shouldDismissView {
-            dismiss()
+        .onChange(of: viewModel.shouldDismissView) { _, shouldDismiss in
+            if shouldDismiss {
+                dismiss()
+            }
         }
     }
-    
-    //    private func iconForShareButton() -> some View {
-    //        Image(systemName: viewModel.isShared(document) ? "person.crop.circle.badge.checkmark" : "person.crop.circle.badge.plus")
-    //            .renderingMode(.original)
-    //    }
-    //
-    //    private func shareView() -> CloudSharingView? {
-    //        guard let share = viewModel.activeShare, let container = viewModel.activeContainer else {
-    //            return nil
-    //        }
-    //        return CloudSharingView(container: container, share: share)
-    //    }
-    
 }
 
 private struct DocumentToolbarTitleView: View {
-    
+
     let icon: Image
     let iconColor: Color
     let name: String
     let description: String
-    
+
     var body: some View {
         HStack {
             icon
                 .symbolRenderingMode(.palette)
                 .foregroundStyle(.white, iconColor)
                 .frame(width: 35, height: 35)
-            
+                .accessibilityHidden(true)
             VStack {
                 Text(name)
-                    .foregroundColor(.primary)
+                    .foregroundStyle(.primary)
                     .bold()
-                Text(description)
-                    .foregroundColor(.secondary)
+                if !description.isEmpty {
+                    Text(description)
+                        .foregroundStyle(.secondary)
+                }
             }
         }
     }
@@ -101,38 +91,20 @@ private struct DocumentToolbarTitleView: View {
 
 extension DocumentView {
     private var toolbarView: some ToolbarContent {
-        ToolbarItemGroup(placement: .navigationBarTrailing) {
-            //MARK:  For Now it is not possible to use it - there is a bug in the NSPersistanceCloudKitController that is prevent database of deleteing created earlier share when the user taps "unshare". As a result, even though share is unshared, UI will always be as it is shared. So we wait for the bugfix from Apple.
-            //                Button(action: shareAction, label: iconForShareButton)
-            //                    .sheet(isPresented: $viewModel.isCloudSharing, content: shareView)
+        ToolbarItemGroup(placement: .topBarTrailing) {
             Button(action: viewModel.shareButtonPressed) {
-                Image(systemName: "square.and.arrow.up")
+                Label("dv_share_doc_title", systemImage: "square.and.arrow.up")
             }
             Button(action: viewModel.editButtonPressed) {
-                Image(systemName: "pencil")
+                Label("edit_button", systemImage: "pencil")
             }
             .disabled(!viewModel.editAllowed())
         }
     }
-    
-    private var shareActionSheetView: ActionSheet {
-        ActionSheet(title: Text("dv_share_doc_title"),
-                    message: Text("dv_share_doc_body"),
-                    buttons: [
-                        //MARK: Doesn't work for some reason - only single object can be shared
-                        .default(Text("dv_share_photo_and_text"), action: viewModel.sharePhotosAndTextButtonPressed),
-                        .default(Text("dv_share_photo"), action: viewModel.sharePhotosButtonPressed),
-                        .default(Text("dv_share_text"), action: viewModel.shareTextButtonPressed),
-                        .cancel()
-                    ])
-    }
 }
 
-struct NewDocumentView_Previews: PreviewProvider {
-    
-    static var previews: some View {
-        NavigationView {
-            DocumentView(document: Document.test)
-        }
+#Preview {
+    NavigationStack {
+        DocumentView(document: Document.test)
     }
 }

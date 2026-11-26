@@ -8,34 +8,21 @@
 import UIKit
 
 extension UIImage {
-    func resized(withPercentage percentage: CGFloat, isOpaque: Bool = true) -> UIImage? {
-        let canvas = CGSize(width: size.width * percentage, height: size.height * percentage)
-        let format = imageRendererFormat
-        format.opaque = isOpaque
-        return UIGraphicsImageRenderer(size: canvas, format: format).image {
-            _ in draw(in: CGRect(origin: .zero, size: canvas))
+
+    /// Returns the image scaled so its longest side is at most `maxPixelSize` pixels (never scaled up).
+    func scaledDown(toMaxPixelSize maxPixelSize: CGFloat) -> UIImage {
+        let pixelWidth = size.width * scale
+        let pixelHeight = size.height * scale
+        let longestSide = max(pixelWidth, pixelHeight)
+        guard longestSide > maxPixelSize, longestSide > 0 else { return self }
+
+        let factor = maxPixelSize / longestSide
+        let target = CGSize(width: (pixelWidth * factor).rounded(), height: (pixelHeight * factor).rounded())
+        let format = UIGraphicsImageRendererFormat.default()
+        format.scale = 1
+        format.opaque = true
+        return UIGraphicsImageRenderer(size: target, format: format).image { _ in
+            draw(in: CGRect(origin: .zero, size: target))
         }
     }
-    
-    func resized(toWidth width: CGFloat, isOpaque: Bool = true) -> UIImage? {
-        let canvas = CGSize(width: width, height: CGFloat(ceil(width/size.width * size.height)))
-        let format = imageRendererFormat
-        format.opaque = isOpaque
-        return UIGraphicsImageRenderer(size: canvas, format: format).image {
-            _ in draw(in: CGRect(origin: .zero, size: canvas))
-        }
-    }
-    
-    
-        func resized(to height: CGFloat) -> UIImage {
-            let scale = height / self.size.height
-            let newWidth = self.size.width * scale
-            let newSize = CGSize(width: newWidth, height: height)
-            let renderer = UIGraphicsImageRenderer(size: newSize)
-
-            return renderer.image { _ in
-                self.draw(in: CGRect(origin: .zero, size: newSize))
-            }
-        }
-
 }

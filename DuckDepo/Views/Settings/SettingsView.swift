@@ -8,78 +8,48 @@
 import SwiftUI
 
 struct SettingsView: View {
-    
-    @StateObject private var biometricController = BiometricController.shared
-    @State var documentsCount: Int = 0
-    @State var passwordsCount: Int = 0
-    
-    @State var showAutofillInfo: Bool = false
 
-    private var db: DataBase = DataBase.shared
-    
+    @ObservedObject private var biometricController = BiometricController.shared
+    @ObservedObject private var syncMonitor = SyncMonitor.shared
+    @State private var documentsCount = 0
+    @State private var passwordsCount = 0
+    @State private var showAutofillInfo = false
+
+    private let db = DataBase.shared
+
     var body: some View {
-        NavigationView {
-            listView
-                .navigationTitle("sv_title")
+        NavigationStack {
+            List {
+                BiometricSection(isBiometryEnabled: $biometricController.isBiometryEnabled,
+                                 biometryDelay: $biometricController.biometricDelay)
+                ICloudSection(monitor: syncMonitor)
+                OverviewSection(documentCount: $documentsCount, passwordCount: $passwordsCount)
+                HelpSection(showAutofillInfo: $showAutofillInfo)
+                DeleteAllSection(onDeleteAction: deleteEverything)
+            }
+            .navigationTitle("sv_title")
         }
-        .onAppear(perform: updateDocumentsCount)
-        .sheet(isPresented: $showAutofillInfo, content: {
+        .onAppear(perform: updateCounts)
+        .onReceive(NotificationCenter.default.publisher(for: .NSManagedObjectContextObjectsDidChange, object: db.context)) { _ in
+            updateCounts()
+        }
+        .sheet(isPresented: $showAutofillInfo) {
             AutofillInfoView()
                 .presentationDragIndicator(.visible)
-        })
-        .navigationViewStyle(StackNavigationViewStyle())
+        }
     }
-    
-    private func updateDocumentsCount() {
-        documentsCount = DataBase.shared.fetchDocumentCount()
-        passwordsCount = PasswordsStorage().count()
+
+    private func updateCounts() {
+        documentsCount = db.fetchDocumentCount()
+        passwordsCount = db.fetchCount(for: DDPassword.self)
     }
-    
+
     private func deleteEverything() {
         db.deleteEverything()
-        updateDocumentsCount()
-    }
-
-}
-
-extension SettingsView {
-    private var listView: some View {
-        List {
-            BiometricSection(isBiometryEnabled: $biometricController.isBiometryEnabled, biometryDelay: $biometricController.biometricDelay)
-            
-            OverviewSection(documentCount: $documentsCount, passwordCount: $passwordsCount)
-            
-            HelpSection(showAutofillInfo: $showAutofillInfo)
-            
-            DeleteAllSection(onDeleteAction: deleteEverything)
-        }
+        updateCounts()
     }
 }
 
 #Preview {
-    
-    struct PreviewWrapper: View {
-        var body: some View {
-            SettingsView()
-                .preferredColorScheme(.dark)
-        }
-    }
-    
-    return SettingsView()
+    SettingsView()
 }
-
-
-
-//struct CategorySection: View {
-//    var body: some View {
-//        Section {
-//            NavigationLink {
-//                EditFoldersView()
-//            } label: {
-//                Text("Edit Categories")
-//            }
-//        } header: {
-//            Text("Categories")
-//        }
-//    }
-//}

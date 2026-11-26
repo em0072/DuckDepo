@@ -5,88 +5,81 @@
 //  Created by Evgeny Mitko on 25/11/2021.
 //
 
-import Foundation
 import CloudKit
-import CoreData
 import Combine
+import CoreData
 
-class DocumentsStorage: NSObject {
-    
-    var folders = CurrentValueSubject<[Folder], Never>([])
-    var documents = CurrentValueSubject<[Document], Never>([])
-    private var fetchedRequestController: NSFetchedResultsController<DDDocument>
-//    private var fetchedFoldersRequestController: NSFetchedResultsController<DDFolder>
+/// Publishes the document list. List items don't include photos; load a full
+/// document with `DataBase.fullDocument(with:)` when it's opened.
+final class DocumentsStorage: NSObject {
 
-    override init() {
+    let documents = CurrentValueSubject<[Document], Never>([])
 
+    private let database: DataBase
+    private let fetchedResultsController: NSFetchedResultsController<DDDocument>
+    private var storeObserver: NSObjectProtocol?
+
+    init(database: DataBase = .shared) {
+        self.database = database
         let fetchRequest = DDDocument.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \DDDocument.documentTypeOrder, ascending: true),
                                         NSSortDescriptor(keyPath: \DDDocument.order, ascending: true)]
-        fetchedRequestController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: DataBase.shared.context, sectionNameKeyPath: nil, cacheName: nil)
-        
-//        let fetchRequestFolders = DDFolder.fetchRequest()
-//        fetchRequestFolders.sortDescriptors = [NSSortDescriptor(keyPath: \DDFolder.name, ascending: true),
-//                                        NSSortDescriptor(keyPath: \DDDocument.order, ascending: true)]
-//        fetchedFoldersRequestController = NSFetchedResultsController(fetchRequest: fetchRequestFolders, managedObjectContext: DataBase.shared.context, sectionNameKeyPath: nil, cacheName: nil)
-
+        fetchRequest.relationshipKeyPathsForPrefetching = ["sections", "sections.fields"]
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
+                                                              managedObjectContext: database.context,
+                                                              sectionNameKeyPath: nil,
+                                                              cacheName: nil)
         super.init()
-        
-        fetchedRequestController.delegate = self
-        do {
-            try fetchedRequestController.performFetch()
-            controllerDidChangeContent(fetchedRequestController as! NSFetchedResultsController<NSFetchRequestResult>)
-            
-        } catch {
-            print("Oops, could not fetch documents")
+        fetchedResultsController.delegate = self
+        performFetch()
+        // The store may load later than this object is created (device was locked).
+        storeObserver = NotificationCenter.default.addObserver(forName: .persistentStoresDidLoad, object: nil, queue: .main) { [weak self] _ in
+            self?.performFetch()
         }
-        
-//        fetchedFoldersRequestController.delegate = self
-//        do {
-//            try fetchedFoldersRequestController.performFetch()
-//            controllerDidChangeContent(fetchedFoldersRequestController as! NSFetchedResultsController<NSFetchRequestResult>)
-//            
-//        } catch {
-//            print("Oops, could not fetch documents")
-//        }
+    }
+
+    deinit {
+        if let storeObserver {
+            NotificationCenter.default.removeObserver(storeObserver)
+        }
+    }
+
+    private func performFetch() {
+        do {
+            try fetchedResultsController.performFetch()
+            publish()
+        } catch {
+            database.logger.error("Fetching documents failed: \(String(describing: error), privacy: .public)")
+        }
+    }
+
+    private func publish() {
+        documents.value = (fetchedResultsController.fetchedObjects ?? []).map { $0.convert(includePhotos: false) }
     }
 }
 
 extension DocumentsStorage: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        
-        guard let documents = controller.fetchedObjects as? [DDDocument] else {
-            return
-        }
-        self.documents.value = documents.map({ $0.convert() })
-        
-//        guard let folders = controller.fetchedObjects as? [DDFolder] else {
-//            return
-//        }
-//        self.folders.value = folders.map({ $0.convert() })
-
+        publish()
     }
 }
 
-
 extension DataBase {
-    
-//    static var shared: DocumentsDataBase = DocumentsDataBase()
-    
-    public func isShared(_ document: DDDocument) -> Bool {
-        PersistenceController.shared.isShared(object: document)
+
+    // MARK: - Sharing
+
+    func isShared(_ document: DDDocument) -> Bool {
+        persistenceController.isShared(object: document)
     }
-    
-    public func isShared(_ document: Document) -> Bool {
-        if let fetchedDoc = fetchFromDB(document) {
-            return PersistenceController.shared.isShared(object: fetchedDoc)
-        } else {
-            return false
-        }
+
+    func isShared(_ document: Document) -> Bool {
+        guard let fetchedDoc = fetchFromDB(document) else { return false }
+        return persistenceController.isShared(object: fetchedDoc)
     }
-    
-    public func share(document: DDDocument, completion: @escaping (CKShare?, CKContainer?, Error?) -> Void) {
+
+    func share(document: DDDocument, completion: @escaping (CKShare?, CKContainer?, Error?) -> Void) {
         let share = persistenceController.fetchShare(for: document)
-        persistenceController.container.share([document], to: share) { objectIDs, share, container, error in
+        persistenceController.container.share([document], to: share) { _, share, container, error in
             if let actualShare = share {
                 document.managedObjectContext?.performAndWait {
                     actualShare[CKShare.SystemFieldKey.title] = document.name
@@ -95,55 +88,59 @@ extension DataBase {
             completion(share, container, error)
         }
     }
-    
-    public func canEdit(_ document: DDDocument) -> Bool {
+
+    func canEdit(_ document: DDDocument) -> Bool {
         persistenceController.canEdit(object: document)
     }
-        
-    public func canDelete(_ document: DDDocument) -> Bool {
+
+    func canDelete(_ document: DDDocument) -> Bool {
         persistenceController.canDelete(object: document)
     }
 
-    public func save(_ document: Document) {
+    // MARK: - CRUD
+
+    @discardableResult
+    func save(_ document: Document) -> Bool {
         _ = DDDocument(viewContext: context, object: document, order: fetchDocumentCount())
-        save()
+        return save()
     }
 
-    public func fetchFromDB(_ document: Document) -> DDDocument? {
+    func fetchFromDB(_ document: Document) -> DDDocument? {
         DDDocument.fetchDocument(with: document.id, viewContext: context)
     }
-    
-    public func update(_ document: Document)  {
-        if let fetchedDDDocument = DDDocument.fetchDocument(with: document.id, viewContext: context) {
-            for section in fetchedDDDocument.getSections() {
-                for field in section.getAllFields() {
-                    context.delete(field)
-                }
-                context.delete(section)
+
+    /// The document with its photos, as currently stored.
+    func fullDocument(with id: UUID) -> Document? {
+        DDDocument.fetchDocument(with: id, viewContext: context)?.convert(includePhotos: true)
+    }
+
+    @discardableResult
+    func update(_ document: Document) -> Bool {
+        guard let stored = DDDocument.fetchDocument(with: document.id, viewContext: context) else { return false }
+        for section in stored.getSections() {
+            for field in section.getAllFields() {
+                context.delete(field)
             }
-            fetchedDDDocument.name = document.name
-            fetchedDDDocument.updateType(newType: document.documentType)
-            fetchedDDDocument.documentDescription = document.description
-            fetchedDDDocument.addToPhotos(document.photos)
-            for index in 0..<document.sections.count {
-                let section = document.sections[index]
-                let newDDSection = DDSection(viewContext: context, object: section, order: index, document: fetchedDDDocument)
-                fetchedDDDocument.addToSections(newDDSection)
-            }
-            save()
+            context.delete(section)
         }
-    }
-    
-    public func fetchDocumentCount() -> Int {
-        return fetchCount(for: DDDocument.self)
-    }
-    
-    public func delete(_ document: Document) {
-        if let fetchedDDDocument = DDDocument.fetchDocument(with: document.id, viewContext: context) {
-//            deleteShareIfNeeded(for: fetchedDDDocument)
-            context.delete(fetchedDDDocument)
-            save()
+        stored.name = document.name
+        stored.updateType(newType: document.documentType)
+        stored.documentDescription = document.description
+        stored.setPhotos(document.photos)
+        for (index, section) in document.sections.enumerated() {
+            stored.addToSections(DDSection(viewContext: context, object: section, order: index, document: stored))
         }
+        return save()
     }
-    
+
+    func fetchDocumentCount() -> Int {
+        fetchCount(for: DDDocument.self)
+    }
+
+    @discardableResult
+    func delete(_ document: Document) -> Bool {
+        guard let stored = DDDocument.fetchDocument(with: document.id, viewContext: context) else { return false }
+        context.delete(stored)
+        return save()
+    }
 }

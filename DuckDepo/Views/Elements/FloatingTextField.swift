@@ -6,49 +6,72 @@
 //
 
 import SwiftUI
-import Combine
 
-protocol FloatingTextFieldDelegate {
-    func valueChangedForField(with id: UUID, newValue: String)
-}
-
+/// A text field whose title floats above the text once something is typed.
+/// It edits the binding directly, so rows can be added, removed and reordered safely.
 struct FloatingTextField: View {
-    
-    var title: String
+
+    /// Input traits. Credentials must never be auto-capitalized or auto-corrected.
+    enum Kind {
+        case text
+        case name
+        case login
+        case password
+        case url
+
+        var keyboardType: UIKeyboardType {
+            switch self {
+            case .url: return .URL
+            case .login: return .emailAddress
+            case .text, .name, .password: return .default
+            }
+        }
+
+        var capitalization: TextInputAutocapitalization {
+            switch self {
+            case .text: return .sentences
+            case .name: return .words
+            case .login, .password, .url: return .never
+            }
+        }
+
+        var disablesAutocorrection: Bool {
+            switch self {
+            case .text, .name: return false
+            case .login, .password, .url: return true
+            }
+        }
+    }
+
+    let title: String
     @Binding var value: String
-    @State var textFieldValue: String = ""
-    var id: UUID = UUID()
-    var delegate: FloatingTextFieldDelegate?
-    
+    var kind: Kind = .text
+
     var body: some View {
         ZStack(alignment: .leading) {
-            Text(title.capitalized)
-                .foregroundColor(.neumorphicText)
-                .offset(y: textFieldValue.isEmpty ? -5 : -25)
-                .scaleEffect(textFieldValue.isEmpty ? 1 : 0.8, anchor: .leading)
-            TextField("", text: $textFieldValue)
-                .offset(y: textFieldValue.isEmpty ? -5 : 0)
+            Text(title)
+                .foregroundStyle(.secondary)
+                .offset(y: value.isEmpty ? -5 : -25)
+                .scaleEffect(value.isEmpty ? 1 : 0.8, anchor: .leading)
+                .accessibilityHidden(true)
+            TextField("", text: $value)
+                .accessibilityLabel(title)
+                .offset(y: value.isEmpty ? -5 : 0)
+                .keyboardType(kind.keyboardType)
+                .textInputAutocapitalization(kind.capitalization)
+                .autocorrectionDisabled(kind.disablesAutocorrection)
+                .fontDesign(kind == .password ? .monospaced : .default)
         }
         .padding(.top, 15)
         .padding(.bottom, 5)
-        .animation(.easeInOut(duration: 0.2), value: textFieldValue)
-        .onAppear {
-            textFieldValue = value
-        }
-        .onChange(of: textFieldValue) { newValue in
-            delegate?.valueChangedForField(with: id, newValue: newValue)
-            value = textFieldValue
-        }
+        .animation(.easeInOut(duration: 0.2), value: value.isEmpty)
     }
 }
 
-struct FloatingTextField_Previews: PreviewProvider {
-    
-    
-    static var previews: some View {
-        
-        FloatingTextField(title: "Title", value: .constant(""))
-        
+#Preview {
+    @Previewable @State var value = ""
+    List {
+        FloatingTextField(title: "Title", value: $value)
+        FloatingTextField(title: "Password", value: .constant("s3cr3t"), kind: .password)
     }
 }
-

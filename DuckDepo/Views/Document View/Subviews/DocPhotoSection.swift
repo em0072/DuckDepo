@@ -8,42 +8,37 @@
 import SwiftUI
 
 struct DocPhotoSection: View {
-    
-    var photos: [UIImage]
-    @Binding var selectedPhoto: UIImage?
+
+    let photos: [DocumentPhoto]
+    @Binding var selectedPhoto: DocumentPhoto?
 
     var body: some View {
         Section {
-                if !photos.isEmpty {
-                    ScrollView(.horizontal) {
-                        HStack {
-                            ForEach(photos, id: \.self) { photo in
-                                PhotoCell(image: photo) {
-                                    self.selectedPhoto = photo
-                                }
+            if photos.isEmpty {
+                Text("dv_no_photos")
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+            } else {
+                ScrollView(.horizontal) {
+                    LazyHStack {
+                        ForEach(photos) { photo in
+                            PhotoCell(image: photo.image) {
+                                selectedPhoto = photo
                             }
                         }
-                        .frame(height: 110)
                     }
-                } else {
-                    HStack {
-                        Spacer()
-                        Text("dv_no_photos")
-                        Spacer()
-                    }
-                    .padding()
+                    .frame(height: 110)
                 }
+            }
         } header: {
             Text("dv_photos")
         }
     }
 }
 
-struct NewPhotoView_Previews: PreviewProvider {
-    
-    static var previews: some View {
-        List {
-            DocPhotoSection(photos: Document.test.photos, selectedPhoto: .constant(nil))
-        }
+#Preview {
+    List {
+        DocPhotoSection(photos: Document.test.photos, selectedPhoto: .constant(nil))
     }
 }

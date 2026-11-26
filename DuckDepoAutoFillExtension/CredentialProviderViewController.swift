@@ -4,70 +4,99 @@
 //
 //  Created by Evgeny Mitko on 27/06/2022.
 //
-import UIKit
-import SwiftUI
+
 import AuthenticationServices
-import KeychainSwift
-import Combine
+import SwiftUI
+import UIKit
 
-class CredentialProviderViewController: ASCredentialProviderViewController {
+final class CredentialProviderViewController: ASCredentialProviderViewController {
 
-    /*
-     Prepare your UI to list available credentials for the user to choose from. The items in
-     'serviceIdentifiers' describe the service the user is logging in to, so your extension can
-     prioritize the most relevant credentials in the list.
-    */
+    private let lock = BiometricController.shared
+
+    /// The user opened the AutoFill list from the keyboard or a password field.
     override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
-        let viewModel = AutoFillPasswordsListViewModel(identifiers: prepareIdentifiers(serviceIdentifiers))
-        let swiftUIView = AutoFillPasswordsListView(viewModel: viewModel) {
-            self.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code: ASExtensionError.userCanceled.rawValue))
-        } onSelect: { password in
-            let passwordCredential = ASPasswordCredential(user: password.login, password: password.value)
-            self.extensionContext.completeRequest(withSelectedCredential: passwordCredential, completionHandler: nil)
-        }
-        let hostController = UIHostingController(rootView: swiftUIView)
-        addChild(hostController)
-        view.addSubview(hostController.view)
-        
-        hostController.view.translatesAutoresizingMaskIntoConstraints = false
-        let constraints =
-        [hostController.view.topAnchor.constraint(equalTo: view.topAnchor),
-         hostController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-         hostController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-         hostController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor)]
-        
-        NSLayoutConstraint.activate(constraints)
-        hostController.didMove(toParent: self)
+        let viewModel = AutoFillPasswordsListViewModel(identifiers: serviceIdentifiers.map(\.identifier))
+        show(AutoFillPasswordsListView(viewModel: viewModel, onClose: { [weak self] in
+            self?.cancel(.userCanceled)
+        }, onSelect: { [weak self] credential in
+            self?.extensionContext.completeRequest(withSelectedCredential: credential, completionHandler: nil)
+        }))
     }
-        
-    private func prepareIdentifiers( _ serviceIdentifiers: [ASCredentialServiceIdentifier]) -> [String] {
-        serviceIdentifiers.map({ $0.identifier } )
-    }
-//     Implement this method if your extension supports showing credentials in the QuickType bar.
-//     When the user selects a credential from your app, this method will be called with the
-//     ASPasswordCredentialIdentity your app has previously saved to the ASCredentialIdentityStore.
-//     Provide the password by completing the extension request with the associated ASPasswordCredential.
-//     If using the credential would require showing custom UI for authenticating the user, cancel
-//     the request with error code ASExtensionError.userInteractionRequired.
 
-    override func provideCredentialWithoutUserInteraction(for credentialIdentity: ASPasswordCredentialIdentity) {
-        let keychain = Keychain.shared
-        guard let identifier = credentialIdentity.recordIdentifier, let passwordValue = keychain.get(identifier) else {
-            self.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code: ASExtensionError.credentialIdentityNotFound.rawValue))
+    /// The user picked a suggestion in the QuickType bar. Without the app lock we can fill right away;
+    /// with it, ask the system to show our UI so the user can authenticate first.
+    override func provideCredentialWithoutUserInteraction(for credentialRequest: any ASCredentialRequest) {
+        guard !requiresAuthentication else {
+            cancel(.userInteractionRequired)
             return
         }
-        let passwordCredential = ASPasswordCredential(user: credentialIdentity.user, password: passwordValue)
-        self.extensionContext.completeRequest(withSelectedCredential: passwordCredential, completionHandler: nil)
+        complete(credentialRequest)
     }
-    
 
-    /*
-     Implement this method if provideCredentialWithoutUserInteraction(for:) can fail with
-     ASExtensionError.userInteractionRequired. In this case, the system may present your extension's
-     UI and call this method. Show appropriate UI for authenticating the user then provide the password
-     by completing the extension request with the associated ASPasswordCredential.
-
-    override func prepareInterfaceToProvideCredential(for credentialIdentity: ASPasswordCredentialIdentity) {
+    override func prepareInterfaceToProvideCredential(for credentialRequest: any ASCredentialRequest) {
+        guard requiresAuthentication else {
+            complete(credentialRequest)
+            return
+        }
+        let authenticateAndFill: () -> Void = { [weak self] in
+            self?.lock.authenticate { success in
+                if success {
+                    self?.complete(credentialRequest)
+                }
+            }
+        }
+        show(NavigationStack {
+            AutoFillUnlockView(onUnlock: authenticateAndFill)
+                .toolbar {
+                    ToolbarItem(placement: .topBarLeading) {
+                        CloseButton { [weak self] in
+                            self?.cancel(.userCanceled)
+                        }
+                    }
+                }
+                .task { authenticateAndFill() }
+        }
+        .tint(.duckYellow))
     }
-    */
+
+    // MARK: - Helpers
+
+    /// Until the app has run once after updating, its lock setting may not be readable yet, so authenticate then too.
+    private var requiresAuthentication: Bool {
+        guard BiometricController.deviceCanAuthenticate() else { return false }
+        return lock.isLockRequired || !DefaultsController.shared.isSharedStoreReady
+    }
+
+    private func complete(_ request: any ASCredentialRequest) {
+        let identity = request.credentialIdentity
+        guard let recordID = identity.recordIdentifier, let value = Keychain.shared.string(forKey: recordID) else {
+            cancel(.credentialIdentityNotFound)
+            return
+        }
+        let credential = ASPasswordCredential(user: identity.user, password: value)
+        extensionContext.completeRequest(withSelectedCredential: credential, completionHandler: nil)
+    }
+
+    private func cancel(_ code: ASExtensionError.Code) {
+        extensionContext.cancelRequest(withError: ASExtensionError(code))
+    }
+
+    private func show<Content: View>(_ rootView: Content) {
+        children.forEach { child in
+            child.willMove(toParent: nil)
+            child.view.removeFromSuperview()
+            child.removeFromParent()
+        }
+        let host = UIHostingController(rootView: rootView)
+        addChild(host)
+        view.addSubview(host.view)
+        host.view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            host.view.topAnchor.constraint(equalTo: view.topAnchor),
+            host.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            host.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            host.view.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+        host.didMove(toParent: self)
+    }
 }

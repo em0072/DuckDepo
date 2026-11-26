@@ -12,6 +12,12 @@ enum DocumentType: String, Codable, Identifiable, CaseIterable, Hashable {
     
     var id: DocumentType { self }
 
+    /// Shown to the user; `rawValue` is stored and synced and must not change.
+    var localizedName: String {
+        // Not `String(localized: "doc_type_\(rawValue)")`: interpolation there becomes a format argument, not part of the key.
+        ("doc_type_" + rawValue).localized()
+    }
+
     case identification
     case transport
     case government

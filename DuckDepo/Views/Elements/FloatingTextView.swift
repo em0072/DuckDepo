@@ -6,44 +6,40 @@
 //
 
 import SwiftUI
-import Foundation
 
-protocol FloatingTextViewDelegate {
-    func copied(text: String, withTaps: Bool)
-}
-
+/// A read-only value with a small title. Double-tap or long-press to copy.
 struct FloatingTextView: View {
 
-    var title: String
-    var value: String
+    let title: String
+    let value: String
     var url: URL?
+    /// Monospaced value (passwords), so similar characters like 0/O and l/I are easy to tell apart.
+    var isMonospaced = false
     @Binding var isVisible: Bool
-    var delegate: FloatingTextViewDelegate?
-    
-    
-    init(title: String, value: String, url: URL? = nil, isVisible: Binding<Bool>? = nil, delegate: FloatingTextViewDelegate? = nil) {
+
+    init(title: String, value: String, url: URL? = nil, isMonospaced: Bool = false, isVisible: Binding<Bool>? = nil) {
         self.title = title
         self.value = value
         self.url = url
+        self.isMonospaced = isMonospaced
         self._isVisible = isVisible ?? .constant(true)
-        self.delegate = delegate
     }
-    
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
             Text(title)
-                .foregroundColor(Color(white: 0.3))
-                .scaleEffect(0.8, anchor: .leading)
+                .font(.footnote)
+                .foregroundStyle(.secondary)
                 .padding(.top, 5)
             HStack {
                 Group {
-                    if let url = url {
-                        Link(proccessedValue, destination: url)
+                    if let url {
+                        Link(processedValue, destination: url)
                     } else {
-                        Text(proccessedValue)
+                        Text(processedValue)
                     }
                 }
+                .fontDesign(isMonospaced ? .monospaced : .default)
                 .padding(.bottom, 5)
                 .contextMenu {
                     if let url {
@@ -59,18 +55,19 @@ struct FloatingTextView: View {
                 ClipboardController.shared.copy(string: value)
             }
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityAction(named: Text("dv_copy_to_clipboard")) {
+            ClipboardController.shared.copy(string: value)
+        }
     }
-    
-    var proccessedValue: String {
-        return isVisible ? value : String(repeating: "•", count: value.count)
+
+    private var processedValue: String {
+        isVisible ? value : String(repeating: "•", count: max(value.count, 8))
     }
-    
 }
 
-struct FloatingTextView_Previews: PreviewProvider {
-    static var previews: some View {
-        List {
-            FloatingTextView(title: "Title", value: "Value")
-        }
+#Preview {
+    List {
+        FloatingTextView(title: "Title", value: "Value")
     }
 }

@@ -7,23 +7,20 @@
 
 import Foundation
 
-struct DocSection: Identifiable, Equatable, Hashable {
-    
-    static func == (lhs: DocSection, rhs: DocSection) -> Bool {
-        lhs.id == rhs.id
-    }
+/// Equality compares contents (used to detect unsaved changes). Look sections up by `id`.
+struct DocSection: Identifiable, Hashable {
+    var id = UUID()
+    var name: String
+    var fields: [Field]
 
-    public var id = UUID()
-    public var name: String
-//    public var order: Int
-    public var fields: [Field]
-//    public var document: Document?
-    
-    init(name: String = "", fields: [Field] = []) {
+    init(id: UUID = UUID(), name: String = "", fields: [Field] = []) {
+        self.id = id
         self.name = name
-//        self.order = order
         self.fields = fields
-//        self.document = documnet
     }
 
+    /// `true` when at least one field has a value.
+    var hasValues: Bool {
+        fields.contains { !$0.value.isEmpty }
+    }
 }

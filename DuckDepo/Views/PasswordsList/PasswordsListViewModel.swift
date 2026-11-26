@@ -5,32 +5,28 @@
 //  Created by Evgeny Mitko on 27/06/2022.
 //
 
-import Foundation
 import Combine
+import Foundation
 
-class PasswordsListViewModel: ObservableObject {
-    
-    private let testPassword = [Password(name: "Google", login: "alpaca@gmail.com", value: "", website: "https://google.com"),
-                        Password(name: "Instagram", login: "alpaca@gmail.com", value: "", website: "https://instagram.com"),
-                        Password(name: "Twitter", login: "alpaca@gmail.com", value: "", website: "https://twitter.com")]
+final class PasswordsListViewModel: ObservableObject {
 
     @Published var passwords: [Password] = []
-    
-    @Published var isAddingNewPassword: Bool = false
-    @Published var selectedPassword: Password?
+    @Published var isAddingNewPassword = false
 
-    private var cancellable = Set<AnyCancellable>()
-    private var dataStorage = PasswordsStorage()
+    private var cancellables = Set<AnyCancellable>()
+    private let dataStorage: PasswordsStorage
 
-    
-    init() {
-        dataStorage.passwords.sink { passwords in
-            self.passwords = passwords
-        }.store(in: &cancellable)
+    init(dataStorage: PasswordsStorage = PasswordsStorage()) {
+        self.dataStorage = dataStorage
+        dataStorage.startObserving()
+        dataStorage.passwords
+            .sink { [weak self] passwords in
+                self?.passwords = passwords
+            }
+            .store(in: &cancellables)
     }
-    
+
     func addNewPasswordButtonPressed() {
         isAddingNewPassword = true
     }
-
 }

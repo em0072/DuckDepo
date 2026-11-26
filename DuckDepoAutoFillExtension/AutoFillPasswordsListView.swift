@@ -5,65 +5,79 @@
 //  Created by Evgeny Mitko on 28/06/2022.
 //
 
+import AuthenticationServices
 import SwiftUI
-import Combine
 
 struct AutoFillPasswordsListView: View {
-    
+
     @StateObject var viewModel: AutoFillPasswordsListViewModel
-    var onClose: (()->())?
-    var onSelect: ((Password)->())?
-        
+    var onClose: (() -> Void)?
+    var onSelect: ((ASPasswordCredential) -> Void)?
+
     var body: some View {
         NavigationStack {
-            ZStack {
-                if !viewModel.passwords.isEmpty {
-                    listView()
-                } else {
-                    InitialInstructionsView(type: .passwords)
-                }
-            }
-            .navigationTitle("af_nav_title")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    CloseButton() {
-                        onClose?()
+            content
+                .navigationTitle("af_nav_title")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .topBarLeading) {
+                        CloseButton {
+                            onClose?()
+                        }
+                    }
+                    if viewModel.isStoreReady && !viewModel.isLocked {
+                        ToolbarItem(placement: .topBarTrailing) {
+                            Button {
+                                viewModel.addNewPasswordButtonPressed()
+                            } label: {
+                                Label("epv_new_password_title", systemImage: "plus")
+                            }
+                        }
                     }
                 }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        viewModel.addNewPasswordButtonPressed()
-                    } label: {
-                        Image(systemName: "plus")
+                .fullScreenCover(isPresented: $viewModel.isAddingNewPassword) {
+                    EditPasswordView(type: .new)
+                }
+                .sheet(item: $viewModel.selectedPassword) { password in
+                    NavigationStack {
+                        PasswordView(password: password)
                     }
-                }
-            }
-            .fullScreenCover(isPresented: $viewModel.isAddingNewPassword) {
-                EditPasswordView(type: .new)
-            }
-            .sheet(item: $viewModel.selectedPassword) { password in
-                NavigationStack {
-                    PasswordView(password: password)
-                }
                     .presentationDragIndicator(.visible)
-            }
+                }
         }
         .tint(.duckYellow)
     }
-    
-    private func listView() -> some View {
+
+    @ViewBuilder
+    private var content: some View {
+        if !viewModel.isStoreReady {
+            AutoFillMessageView(title: "af_open_app_title", message: "af_open_app_body", systemImage: "arrow.up.forward.app")
+        } else if viewModel.isLocked {
+            AutoFillUnlockView(onUnlock: viewModel.unlock)
+                .task {
+                    viewModel.unlock()
+                }
+        } else if viewModel.passwords.isEmpty {
+            InitialInstructionsView(type: .passwords)
+        } else {
+            listView
+                .searchable(text: $viewModel.searchText)
+        }
+    }
+
+    private var listView: some View {
         List {
-            if !viewModel.recomendedPasswords.isEmpty {
-                Section  {
-                    ForEach(viewModel.recomendedPasswords) { password in
+            if !viewModel.recommendedPasswords.isEmpty && viewModel.searchText.isEmpty {
+                Section {
+                    ForEach(viewModel.recommendedPasswords) { password in
                         row(for: password)
                     }
                 } header: {
                     Text("af_recommended_passwords")
                 }
             }
-            Section  {
-                ForEach(viewModel.passwords) { password in
+            Section {
+                ForEach(viewModel.filteredPasswords) { password in
                     row(for: password)
                 }
             } header: {
@@ -71,40 +85,71 @@ struct AutoFillPasswordsListView: View {
             }
         }
     }
-    
-    func row(for password: Password) -> some View {
+
+    private func row(for password: Password) -> some View {
         HStack {
             Button {
-                onSelect?(password)
+                onSelect?(viewModel.credential(for: password))
             } label: {
                 PasswordRow(name: password.name, login: password.login)
             }
-            
             Spacer()
-            
             Button {
                 viewModel.showPassword(password)
             } label: {
-                Image(systemName: "info")
-                    .foregroundColor(.duckYellow)
-                    .bold()
+                Image(systemName: "info.circle")
+                    .foregroundStyle(Color.duckYellow)
             }
             .buttonStyle(.plain)
+            .accessibilityLabel(Text("af_show_details"))
         }
     }
-    
-    
 }
 
-struct AutoFillPasswordsListView_Previews: PreviewProvider {
-    
-    static var viewModel: AutoFillPasswordsListViewModel {
-        let viewModel = AutoFillPasswordsListViewModel(identifiers: [])
-        viewModel.passwords = Array(repeating: Password.test, count: 2)
-        return viewModel
+/// Shown while the extension waits for the user to authenticate.
+struct AutoFillUnlockView: View {
+    let onUnlock: () -> Void
+
+    var body: some View {
+        VStack(spacing: 16) {
+            Image(systemName: "lock.fill")
+                .font(.largeTitle)
+                .foregroundStyle(.secondary)
+                .accessibilityHidden(true)
+            Text("lock_title")
+                .font(.title3.bold())
+            Button("lock_unlock_passcode", action: onUnlock)
+                .buttonStyle(.borderedProminent)
+                .tint(.duckYellow)
+                .foregroundStyle(.black)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
-    
-    static var previews: some View {
-        AutoFillPasswordsListView(viewModel: viewModel, onClose: nil, onSelect: nil)
+}
+
+struct AutoFillMessageView: View {
+    let title: LocalizedStringKey
+    let message: LocalizedStringKey
+    let systemImage: String
+
+    var body: some View {
+        VStack(spacing: 12) {
+            Image(systemName: systemImage)
+                .font(.largeTitle)
+                .foregroundStyle(.secondary)
+                .accessibilityHidden(true)
+            Text(title)
+                .font(.headline)
+            Text(message)
+                .font(.callout)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+        }
+        .padding(32)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
+}
+
+#Preview {
+    AutoFillPasswordsListView(viewModel: AutoFillPasswordsListViewModel(identifiers: [], isStoreReady: false))
 }

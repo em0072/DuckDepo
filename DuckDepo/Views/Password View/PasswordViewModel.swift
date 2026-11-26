@@ -7,86 +7,76 @@
 
 import Foundation
 
-class PasswordViewModel: ObservableObject {
-    
+final class PasswordViewModel: ObservableObject {
+
     @Published var password: Password
-    
+
     @Published var showShareAlert = false
     @Published var showShareSheetView = false
     @Published var isEditingPassword = false
     @Published var isPasswordVisible = false
     @Published var shouldDismissView = false
-    
+
     var itemsToShare: [Any]?
-    
-    init(password: Password) {
+
+    /// List items carry no password value; read it from the keychain only for this screen.
+    init(password: Password, storage: PasswordsStorage = PasswordsStorage()) {
+        var password = password
+        password.value = storage.value(for: password.id)
         self.password = password
     }
-    
+
     var shouldShowCredentialsSection: Bool {
-        return isLoginExist || isPasswordExist
+        isLoginExist || isPasswordExist
     }
-    
+
     var isNameExist: Bool {
-        return !password.name.isEmpty
+        !password.name.isEmpty
     }
 
     var isLoginExist: Bool {
-        return !password.login.isEmpty
+        !password.login.isEmpty
     }
 
     var isPasswordExist: Bool {
-        return !password.value.isEmpty
+        !password.value.isEmpty
     }
-    
+
     var isWebsiteExist: Bool {
-        return !password.website.isEmpty
+        !password.website.isEmpty
     }
-    
+
     func sharePassword() {
-        var shareString: String = ""
+        var lines: [String] = []
         if isNameExist {
-            shareString.append("pv_share_details_title".localized())
-            shareString.append(password.name)
-            shareString.append("\n\n")
+            lines.append("pv_share_details_title".localized() + password.name)
         }
         if isLoginExist {
-            shareString.append("Login: ")
-            shareString.append(password.login)
-            shareString.append("\n\n")
+            lines.append("pv_share_login".localized() + password.login)
         }
         if isPasswordExist {
-            shareString.append("Password: ")
-            shareString.append(password.value)
-            shareString.append("\n\n")
+            lines.append("pv_share_password".localized() + password.value)
         }
         if isWebsiteExist {
-            shareString.append("Website: ")
-            shareString.append(password.website)
-            shareString.append("\n\n")
+            lines.append("pv_share_website".localized() + password.website)
         }
-
-        shareString.append("pv_share_caption".localized())
-        shareString.append("\n")
-        shareString.append("https://DuckDepo.com")
-        share(items: [shareString])
+        lines.append("pv_share_caption".localized() + "\nhttps://DuckDepo.com")
+        share(items: [lines.joined(separator: "\n\n")])
     }
 
     private func share(items: [Any]) {
         itemsToShare = items
         showShareSheetView = true
     }
-
 }
 
 extension PasswordViewModel: EditPasswordViewModelDelegate {
-    
+
     func passwordUpdated(_ password: Password) {
         self.password = password
     }
-    
+
     func passwordDeleted() {
         shouldDismissView = true
     }
-    
 }

@@ -64,20 +64,15 @@ extension DDSection {
         self.init(context: viewContext)
         name = object.name
         self.order = Int32(order)
-        for index in 0..<object.fields.count {
-            let field = object.fields[index]
-            if !field.value.isEmpty {
-                self.addToFields(DDField(viewContext: viewContext, object: field, order: index, section: self))
-            }
+        self.document = document
+        // Empty fields are kept: the user added them on purpose and may fill them in later.
+        for (index, field) in object.fields.enumerated() {
+            addToFields(DDField(viewContext: viewContext, object: field, order: index, section: self))
         }
     }
-    
+
     func convert() -> DocSection {
-        var fields = [Field]()
-        for field in getAllFields() {
-            fields.append(field.convert())
-        }
-        return DocSection(name: self.name ?? "", fields: fields)
+        DocSection(name: name ?? "", fields: getAllFields().map { $0.convert() })
     }
 
 }

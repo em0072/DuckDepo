@@ -8,136 +8,116 @@
 import SwiftUI
 
 struct EditPasswordView: View {
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.dismiss) private var dismiss
 
-    @ObservedObject var viewModel: EditPasswordViewModel
-    @State var isShowingDeleteAlert: Bool = false
-    @State var isShowingPassGenerator: Bool = false
-    
-    
+    /// A `@StateObject`, so typed values survive the parent redrawing (e.g. when iCloud delivers changes).
+    @StateObject private var viewModel: EditPasswordViewModel
+    @State private var isShowingDeleteAlert = false
+    @State private var isShowingPassGenerator = false
+    @State private var isShowingDiscardDialog = false
+
     init(type: EditPasswordViewModel.PasswordType = .new, delegate: EditPasswordViewModelDelegate? = nil) {
-        self.viewModel = EditPasswordViewModel()
-        viewModel.type = type
-        viewModel.delegate = delegate
-        
+        _viewModel = StateObject(wrappedValue: EditPasswordViewModel(type: type, delegate: delegate))
     }
-    
+
     var body: some View {
-        NavigationView {
-                contentView
-            .onChange(of: viewModel.shouldCloseView, perform: closeAction)
-            .navigationTitle(viewModel.viewTitle)
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationBarItems(leading: closeButton,
-                                trailing: deleteButton)
-            .sheet(isPresented: $isShowingPassGenerator) {
-                passGenerationView
-                    .presentationDragIndicator(.visible)
-                    .presentationDetents([.height(350)])
-            }
-            .alert("epv_delete_alert_title", isPresented: $isShowingDeleteAlert, actions: {
-                Button("epv_delete_alert_delete", role: .destructive, action: deleteAlertAction)
-            }, message: {
-                Text("epv_delete_alert_body")
-            })
-            
+        NavigationStack {
+            contentView
+                .navigationTitle(viewModel.viewTitle)
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .topBarLeading) {
+                        CloseButton(action: closeButtonAction)
+                            .confirmationDialog("discard_changes_title", isPresented: $isShowingDiscardDialog, titleVisibility: .visible) {
+                                Button("discard_changes_button", role: .destructive) {
+                                    dismiss()
+                                }
+                                Button("keep_editing_button", role: .cancel) {}
+                            }
+                    }
+                    if !viewModel.isNew {
+                        ToolbarItem(placement: .topBarTrailing) {
+                            Button {
+                                isShowingDeleteAlert = true
+                            } label: {
+                                Label("epv_delete_alert_delete", systemImage: "trash")
+                            }
+                        }
+                    }
+                }
+                .sheet(isPresented: $isShowingPassGenerator) {
+                    passGenerationView
+                        .presentationDragIndicator(.visible)
+                        .presentationDetents([.height(350)])
+                }
+                .alert("epv_delete_alert_title", isPresented: $isShowingDeleteAlert) {
+                    Button("epv_delete_alert_delete", role: .destructive, action: viewModel.delete)
+                } message: {
+                    Text("epv_delete_alert_body")
+                }
+                .alert("save_failed_title", isPresented: $viewModel.saveFailed) {
+                    Button("Ok", role: .cancel) {}
+                } message: {
+                    Text("save_failed_body")
+                }
         }
-        .animation(.default, value: isShowingPassGenerator)
+        .interactiveDismissDisabled(viewModel.hasChanges)
+        .onChange(of: viewModel.shouldCloseView) { _, shouldClose in
+            if shouldClose {
+                dismiss()
+            }
+        }
     }
-    
-    func deleteButtonAction() {
-        self.isShowingDeleteAlert = true
-    }
-    
-    func deleteAlertAction() {
-        self.isShowingDeleteAlert = false
-        viewModel.delete()
-    }
-    
-    private func closeAction(_ shouldCloseView: Bool) {
-        if shouldCloseView {
+
+    private func closeButtonAction() {
+        if viewModel.hasChanges {
+            isShowingDiscardDialog = true
+        } else {
             dismiss()
         }
     }
-    
 }
 
 extension EditPasswordView {
-    
+
     private var contentView: some View {
         List {
-            nameSection
-            
-            credentialsSection
-            
-            websiteSection
-            
-            AddButtonView(title: viewModel.saveButtonTitle) {
-                viewModel.addNewPasswordButtonAction()
+            Section {
+                FloatingTextField(title: "epv_name".localized(), value: $viewModel.passwordName, kind: .name)
+            } header: {
+                Text("epv_general_information")
             }
-            .disabled(viewModel.passwordName.isEmpty)
+
+            Section {
+                FloatingTextField(title: "epv_login".localized(), value: $viewModel.passwordLogin, kind: .login)
+                HStack {
+                    FloatingTextField(title: "epv_password".localized(), value: $viewModel.passwordValue, kind: .password)
+                    Button {
+                        isShowingPassGenerator = true
+                    } label: {
+                        Image(systemName: "wand.and.stars.inverse")
+                            .foregroundStyle(Color.duckYellow)
+                            .bold()
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(Text("pgv_title"))
+                }
+            } header: {
+                Text("epv_credentials")
+            }
+
+            Section {
+                FloatingTextField(title: "epv_website".localized(), value: $viewModel.passwordWebsite, kind: .url)
+            } header: {
+                Text("epv_additional_information")
+            }
+
+            AddButtonView(title: viewModel.saveButtonTitle, action: viewModel.save)
+                .disabled(!viewModel.canSave)
         }
         .listStyle(.insetGrouped)
     }
-    
-    private var nameSection: some View {
-        Section {
-            BindableFloatingTextField(title: "epv_name".localized(), value: $viewModel.passwordName)
-        } header: {
-            Text("epv_general_information")
-        }
-    }
-    
-    private var credentialsSection: some View {
-        Section {
-                VStack {
-                    BindableFloatingTextField(title: "epv_login".localized(), value: $viewModel.passwordLogin)
-                    
-                    Divider()
-                    
-                    HStack {
-                        BindableFloatingTextField(title: "epv_password".localized(), value: $viewModel.passwordValue)
-                        
-                        Button {
-                            isShowingPassGenerator = true
-                        } label: {
-                            Image(systemName: "wand.and.stars.inverse")
-                                .foregroundColor(.duckYellow)
-                                .bold()
-                        }
-                        .buttonStyle(.plain)
-                    }
-                }
-        } header: {
-            Text("epv_credentials")
-        }
-    }
-    
-    private var websiteSection: some View {
-        Section {
-                VStack {
-                    BindableFloatingTextField(title: "epv_website".localized(), value: $viewModel.passwordWebsite, keyboardType: .URL)
-                }
-        } header: {
-            Text("epv_additional_information")
-        }
-    }
-    
-    private var closeButton: some View {
-        CloseButton {
-            dismiss()
-        }
-    }
-    
-    @ViewBuilder
-    private var deleteButton: some View {
-        if case .existing(_) = viewModel.type {
-            Button(action: deleteButtonAction) {
-                Image(systemName: "trash.fill")
-            }
-        }
-    }
-    
+
     private var passGenerationView: some View {
         PasswordGeneratorView(isPresented: $isShowingPassGenerator) { generatedPassword in
             viewModel.passwordValue = generatedPassword
@@ -146,11 +126,8 @@ extension EditPasswordView {
         .padding(.top, 20)
         .padding()
     }
-
 }
 
-struct EditPasswordView_Previews: PreviewProvider {
-    static var previews: some View {
-        EditPasswordView(type: .existing(Password.test))
-    }
+#Preview {
+    EditPasswordView(type: .existing(Password.test))
 }

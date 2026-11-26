@@ -8,100 +8,82 @@
 import SwiftUI
 
 struct EditDocumentView: View {
-    
+
     @Environment(\.dismiss) private var dismiss
-    
+
     @StateObject var viewModel: EditDocumentViewModel
-    
-    //MARK: Views States
-    @State private var isShowingAlert: Bool = false
-    @State private var isShowingDeleteAlert: Bool = false
-    @State private var alertTitle: String = ""
-    @State private var alertMessage: String = ""
-    @State private var showingAddNewSectionView = false
-    @State private var showingAddNewInfoDuplicateWarning = false
-    
+
+    @State private var isShowingDeleteAlert = false
+    @State private var isShowingDiscardDialog = false
+
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
-                TitleView(name:  $viewModel.document.name, description: $viewModel.document.description, documentType: $viewModel.document.documentType)
-                
-                PhotosSectionView(images: $viewModel.document.photos, delegate: viewModel)
-                
+                TitleView(name: $viewModel.document.name,
+                          description: $viewModel.document.description,
+                          documentType: $viewModel.document.documentType)
+                PhotosSectionView(photos: viewModel.document.photos, delegate: viewModel)
                 SectionView(sections: $viewModel.document.sections, options: viewModel.inputOption.sections, delegate: viewModel)
-                
                 AddSectionMenu(menuOptions: .constant(viewModel.inputOption.listOfSectionNames()), delegate: viewModel)
-                
-                AddButtonView(title: viewModel.saveButtonTitle, action: viewModel.addNewDocumentButtonAction)
-                    .disabled(viewModel.document.name.isEmpty)
+                AddButtonView(title: viewModel.saveButtonTitle, action: viewModel.save)
+                    .disabled(!viewModel.canSave)
             }
             .listStyle(.insetGrouped)
             .navigationTitle(viewModel.viewTitle)
             .navigationBarTitleDisplayMode(.inline)
-            .navigationBarItems(leading: closeButton(),
-                                trailing: deleteButton())
-        }
-        .onChange(of: viewModel.shouldCloseView, perform: closeAction)
-        .fullScreenCover(isPresented: $viewModel.showingImageViewer, onDismiss: nil) {
-            if let selctedPhoto = viewModel.imageViewerImage {
-                ImageViewer(photos: viewModel.document.photos, selectedImage: selctedPhoto)
-            }
-        }
-        .alert(alertTitle, isPresented: $isShowingAlert, actions: {
-            Button("Ok") {
-                self.isShowingAlert = false
-            }
-        }, message: {
-            Text(alertMessage)
-        })
-        .alert("delete_confirmation_title", isPresented: $isShowingDeleteAlert, actions: {
-            Button("delete", role: .destructive, action: deleteAlertAction)
-        }, message: {
-            Text("delete_confirmation_body")
-        })
-    }
-    
-    private func closeButton() -> some View {
-        CloseButton() {
-            dismiss()
-        }
-    }
-    
-    private func deleteButton() -> some View {
-        Group {
-            if case .existing(_) = viewModel.type {
-                Button(action: deleteButtonAction) {
-                    Image(systemName: "trash.fill")
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    CloseButton(action: closeButtonAction)
+                        .confirmationDialog("discard_changes_title", isPresented: $isShowingDiscardDialog, titleVisibility: .visible) {
+                            Button("discard_changes_button", role: .destructive) {
+                                dismiss()
+                            }
+                            Button("keep_editing_button", role: .cancel) {}
+                        }
+                }
+                if !viewModel.isNew {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            isShowingDeleteAlert = true
+                        } label: {
+                            Label("delete", systemImage: "trash")
+                        }
+                    }
                 }
             }
         }
+        .interactiveDismissDisabled(viewModel.hasChanges)
+        .onChange(of: viewModel.shouldCloseView) { _, shouldClose in
+            if shouldClose {
+                dismiss()
+            }
+        }
+        .fullScreenCover(isPresented: $viewModel.showingImageViewer) {
+            if let photo = viewModel.imageViewerPhoto {
+                ImageViewer(photos: viewModel.document.photos.map(\.image), selectedImage: photo.image)
+            }
+        }
+        .alert("save_failed_title", isPresented: $viewModel.saveFailed) {
+            Button("Ok", role: .cancel) {}
+        } message: {
+            Text("save_failed_body")
+        }
+        .alert("delete_confirmation_title", isPresented: $isShowingDeleteAlert) {
+            Button("delete", role: .destructive, action: viewModel.delete)
+        } message: {
+            Text("delete_confirmation_body")
+        }
     }
-    
-    private func closeAction(_ shouldCloseView: Bool) {
-        if shouldCloseView {
+
+    private func closeButtonAction() {
+        if viewModel.hasChanges {
+            isShowingDiscardDialog = true
+        } else {
             dismiss()
         }
     }
-    
-    func deleteButtonAction() {
-        self.isShowingDeleteAlert = true
-    }
-    
-    func deleteAlertAction() {
-        self.isShowingDeleteAlert = false
-        viewModel.delete()
-        
-    }
 }
 
-struct AddNewDocumentView_Previews: PreviewProvider {
-    
-    static var previews: some View {
-        EditDocumentView(viewModel: EditDocumentViewModel(type: .existing(Document.test)))
-    }
+#Preview {
+    EditDocumentView(viewModel: EditDocumentViewModel(type: .existing(Document.test)))
 }
-
-
-
-
-

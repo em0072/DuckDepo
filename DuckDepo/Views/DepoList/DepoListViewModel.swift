@@ -5,37 +5,31 @@
 //  Created by Evgeny Mitko on 17/06/2022.
 //
 
-import Foundation
 import Combine
+import Foundation
 
-class DepoListViewModel: ObservableObject {
-    
+final class DepoListViewModel: ObservableObject {
+
     @Published var documents: [Document] = []
-    
-    @Published var isAddingNewDocument: Bool = false
-    @Published var isAddingNewFolder: Bool = false
-    @Published var selectedDocument: Document?
+    @Published var isAddingNewDocument = false
 
-    private var cancellable = Set<AnyCancellable>()
-    private var dataStorage = DocumentsStorage()
-    
-    
-    init() {
-        dataStorage.documents.sink { documents in
-            self.documents = documents
-        }.store(in: &cancellable)
+    private var cancellables = Set<AnyCancellable>()
+    private let dataStorage: DocumentsStorage
+
+    init(dataStorage: DocumentsStorage = DocumentsStorage()) {
+        self.dataStorage = dataStorage
+        dataStorage.documents
+            .sink { [weak self] documents in
+                self?.documents = documents
+            }
+            .store(in: &cancellables)
     }
-    
+
     var editDocumentViewModel: EditDocumentViewModel {
-        return EditDocumentViewModel(type: .new)
+        EditDocumentViewModel(type: .new)
     }
-    
+
     func addNewDocumentButtonPressed() {
         isAddingNewDocument = true
     }
-    
-    func addNewFolderButtonPressed() {
-        isAddingNewFolder = true
-    }
-
 }

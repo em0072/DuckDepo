@@ -5,45 +5,32 @@
 //  Created by Evgeny Mitko on 09/11/2021.
 //
 
-import UIKit
 import CloudKit
-import CoreData
+import os
+import UIKit
 
-//@main
-class AppDelegate: UIResponder, UIApplicationDelegate {
-    
-    static let shared: AppDelegate = AppDelegate()
-        
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+final class AppDelegate: UIResponder, UIApplicationDelegate {
+
+    private let logger = Logger(subsystem: "DuckDepo", category: "App")
+
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+        guard !AppEnvironment.isRunningTests else { return true }
+        // Create the CloudKit container at launch so it can handle the push that woke the app.
+        _ = PersistenceController.shared
+        _ = SyncMonitor.shared
         return true
     }
 
-    // MARK: UISceneSession Lifecycle
-
-    func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
-        // Called when a new scene session is being created.
-        // Use this method to select a configuration to create the new scene with.
-        return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
-    }
-
-    func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
-        // Called when the user discards a scene session.
-        // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
-        // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
-    }
-    
     func application(_ application: UIApplication, userDidAcceptCloudKitShareWith cloudKitShareMetadata: CKShare.Metadata) {
-        let sharedStore = PersistenceController.shared.sharedPersistentStore
-        let container = PersistenceController.shared.container
-        container.acceptShareInvitations(from: [cloudKitShareMetadata], into: sharedStore) { shareMetas, error in
-            if let shareAcceptenceError = error {
-                print("Could not accept share - \(shareAcceptenceError)")
-            } else {
-                print("Accepted share with metadata - \(String(describing: shareMetas))")
+        let persistence = PersistenceController.shared
+        guard let sharedStore = persistence.sharedPersistentStore else {
+            logger.error("Received a CloudKit share, but sharing isn't set up")
+            return
+        }
+        persistence.container.acceptShareInvitations(from: [cloudKitShareMetadata], into: sharedStore) { [logger] _, error in
+            if let error {
+                logger.error("Could not accept share: \(String(describing: error), privacy: .public)")
             }
         }
-
     }
 }
-
-
