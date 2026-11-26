@@ -13,6 +13,8 @@ struct AutoFillPasswordsListView: View {
     @State var viewModel: AutoFillPasswordsListViewModel
     var onClose: (() -> Void)?
     var onSelect: ((ASPasswordCredential) -> Void)?
+    /// In one-time code mode, called with the code to fill in.
+    var onSelectCode: ((String) -> Void)?
 
     var body: some View {
         NavigationStack {
@@ -25,7 +27,7 @@ struct AutoFillPasswordsListView: View {
                             onClose?()
                         }
                     }
-                    if viewModel.isStoreReady && !viewModel.isLocked {
+                    if viewModel.isStoreReady && !viewModel.isLocked && viewModel.mode == .passwords {
                         ToolbarItem(placement: .primaryAction) {
                             Button {
                                 viewModel.addNewPasswordButtonPressed()
@@ -58,10 +60,15 @@ struct AutoFillPasswordsListView: View {
                     viewModel.unlock()
                 }
         } else if viewModel.passwords.isEmpty {
-            ContentUnavailableView {
-                Label("ii_headline_passwords", systemImage: "key")
-            } description: {
-                Text("ii_caption_passwords")
+            if viewModel.mode == .oneTimeCodes {
+                ContentUnavailableView("af_no_codes_title", systemImage: "number",
+                                       description: Text("af_no_codes_body"))
+            } else {
+                ContentUnavailableView {
+                    Label("ii_headline_passwords", systemImage: "key")
+                } description: {
+                    Text("ii_caption_passwords")
+                }
             }
         } else {
             listView
@@ -93,9 +100,19 @@ struct AutoFillPasswordsListView: View {
     private func row(for password: Password) -> some View {
         HStack {
             Button {
-                onSelect?(viewModel.credential(for: password))
+                if viewModel.mode == .oneTimeCodes, let code = viewModel.oneTimeCodes[password.id] {
+                    onSelectCode?(code.code())
+                } else {
+                    onSelect?(viewModel.credential(for: password))
+                }
             } label: {
-                PasswordRow(name: password.name, login: password.login)
+                HStack {
+                    PasswordRow(name: password.name, login: password.login)
+                    if let code = viewModel.oneTimeCodes[password.id] {
+                        Spacer()
+                        OneTimeCodeText(code: code)
+                    }
+                }
             }
             Spacer()
             Button {

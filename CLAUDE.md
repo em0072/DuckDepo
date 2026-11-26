@@ -54,7 +54,7 @@ xcodebuild -project DuckDepo.xcodeproj -scheme DuckDepo clean
 
 ### Security Architecture
 - **BiometricController**: Manages Face ID/Touch ID authentication
-- **Keychain Integration**: Password values live in the iCloud-synchronized keychain group (`Keychain` wraps KeychainSwift behind `KeychainStoring`); Core Data holds only name/login/website
+- **Keychain Integration**: Password values live in the iCloud-synchronized keychain group (`Keychain` wraps KeychainSwift behind `KeychainStoring`); Core Data holds only name/login/website. One-time code setups (`otpauth://` links, `OneTimeCode`, RFC 6238) are stored next to them under `<id>.otp` and offered to AutoFill as `ASOneTimeCodeCredentialIdentity` (extension capability `ProvidesOneTimeCodes`)
 - **App Locking**: `BiometricController` + `LockWindowPresenter` (a separate window above all sheets). Lock state is never persisted; the app always starts locked when the lock is on
 - **LegacyDataMigration**: idempotent repair of v1 data, runs on every activation
 
