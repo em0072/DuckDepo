@@ -9,8 +9,8 @@ import SwiftUI
 
 struct SettingsView: View {
 
-    @ObservedObject private var biometricController = BiometricController.shared
-    @ObservedObject private var syncMonitor = SyncMonitor.shared
+    @Bindable private var biometricController = BiometricController.shared
+    private var syncMonitor = SyncMonitor.shared
     @State private var documentsCount = 0
     @State private var passwordsCount = 0
     @State private var showAutofillInfo = false

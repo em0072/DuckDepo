@@ -24,7 +24,7 @@ struct DownloadingFromICloudView: View {
 
 private struct SyncActivitySubtitle: ViewModifier {
 
-    @ObservedObject var monitor: SyncMonitor
+    let monitor: SyncMonitor
 
     func body(content: Content) -> some View {
         // CloudKit reports when a sync starts and ends, not how far along it is, so there is no percentage to show.

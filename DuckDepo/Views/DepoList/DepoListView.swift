@@ -9,8 +9,8 @@ import SwiftUI
 
 struct DepoListView: View {
 
-    @StateObject var viewModel: DepoListViewModel
-    @ObservedObject private var syncMonitor = SyncMonitor.shared
+    @State var viewModel: DepoListViewModel
+    private var syncMonitor = SyncMonitor.shared
 
     var body: some View {
         NavigationSplitView {
@@ -35,6 +35,7 @@ struct DepoListView: View {
             .navigationDestination(for: Document.self) { document in
                 DocumentView(document: document)
             }
+            .onAppear(perform: viewModel.start)
         } detail: {
             NoSelectionViewView(type: .document)
         }

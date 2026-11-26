@@ -17,6 +17,8 @@ extension DDSection {
     }
 
     @NSManaged public var name: String?
+    /// A `SectionKey` raw value for predefined sections (2.7+).
+    @NSManaged public var key: String?
     @NSManaged public var order: Int32
     @NSManaged public var fields: Set<DDField>?
     @NSManaged public var document: DDDocument?
@@ -62,6 +64,7 @@ extension DDSection {
     
     convenience init(viewContext: NSManagedObjectContext, object: DocSection, order: Int, document: DDDocument?) {
         self.init(context: viewContext)
+        key = object.key
         name = object.name
         self.order = Int32(order)
         self.document = document
@@ -72,7 +75,7 @@ extension DDSection {
     }
 
     func convert() -> DocSection {
-        DocSection(name: name ?? "", fields: getAllFields().map { $0.convert() })
+        DocSection(key: key, name: name ?? "", fields: getAllFields().map { $0.convert() })
     }
 
 }

@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SFSafeSymbols
 
 struct BiometricSection: View {
     
@@ -41,7 +40,7 @@ private struct BiometricToggleView: View {
 
     var body: some View {
         Toggle(isOn: $isBiometryEnabled, label: {
-            Label(biometricToggleTitle, systemSymbol: biometricToggleSymbol)
+            Label(biometricToggleTitle, systemImage: biometricToggleSymbol)
                 .labelStyle(ColorfulIconLabelStyle(color: .green, size: size))
         })
         .tint(.duckYellow)
@@ -62,16 +61,12 @@ private struct BiometricToggleView: View {
     }
     
     
-    private var biometricToggleSymbol: SFSymbol {
+    private var biometricToggleSymbol: String {
         switch BiometricController.shared.biometricType() {
-        case .opticId:
-            return SFSymbol.opticid
-        case .face:
-            return SFSymbol.faceid
-        case .touch:
-            return SFSymbol.touchid
-        case .none:
-            return SFSymbol._123Rectangle
+        case .opticId: "opticid"
+        case .face: "faceid"
+        case .touch: "touchid"
+        case .none: "123.rectangle"
         }
     }
 }

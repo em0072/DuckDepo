@@ -8,7 +8,7 @@ import SwiftUI
 /// Shows whether iCloud sync is working, so a silent failure doesn't look like lost data.
 struct ICloudSection: View {
 
-    @ObservedObject var monitor: SyncMonitor
+    let monitor: SyncMonitor
 
     var body: some View {
         Section {

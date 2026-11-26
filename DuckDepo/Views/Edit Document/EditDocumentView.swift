@@ -11,7 +11,7 @@ struct EditDocumentView: View {
 
     @Environment(\.dismiss) private var dismiss
 
-    @StateObject var viewModel: EditDocumentViewModel
+    @State var viewModel: EditDocumentViewModel
 
     @State private var isShowingDeleteAlert = false
     @State private var isShowingDiscardDialog = false
@@ -23,12 +23,13 @@ struct EditDocumentView: View {
                           description: $viewModel.document.description,
                           documentType: $viewModel.document.documentType)
                 PhotosSectionView(photos: viewModel.document.photos, delegate: viewModel)
-                SectionView(sections: $viewModel.document.sections, options: viewModel.inputOption.sections, delegate: viewModel)
-                AddSectionMenu(menuOptions: .constant(viewModel.inputOption.listOfSectionNames()), delegate: viewModel)
+                SectionView(sections: $viewModel.document.sections, delegate: viewModel)
+                AddSectionMenu(availableSections: viewModel.availableSections, delegate: viewModel)
                 AddButtonView(title: viewModel.saveButtonTitle, action: viewModel.save)
                     .disabled(!viewModel.canSave)
             }
             .listStyle(.insetGrouped)
+            .onAppear(perform: viewModel.load)
             .navigationTitle(viewModel.viewTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

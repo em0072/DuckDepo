@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7D1C0A1E2F3A4B5C6D7E8FB2 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 7D1C0A1E2F3A4B5C6D7E8FB0 /* Localizable.xcstrings */; };
+		7D1C0A1E2F3A4B5C6D7E8FB3 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 7D1C0A1E2F3A4B5C6D7E8FB0 /* Localizable.xcstrings */; };
+		7D1C0A1E2F3A4B5C6D7E8FB4 /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 7D1C0A1E2F3A4B5C6D7E8FB1 /* InfoPlist.xcstrings */; };
 		7D1C0A1E2F3A4B5C6D7E8F91 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 7D1C0A1E2F3A4B5C6D7E8F90 /* AppIcon.icon */; };
 		7502B5EC27312E3C00E9F0C8 /* AddSectionMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7502B5EB27312E3C00E9F0C8 /* AddSectionMenu.swift */; };
 		7502B5F027316F2E00E9F0C8 /* SectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7502B5EF27316F2E00E9F0C8 /* SectionView.swift */; };
@@ -22,12 +25,10 @@
 		75102F6328607C0800464528 /* ImageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75102F6228607C0800464528 /* ImageViewer.swift */; };
 		7517B5B2285C7F8C00C5B8F5 /* DepoListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7517B5B1285C7F8C00C5B8F5 /* DepoListViewModel.swift */; };
 		751E9B48272AF7B1008D4D26 /* UIImage Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 751E9B47272AF7B1008D4D26 /* UIImage Extension.swift */; };
-		75227C5A2C2AA12B00A0AA3D /* SFSafeSymbols in Frameworks */ = {isa = PBXBuildFile; productRef = 75227C592C2AA12B00A0AA3D /* SFSafeSymbols */; };
 		753F1FC4272BF3B500804584 /* DDField+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753F1FC0272BF3B500804584 /* DDField+CoreDataClass.swift */; };
 		753F1FC5272BF3B500804584 /* DDField+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753F1FC1272BF3B500804584 /* DDField+CoreDataProperties.swift */; };
 		753F1FDA272BF5F000804584 /* DDSection+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753F1FD8272BF5F000804584 /* DDSection+CoreDataClass.swift */; };
 		753F1FDB272BF5F000804584 /* DDSection+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753F1FD9272BF5F000804584 /* DDSection+CoreDataProperties.swift */; };
-		753F1FE3272C008B00804584 /* Info Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753F1FE2272C008B00804584 /* Info Options.swift */; };
 		753F1FE5272C019700804584 /* String Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753F1FE4272C019700804584 /* String Extension.swift */; };
 		7542D92127284F4C00DB7A95 /* AddNewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7542D92027284F4B00DB7A95 /* AddNewView.swift */; };
 		755425C9272A98B500733D64 /* AddCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755425C8272A98B500733D64 /* AddCell.swift */; };
@@ -52,7 +53,6 @@
 		756204E82C2AC62000855C1E /* DDFolder+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756204E62C2AC59400855C1E /* DDFolder+CoreDataProperties.swift */; };
 		756204EE2C2ACA0E00855C1E /* Folder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755759AC2730455600DA8B9A /* Folder.swift */; };
 		756A0D5F2758B99500CD29E0 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 756A0D5E2758B99500CD29E0 /* Launch Screen.storyboard */; };
-		756A0D602758BCB800CD29E0 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 756A0D622758BCB800CD29E0 /* Localizable.strings */; };
 		756AF0B02726C320001CB821 /* DuckDepoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756AF0AF2726C320001CB821 /* DuckDepoApp.swift */; };
 		756AF0B22726C320001CB821 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756AF0B12726C320001CB821 /* ContentView.swift */; };
 		756AF0B42726C324001CB821 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 756AF0B32726C324001CB821 /* Assets.xcassets */; };
@@ -82,7 +82,6 @@
 		75821E55286B021F009F8C5E /* CoreData Countable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C923274FC82800551645 /* CoreData Countable.swift */; };
 		75821E57286B022D009F8C5E /* DDSection+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753F1FD8272BF5F000804584 /* DDSection+CoreDataClass.swift */; };
 		75821E58286B0232009F8C5E /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755759AA2730450800DA8B9A /* Document.swift */; };
-		75821E59286B0238009F8C5E /* Info Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753F1FE2272C008B00804584 /* Info Options.swift */; };
 		75821E5A286B023E009F8C5E /* DocSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755759A8273044BC00DA8B9A /* DocSection.swift */; };
 		75821E5B286B0246009F8C5E /* Field.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755759A6273044A800DA8B9A /* Field.swift */; };
 		75821E5C286B0257009F8C5E /* String Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753F1FE4272C019700804584 /* String Extension.swift */; };
@@ -91,9 +90,7 @@
 		75821E5F286B026E009F8C5E /* DDField+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753F1FC0272BF3B500804584 /* DDField+CoreDataClass.swift */; };
 		75821E60286B048E009F8C5E /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75D414EA2726CA6700355AE7 /* CloudKit.framework */; };
 		758ABD132729828F0074F61A /* EditDocumentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 758ABD122729828F0074F61A /* EditDocumentView.swift */; };
-		759257632759047C003C9826 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 759257652759047D003C9826 /* Localizable.stringsdict */; };
 		7593B5C82864A12A008925E6 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7593B5C72864A129008925E6 /* AuthenticationServices.framework */; };
-		75973027273A7D2600A105A7 /* Predefiened Field Options.json in Resources */ = {isa = PBXBuildFile; fileRef = 75973026273A7D2600A105A7 /* Predefiened Field Options.json */; };
 		75A021ED27343B53001484BA /* ShareSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A021EC27343B53001484BA /* ShareSheetView.swift */; };
 		75A021F027343E48001484BA /* Biometric Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A021EF27343E48001484BA /* Biometric Controller.swift */; };
 		75A021F227347E86001484BA /* DataBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A021F127347E86001484BA /* DataBase.swift */; };
@@ -133,7 +130,6 @@
 		75E178CE286B32EB00349050 /* AutoFillPasswordsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E178CD286B32EB00349050 /* AutoFillPasswordsListView.swift */; };
 		75E178D0286B336500349050 /* AutoFillPasswordsListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E178CF286B336500349050 /* AutoFillPasswordsListViewModel.swift */; };
 		75E178D1286B3D2C00349050 /* InitialInstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C90D274F825200551645 /* InitialInstructionsView.swift */; };
-		75E178D2286B3DDE00349050 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 756A0D622758BCB800CD29E0 /* Localizable.strings */; };
 		75E178D3286B3F7400349050 /* EditPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C910274F84B500551645 /* EditPasswordView.swift */; };
 		75E178D4286B3F7600349050 /* EditPasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C912274F84C600551645 /* EditPasswordViewModel.swift */; };
 		75E178D6286B3F8A00349050 /* PasswordGeneratorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A1C925274FD0F400551645 /* PasswordGeneratorView.swift */; };
@@ -167,8 +163,16 @@
 		B70A84EB9FB1D418D2539424 /* StorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD06B5FADAC45A6A6AA98DC /* StorageTests.swift */; };
 		F992C26682E6C96C8DB7973B /* EditDocumentViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02EF417E05BFE534BAD5A7FC /* EditDocumentViewModelTests.swift */; };
 		713A2797F7374219C61DEA95 /* AppLockTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C443DA79BF20ABCBD0A21403 /* AppLockTests.swift */; };
-		D9556BB038794C91A2012DE1 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 27CDE854F84CA890CFE17BDD /* InfoPlist.strings */; };
 		41492C720A32FC2B6B440E24 /* SyncActivityViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C0C0F8A9762C64012677A8 /* SyncActivityViews.swift */; };
+		94C414769D0180A07954A3B5 /* FieldCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 743B031A13A40D7989525506 /* FieldCatalog.swift */; };
+		A19258F61AAFF8BC0EFD6CD4 /* FieldCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 743B031A13A40D7989525506 /* FieldCatalog.swift */; };
+		CFE8B3908315F65BBB9E9AAC /* FieldDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0288592DAE338FEAC9918B55 /* FieldDate.swift */; };
+		623279D3B2D89DC8ED6D8FE8 /* FieldDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0288592DAE338FEAC9918B55 /* FieldDate.swift */; };
+		AB81CD27DE9485F7AC8D4CA4 /* DDPhoto+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F688129FDB1809035AF1BE /* DDPhoto+CoreDataClass.swift */; };
+		FAAC9B792DC70D5C05F6AC34 /* DDPhoto+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F688129FDB1809035AF1BE /* DDPhoto+CoreDataClass.swift */; };
+		3174EC6028B1CC10A24C1024 /* DDPhoto+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E17DB28220104974135534 /* DDPhoto+CoreDataProperties.swift */; };
+		F823A163B993D0D0D9943110 /* DDPhoto+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E17DB28220104974135534 /* DDPhoto+CoreDataProperties.swift */; };
+		98D077FFFB5F1FDA7CBBA624 /* DataModelV3Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283ECAE69125C79D51008390 /* DataModelV3Tests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -203,6 +207,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7D1C0A1E2F3A4B5C6D7E8FB0 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		7D1C0A1E2F3A4B5C6D7E8FB1 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
+		7D1C0A1E2F3A4B5C6D7E8FA0 /* DuckDepo 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "DuckDepo 3.xcdatamodel"; sourceTree = "<group>"; };
 		7D1C0A1E2F3A4B5C6D7E8F90 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		7502B5EB27312E3C00E9F0C8 /* AddSectionMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSectionMenu.swift; sourceTree = "<group>"; };
 		7502B5EF27316F2E00E9F0C8 /* SectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionView.swift; sourceTree = "<group>"; };
@@ -222,7 +229,6 @@
 		753F1FC1272BF3B500804584 /* DDField+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DDField+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		753F1FD8272BF5F000804584 /* DDSection+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DDSection+CoreDataClass.swift"; sourceTree = "<group>"; };
 		753F1FD9272BF5F000804584 /* DDSection+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DDSection+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		753F1FE2272C008B00804584 /* Info Options.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Info Options.swift"; sourceTree = "<group>"; };
 		753F1FE4272C019700804584 /* String Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String Extension.swift"; sourceTree = "<group>"; };
 		7542D92027284F4B00DB7A95 /* AddNewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewView.swift; sourceTree = "<group>"; };
 		755425C8272A98B500733D64 /* AddCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCell.swift; sourceTree = "<group>"; };
@@ -241,8 +247,6 @@
 		756204E02C2AC50000855C1E /* DDFolder+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DDFolder+CoreDataClass.swift"; sourceTree = "<group>"; };
 		756204E62C2AC59400855C1E /* DDFolder+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DDFolder+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		756A0D5E2758B99500CD29E0 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
-		756A0D612758BCB800CD29E0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		756A0D642758BCCA00CD29E0 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		756AF0AC2726C320001CB821 /* DuckDepo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DuckDepo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		756AF0AF2726C320001CB821 /* DuckDepoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuckDepoApp.swift; sourceTree = "<group>"; };
 		756AF0B12726C320001CB821 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -257,10 +261,7 @@
 		757DB2C42A582F9B008B8A54 /* CloseButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloseButton.swift; sourceTree = "<group>"; };
 		7580B245273AA99A00F06F23 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		758ABD122729828F0074F61A /* EditDocumentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDocumentView.swift; sourceTree = "<group>"; };
-		759257642759047D003C9826 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
-		759257662759047E003C9826 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ru; path = ru.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		7593B5C72864A129008925E6 /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
-		75973026273A7D2600A105A7 /* Predefiened Field Options.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Predefiened Field Options.json"; sourceTree = "<group>"; };
 		75A021EC27343B53001484BA /* ShareSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheetView.swift; sourceTree = "<group>"; };
 		75A021EF27343E48001484BA /* Biometric Controller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Biometric Controller.swift"; sourceTree = "<group>"; };
 		75A021F127347E86001484BA /* DataBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBase.swift; sourceTree = "<group>"; };
@@ -319,9 +320,12 @@
 		AFD06B5FADAC45A6A6AA98DC /* StorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageTests.swift; sourceTree = "<group>"; };
 		02EF417E05BFE534BAD5A7FC /* EditDocumentViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDocumentViewModelTests.swift; sourceTree = "<group>"; };
 		C443DA79BF20ABCBD0A21403 /* AppLockTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLockTests.swift; sourceTree = "<group>"; };
-		F799B40059C701DBB8FF5EF2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		29F58F57816F8D1EA560A97E /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		46C0C0F8A9762C64012677A8 /* SyncActivityViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncActivityViews.swift; sourceTree = "<group>"; };
+		743B031A13A40D7989525506 /* FieldCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldCatalog.swift; sourceTree = "<group>"; };
+		0288592DAE338FEAC9918B55 /* FieldDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldDate.swift; sourceTree = "<group>"; };
+		C8F688129FDB1809035AF1BE /* DDPhoto+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DDPhoto+CoreDataClass.swift"; sourceTree = "<group>"; };
+		C9E17DB28220104974135534 /* DDPhoto+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DDPhoto+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		283ECAE69125C79D51008390 /* DataModelV3Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModelV3Tests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -331,7 +335,6 @@
 			files = (
 				75A140CF2869C914004A47A8 /* KeychainSwift in Frameworks */,
 				7593B5C82864A12A008925E6 /* AuthenticationServices.framework in Frameworks */,
-				75227C5A2C2AA12B00A0AA3D /* SFSafeSymbols in Frameworks */,
 				75A369D92850F14600196EE2 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -384,6 +387,8 @@
 				755759AC2730455600DA8B9A /* Folder.swift */,
 				75A1C915274F85A600551645 /* Password.swift */,
 				755E4833287D6BEE00DD045D /* DocumentType.swift */,
+				743B031A13A40D7989525506 /* FieldCatalog.swift */,
+				0288592DAE338FEAC9918B55 /* FieldDate.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -393,7 +398,6 @@
 			children = (
 				751E9B47272AF7B1008D4D26 /* UIImage Extension.swift */,
 				753F1FE4272C019700804584 /* String Extension.swift */,
-				753F1FE2272C008B00804584 /* Info Options.swift */,
 				75AB83E22733E77D000618F1 /* Notification.Name extension.swift */,
 				75A1C927274FDE1F00551645 /* Password Generator.swift */,
 				4E34CDE07830AF76ABBD34DB /* DomainMatcher.swift */,
@@ -438,7 +442,6 @@
 			children = (
 				7D1C0A1E2F3A4B5C6D7E8F90 /* AppIcon.icon */,
 				756AF0B32726C324001CB821 /* Assets.xcassets */,
-				75973026273A7D2600A105A7 /* Predefiened Field Options.json */,
 				756A0D5E2758B99500CD29E0 /* Launch Screen.storyboard */,
 			);
 			path = Assets;
@@ -447,9 +450,8 @@
 		756A0D5B2758B7D000CD29E0 /* Localization */ = {
 			isa = PBXGroup;
 			children = (
-				756A0D622758BCB800CD29E0 /* Localizable.strings */,
-				27CDE854F84CA890CFE17BDD /* InfoPlist.strings */,
-				759257652759047D003C9826 /* Localizable.stringsdict */,
+				7D1C0A1E2F3A4B5C6D7E8FB0 /* Localizable.xcstrings */,
+				7D1C0A1E2F3A4B5C6D7E8FB1 /* InfoPlist.xcstrings */,
 			);
 			path = Localization;
 			sourceTree = "<group>";
@@ -559,6 +561,8 @@
 				75A1C909274F814100551645 /* DDPassword+CoreDataClass.swift */,
 				75A1C90A274F814100551645 /* DDPassword+CoreDataProperties.swift */,
 				75A1C923274FC82800551645 /* CoreData Countable.swift */,
+				C8F688129FDB1809035AF1BE /* DDPhoto+CoreDataClass.swift */,
+				C9E17DB28220104974135534 /* DDPhoto+CoreDataProperties.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -713,6 +717,7 @@
 				AFD06B5FADAC45A6A6AA98DC /* StorageTests.swift */,
 				02EF417E05BFE534BAD5A7FC /* EditDocumentViewModelTests.swift */,
 				C443DA79BF20ABCBD0A21403 /* AppLockTests.swift */,
+				283ECAE69125C79D51008390 /* DataModelV3Tests.swift */,
 			);
 			path = DuckDepoTests;
 			sourceTree = "<group>";
@@ -737,7 +742,6 @@
 			name = DuckDepo;
 			packageProductDependencies = (
 				75A140CE2869C913004A47A8 /* KeychainSwift */,
-				75227C592C2AA12B00A0AA3D /* SFSafeSymbols */,
 			);
 			productName = DuckDepo;
 			productReference = 756AF0AC2726C320001CB821 /* DuckDepo.app */;
@@ -815,7 +819,6 @@
 			mainGroup = 756AF0A32726C320001CB821;
 			packageReferences = (
 				75A140CD2869C913004A47A8 /* XCRemoteSwiftPackageReference "keychain-swift" */,
-				75227C582C2AA08D00A0AA3D /* XCRemoteSwiftPackageReference "SFSafeSymbols" */,
 			);
 			productRefGroup = 756AF0AD2726C320001CB821 /* Products */;
 			projectDirPath = "";
@@ -833,13 +836,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				75973027273A7D2600A105A7 /* Predefiened Field Options.json in Resources */,
-				759257632759047C003C9826 /* Localizable.stringsdict in Resources */,
-				756A0D602758BCB800CD29E0 /* Localizable.strings in Resources */,
-				D9556BB038794C91A2012DE1 /* InfoPlist.strings in Resources */,
 				756AF0B72726C324001CB821 /* Preview Assets.xcassets in Resources */,
 				756A0D5F2758B99500CD29E0 /* Launch Screen.storyboard in Resources */,
 				756AF0B42726C324001CB821 /* Assets.xcassets in Resources */,
+				7D1C0A1E2F3A4B5C6D7E8FB2 /* Localizable.xcstrings in Resources */,
+				7D1C0A1E2F3A4B5C6D7E8FB4 /* InfoPlist.xcstrings in Resources */,
 				7D1C0A1E2F3A4B5C6D7E8F91 /* AppIcon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -849,8 +850,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				75A140E12869FD2E004A47A8 /* MainInterface.storyboard in Resources */,
+				7D1C0A1E2F3A4B5C6D7E8FB3 /* Localizable.xcstrings in Resources */,
 				75E178DD286B3FED00349050 /* Assets.xcassets in Resources */,
-				75E178D2286B3DDE00349050 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -937,7 +938,6 @@
 				75A1C91C274FA66300551645 /* PasswordsStorage.swift in Sources */,
 				753F1FDA272BF5F000804584 /* DDSection+CoreDataClass.swift in Sources */,
 				75D4150427280F6400355AE7 /* SettingsView.swift in Sources */,
-				753F1FE3272C008B00804584 /* Info Options.swift in Sources */,
 				75A140D32869D3F4004A47A8 /* PasswordsListView.swift in Sources */,
 				75A1C91A274FA64700551645 /* DocumentsStorage.swift in Sources */,
 				75088874273E913A009A7D3B /* Defaults Controller.swift in Sources */,
@@ -955,6 +955,10 @@
 				E3A15F18E769B9727C83802B /* LockScreenView.swift in Sources */,
 				2260C6BDDFEFF8F8B49F47CF /* ICloudSection.swift in Sources */,
 				41492C720A32FC2B6B440E24 /* SyncActivityViews.swift in Sources */,
+				94C414769D0180A07954A3B5 /* FieldCatalog.swift in Sources */,
+				CFE8B3908315F65BBB9E9AAC /* FieldDate.swift in Sources */,
+				AB81CD27DE9485F7AC8D4CA4 /* DDPhoto+CoreDataClass.swift in Sources */,
+				3174EC6028B1CC10A24C1024 /* DDPhoto+CoreDataProperties.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -964,7 +968,6 @@
 			files = (
 				75821E57286B022D009F8C5E /* DDSection+CoreDataClass.swift in Sources */,
 				757DB2C12A582677008B8A54 /* PasswordView.swift in Sources */,
-				75821E59286B0238009F8C5E /* Info Options.swift in Sources */,
 				75821E53286B0209009F8C5E /* DDPassword+CoreDataClass.swift in Sources */,
 				75821E4E286AFF7F009F8C5E /* Password.swift in Sources */,
 				75821E4D286AFF43009F8C5E /* PasswordsStorage.swift in Sources */,
@@ -1011,6 +1014,10 @@
 				E4778604643AA330BB9A9F64 /* Biometric Controller.swift in Sources */,
 				C18F5E38DCC2AFFC16B60B2D /* Defaults Controller.swift in Sources */,
 				C6F24EA653E50706652DE7C0 /* UIImage Extension.swift in Sources */,
+				A19258F61AAFF8BC0EFD6CD4 /* FieldCatalog.swift in Sources */,
+				623279D3B2D89DC8ED6D8FE8 /* FieldDate.swift in Sources */,
+				FAAC9B792DC70D5C05F6AC34 /* DDPhoto+CoreDataClass.swift in Sources */,
+				F823A163B993D0D0D9943110 /* DDPhoto+CoreDataProperties.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1025,6 +1032,7 @@
 				B70A84EB9FB1D418D2539424 /* StorageTests.swift in Sources */,
 				F992C26682E6C96C8DB7973B /* EditDocumentViewModelTests.swift in Sources */,
 				713A2797F7374219C61DEA95 /* AppLockTests.swift in Sources */,
+				98D077FFFB5F1FDA7CBBA624 /* DataModelV3Tests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1044,39 +1052,12 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		756A0D622758BCB800CD29E0 /* Localizable.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				756A0D612758BCB800CD29E0 /* en */,
-				756A0D642758BCCA00CD29E0 /* ru */,
-			);
-			name = Localizable.strings;
-			sourceTree = "<group>";
-		};
-		759257652759047D003C9826 /* Localizable.stringsdict */ = {
-			isa = PBXVariantGroup;
-			children = (
-				759257642759047D003C9826 /* en */,
-				759257662759047E003C9826 /* ru */,
-			);
-			name = Localizable.stringsdict;
-			sourceTree = "<group>";
-		};
 		75A140DF2869FD2E004A47A8 /* MainInterface.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				75A140E02869FD2E004A47A8 /* Base */,
 			);
 			name = MainInterface.storyboard;
-			sourceTree = "<group>";
-		};
-		27CDE854F84CA890CFE17BDD /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				F799B40059C701DBB8FF5EF2 /* en */,
-				29F58F57816F8D1EA560A97E /* ru */,
-			);
-			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -1089,6 +1070,7 @@
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -1153,6 +1135,7 @@
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -1420,14 +1403,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		75227C582C2AA08D00A0AA3D /* XCRemoteSwiftPackageReference "SFSafeSymbols" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SFSafeSymbols/SFSafeSymbols";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.3.0;
-			};
-		};
 		75A140CD2869C913004A47A8 /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/evgenyneu/keychain-swift.git";
@@ -1439,11 +1414,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		75227C592C2AA12B00A0AA3D /* SFSafeSymbols */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 75227C582C2AA08D00A0AA3D /* XCRemoteSwiftPackageReference "SFSafeSymbols" */;
-			productName = SFSafeSymbols;
-		};
 		75A140CE2869C913004A47A8 /* KeychainSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 75A140CD2869C913004A47A8 /* XCRemoteSwiftPackageReference "keychain-swift" */;
@@ -1460,10 +1430,11 @@
 		7509CEC92865ABB400C7675F /* DuckDepo.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				7D1C0A1E2F3A4B5C6D7E8FA0 /* DuckDepo 3.xcdatamodel */,
 				75E178CC286B302C00349050 /* DuckDepo 2.xcdatamodel */,
 				7509CECA2865ABB400C7675F /* DuckDepo.xcdatamodel */,
 			);
-			currentVersion = 75E178CC286B302C00349050 /* DuckDepo 2.xcdatamodel */;
+			currentVersion = 7D1C0A1E2F3A4B5C6D7E8FA0 /* DuckDepo 3.xcdatamodel */;
 			path = DuckDepo.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

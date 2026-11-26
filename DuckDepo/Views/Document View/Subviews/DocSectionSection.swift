@@ -14,10 +14,10 @@ struct DocSectionSection: View {
     var body: some View {
         Section {
             ForEach(section.fields) { field in
-                FloatingTextView(title: field.title, value: field.value)
+                FloatingTextView(title: field.displayTitle, value: field.displayValue)
             }
         } header: {
-            Text(section.name)
+            Text(section.displayName)
         }
     }
 }

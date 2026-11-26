@@ -32,7 +32,7 @@ xcodebuild -project DuckDepo.xcodeproj -scheme DuckDepo clean
 ## Architecture
 
 ### MVVM Pattern
-- ViewModels use `@ObservableObject` and Combine for reactive UI updates
+- ViewModels are `@Observable` classes held in `@State`. A view model built in a view's initializer is rebuilt on every parent redraw, so its init must be cheap: heavy work (fetches, keychain reads, full documents) goes in `start()`/`load()`, called once from `onAppear`
 - Each major view has a corresponding ViewModel (e.g., `DepoListViewModel`, `EditDocumentViewModel`)
 - Models are Core Data entities with custom classes
 
@@ -40,8 +40,10 @@ xcodebuild -project DuckDepo.xcodeproj -scheme DuckDepo clean
 - **PersistenceController**: Singleton managing NSPersistentCloudKitContainer. Roles: `.app` (syncs with CloudKit), `.autoFill` (same file, no CloudKit), `.inMemory` (tests)
 - **CloudKit Integration**: Only the app mirrors to `iCloud.DuckDepo`. AutoFill writes reach the app through persistent history (`mergeChangesFromOtherProcesses`)
 - **Store location**: moved from the app sandbox to the App Group on first launch of 2.7 (`moveLegacyStoreIfNeeded`); the extension waits for `DefaultsController.isSharedStoreReady`
-- **Model changes**: run a Debug build once with `-InitializeCloudKitSchema`, then deploy the schema to Production in the CloudKit Console
-- **Entities**: `DDDocument`, `DDPassword`, `DDSection`, `DDField`, `DDFolder`
+- **Model changes**: add a new model version (additive only: CloudKit can't rename or remove), run a Debug build once with `-InitializeCloudKitSchema`, then deploy the schema to Production in the CloudKit Console
+- **Entities**: `DDDocument`, `DDPhoto`, `DDPassword`, `DDSection`, `DDField`, `DDFolder` (current model: `DuckDepo 3`)
+- **Keys**: predefined sections and fields store a stable `key` (`SectionKey`/`FieldKey` in `FieldCatalog.swift`) and display their name from it, so names follow the current language. Date fields store `yyyy-MM-dd` (`FieldDate`); documents keep `createdAt`/`updatedAt`/`expiresAt`
+- **Photos**: one `DDPhoto` record per photo (ID derived from the image bytes), plus the old `photoData` blob kept in sync for devices still on 2.6. `LegacyDataMigration` converts `photoData` changed by 2.6 and removes duplicate records the same way on every device
 - **File Protection**: Complete file protection enabled for security
 
 ### Security Architecture
@@ -76,7 +78,6 @@ xcodebuild -project DuckDepo.xcodeproj -scheme DuckDepo clean
 
 ### Swift Package Manager
 - **KeychainSwift** (master): Keychain access wrapper
-- **SFSafeSymbols** (v5.3.0): Type-safe SF Symbols
 
 ## Testing
 
@@ -89,8 +90,8 @@ Target `DuckDepoTests` (Swift Testing, hosted by the app). The app skips its dat
 
 ### Localization
 - English and Russian language support
-- Strings files in `Localization/` folders
-- Predefined field options in JSON format
+- String Catalogs: `Localization/Localizable.xcstrings` (app and extension) and `InfoPlist.xcstrings`
+- Predefined sections and fields: `FieldCatalog.swift`
 
 ### CloudKit Considerations
 - Development environment configured
@@ -103,9 +104,9 @@ Target `DuckDepoTests` (Swift Testing, hosted by the app). The app skips its dat
 - Requires physical device for full testing
 
 ### Common Patterns
-- Use `@StateObject` for ViewModel creation
+- Use `@State` for view models (see MVVM above) and `@Bindable` for bindings into shared `@Observable` controllers
 - Environment injection for Core Data context
-- Combine publishers for reactive data flow
+- Storage classes publish lists with Combine; view models subscribe in `start()`
 - Custom view modifiers for consistent styling
 
 ## File Organization

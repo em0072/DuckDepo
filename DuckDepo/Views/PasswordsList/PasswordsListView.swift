@@ -9,8 +9,8 @@ import SwiftUI
 
 struct PasswordsListView: View {
 
-    @StateObject var viewModel: PasswordsListViewModel
-    @ObservedObject private var syncMonitor = SyncMonitor.shared
+    @State var viewModel: PasswordsListViewModel
+    private var syncMonitor = SyncMonitor.shared
 
     var body: some View {
         NavigationSplitView {
@@ -39,6 +39,7 @@ struct PasswordsListView: View {
             .navigationDestination(for: Password.self) { password in
                 PasswordView(password: password)
             }
+            .onAppear(perform: viewModel.start)
         } detail: {
             NoSelectionViewView(type: .password)
         }

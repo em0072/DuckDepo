@@ -8,112 +8,83 @@
 import SwiftUI
 
 protocol AddSectionMenuDelegate {
-    func addNewSection(_ name: String)
-    func sectionIsDuplicate(_ name: String) -> Bool
+    func addNewSection(_ section: DocSection)
+    func sectionIsDuplicate(named name: String) -> Bool
 }
 
 struct AddSectionMenu: View {
-    
-    @State var showingAddNewSectionView: Bool = false
-    @State var showDuplicatedAlert: Bool = false
-    @Binding var menuOptions: [String]
+
+    /// Predefined sections the document doesn't have yet.
+    let availableSections: [SectionKey]
     var delegate: AddSectionMenuDelegate?
-    
+
+    @State private var showingAddNewSectionView = false
+    @State private var showDuplicatedAlert = false
+
     var body: some View {
         Section {
-        addButton
-            .frame(maxWidth: .infinity)
-            .sheet(isPresented: $showingAddNewSectionView) {
-                AddNewView(isPresented: $showingAddNewSectionView, duplicateAlertPresented: $showDuplicatedAlert, type: .section, onSave: addSection)
-                    .presentationDetents([.height(250)])
-                    .presentationDragIndicator(.visible)
-            }
-            .alert("asm_duplicate_title", isPresented: $showDuplicatedAlert, actions: {
-                Button("Ok") {
-                    self.showDuplicatedAlert = false
+            addButton
+                .frame(maxWidth: .infinity)
+                .sheet(isPresented: $showingAddNewSectionView) {
+                    AddNewView(isPresented: $showingAddNewSectionView, duplicateAlertPresented: $showDuplicatedAlert, type: .section, onSave: addCustomSection)
+                        .presentationDetents([.height(250)])
+                        .presentationDragIndicator(.visible)
                 }
-            }, message: {
-                Text("asm_duplicate_body")
-            })
+                .alert("asm_duplicate_title", isPresented: $showDuplicatedAlert) {
+                    Button("Ok", role: .cancel) {}
+                } message: {
+                    Text("asm_duplicate_body")
+                }
         }
     }
-    
-    @ViewBuilder var addButton: some View {
-        if possibleOptions.isEmpty {
-            addCustomSectionButton
-        } else {
-            menuButton
-        }
-    }
-    
-    var addCustomSectionButton: some View {
-        Button {
-            self.showingAddNewSectionView = true
-        } label: {
-            buttonLabel
-        }
-        .buttonStyle(RoundedRectYellowButtonStyle())
-    }
-    
-    var menuButton: some View {
-        Menu {
-            ForEach(possibleOptions, id: \.self) { section in
-                    Button {
-                        addSection(section)
-                    } label: {
-                        Text(section)
-                    }
-            }
-            Button {
-                self.showingAddNewSectionView = true
-            } label: {
-                Text("asm_custom")
-            }
-        } label: {
-            buttonLabel
-        }
-        .menuStyle(RoundedRectYellowMenuStyle())
-    }
-    
-    private var buttonLabel: some View {
-        HStack {
-            Spacer()
-            Label("asm_add_section", systemImage: "plus")
-                .font(.callout)
-                .bold()
-                .foregroundColor(.duckYellow)
-                .padding(.vertical, 14)
-            Spacer()
-        }
 
-    }
-    
-    var possibleOptions: [String] {
-        var options = [String]()
-        for option in menuOptions {
-            let dupCheck = delegate?.sectionIsDuplicate(option) ?? false
-            if !dupCheck {
-                options.append(option)
+    @ViewBuilder
+    private var addButton: some View {
+        if availableSections.isEmpty {
+            Button {
+                showingAddNewSectionView = true
+            } label: {
+                buttonLabel
             }
+            .buttonStyle(RoundedRectYellowButtonStyle())
+        } else {
+            Menu {
+                ForEach(availableSections, id: \.self) { key in
+                    Button(key.localizedName) {
+                        delegate?.addNewSection(key.makeSection())
+                    }
+                }
+                Button("asm_custom") {
+                    showingAddNewSectionView = true
+                }
+            } label: {
+                buttonLabel
+            }
+            .menuStyle(RoundedRectYellowMenuStyle())
         }
-        return options
     }
-    
-    func addSection(_ name: String) {
-        let duplicateCheck = delegate?.sectionIsDuplicate(name) ?? false
-        if duplicateCheck {
+
+    private var buttonLabel: some View {
+        Label("asm_add_section", systemImage: "plus")
+            .font(.callout)
+            .bold()
+            .foregroundStyle(Color.duckYellow)
+            .padding(.vertical, 14)
+            .frame(maxWidth: .infinity)
+    }
+
+    private func addCustomSection(_ name: String) {
+        if delegate?.sectionIsDuplicate(named: name) ?? false {
             showDuplicatedAlert = true
         } else {
-            delegate?.addNewSection(name)
+            delegate?.addNewSection(DocSection(name: name))
             showingAddNewSectionView = false
         }
     }
 }
 
-struct AddSectionMenu_Previews: PreviewProvider {
-    static var previews: some View {
-        Form {
-            AddSectionMenu(menuOptions: .constant(InputOption().listOfSectionNames()))
-        }
+#Preview {
+    Form {
+        AddSectionMenu(availableSections: SectionKey.allCases)
     }
 }

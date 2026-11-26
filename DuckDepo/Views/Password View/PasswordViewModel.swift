@@ -7,23 +7,32 @@
 
 import Foundation
 
-final class PasswordViewModel: ObservableObject {
+/// Cheap to create: SwiftUI may build and discard several instances; the one on screen loads in `load()`.
+@Observable
+final class PasswordViewModel {
 
-    @Published var password: Password
+    var password: Password
 
-    @Published var showShareAlert = false
-    @Published var showShareSheetView = false
-    @Published var isEditingPassword = false
-    @Published var isPasswordVisible = false
-    @Published var shouldDismissView = false
+    var showShareAlert = false
+    var showShareSheetView = false
+    var isEditingPassword = false
+    var isPasswordVisible = false
+    var shouldDismissView = false
 
-    var itemsToShare: [Any]?
+    @ObservationIgnored var itemsToShare: [Any]?
+    @ObservationIgnored private let storage: PasswordsStorage
+    @ObservationIgnored private var isLoaded = false
 
-    /// List items carry no password value; read it from the keychain only for this screen.
     init(password: Password, storage: PasswordsStorage = PasswordsStorage()) {
-        var password = password
-        password.value = storage.value(for: password.id)
         self.password = password
+        self.storage = storage
+    }
+
+    /// List items carry no password value; read it from the keychain once, only for this screen.
+    func load() {
+        guard !isLoaded else { return }
+        isLoaded = true
+        password.value = storage.value(for: password.id)
     }
 
     var shouldShowCredentialsSection: Bool {

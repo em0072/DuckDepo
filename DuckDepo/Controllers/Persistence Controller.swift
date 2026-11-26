@@ -147,6 +147,21 @@ final class PersistenceController {
         container.performBackgroundTask(block)
     }
 
+    /// One background context for data repairs: blocks run one after another, so two passes of a
+    /// migration never work on the same objects at once.
+    private lazy var maintenanceContext: NSManagedObjectContext = {
+        let context = container.newBackgroundContext()
+        context.name = "maintenance"
+        context.transactionAuthor = role.transactionAuthor
+        context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        return context
+    }()
+
+    func performMaintenance(_ block: @escaping (NSManagedObjectContext) -> Void) {
+        let context = maintenanceContext
+        context.perform { block(context) }
+    }
+
     // MARK: - Loading
 
     private static func storeURL(for role: Role) -> URL {

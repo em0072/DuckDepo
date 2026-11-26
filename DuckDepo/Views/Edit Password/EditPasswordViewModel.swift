@@ -12,7 +12,9 @@ protocol EditPasswordViewModelDelegate: AnyObject {
     func passwordDeleted()
 }
 
-final class EditPasswordViewModel: ObservableObject {
+/// Cheap to create: SwiftUI may build and discard several instances; the one on screen loads in `load()`.
+@Observable
+final class EditPasswordViewModel {
 
     enum PasswordType {
         case new
@@ -20,18 +22,19 @@ final class EditPasswordViewModel: ObservableObject {
     }
 
     let type: PasswordType
-    weak var delegate: EditPasswordViewModelDelegate?
+    @ObservationIgnored weak var delegate: EditPasswordViewModelDelegate?
 
-    @Published var passwordName = ""
-    @Published var passwordLogin = ""
-    @Published var passwordValue = ""
-    @Published var passwordWebsite = ""
+    var passwordName = ""
+    var passwordLogin = ""
+    var passwordValue = ""
+    var passwordWebsite = ""
 
-    @Published private(set) var shouldCloseView = false
-    @Published var saveFailed = false
+    private(set) var shouldCloseView = false
+    var saveFailed = false
 
-    private let storage: PasswordsStorage
+    @ObservationIgnored private let storage: PasswordsStorage
     private var original: Password
+    @ObservationIgnored private var isLoaded = false
 
     init(type: PasswordType, delegate: EditPasswordViewModelDelegate? = nil, storage: PasswordsStorage = PasswordsStorage()) {
         self.type = type
@@ -41,14 +44,22 @@ final class EditPasswordViewModel: ObservableObject {
         case .new:
             original = Password()
         case .existing(let password):
-            // Read the value from the keychain: the caller's copy may be stale or a list item without a value.
             original = password
-            original.value = storage.value(for: password.id)
         }
         passwordName = original.name
         passwordLogin = original.login
         passwordValue = original.value
         passwordWebsite = original.website
+    }
+
+    /// Reads the value from the keychain once: the caller's copy may be stale or a list item without a value.
+    func load() {
+        guard !isLoaded else { return }
+        isLoaded = true
+        guard case .existing(let password) = type else { return }
+        let value = storage.value(for: password.id)
+        original.value = value
+        passwordValue = value
     }
 
     var isNew: Bool {

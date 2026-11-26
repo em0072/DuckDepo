@@ -7,28 +7,29 @@
 
 import SwiftUI
 
-final class EditDocumentViewModel: ObservableObject {
+/// Cheap to create: SwiftUI may build and discard several instances; the one on screen loads in `load()`.
+@Observable
+final class EditDocumentViewModel {
 
     enum Mode {
         case new
         case existing(Document)
     }
 
-    private let db: DataBase
-    private let originalDocument: Document
-    private let onDismiss: ((Document?) -> Void)?
+    @ObservationIgnored private let db: DataBase
+    private var originalDocument: Document
+    @ObservationIgnored private let onDismiss: ((Document?) -> Void)?
+    @ObservationIgnored private var isLoaded = false
 
     let type: Mode
-    let inputOption = InputOption()
 
-    @Published var document: Document
-    @Published private(set) var shouldCloseView = false
-    @Published var saveFailed = false
+    var document: Document
+    private(set) var shouldCloseView = false
+    var saveFailed = false
 
-    @Published var showingImageViewer = false
-    @Published var imageViewerPhoto: DocumentPhoto?
+    var showingImageViewer = false
+    var imageViewerPhoto: DocumentPhoto?
 
-    /// For an existing document, edits start from the stored version (with photos), not the caller's copy.
     init(type: Mode, database: DataBase = .shared, onDismiss: ((Document?) -> Void)? = nil) {
         self.type = type
         self.db = database
@@ -38,10 +39,20 @@ final class EditDocumentViewModel: ObservableObject {
         case .new:
             initial = Document()
         case .existing(let document):
-            initial = database.fullDocument(with: document.id) ?? document
+            initial = document
         }
         document = initial
         originalDocument = initial
+    }
+
+    /// For an existing document, edits start from the stored version (with photos), not the caller's copy.
+    /// Runs once, before anything is edited.
+    func load() {
+        guard !isLoaded else { return }
+        isLoaded = true
+        guard case .existing(let document) = type, let stored = db.fullDocument(with: document.id) else { return }
+        self.document = stored
+        originalDocument = stored
     }
 
     var isNew: Bool {
@@ -106,8 +117,11 @@ extension EditDocumentViewModel: PhotosSectionViewDelegate {
     }
 
     func add(photos: [DocumentPhoto]) {
+        // A photo's ID comes from its bytes; adding the same picture twice would be one photo twice.
+        var seen = Set(document.photos.map(\.id))
+        let newPhotos = photos.filter { seen.insert($0.id).inserted }
         withAnimation {
-            document.photos.append(contentsOf: photos)
+            document.photos.append(contentsOf: newPhotos)
         }
     }
 
@@ -128,10 +142,10 @@ extension EditDocumentViewModel: SectionViewDelegate {
         }
     }
 
-    func addField(named name: String, toSection sectionID: UUID) {
+    func addField(_ field: Field, toSection sectionID: UUID) {
         guard let index = sectionIndex(sectionID) else { return }
         withAnimation {
-            document.sections[index].fields.append(Field(title: name))
+            document.sections[index].fields.append(field)
         }
     }
 
@@ -142,9 +156,9 @@ extension EditDocumentViewModel: SectionViewDelegate {
         }
     }
 
-    func fieldIsDuplicate(_ name: String, inSection sectionID: UUID) -> Bool {
+    func fieldIsDuplicate(named name: String, inSection sectionID: UUID) -> Bool {
         guard let index = sectionIndex(sectionID) else { return false }
-        return document.sections[index].fields.contains { $0.title == name }
+        return document.sections[index].fields.contains { Self.sameName($0.displayTitle, name) || Self.sameName($0.title, name) }
     }
 }
 
@@ -152,13 +166,23 @@ extension EditDocumentViewModel: SectionViewDelegate {
 
 extension EditDocumentViewModel: AddSectionMenuDelegate {
 
-    func addNewSection(_ name: String) {
+    func addNewSection(_ section: DocSection) {
         withAnimation {
-            document.sections.append(DocSection(name: name))
+            document.sections.append(section)
         }
     }
 
-    func sectionIsDuplicate(_ name: String) -> Bool {
-        document.sections.contains { $0.name == name }
+    func sectionIsDuplicate(named name: String) -> Bool {
+        document.sections.contains { Self.sameName($0.displayName, name) || Self.sameName($0.name, name) }
+    }
+
+    /// Predefined sections the document doesn't have yet.
+    var availableSections: [SectionKey] {
+        let present = Set(document.sections.compactMap(\.sectionKey))
+        return SectionKey.allCases.filter { !present.contains($0) }
+    }
+
+    private static func sameName(_ lhs: String, _ rhs: String) -> Bool {
+        lhs.trimmingCharacters(in: .whitespacesAndNewlines).localizedCaseInsensitiveCompare(rhs.trimmingCharacters(in: .whitespacesAndNewlines)) == .orderedSame
     }
 }
