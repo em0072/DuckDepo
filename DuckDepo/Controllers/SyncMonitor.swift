@@ -24,12 +24,27 @@ final class SyncMonitor {
     static let shared = SyncMonitor()
 
     private(set) var accountStatus: AccountStatus = .checking
-    private(set) var isSyncing = false
+    private var hasRunningEvents = false
+    private var hasDownloadEvents = false
+    private var isActivityVisible = false
+
+    // Without an iCloud account, CloudKit's setup starts and then waits for one indefinitely, so its
+    // events only count while an account is available.
+
+    var isSyncing: Bool {
+        accountStatus == .available && hasRunningEvents
+    }
+
     /// True while CloudKit is setting up or downloading changes.
-    private(set) var isDownloading = false
+    var isDownloading: Bool {
+        accountStatus == .available && hasDownloadEvents
+    }
+
     /// `isSyncing`, but only once a sync has lasted long enough to be worth showing. The export after
     /// each edit and the routine check on every launch finish well under a second and would just flicker.
-    private(set) var showsActivity = false
+    var showsActivity: Bool {
+        accountStatus == .available && isActivityVisible
+    }
     private(set) var lastSyncDate: Date?
     private(set) var lastErrorDescription: String?
 
@@ -81,21 +96,21 @@ final class SyncMonitor {
                 lastErrorDescription = Self.describe(error)
             }
         }
-        isSyncing = !runningEvents.isEmpty
-        isDownloading = runningEvents.values.contains { $0 == .setup || $0 == .import }
+        hasRunningEvents = !runningEvents.isEmpty
+        hasDownloadEvents = runningEvents.values.contains { $0 == .setup || $0 == .import }
         scheduleActivityUpdate()
     }
 
     private func scheduleActivityUpdate() {
         activityUpdate?.cancel()
         activityUpdate = nil
-        guard isSyncing != showsActivity else { return }
+        guard hasRunningEvents != isActivityVisible else { return }
         // Show after a sync has run for a second; hide after a short pause, so the gap between
         // two download batches doesn't make the indicator blink.
-        let delay: TimeInterval = isSyncing ? 1 : 0.6
+        let delay: TimeInterval = hasRunningEvents ? 1 : 0.6
         let update = DispatchWorkItem { [weak self] in
             guard let self else { return }
-            showsActivity = isSyncing
+            isActivityVisible = hasRunningEvents
         }
         activityUpdate = update
         DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: update)

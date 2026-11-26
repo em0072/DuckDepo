@@ -18,11 +18,15 @@ struct EditDocumentView: View {
     var body: some View {
         NavigationStack {
             Form {
+                if let foundNothing = viewModel.scanFoundNothing {
+                    ScanBanner(foundNothing: foundNothing)
+                }
                 TitleView(name: $viewModel.document.name,
                           description: $viewModel.document.description,
                           documentType: $viewModel.document.documentType)
                 PhotosSectionView(photos: viewModel.document.photos, namespace: photoNamespace, delegate: viewModel)
-                SectionView(sections: $viewModel.document.sections, delegate: viewModel)
+                SectionView(sections: $viewModel.document.sections, delegate: viewModel,
+                            scanConfidence: viewModel.scanConfidence(for:))
                 AddSectionMenu(availableSections: viewModel.availableSections, delegate: viewModel)
                 if !viewModel.isNew {
                     Section {

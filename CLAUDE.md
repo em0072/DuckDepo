@@ -46,6 +46,11 @@ xcodebuild -project DuckDepo.xcodeproj -scheme DuckDepo clean
 - **Photos**: one `DDPhoto` record per photo (ID derived from the image bytes), plus the old `photoData` blob kept in sync for devices still on 2.6. `LegacyDataMigration` converts `photoData` changed by 2.6 and removes duplicate records the same way on every device
 - **File Protection**: Complete file protection enabled for security
 
+### Scanning (`DuckDepo/Scanning/`)
+- Everything runs on the device. `DocumentScanner.draft(from:)`: Vision text recognition (`DocumentReader`, language correction off), then exact parsers (`MRZParser` for passport/ID zones with check digits, `DrivingLicenceParser` for the numbered fields of EU and Russian licences, VINs), then `ModelExtractor` (on-device `SystemLanguageModel` only, never the Private Cloud Compute model) for fields still empty
+- The model doesn't support Russian (skipped for mostly-Cyrillic text) and makes values up: `ScanReading.add(_:text:)` keeps only values printed in the recognized text. It's prewarmed when a scan starts and given 6 s
+- The result opens in the editor (`EditDocumentViewModel.Mode.scanned`) with a banner and per-field `ScanMarker`s (verified / read / suggested) that disappear once a value is edited; nothing is saved until confirmed
+
 ### Security Architecture
 - **BiometricController**: Manages Face ID/Touch ID authentication
 - **Keychain Integration**: Password values live in the iCloud-synchronized keychain group (`Keychain` wraps KeychainSwift behind `KeychainStoring`); Core Data holds only name/login/website
@@ -53,8 +58,8 @@ xcodebuild -project DuckDepo.xcodeproj -scheme DuckDepo clean
 - **LegacyDataMigration**: idempotent repair of v1 data, runs on every activation
 
 ### Navigation Structure
-- Tab-based main interface (`Tab` API): Depo (Documents), Passwords, Settings
-- Each list is a selection-based `NavigationSplitView` (sidebar list, detail column on iPad, push on iPhone), with search, swipe actions and context menus
+- Tab-based main interface (`Tab` API): Depo (Documents), Passwords, Settings, plus a search tab (`Tab(role: .search)` with `.tabViewSearchActivation(.searchTabSelection)`, the separate button at the end of the tab bar) that searches documents and passwords together (`SearchView`)
+- Each list is a selection-based `NavigationSplitView` (sidebar list, detail column on iPad, push on iPhone), with swipe actions and context menus
 - Editors are sheets with close/confirm toolbar buttons (`Button(role: .close)` / `.confirm`) and a discard confirmation
 - Photos open in `PhotoViewer` (full screen, zoom transition from the tapped photo)
 
@@ -74,7 +79,7 @@ xcodebuild -project DuckDepo.xcodeproj -scheme DuckDepo clean
 - Standard iOS 26 look (insetGrouped lists, forms, glass toolbars); `duckYellow` is the accent (deep amber #9E6C00 in light mode for contrast, bright #FBC531 in dark, plus Increase Contrast variants); labels on a yellow fill use `onDuckYellow`
 - Reusable components in `Views/Elements/`: `FieldValueRow` (value with copy and show/hide buttons), `LabeledTextField` (editor field with its title above), `PhotoViewer`
 - List rows: `DocumentRow` (thumbnail or type tile, `ExpiryBadge`), `PasswordRow` (monogram)
-- Expiry: `ExpiryStatus` (expired / expires within 90 days / valid) from `Document.expiryDate`; list search in `DocumentSearch`
+- Expiry: `ExpiryStatus` (expired / expires within 90 days / valid) from `Document.expiryDate`; document matching in `DocumentSearch`
 
 ## Dependencies
 
