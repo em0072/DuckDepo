@@ -8,25 +8,36 @@
 import SwiftUI
 
 struct PasswordsListView: View {
-        
+
     @StateObject var viewModel: PasswordsListViewModel
-    
+    @ObservedObject private var syncMonitor = SyncMonitor.shared
+
     var body: some View {
         NavigationSplitView {
-            ZStack {
-                if viewModel.passwords.isEmpty {
-                    InitialInstructionsView(type: .passwords)
+            Group {
+                if !viewModel.passwords.isEmpty {
+                    List(viewModel.passwords) { password in
+                        NavigationLink(value: password) {
+                            PasswordRow(name: password.name, login: password.login)
+                        }
+                    }
+                } else if syncMonitor.showsActivity && syncMonitor.isDownloading {
+                    DownloadingFromICloudView(type: .passwords)
                 } else {
-                    listView
+                    InitialInstructionsView(type: .passwords)
                 }
             }
             .navigationTitle("plv_title")
+            .syncActivitySubtitle(syncMonitor)
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .topBarTrailing) {
                     Button(action: viewModel.addNewPasswordButtonPressed) {
-                        Image(systemName: "plus")
+                        Label("epv_new_password_title", systemImage: "plus")
                     }
                 }
+            }
+            .navigationDestination(for: Password.self) { password in
+                PasswordView(password: password)
             }
         } detail: {
             NoSelectionViewView(type: .password)
@@ -35,43 +46,8 @@ struct PasswordsListView: View {
             EditPasswordView(type: .new)
         }
     }
-    
 }
 
-extension PasswordsListView {
-    private var listView: some View {
-        List(viewModel.passwords) { password in
-            NavigationLink(value: password) {
-                PasswordRow(name: password.name, login: password.login)
-            }
-            .navigationDestination(for: Password.self) { password in
-                PasswordView(password: password)
-            }
-        }
-    }
-    
-    private func passwordRowView(name: String, login: String) -> some View {
-        VStack(alignment: .leading) {
-            Text(name)
-                .foregroundColor(.primary)
-            if !login.isEmpty {
-                Text(login)
-                    .foregroundColor(.secondary)
-                    .font(.caption)
-            }
-        }
-        .padding(.vertical, 2)
-    }
-}
-
-struct NewPasswordsListView_Previews: PreviewProvider {
-    static var viewModel: PasswordsListViewModel {
-        let viewModel = PasswordsListViewModel()
-        viewModel.passwords = Array(repeating: Password(name: "Name", login: "@login"), count: 2)
-        return viewModel
-    }
-    
-    static var previews: some View {
-        PasswordsListView(viewModel: Self.viewModel)
-    }
+#Preview {
+    PasswordsListView(viewModel: PasswordsListViewModel())
 }

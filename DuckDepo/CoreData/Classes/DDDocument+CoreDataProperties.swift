@@ -6,18 +6,16 @@
 //
 //
 
-import Foundation
 import CoreData
-import UIKit
-import CloudKit
-
+import Foundation
+import os
 
 extension DDDocument {
-    
+
     static let entityName = "DDDocument"
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<DDDocument> {
-        return NSFetchRequest<DDDocument>(entityName: DDDocument.entityName)
+        NSFetchRequest<DDDocument>(entityName: DDDocument.entityName)
     }
 
     @NSManaged public var identifier: UUID?
@@ -25,11 +23,10 @@ extension DDDocument {
     @NSManaged public var name: String?
     @NSManaged public var documentDescription: String?
     @NSManaged public var documentType: String?
+    /// An archived `NSArray` of JPEG `NSData`, one per photo. Kept in this format so older app versions can read it.
     @NSManaged public var photoData: Data?
     @NSManaged public var sections: Set<DDSection>?
     @NSManaged public var documentTypeOrder: Int16
-    
-
 }
 
 // MARK: Generated accessors for sections
@@ -46,7 +43,6 @@ extension DDDocument {
 
     @objc(removeSections:)
     @NSManaged public func removeFromSections(_ values: NSSet)
-
 }
 
 extension DDDocument: Comparable {
@@ -55,118 +51,100 @@ extension DDDocument: Comparable {
     }
 }
 
+// MARK: - Photos
+
 extension DDDocument {
-    
-    
-    public func addToPhotos(_ images: [UIImage]) {
-        let dataArray = NSMutableArray()
-            for img in images {
-                if let data = img.jpegData(compressionQuality: 0.3) {
-                    dataArray.add(data)
-                }
-            }
+
+    private static let logger = Logger(subsystem: "DuckDepo", category: "Photos")
+
+    /// The stored JPEG data of each photo, in order.
+    func photoDataItems() -> [Data] {
+        guard let photoData else { return [] }
         do {
-            self.photoData = try NSKeyedArchiver.archivedData(withRootObject: dataArray, requiringSecureCoding: false)
+            let items = try NSKeyedUnarchiver.unarchivedArrayOfObjects(ofClass: NSData.self, from: photoData) ?? []
+            return items.map { $0 as Data }
         } catch {
-            let nsError = error as NSError
-            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+            Self.logger.error("Unarchiving photos failed: \(String(describing: error), privacy: .public)")
+            return []
         }
     }
 
-    public func getPhotos() -> [UIImage]? {
-        var retVal = [UIImage]()
-        guard let object = photoData else { return nil }
-        if let dataArray = try? NSKeyedUnarchiver.unarchivedArrayOfObjects(ofClass: NSData.self, from: object) {
-            for data in dataArray {
-                if let image = UIImage(data: data as Data) {
-                    retVal.append(image)
-                }
-            }
-        }
-        return retVal
+    func photos() -> [DocumentPhoto] {
+        photoDataItems().compactMap(DocumentPhoto.init(data:))
     }
 
-    public func getPhotosAsync(completion: @escaping ([UIImage])->()) {
-        var photos = [UIImage]()
-        DispatchQueue.global(qos: .userInteractive).async {
-            if let photoData = self.photoData {
-                if let dataArray = try? NSKeyedUnarchiver.unarchivedArrayOfObjects(ofClass: NSData.self, from: photoData) {
-                    for data in dataArray {
-                        if let image = UIImage(data: data as Data) {
-                            photos.append(image)
-                        }
-                    }
-                }
-            }
-            DispatchQueue.main.async {
-                completion(photos)
-            }
+    /// Stores the photos' existing JPEG data as is. Photos are never re-encoded, and nothing is
+    /// written (or uploaded to iCloud) when the photos didn't change.
+    func setPhotos(_ photos: [DocumentPhoto]) {
+        let items = photos.map(\.data)
+        guard items != photoDataItems() else { return }
+        guard !items.isEmpty else {
+            photoData = nil
+            return
+        }
+        do {
+            photoData = try NSKeyedArchiver.archivedData(withRootObject: items.map { $0 as NSData } as NSArray,
+                                                         requiringSecureCoding: true)
+        } catch {
+            Self.logger.error("Archiving photos failed: \(String(describing: error), privacy: .public)")
         }
     }
-    
-    public func getSections() -> [DDSection] {
-        return Array(sections ?? []).sorted()
+
+    func getSections() -> [DDSection] {
+        Array(sections ?? []).sorted()
     }
 }
 
+// MARK: - Conversion
+
 extension DDDocument {
-    
+
     convenience init(viewContext: NSManagedObjectContext, object: Document, order: Int) {
         self.init(context: viewContext)
-        self.identifier = object.id
-        self.name = object.name
-        self.documentDescription = object.description
+        identifier = object.id
+        name = object.name
+        documentDescription = object.description
         updateType(newType: object.documentType)
-        self.order = Int16(order)
-        self.addToPhotos(object.photos)
-        for index in 0..<object.sections.count {
-            let section = object.sections[index]
-            self.addToSections(DDSection(viewContext: viewContext, object: section, order: index, document: self))
+        self.order = Int16(clamping: order)
+        setPhotos(object.photos)
+        for (index, section) in object.sections.enumerated() {
+            addToSections(DDSection(viewContext: viewContext, object: section, order: index, document: self))
         }
     }
 
-    
-    
-    func convert() -> Document {
-        var sections = [DocSection]()
+    /// Decoding photos is expensive, so lists convert without them.
+    func convert(includePhotos: Bool) -> Document {
         let documentType = DocumentType(rawValue: self.documentType ?? "") ?? .other
-        var document = Document(id: self.identifier ?? UUID(), name: self.name ?? "",
-                                description: self.documentDescription ?? "", documentType: documentType,
-                                photos: self.getPhotos() ?? [], sections: [])
-        document.order = Int(self.order)
-        for section in getSections() {
-            sections.append(section.convert())
-        }
-        document.sections = sections
+        var document = Document(id: identifier ?? UUID(),
+                                name: name ?? "",
+                                description: documentDescription ?? "",
+                                documentType: documentType,
+                                photos: includePhotos ? photos() : [],
+                                sections: getSections().map { $0.convert() })
+        document.order = Int(order)
         return document
     }
-    
-    func updateType( newType: DocumentType) {
-        self.documentType = newType.rawValue
-        self.documentTypeOrder = Int16(newType.typeOrder)
+
+    func updateType(newType: DocumentType) {
+        documentType = newType.rawValue
+        documentTypeOrder = Int16(newType.typeOrder)
     }
-    
+
     static func fetchDocument(with id: UUID, viewContext: NSManagedObjectContext) -> DDDocument? {
         var fetchedDocument: DDDocument?
         viewContext.performAndWait {
             let fetchRequest = DDDocument.fetchRequest()
             fetchRequest.predicate = DDDocument.predicate(for: id)
             fetchRequest.fetchLimit = 1
-            fetchedDocument = (try? fetchRequest.execute())?.first
+            fetchedDocument = (try? viewContext.fetch(fetchRequest))?.first
         }
         return fetchedDocument
     }
-    
-    
-    
 
-    
     static func predicate(for id: UUID) -> NSPredicate {
-        return NSPredicate(format: "identifier = %@", id as CVarArg)
+        NSPredicate(format: "identifier = %@", id as CVarArg)
     }
-    
 }
 
 extension DDDocument: Identifiable, CoreDataCountable {
 }
-

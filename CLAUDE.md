@@ -14,7 +14,10 @@ DuckDepo is an iOS password manager and document storage app built with SwiftUI,
 open DuckDepo.xcodeproj
 
 # Build from command line
-xcodebuild -project DuckDepo.xcodeproj -scheme DuckDepo -destination 'platform=iOS Simulator,name=iPhone 15' build
+xcodebuild -project DuckDepo.xcodeproj -scheme DuckDepo -destination 'platform=iOS Simulator,name=iPhone 18 Pro' build
+
+# Run unit tests (Swift Testing, target DuckDepoTests)
+xcodebuild -project DuckDepo.xcodeproj -scheme DuckDepo -destination 'platform=iOS Simulator,name=iPhone 18 Pro' test
 
 # Clean build folder
 xcodebuild -project DuckDepo.xcodeproj -scheme DuckDepo clean
@@ -23,7 +26,8 @@ xcodebuild -project DuckDepo.xcodeproj -scheme DuckDepo clean
 ### Project Structure
 - **Main App**: `DuckDepo/` - SwiftUI app with MVVM architecture
 - **AutoFill Extension**: `DuckDepoAutoFillExtension/` - iOS AutoFill credential provider
-- **Shared Core Data**: Both targets share the same Core Data model and storage
+- **Shared Core Data**: Both targets open the same store in the App Group container (`group.evgenymitko.duckdepo`)
+- **Minimum iOS**: 26.0 for all targets
 
 ## Architecture
 
@@ -33,15 +37,18 @@ xcodebuild -project DuckDepo.xcodeproj -scheme DuckDepo clean
 - Models are Core Data entities with custom classes
 
 ### Core Data Stack
-- **PersistenceController**: Singleton managing NSPersistentCloudKitContainer
-- **CloudKit Integration**: Automatic sync with `iCloud.DuckDepo` container
+- **PersistenceController**: Singleton managing NSPersistentCloudKitContainer. Roles: `.app` (syncs with CloudKit), `.autoFill` (same file, no CloudKit), `.inMemory` (tests)
+- **CloudKit Integration**: Only the app mirrors to `iCloud.DuckDepo`. AutoFill writes reach the app through persistent history (`mergeChangesFromOtherProcesses`)
+- **Store location**: moved from the app sandbox to the App Group on first launch of 2.7 (`moveLegacyStoreIfNeeded`); the extension waits for `DefaultsController.isSharedStoreReady`
+- **Model changes**: run a Debug build once with `-InitializeCloudKitSchema`, then deploy the schema to Production in the CloudKit Console
 - **Entities**: `DDDocument`, `DDPassword`, `DDSection`, `DDField`, `DDFolder`
 - **File Protection**: Complete file protection enabled for security
 
 ### Security Architecture
 - **BiometricController**: Manages Face ID/Touch ID authentication
-- **Keychain Integration**: Secure credential storage via KeychainSwift
-- **App Locking**: Configurable biometric delays (5 seconds to 15 minutes)
+- **Keychain Integration**: Password values live in the iCloud-synchronized keychain group (`Keychain` wraps KeychainSwift behind `KeychainStoring`); Core Data holds only name/login/website
+- **App Locking**: `BiometricController` + `LockWindowPresenter` (a separate window above all sheets). Lock state is never persisted; the app always starts locked when the lock is on
+- **LegacyDataMigration**: idempotent repair of v1 data, runs on every activation
 
 ### Navigation Structure
 - Tab-based main interface: Depo (Documents), Passwords, Settings
@@ -58,7 +65,7 @@ xcodebuild -project DuckDepo.xcodeproj -scheme DuckDepo clean
 ### Controllers
 - `BiometricController`: Authentication state management
 - `DefaultsController`: UserDefaults wrapper with proper key management
-- `ClipboardController`: Secure clipboard operations with auto-clear
+- `ClipboardController`: Copies are local-only (no Universal Clipboard) and expire after 60 s (text) / 120 s (images)
 
 ### UI Components
 - Custom neumorphic design system with adaptive dark/light themes
@@ -73,11 +80,10 @@ xcodebuild -project DuckDepo.xcodeproj -scheme DuckDepo clean
 
 ## Testing
 
-Currently no test targets are configured. When adding tests:
-- Use XCTest framework
-- Test ViewModels independently of UI
-- Mock Core Data stack for unit tests
-- Use iOS Simulator for AutoFill extension testing
+Target `DuckDepoTests` (Swift Testing, hosted by the app). The app skips its data stack and UI when `AppEnvironment.isRunningTests`.
+- Use `TestStack.makeDatabase()` (in-memory store) and `InMemoryKeychain`
+- Mark Core Data suites `@MainActor` (the view context is main-queue)
+- The Xcode project has no file-system-synchronized groups: new files must be added to the project (and to the extension target when shared)
 
 ## Development Notes
 

@@ -72,12 +72,12 @@ extension PasswordGeneratorView {
             Slider(value: $numberOfSymbols, in: 6...20, step: 1, label: {
                 Text("pgv_num_of_symbols")
             }, minimumValueLabel: {
-                Text("5")
+                Text("6")
             }, maximumValueLabel: {
                 Text("20")
             })
             .tint(Color.duckYellow)
-            .onChange(of: numberOfSymbols) { _ in
+            .onChange(of: numberOfSymbols) {
                 generatePassword()
             }
         }
@@ -94,7 +94,7 @@ extension PasswordGeneratorView {
                 VStack(spacing: 5) {
                     Text("123")
                     Toggle("", isOn: $useNumbers).labelsHidden()
-                        .onChange(of: useNumbers) { _ in
+                        .onChange(of: useNumbers) {
                             generatePassword()
                         }
                 }
@@ -103,7 +103,7 @@ extension PasswordGeneratorView {
                 VStack(spacing: 5) {
                     Text("aA")
                     Toggle("", isOn: $useCapitals).labelsHidden()
-                        .onChange(of: useCapitals) { _ in
+                        .onChange(of: useCapitals) {
                             generatePassword()
                         }
                 }
@@ -111,7 +111,7 @@ extension PasswordGeneratorView {
                 VStack(spacing: 5) {
                     Text("!@#")
                     Toggle("", isOn: $useSymbols).labelsHidden()
-                        .onChange(of: useSymbols) { _ in
+                        .onChange(of: useSymbols) {
                             generatePassword()
                         }
                 }

@@ -36,12 +36,13 @@ extension DDField {
         self.init(context: viewContext)
         title = object.title
         value = object.value
+        type = object.type.rawValue
         self.order = Int32(order)
         self.section = section
     }
-    
+
     func convert() -> Field {
-        return Field(title: self.title ?? "", value: self.value ?? "")
+        Field(title: title ?? "", value: value ?? "", type: Field.FieldType(rawValue: type ?? "") ?? .string)
     }
 }
 

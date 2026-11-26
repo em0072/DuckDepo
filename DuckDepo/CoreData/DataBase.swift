@@ -5,47 +5,49 @@
 //  Created by Evgeny Mitko on 04/11/2021.
 //
 
-import Foundation
 import CoreData
+import os
 
-class DataBase: NSObject, ObservableObject, NSFetchedResultsControllerDelegate {
-    
-    static let shared = DataBase()
-    
-    let persistenceController: PersistenceController = PersistenceController.shared
+final class DataBase {
+
+    static let shared = DataBase(persistenceController: .shared)
+
+    let persistenceController: PersistenceController
+
     var context: NSManagedObjectContext {
         persistenceController.context
     }
-    
-    public func save() {
+
+    let logger = Logger(subsystem: "DuckDepo", category: "DataBase")
+
+    init(persistenceController: PersistenceController) {
+        self.persistenceController = persistenceController
+    }
+
+    @discardableResult
+    func save() -> Bool {
         persistenceController.saveContext()
     }
-    
-    public func deleteEverything() {
-        var requests = [NSFetchRequest<NSFetchRequestResult>]()
-        let docFetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: DDDocument.entityName)
-        requests.append(docFetchRequest)
-        let passFetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: DDPassword.entityName)
-        requests.append(passFetchRequest)
+
+    /// Deletes all documents, folders and passwords on this device and, through iCloud, on the user's other devices.
+    func deleteEverything(keychain: KeychainStoring = Keychain.shared) {
+        let entityNames = [DDDocument.entityName, DDPassword.entityName, "DDFolder"]
         do {
-            for request in requests {
-                let objects = try context.fetch(request)
-                for object in objects {
-                    guard let objectData = object as? NSManagedObject else {continue}
-                    context.delete(objectData)
+            for name in entityNames {
+                let request = NSFetchRequest<NSManagedObject>(entityName: name)
+                for object in try context.fetch(request) {
+                    context.delete(object)
                 }
             }
-            persistenceController.saveContext()
-            Keychain.shared.clear()
+            save()
+            keychain.clear()
             CredentialIdentityStoreController.shared.removeAll()
-        } catch let error {
-            print("Error Deleteing everything - \(error)")
+        } catch {
+            logger.error("Deleting everything failed: \(String(describing: error), privacy: .public)")
         }
     }
-    
+
     func fetchCount(for object: CoreDataCountable.Type) -> Int {
-        return (try? context.count(for: object.fetchRequest())) ?? 0
+        (try? context.count(for: object.fetchRequest())) ?? 0
     }
-
 }
-

@@ -5,109 +5,120 @@
 //  Created by Evgeny Mitko on 01/11/2021.
 //
 
+import PhotosUI
 import SwiftUI
+import VisionKit
 
 protocol PhotosSectionViewDelegate {
-    func select(photo: UIImage)
-    func photoPicked(didPickPhoto photo: UIImage)
-    func cameraPicker(didPickPhotos photos: [UIImage])
-    func delete(photo: UIImage)
+    func select(photo: DocumentPhoto)
+    func add(photos: [DocumentPhoto])
+    func delete(photo: DocumentPhoto)
 }
 
 struct PhotosSectionView: View {
-        
-    @Binding var images: [UIImage]
+
+    let photos: [DocumentPhoto]
     var delegate: PhotosSectionViewDelegate?
-    
-    @State var showingPhotoChooser = false
-    @State var showingCameraView = false
-    @State var showingImagePicker = false
-    @State var imagePickerSelectedImage: UIImage?
-    @State var cameraPickerSelectedImages: [UIImage]?
+
+    @State private var showingPhotoChooser = false
+    @State private var showingCameraView = false
+    @State private var showingPhotoPicker = false
+    @State private var pickerItems: [PhotosPickerItem] = []
+    @State private var cameraImages: [UIImage]?
+    @State private var isProcessing = false
 
     var body: some View {
         Section {
-            ZStack {
             ScrollView(.horizontal) {
                 LazyHStack(spacing: 16) {
-                    // Add new photo cell
-                    AddCell() {
+                    AddCell {
                         showingPhotoChooser = true
                     }
-                    // Photo cells
-                    ForEach(images, id: \.self) { image in
+                    .accessibilityLabel(Text("psv_add_photo"))
+                    if isProcessing {
+                        ProgressView()
+                            .frame(width: 80)
+                    }
+                    ForEach(photos) { photo in
                         ZStack(alignment: .topTrailing) {
-                            //Photo
-                            PhotoCell(image: image) {
-                                    delegate?.select(photo: image)
-                                }
-                            //Delete photo button
+                            PhotoCell(image: photo.image) {
+                                delegate?.select(photo: photo)
+                            }
                             Button {
-                                delegate?.delete(photo: image)
+                                delegate?.delete(photo: photo)
                             } label: {
                                 Image(systemName: "multiply.circle.fill")
                                     .foregroundStyle(.white, Color.red)
                             }
                             .frame(width: 20)
                             .offset(x: 7, y: -7)
+                            .accessibilityLabel(Text("psv_delete_photo"))
                         }
                     }
-                    
                 }
                 .padding(16)
             }
-            }
-            .actionSheet(isPresented: $showingPhotoChooser) {
-                ActionSheet(title: Text("psv_photo_selection_body"), buttons: [
-                    .default(Text("psv_camera")) {
+            .confirmationDialog("psv_photo_selection_body", isPresented: $showingPhotoChooser, titleVisibility: .visible) {
+                if VNDocumentCameraViewController.isSupported {
+                    Button("psv_camera") {
                         showingCameraView = true
-                    },
-                    .default(Text("psv_photo_library")) {
-                        showingImagePicker = true
-                    },
-                    .cancel()
-                ])
+                    }
+                }
+                Button("psv_photo_library") {
+                    showingPhotoPicker = true
+                }
             }
-            .sheet(isPresented: $showingImagePicker, onDismiss: onImagePickerAction) {
-                ImagePickerView(image: $imagePickerSelectedImage)
+            .photosPicker(isPresented: $showingPhotoPicker, selection: $pickerItems, maxSelectionCount: 10, matching: .images)
+            .onChange(of: pickerItems) { _, items in
+                guard !items.isEmpty else { return }
+                loadPickedItems(items)
             }
-            .sheet(isPresented: $showingCameraView, onDismiss: onCameraPickerAction) {
-                CameraPickerView(imageArray: $cameraPickerSelectedImages)
+            .fullScreenCover(isPresented: $showingCameraView, onDismiss: onCameraDismiss) {
+                CameraPickerView(imageArray: $cameraImages)
+                    .ignoresSafeArea()
             }
-            
         } header: {
-            HStack {
-                Text("psv_photos")
-                    .font(.footnote)
-                    .foregroundColor(.neumorphicText)
-                    .textCase(.uppercase)
-                Spacer()
-            }
-            .padding(.horizontal, 16)
+            Text("psv_photos")
         }
+    }
 
+    private func loadPickedItems(_ items: [PhotosPickerItem]) {
+        pickerItems = []
+        isProcessing = true
+        Task {
+            var images: [UIImage] = []
+            for item in items {
+                if let data = try? await item.loadTransferable(type: Data.self), let image = UIImage(data: data) {
+                    images.append(image)
+                }
+            }
+            await addEncoded(images)
+        }
     }
-    
-    func onImagePickerAction() {
-        guard let selectedImage = imagePickerSelectedImage else { return }
-        delegate?.photoPicked(didPickPhoto: selectedImage)
+
+    private func onCameraDismiss() {
+        guard let images = cameraImages, !images.isEmpty else { return }
+        cameraImages = nil
+        isProcessing = true
+        Task {
+            await addEncoded(images)
+        }
     }
-    
-    func onCameraPickerAction() {
-        guard let selectedImages = cameraPickerSelectedImages, !selectedImages.isEmpty else { return }
-        delegate?.cameraPicker(didPickPhotos: selectedImages)
+
+    /// JPEG-encodes off the main thread; scanned pages are large.
+    private func addEncoded(_ images: [UIImage]) async {
+        let photos = await Task.detached(priority: .userInitiated) {
+            images.compactMap(DocumentPhoto.init(image:))
+        }.value
+        await MainActor.run {
+            isProcessing = false
+            delegate?.add(photos: photos)
+        }
     }
-    
 }
 
-struct PhotosSectionView_Previews: PreviewProvider {
-    
-    static let images = [UIImage(named: "duck")!, UIImage(named: "duck")!]
-
-    static var previews: some View {
-        List {
-            PhotosSectionView(images: .constant(PhotosSectionView_Previews.images))
-        }
-        
+#Preview {
+    List {
+        PhotosSectionView(photos: Document.test.photos)
     }
 }

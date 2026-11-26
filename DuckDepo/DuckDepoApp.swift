@@ -6,64 +6,53 @@
 //
 
 import SwiftUI
-import LocalAuthentication
+
+enum AppEnvironment {
+    /// Unit tests run inside the app; skip the real data stack and UI then.
+    static let isRunningTests = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
+}
 
 @main
 struct DuckDepoApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @Environment(\.scenePhase) private var scenePhase
-    
-    //Migration Properties
-    @AppStorage("manualMigrationV1toV2") private var manualMigrationV1toV2: Bool = true
-    @StateObject var migrationManager = ManualMigrationV1toV2()
-    
-    
-    @ObservedObject var biometricController = BiometricController.shared
 
     var body: some Scene {
         WindowGroup {
-            if manualMigrationV1toV2 && DataBase.shared.fetchCount(for: DDPassword.self) > 0 {
-                AppProgressView(progressValue: $migrationManager.progress)
-                    .onAppear(perform: {
-                        if manualMigrationV1toV2 {
-                            migrationManager.onMigrationEnd = {
-                                manualMigrationV1toV2 = false
-                            }
-                            migrationManager.startMigration()
-                        }
-                    })
+            if AppEnvironment.isRunningTests {
+                Color.clear
             } else {
-                
-                ZStack {
-                    ContentView()
-                        .environment(\.managedObjectContext, PersistenceController.shared.context)
-                        .overlay(
-                            .ultraThinMaterial
-                            .opacity(biometricController.isUnlocked ? 0 : 1)
-                        )
-                }
-                .animation(.default, value: biometricController.isUnlocked)
-                
+                ContentView()
+                    .environment(\.managedObjectContext, PersistenceController.shared.context)
+                    .background {
+                        WindowSceneReader { scene in
+                            LockWindowPresenter.shared.attach(to: scene)
+                        }
+                    }
             }
         }
-        .onChange(of: scenePhase) { (newScenePhase) in
-            switch newScenePhase {
+        .onChange(of: scenePhase) { _, newPhase in
+            guard !AppEnvironment.isRunningTests else { return }
+            let lock = BiometricController.shared
+            switch newPhase {
             case .active:
-                biometricController.onActiveState()
-                onActiveActions()
+                lock.sceneDidBecomeActive()
+                appDidBecomeActive()
             case .inactive:
-                biometricController.onInactiveState()
+                lock.sceneWillResignActive()
             case .background:
-                biometricController.onBackgroundState()
+                lock.sceneDidEnterBackground()
             @unknown default:
-                print("Apple must have added something new!")
+                break
             }
         }
-
     }
-    
-    
-    func onActiveActions() {
-        CredentialIdentityStoreController.shared.checkState()
-    }    
+
+    private func appDidBecomeActive() {
+        let persistence = PersistenceController.shared
+        guard persistence.isLoaded else { return }
+        persistence.mergeChangesFromOtherProcesses()
+        LegacyDataMigration.run(in: persistence.context, keychain: Keychain.shared)
+        CredentialIdentityStoreController.shared.refresh()
+    }
 }

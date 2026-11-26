@@ -6,58 +6,47 @@
 //
 //
 
-import Foundation
 import CoreData
-
+import Foundation
 
 extension DDPassword {
 
     static let entityName = "DDPassword"
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<DDPassword> {
-        return NSFetchRequest<DDPassword>(entityName: DDPassword.entityName)
+        NSFetchRequest<DDPassword>(entityName: DDPassword.entityName)
     }
-    
-    
 
-    @NSManaged public var id: UUID
+    /// Optional in the model: version 1 records had no ID until `LegacyDataMigration` assigns one.
+    @NSManaged public var id: UUID?
     @NSManaged public var name: String
     @NSManaged public var login: String
+    /// Only used by version 1. Values now live in the keychain; `LegacyDataMigration` clears this.
     @NSManaged public var value: String
     @NSManaged public var website: String
-    
-    var websiteURL: URL? {
-        if website.starts(with: "http") {
-            return URL(string: website)
-        } else {
-            return URL(string: "http://\(website)")
-        }
+
+    /// `nil` for a record that has no ID yet.
+    func convert() -> Password? {
+        guard let id else { return nil }
+        return Password(id: id, name: name, login: login, website: website)
     }
 
-    func convert() -> Password {
-        let password = Password(id: self.id, name: self.name, login: self.login, website: self.website)
-        return password
-    }
-    
-    func update(name: String? = nil , login: String? = nil, website: String? = nil) {
-        if let name = name {
+    func update(name: String? = nil, login: String? = nil, website: String? = nil) {
+        if let name {
             self.name = name
         }
-        if let login = login {
+        if let login {
             self.login = login
         }
-        if let website = website {
+        if let website {
             self.website = website
         }
     }
 
     static func predicate(for id: UUID) -> NSPredicate {
-        return NSPredicate(format: "id = %@", id as CVarArg)
+        NSPredicate(format: "id = %@", id as CVarArg)
     }
-
-    
 }
 
 extension DDPassword: Identifiable, CoreDataCountable {
-
 }

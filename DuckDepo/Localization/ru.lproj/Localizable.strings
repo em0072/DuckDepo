@@ -40,7 +40,6 @@
 
 // NoDocumentSelectedView
 "no_doc_view_title" = "Добро Пожаловать в DuckDepo!";
-"no_doc_view_body %@ %@" = "Ни один %@ не выбран. Пожалуйста, выберите %@ в левой панели.";
 "no_doc_view_body_docs" = "Ни один документ не выбран. Пожалуйста, выберите документ в левой панели.";
 "no_doc_view_body_passwords" = "Ни один пароль не выбран. Пожалуйста, выберите пароль в левой панели.";
 
@@ -181,15 +180,78 @@
 "sv_delete_all_button" = "Удалить все данные";
 "sv_delete_all_confirm_title" = "Вы уверены?";
 "sv_delete_all_confirm_button" = "Да, Я уверен!";
-"sv_delete_all_confirm_body" = "Это действие необратимо и приведет к удалению всех данные из приложения DuckDepo. Вы уверены, что хотите продолжить?";
+"sv_delete_all_confirm_body" = "Будут удалены все документы и пароли на этом устройстве и на всех устройствах с той же учётной записью iCloud. Это действие нельзя отменить.";
 
 
-//AppProgressView
-"apv_sorry" = "Извините!";
-"apv_duckIsBusy" = "Утка выполняет кое-какие необходимые действия. Пожалуйста, не закрывайте приложение! Это займет всего пару секунд.";
 
 //AutoFill Extension
 "af_nav_title" = "Пароли Автозаполнения";
 "af_recommended_passwords" = "Рекомендуемые Пароли";
 "af_all_passwords" = "Все Пароли";
+"dv_copy_to_clipboard" = "Скопировать";
+"dv_open_website" = "Открыть сайт";
+"sv_enable_opticid" = "Включить Optic ID";
 
+// App lock
+"lock_auth_reason" = "Разблокируйте данные DuckDepo";
+"lock_title" = "DuckDepo заблокировано";
+"lock_unlock_faceid" = "Разблокировать с Face ID";
+"lock_unlock_touchid" = "Разблокировать с Touch ID";
+"lock_unlock_opticid" = "Разблокировать с Optic ID";
+"lock_unlock_passcode" = "Разблокировать";
+
+// Common
+"copied_notification" = "Скопировано";
+"edit_button" = "Изменить";
+"discard_changes_title" = "Отменить изменения?";
+"discard_changes_button" = "Не сохранять";
+"keep_editing_button" = "Продолжить";
+"save_failed_title" = "Не удалось сохранить";
+"save_failed_body" = "Изменения не сохранены. Попробуйте ещё раз.";
+"psv_add_photo" = "Добавить фото";
+"psv_delete_photo" = "Удалить фото";
+"sv_delete_field %@" = "Удалить %@";
+"sv_delete_section %@" = "Удалить раздел %@";
+
+// Document categories
+"doc_type_identification" = "Удостоверения личности";
+"doc_type_transport" = "Транспорт";
+"doc_type_government" = "Государственные";
+"doc_type_work" = "Работа";
+"doc_type_medicine" = "Медицина";
+"doc_type_education" = "Образование";
+"doc_type_leisure" = "Досуг";
+"doc_type_other" = "Другое";
+
+// Password sharing
+"pv_share_login" = "Логин: ";
+"pv_share_password" = "Пароль: ";
+"pv_share_website" = "Сайт: ";
+"pv_show_password" = "Показать пароль";
+"pv_hide_password" = "Скрыть пароль";
+
+// AutoFill
+"af_open_app_title" = "Откройте DuckDepo";
+"af_open_app_body" = "Откройте приложение DuckDepo один раз, чтобы завершить обновление. После этого пароли появятся здесь.";
+"af_show_details" = "Подробнее";
+
+// iCloud
+"icloud_section_title" = "iCloud";
+"icloud_sync" = "Синхронизация iCloud";
+"icloud_status_syncing" = "Синхронизация…";
+"icloud_status_error" = "Ошибка";
+"icloud_status_synced %@" = "Синхронизировано %@";
+"icloud_status_on" = "Включена";
+"icloud_status_no_account" = "Нет входа в iCloud";
+"icloud_status_restricted" = "Ограничено";
+"icloud_status_unavailable" = "Недоступно";
+"icloud_keychain_footer" = "Документы и данные паролей синхронизируются через iCloud. Сами пароли синхронизируются через Связку ключей iCloud: включите «Пароли и Связка ключей» в Настройки › ваше имя › iCloud на каждом устройстве.";
+"icloud_error_quota" = "Хранилище iCloud заполнено.";
+"icloud_error_not_signed_in" = "Войдите в iCloud в Настройках, чтобы включить синхронизацию.";
+"icloud_error_network" = "Нет подключения к интернету. DuckDepo синхронизирует данные, когда связь появится.";
+"Ok" = "ОК";
+
+"sync_subtitle_syncing" = "Синхронизация с iCloud…";
+"sync_downloading_title" = "Загрузка из iCloud";
+"sync_downloading_documents" = "Документы появятся здесь по мере загрузки.";
+"sync_downloading_passwords" = "Пароли появятся здесь по мере загрузки.";

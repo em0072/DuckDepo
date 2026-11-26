@@ -8,14 +8,13 @@
 import SwiftUI
 
 struct DocSectionSection: View {
-    
+
     let section: DocSection
-    
+
     var body: some View {
         Section {
-                ForEach(0..<section.fields.count, id: \.self) { index in
-                    let field = section.fields[index]
-                        FloatingTextView(title: field.title, value: field.value)
+            ForEach(section.fields) { field in
+                FloatingTextView(title: field.title, value: field.value)
             }
         } header: {
             Text(section.name)
@@ -23,10 +22,8 @@ struct DocSectionSection: View {
     }
 }
 
-struct DocSectionSection_Previews: PreviewProvider {
-    static var previews: some View {
-        List {
-            DocSectionSection(section: Document.test.sections.first!)
-        }
+#Preview {
+    List {
+        DocSectionSection(section: Document.test.sections.first!)
     }
 }

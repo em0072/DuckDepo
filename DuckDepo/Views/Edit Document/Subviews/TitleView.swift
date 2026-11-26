@@ -18,11 +18,11 @@ struct TitleView: View {
             ZStack {
                 VStack(spacing: 0) {
                     VStack {
-                        FloatingTextField(title: "nv_doc_name".localized(), value: $name)
-                        
+                        FloatingTextField(title: "nv_doc_name".localized(), value: $name, kind: .name)
+
                         Divider()
-                        
-                        FloatingTextField(title: "nv_doc_description".localized(), value: $description)
+
+                        FloatingTextField(title: "nv_doc_description".localized(), value: $description, kind: .name)
                             .padding(.top, 4)
                         
                         Divider()
@@ -45,10 +45,10 @@ extension TitleView {
     private var categoryTextField: some View {
         HStack {
             Text("nv_doc_categoory".localized())
-                .foregroundColor(.neumorphicText)
+                .foregroundStyle(.secondary)
                 .font(.footnote)
             Spacer()
-            Text(documentType.rawValue.capitalized)
+            Text(documentType.localizedName)
                 .font(.footnote)
         }
     }
@@ -72,6 +72,8 @@ extension TitleView {
             imageForCategory(type, selcted: documentType == type)
         }
         .frame(width: 35, height: 35)
+        .accessibilityLabel(type.localizedName)
+        .accessibilityAddTraits(documentType == type ? .isSelected : [])
     }
     
     private func imageForCategory(_ type: DocumentType, selcted: Bool) -> some View {

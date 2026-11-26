@@ -63,19 +63,14 @@ private struct BiometricToggleView: View {
     
     
     private var biometricToggleSymbol: SFSymbol {
-        let type = BiometricController.shared.biometricType()
-        switch type {
+        switch BiometricController.shared.biometricType() {
         case .opticId:
-            if #available(iOS 17.0, *) {
-                return SFSymbol.opticid
-            } else {
-                return SFSymbol.eye
-            }
+            return SFSymbol.opticid
         case .face:
             return SFSymbol.faceid
         case .touch:
             return SFSymbol.touchid
-        default:
+        case .none:
             return SFSymbol._123Rectangle
         }
     }
@@ -110,13 +105,13 @@ private struct BiometricAskAfterView: View {
             return "sv_immediatley".localized()
         case .fiveSeconds:
             return "sv_5_sec".localized()
-        case .fiveteenSeconds:
+        case .fifteenSeconds:
             return "sv_15_sec".localized()
         case .minute:
             return "sv_1_min".localized()
         case .fiveMinutes:
             return "sv_5_min".localized()
-        case .fiveteenMinutes:
+        case .fifteenMinutes:
             return "sv_15_min".localized()
         }
     }

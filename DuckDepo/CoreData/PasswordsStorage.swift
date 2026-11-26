@@ -5,93 +5,124 @@
 //  Created by Evgeny Mitko on 25/11/2021.
 //
 
-import Foundation
-import CoreData
 import Combine
+import CoreData
+import Foundation
 
-class PasswordsStorage: NSObject {
-    
-    let database = DataBase.shared
-    var passwords = CurrentValueSubject<[Password], Never>([])
-    private var fetchedRequestController: NSFetchedResultsController<DDPassword>
-    
-    override init() {
+/// Password records live in Core Data; their values live in the keychain.
+///
+/// List items are published without values. Read a value with `value(for:)` only when it's needed.
+final class PasswordsStorage: NSObject {
 
-        let fetchRequest = DDPassword.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \DDPassword.name, ascending: true)]
-        fetchedRequestController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: DataBase.shared.context, sectionNameKeyPath: nil, cacheName: nil)
+    let passwords = CurrentValueSubject<[Password], Never>([])
+
+    private let database: DataBase
+    private let keychain: KeychainStoring
+    private let identityStore: CredentialIdentityStoreController?
+    private var fetchedResultsController: NSFetchedResultsController<DDPassword>?
+    private var storeObserver: NSObjectProtocol?
+
+    private var context: NSManagedObjectContext {
+        database.context
+    }
+
+    init(database: DataBase = .shared,
+         keychain: KeychainStoring = Keychain.shared,
+         identityStore: CredentialIdentityStoreController? = .shared) {
+        self.database = database
+        self.keychain = keychain
+        self.identityStore = identityStore
         super.init()
-        
-        fetchedRequestController.delegate = self
+    }
+
+    deinit {
+        if let storeObserver {
+            NotificationCenter.default.removeObserver(storeObserver)
+        }
+    }
+
+    /// Starts publishing `passwords`. Only list screens need this.
+    func startObserving() {
+        guard fetchedResultsController == nil else { return }
+        let request = DDPassword.fetchRequest()
+        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true,
+                                                    selector: #selector(NSString.localizedCaseInsensitiveCompare(_:)))]
+        let controller = NSFetchedResultsController(fetchRequest: request, managedObjectContext: context,
+                                                    sectionNameKeyPath: nil, cacheName: nil)
+        controller.delegate = self
+        fetchedResultsController = controller
+        performFetch()
+        storeObserver = NotificationCenter.default.addObserver(forName: .persistentStoresDidLoad, object: nil, queue: .main) { [weak self] _ in
+            self?.performFetch()
+        }
+    }
+
+    private func performFetch() {
+        guard let fetchedResultsController else { return }
         do {
-            try fetchedRequestController.performFetch()
-            controllerDidChangeContent(fetchedRequestController as! NSFetchedResultsController<NSFetchRequestResult>)
+            try fetchedResultsController.performFetch()
+            publish()
         } catch {
-            print("Oops, could not fetch passwords")
+            database.logger.error("Fetching passwords failed: \(String(describing: error), privacy: .public)")
         }
     }
-    
+
+    private func publish() {
+        passwords.value = (fetchedResultsController?.fetchedObjects ?? []).compactMap { $0.convert() }
+    }
+
+    // MARK: - CRUD
+
     func fetch(with id: UUID) -> DDPassword? {
-        let fetchRequest = DDPassword.fetchRequest()
-        fetchRequest.predicate = DDPassword.predicate(for: id)
-        fetchRequest.fetchLimit = 1
-        return try? database.context.fetch(fetchRequest).first
+        let request = DDPassword.fetchRequest()
+        request.predicate = DDPassword.predicate(for: id)
+        request.fetchLimit = 1
+        return try? context.fetch(request).first
     }
-    
-    func update(_ password: Password) {
-        let ddPassword = fetch(with: password.id)
-        if let ddPassword = ddPassword {
-            ddPassword.update(name: password.name, login: password.login, website: password.website)
-            setPasswordValue(password.value, for: password.id)
-            database.save()
-            //Update Identiti Store
-            CredentialIdentityStoreController.shared.save(password)
+
+    func value(for id: UUID) -> String {
+        keychain.string(forKey: id.uuidString) ?? ""
+    }
+
+    /// Inserts or updates the record and its keychain value. Returns `false` if nothing was saved.
+    @discardableResult
+    func save(_ password: Password) -> Bool {
+        let object: DDPassword
+        if let existing = fetch(with: password.id) {
+            object = existing
+        } else {
+            object = DDPassword(context: context)
+            object.id = password.id
         }
+        object.update(name: password.name, login: password.login, website: password.website)
+        guard keychain.set(password.value, forKey: password.id.uuidString) else {
+            context.rollback()
+            return false
+        }
+        guard database.save() else {
+            context.rollback()
+            return false
+        }
+        identityStore?.refresh(context: context)
+        return true
     }
-    
-    func saveNewPassword(_ password: Password) {
-        let ddPassword = DDPassword(context: database.context)
-        ddPassword.id = password.id
-        ddPassword.update(name: password.name, login: password.login, website: password.website)
-        //Update Keychain
-        setPasswordValue(password.value, for: password.id)
-        database.save()
-        //Update Identiti Store
-        CredentialIdentityStoreController.shared.save(password)
-    }
-    
+
     func delete(_ password: Password) {
-        if let ddPassword = fetch(with: password.id) {
-            database.context.delete(ddPassword)
-            database.save()
-            Keychain.shared.delete(password.id.uuidString)
-            CredentialIdentityStoreController.shared.remove(password)
+        guard let object = fetch(with: password.id) else { return }
+        context.delete(object)
+        if database.save() {
+            keychain.delete(password.id.uuidString)
+            identityStore?.refresh(context: context)
         }
     }
 
     func count() -> Int {
-        return database.fetchCount(for: DDPassword.self)
+        database.fetchCount(for: DDPassword.self)
     }
-    
-    func getPasswordValue(for id: UUID) -> String {
-        Keychain.shared.get(id.uuidString) ?? ""
-    }
-    
-    func setPasswordValue(_ value: String, for id: UUID) {
-        Keychain.shared.set(value, forKey: id.uuidString)
-    }
-    
 }
 
 extension PasswordsStorage: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        guard let passwords = controller.fetchedObjects as? [DDPassword] else {
-            return
-        }
-        self.passwords.value = passwords.map({ ddPassword in
-            var password = ddPassword.convert()
-            password.value = getPasswordValue(for: password.id)
-            return password
-        })
+        publish()
     }
 }

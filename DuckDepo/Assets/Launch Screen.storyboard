@@ -16,20 +16,19 @@
                         <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="DuckForLaunchScreen" translatesAutoresizingMaskIntoConstraints="NO" id="ujU-pf-34m">
-                                <rect key="frame" x="90" y="338" width="248" height="250"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchDuck" translatesAutoresizingMaskIntoConstraints="NO" id="ujU-pf-34m">
+                                <rect key="frame" x="104" y="370" width="220" height="186"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="ujU-pf-34m" secondAttribute="height" multiplier="124:125" id="GmF-iZ-o5A"/>
+                                    <constraint firstAttribute="width" constant="220" id="kMi-5u-qxJ"/>
+                                    <constraint firstAttribute="width" secondItem="ujU-pf-34m" secondAttribute="height" multiplier="772:654" id="GmF-iZ-o5A"/>
                                 </constraints>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
-                        <color key="backgroundColor" name="neumorphicBackground"/>
+                        <color key="backgroundColor" name="LaunchBackground"/>
                         <constraints>
                             <constraint firstItem="ujU-pf-34m" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="3BT-da-kMk"/>
-                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="trailing" secondItem="ujU-pf-34m" secondAttribute="trailing" constant="90" id="kMi-5u-qxJ"/>
                             <constraint firstItem="ujU-pf-34m" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="rvh-K3-UtW"/>
-                            <constraint firstItem="ujU-pf-34m" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" constant="90" id="zpp-SQ-Abe"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -39,9 +38,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="DuckForLaunchScreen" width="250" height="250"/>
-        <namedColor name="neumorphicBackground">
-            <color red="0.92156862745098034" green="0.92156862745098034" blue="0.92156862745098034" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        <image name="LaunchDuck" width="220" height="186"/>
+        <namedColor name="LaunchBackground">
+            <color red="1" green="0.74901960784313726" blue="0.11764705882352941" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

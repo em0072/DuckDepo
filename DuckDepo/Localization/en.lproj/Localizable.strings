@@ -31,8 +31,8 @@
 "Notes" = "Notes";
 
 //InitialInstructionsView
-"ii_headline_documents" = "You'll find you documents here!";
-"ii_headline_passwords" = "You'll find you passwords here!";
+"ii_headline_documents" = "You'll find your documents here!";
+"ii_headline_passwords" = "You'll find your passwords here!";
 "ii_caption_documents" = "Your documents are stored encrypted on your device and your iCloud account, which means that your information is fully encrypted and available only for you.";
 "ii_caption_passwords" = "Your passwords are stored encrypted on your device and your iCloud account, which means that your information is fully encrypted and available only for you.";
 
@@ -165,7 +165,7 @@
 "sv_ask_after" = "Ask after";
 "sv_passcode_not_set" = "You need to enable passcode in the phone settings to secure DuckDepo app.";
 "sv_security" = "Security";
-"sv_immediatley" = "Immediatley";
+"sv_immediatley" = "Immediately";
 "sv_5_sec" = "After 5 seconds";
 "sv_15_sec" = "After 15 seconds";
 "sv_1_min" = "After 1 minute";
@@ -184,17 +184,75 @@
 "sv_delete_all_button" = "Delete All Data";
 "sv_delete_all_confirm_title" = "Are you sure?";
 "sv_delete_all_confirm_button" = "Yes, I am sure!";
-"sv_delete_all_confirm_body" = "This action will delete all data and it cannot be undone. Are you sure you want to proceed?";
+"sv_delete_all_confirm_body" = "This deletes all documents and passwords on this device and on every device signed in to the same iCloud account. It can't be undone.";
 
 
-//AppProgressView
-"apv_sorry" = "Sorry!";
-"apv_duckIsBusy" = "The duck is performing some necessary work in the background. Please don't close the app! It will take only a couple of seconds.";
 
 //AutoFill Extension
 "af_nav_title" = "Autofill Password";
 "af_recommended_passwords" = "Recommended Passwords";
 "af_all_passwords" = "All Passwords";
 
+// App lock
+"lock_auth_reason" = "Unlock your DuckDepo data";
+"lock_title" = "DuckDepo is locked";
+"lock_unlock_faceid" = "Unlock with Face ID";
+"lock_unlock_touchid" = "Unlock with Touch ID";
+"lock_unlock_opticid" = "Unlock with Optic ID";
+"lock_unlock_passcode" = "Unlock";
 
+// Common
+"copied_notification" = "Copied";
+"edit_button" = "Edit";
+"discard_changes_title" = "Discard your changes?";
+"discard_changes_button" = "Discard Changes";
+"keep_editing_button" = "Keep Editing";
+"save_failed_title" = "Couldn't Save";
+"save_failed_body" = "Your changes weren't saved. Try again.";
+"psv_add_photo" = "Add Photo";
+"psv_delete_photo" = "Delete Photo";
+"sv_delete_field %@" = "Delete %@";
+"sv_delete_section %@" = "Delete Section %@";
 
+// Document categories
+"doc_type_identification" = "Identification";
+"doc_type_transport" = "Transport";
+"doc_type_government" = "Government";
+"doc_type_work" = "Work";
+"doc_type_medicine" = "Medicine";
+"doc_type_education" = "Education";
+"doc_type_leisure" = "Leisure";
+"doc_type_other" = "Other";
+
+// Password sharing
+"pv_share_login" = "Login: ";
+"pv_share_password" = "Password: ";
+"pv_share_website" = "Website: ";
+"pv_show_password" = "Show Password";
+"pv_hide_password" = "Hide Password";
+
+// AutoFill
+"af_open_app_title" = "Open DuckDepo";
+"af_open_app_body" = "Open the DuckDepo app once to finish updating. Your passwords will then appear here.";
+"af_show_details" = "Show Details";
+
+// iCloud
+"icloud_section_title" = "iCloud";
+"icloud_sync" = "iCloud Sync";
+"icloud_status_syncing" = "Syncing…";
+"icloud_status_error" = "Error";
+"icloud_status_synced %@" = "Synced %@";
+"icloud_status_on" = "On";
+"icloud_status_no_account" = "Not Signed In";
+"icloud_status_restricted" = "Restricted";
+"icloud_status_unavailable" = "Unavailable";
+"icloud_keychain_footer" = "Documents and password details sync through iCloud. Password values sync through iCloud Keychain: turn on Passwords and Keychain in Settings › your name › iCloud on each device.";
+"icloud_error_quota" = "Your iCloud storage is full.";
+"icloud_error_not_signed_in" = "Sign in to iCloud in Settings to sync.";
+"icloud_error_network" = "No internet connection. DuckDepo will sync when you're back online.";
+"Ok" = "OK";
+
+"sync_subtitle_syncing" = "Syncing with iCloud…";
+"sync_downloading_title" = "Downloading from iCloud";
+"sync_downloading_documents" = "Your documents will appear here as they arrive.";
+"sync_downloading_passwords" = "Your passwords will appear here as they arrive.";

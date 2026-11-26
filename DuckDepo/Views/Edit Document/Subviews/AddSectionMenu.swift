@@ -64,7 +64,7 @@ struct AddSectionMenu: View {
                         Text(section)
                     }
             }
-            Button(role: .destructive) {
+            Button {
                 self.showingAddNewSectionView = true
             } label: {
                 Text("asm_custom")

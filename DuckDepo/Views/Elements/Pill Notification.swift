@@ -35,7 +35,7 @@ struct Pill_Notification: ViewModifier {
                 .offset(y: show ? -10 : -50)
                 .opacity(show ? 1 : 0)
                 .animation(.default, value: show)
-                .onChange(of: show, perform: { newValue in
+                .onChange(of: show) { _, newValue in
                     if newValue == true {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                             withAnimation {
@@ -43,7 +43,7 @@ struct Pill_Notification: ViewModifier {
                             }
                         }
                     }
-                })
+                }
             }
             }
         }
