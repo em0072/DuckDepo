@@ -124,6 +124,7 @@ final class SettingsViewModel {
 
     func deleteEverything() {
         database.deleteEverything()
+        PhotoTextIndex.shared.removeAll()
         countPasswords()
     }
 }

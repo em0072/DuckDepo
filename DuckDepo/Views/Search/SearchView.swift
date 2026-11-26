@@ -30,6 +30,7 @@ struct SearchView: View {
     @ViewBuilder
     private var content: some View {
         let documents = viewModel.documentResults
+        let photoMatches = viewModel.photoMatches
         let passwords = viewModel.passwordResults
         if !viewModel.isSearching {
             ContentUnavailableView("search_empty_title", systemImage: "magnifyingglass",
@@ -42,7 +43,8 @@ struct SearchView: View {
                     Section("search_documents") {
                         ForEach(documents) { document in
                             NavigationLink(value: SearchDestination.document(document.id)) {
-                                DocumentRow(document: document)
+                                DocumentRow(document: document,
+                                            photoMatch: photoMatches[document.id].map { ($0, viewModel.query) })
                             }
                         }
                     }

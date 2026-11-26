@@ -53,6 +53,7 @@ struct DuckDepoApp: App {
         guard persistence.isLoaded else { return }
         persistence.mergeChangesFromOtherProcesses()
         ExpiryReminders.shared.start()
+        PhotoIndexer.shared.start()
         // Converting photos reads every photo, so do it once per launch. Until then a document shows
         // its old photo data whenever that is newer (see `DDDocument.photos()`).
         let convertPhotos = !LaunchState.didConvertPhotos

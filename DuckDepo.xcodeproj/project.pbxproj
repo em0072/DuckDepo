@@ -184,6 +184,9 @@
 		DDF86867EBBF11053931B4BF /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F0CBD5E5CFD56CD532F5A6 /* SettingsViewModel.swift */; };
 		FE372F4723B3F8ADAF3E6D64 /* ExpiryReminders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B1FC1AB7D4CA90A294C8EF /* ExpiryReminders.swift */; };
 		A41698958879786997F8BCFD /* RemindersAndSettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA416B3A01EA0856B1EE275 /* RemindersAndSettingsTests.swift */; };
+		4D64B73A62E6B935EDAE86D6 /* PhotoTextIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A0C6460E160858611BFA8C /* PhotoTextIndex.swift */; };
+		722488C6ABDC3A5D7D0530A1 /* PhotoIndexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44201520F1F76D60AA402180 /* PhotoIndexer.swift */; };
+		3937FD628A1749AAF3D4E9AE /* PhotoSearchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA96E14BD30AC74754478FA /* PhotoSearchTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -351,6 +354,9 @@
 		31F0CBD5E5CFD56CD532F5A6 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		05B1FC1AB7D4CA90A294C8EF /* ExpiryReminders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpiryReminders.swift; sourceTree = "<group>"; };
 		8DA416B3A01EA0856B1EE275 /* RemindersAndSettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersAndSettingsTests.swift; sourceTree = "<group>"; };
+		92A0C6460E160858611BFA8C /* PhotoTextIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoTextIndex.swift; sourceTree = "<group>"; };
+		44201520F1F76D60AA402180 /* PhotoIndexer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoIndexer.swift; sourceTree = "<group>"; };
+		4EA96E14BD30AC74754478FA /* PhotoSearchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSearchTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -750,6 +756,7 @@
 				0FEE6A664B976FBE8C67B175 /* ScanDraftTests.swift */,
 				C7C1DD455E4C69711182B406 /* ScanPipelineTests.swift */,
 				8DA416B3A01EA0856B1EE275 /* RemindersAndSettingsTests.swift */,
+				4EA96E14BD30AC74754478FA /* PhotoSearchTests.swift */,
 			);
 			path = DuckDepoTests;
 			sourceTree = "<group>";
@@ -773,6 +780,8 @@
 				BC21454C13BE3BB973FD032D /* ModelExtractor.swift */,
 				17F75BBBF792FE1E450061A7 /* ScanReading.swift */,
 				BB70E0845AB6D06BB3C7790D /* DocumentScanner.swift */,
+				92A0C6460E160858611BFA8C /* PhotoTextIndex.swift */,
+				44201520F1F76D60AA402180 /* PhotoIndexer.swift */,
 			);
 			path = Scanning;
 			sourceTree = "<group>";
@@ -1022,6 +1031,8 @@
 				1A8D6E939E052AD1F10FDAAD /* AboutSection.swift in Sources */,
 				DDF86867EBBF11053931B4BF /* SettingsViewModel.swift in Sources */,
 				FE372F4723B3F8ADAF3E6D64 /* ExpiryReminders.swift in Sources */,
+				4D64B73A62E6B935EDAE86D6 /* PhotoTextIndex.swift in Sources */,
+				722488C6ABDC3A5D7D0530A1 /* PhotoIndexer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1099,6 +1110,7 @@
 				A17AEE0C83043038688EEEC1 /* ScanDraftTests.swift in Sources */,
 				17B2B60F7F7D2BA1E062A27D /* ScanPipelineTests.swift in Sources */,
 				A41698958879786997F8BCFD /* RemindersAndSettingsTests.swift in Sources */,
+				3937FD628A1749AAF3D4E9AE /* PhotoSearchTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
