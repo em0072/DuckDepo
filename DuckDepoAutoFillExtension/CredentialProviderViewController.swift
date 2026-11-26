@@ -36,7 +36,8 @@ final class CredentialProviderViewController: ASCredentialProviderViewController
     /// The user picked a suggestion in the QuickType bar. Without the app lock we can fill right away;
     /// with it, ask the system to show our UI so the user can authenticate first.
     override func provideCredentialWithoutUserInteraction(for credentialRequest: any ASCredentialRequest) {
-        guard !requiresAuthentication else {
+        // A passkey is only used after Face ID or the passcode, so its response can say the user was verified.
+        guard credentialRequest.type != .passkeyAssertion, !requiresAuthentication else {
             cancel(.userInteractionRequired)
             return
         }
@@ -44,6 +45,19 @@ final class CredentialProviderViewController: ASCredentialProviderViewController
     }
 
     override func prepareInterfaceToProvideCredential(for credentialRequest: any ASCredentialRequest) {
+        if credentialRequest.type == .passkeyAssertion, let request = credentialRequest as? ASPasskeyCredentialRequest {
+            guard let identity = request.credentialIdentity as? ASPasskeyCredentialIdentity,
+                  let passkey = PasskeyStorage().passkey(credentialID: identity.credentialID) else {
+                cancel(.credentialIdentityNotFound)
+                return
+            }
+            show(PasskeyWorkingView())
+            Task {
+                await signIn(with: passkey, clientDataHash: request.clientDataHash,
+                             preference: request.userVerificationPreference)
+            }
+            return
+        }
         guard requiresAuthentication else {
             complete(credentialRequest)
             return
@@ -67,6 +81,98 @@ final class CredentialProviderViewController: ASCredentialProviderViewController
                 .task { authenticateAndFill() }
         }
         .tint(.duckYellow))
+    }
+
+    // MARK: - Passkeys
+
+    /// A site asked to sign in with a passkey and the user chose DuckDepo.
+    override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier],
+                                        requestParameters: ASPasskeyCredentialRequestParameters) {
+        let passkeys = PasskeyStorage().passkeys(for: requestParameters.relyingPartyIdentifier,
+                                                 allowed: requestParameters.allowedCredentials)
+        show(PasskeyChoiceView(relyingParty: requestParameters.relyingPartyIdentifier, passkeys: passkeys, onCancel: { [weak self] in
+            self?.cancel(.userCanceled)
+        }, onSelect: { [weak self] passkey in
+            Task {
+                await self?.signIn(with: passkey, clientDataHash: requestParameters.clientDataHash,
+                                   preference: requestParameters.userVerificationPreference)
+            }
+        }))
+    }
+
+    /// A site wants to make a passkey and the user chose DuckDepo to keep it.
+    override func prepareInterface(forPasskeyRegistration registrationRequest: any ASCredentialRequest) {
+        guard let request = registrationRequest as? ASPasskeyCredentialRequest,
+              let identity = request.credentialIdentity as? ASPasskeyCredentialIdentity,
+              request.supportedAlgorithms.contains(.ES256) else {
+            cancel(.failed)
+            return
+        }
+        // The site already has one of DuckDepo's passkeys for this account.
+        let storage = PasskeyStorage()
+        if let excluded = request.excludedCredentials,
+           excluded.contains(where: { storage.passkey(credentialID: $0.credentialID) != nil }) {
+            cancel(.matchedExcludedCredential)
+            return
+        }
+        show(PasskeyRegistrationView(relyingParty: identity.relyingPartyIdentifier, userName: identity.userName, onCancel: { [weak self] in
+            self?.cancel(.userCanceled)
+        }, onSave: { [weak self] in
+            Task {
+                await self?.register(identity: identity, request: request)
+            }
+        }))
+    }
+
+    private func register(identity: ASPasskeyCredentialIdentity, request: ASPasskeyCredentialRequest) async {
+        let verification = await UserVerification.verify(reason: String(localized: "passkey_save_reason \(identity.relyingPartyIdentifier)"))
+        guard let userVerified = Self.userVerified(verification, preference: request.userVerificationPreference) else {
+            cancel(verification == .failed ? .userCanceled : .failed)
+            return
+        }
+        let passkey = Passkey.make(relyingParty: identity.relyingPartyIdentifier, userName: identity.userName,
+                                   userHandle: identity.userHandle)
+        guard let attestation = try? PasskeyAuthenticator.attestationObject(for: passkey, userVerified: userVerified),
+              PasskeyStorage().save(passkey) else {
+            cancel(.failed)
+            return
+        }
+        CredentialIdentityStoreController.shared.add(passkey)
+        let credential = ASPasskeyRegistrationCredential(relyingParty: identity.relyingPartyIdentifier,
+                                                         clientDataHash: request.clientDataHash,
+                                                         credentialID: passkey.credentialID,
+                                                         attestationObject: attestation)
+        await extensionContext.completeRegistrationRequest(using: credential)
+    }
+
+    private func signIn(with passkey: Passkey, clientDataHash: Data,
+                        preference: ASAuthorizationPublicKeyCredentialUserVerificationPreference) async {
+        let verification = await UserVerification.verify(reason: String(localized: "passkey_sign_in_reason \(passkey.relyingParty)"))
+        guard let userVerified = Self.userVerified(verification, preference: preference) else {
+            cancel(verification == .failed ? .userCanceled : .failed)
+            return
+        }
+        guard let assertion = try? PasskeyAuthenticator.assertion(for: passkey, clientDataHash: clientDataHash,
+                                                                 userVerified: userVerified) else {
+            cancel(.failed)
+            return
+        }
+        let credential = ASPasskeyAssertionCredential(userHandle: passkey.userHandle, relyingParty: passkey.relyingParty,
+                                                      signature: assertion.signature, clientDataHash: clientDataHash,
+                                                      authenticatorData: assertion.authenticatorData,
+                                                      credentialID: passkey.credentialID)
+        await extensionContext.completeAssertionRequest(using: credential)
+    }
+
+    /// Whether to report the user as verified; nil when the request can't go ahead.
+    private static func userVerified(_ verification: UserVerification.Result,
+                                     preference: ASAuthorizationPublicKeyCredentialUserVerificationPreference) -> Bool? {
+        switch verification {
+        case .verified: true
+        case .failed: nil
+        // Without a passcode the user can't be verified; fine unless the site insists.
+        case .unavailable: preference == .required ? nil : false
+        }
     }
 
     // MARK: - Helpers

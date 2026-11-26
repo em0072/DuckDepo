@@ -562,6 +562,40 @@
         }
       }
     },
+    "autofill_step_passkey_body" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "When a site offers a passkey, choose DuckDepo to keep it. Next time, sign in with Face ID."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Когда сайт предлагает ключ входа, выберите DuckDepo, чтобы сохранить его. В следующий раз входите с Face ID."
+          }
+        }
+      }
+    },
+    "autofill_step_passkey_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use Passkeys"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Используйте ключи входа"
+          }
+        }
+      }
+    },
     "autofill_step_suggest_body" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2621,6 +2655,278 @@
         }
       }
     },
+    "passkey_created" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Created"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Создан"
+          }
+        }
+      }
+    },
+    "passkey_delete" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete Passkey"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Удалить ключ входа"
+          }
+        }
+      }
+    },
+    "passkey_delete_body %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You won’t be able to sign in to %@ with it any more. Make sure you have another way to sign in."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вы больше не сможете входить на %@ с ним. Убедитесь, что у вас есть другой способ входа."
+          }
+        }
+      }
+    },
+    "passkey_delete_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete Passkey?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Удалить ключ входа?"
+          }
+        }
+      }
+    },
+    "passkey_none_body %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DuckDepo has no passkey for %@."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "В DuckDepo нет ключа входа для %@."
+          }
+        }
+      }
+    },
+    "passkey_none_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Passkeys"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нет ключей входа"
+          }
+        }
+      }
+    },
+    "passkey_row_hint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Passkey"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ключ входа"
+          }
+        }
+      }
+    },
+    "passkey_save_body" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "It’s kept in DuckDepo and syncs to your devices through iCloud Keychain. You sign in with Face ID instead of a password."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Он хранится в DuckDepo и синхронизируется между вашими устройствами через Связку ключей iCloud. Вы входите с Face ID вместо пароля."
+          }
+        }
+      }
+    },
+    "passkey_save_button" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save Passkey"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сохранить ключ входа"
+          }
+        }
+      }
+    },
+    "passkey_save_reason %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save a passkey for %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сохранить ключ входа для %@"
+          }
+        }
+      }
+    },
+    "passkey_save_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save a Passkey?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сохранить ключ входа?"
+          }
+        }
+      }
+    },
+    "passkey_sign_in_reason %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign in to %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Войти на %@"
+          }
+        }
+      }
+    },
+    "passkey_sign_in_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign In with a Passkey"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вход с ключом входа"
+          }
+        }
+      }
+    },
+    "passkey_site" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Website"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сайт"
+          }
+        }
+      }
+    },
+    "passkey_summary" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Signs you in with Face ID instead of a password. Kept in iCloud Keychain."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Позволяет входить с Face ID вместо пароля. Хранится в Связке ключей iCloud."
+          }
+        }
+      }
+    },
+    "passkey_user" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "User Name"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Имя пользователя"
+          }
+        }
+      }
+    },
     "Passwords" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2842,6 +3148,23 @@
         }
       }
     },
+    "pl_passkeys" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Passkeys"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ключи входа"
+          }
+        }
+      }
+    },
     "Place Of Birth" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3001,13 +3324,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Password values are kept in iCloud Keychain, which is end-to-end encrypted."
+            "value" : "Passwords, passkeys and verification code keys are kept in iCloud Keychain, which is end-to-end encrypted."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Пароли хранятся в Связке ключей iCloud со сквозным шифрованием."
+            "value" : "Пароли, ключи входа и ключи кодов подтверждения хранятся в Связке ключей iCloud со сквозным шифрованием."
           }
         }
       }

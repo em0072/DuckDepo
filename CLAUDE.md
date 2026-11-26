@@ -55,6 +55,7 @@ xcodebuild -project DuckDepo.xcodeproj -scheme DuckDepo clean
 ### Security Architecture
 - **BiometricController**: Manages Face ID/Touch ID authentication
 - **Keychain Integration**: Password values live in the iCloud-synchronized keychain group (`Keychain` wraps KeychainSwift behind `KeychainStoring`); Core Data holds only name/login/website. One-time code setups (`otpauth://` links, `OneTimeCode`, RFC 6238) are stored next to them under `<id>.otp` and offered to AutoFill as `ASOneTimeCodeCredentialIdentity` (extension capability `ProvidesOneTimeCodes`)
+- **Passkeys** (`DuckDepo/Passkeys/`): DuckDepo is a WebAuthn authenticator in AutoFill (extension capability `ProvidesPasskeys`). `PasskeyAuthenticator` builds the P-256/ES256 COSE key, "none" attestation (zero AAGUID) and assertions with a small canonical `CBOR` encoder; flags say backup eligible and backed up. Each `Passkey` (credential ID, site, user, user handle, private key) is JSON in the synced keychain under `passkey.<base64url credential ID>` (`PasskeyStorage`), so nothing touches Core Data or the CloudKit schema. Creating or using one asks `UserVerification` (Face ID or passcode) first; the extension never signs without interaction. The app lists passkeys in their own section of Passwords (`PasskeyRow`, `PasskeyView`, delete only)
 - **App Locking**: `BiometricController` + `LockWindowPresenter` (a separate window above all sheets). Lock state is never persisted; the app always starts locked when the lock is on
 - **LegacyDataMigration**: idempotent repair of v1 data, runs on every activation
 
@@ -63,7 +64,7 @@ xcodebuild -project DuckDepo.xcodeproj -scheme DuckDepo clean
 - Each list is a selection-based `NavigationSplitView` (sidebar list, detail column on iPad, push on iPhone), with swipe actions and context menus
 - Editors are sheets with close/confirm toolbar buttons (`Button(role: .close)` / `.confirm`) and a discard confirmation
 - Photos open in `PhotoViewer` (full screen, zoom transition from the tapped photo); on the document they show in `PhotoGallery` (a row at each photo's own shape, or one photo at full width)
-- Settings: an overview card (counts, documents to renew), rows with `ColorfulIconLabelStyle` tiles (`.labelStyle(.tile(color))`), Security (lock, clipboard), Reminders, Sync and AutoFill (status from `ASCredentialIdentityStore`), About (Privacy page, version)
+- Settings: an overview card (counts, with passkeys counted as passwords; documents to renew), rows with `ColorfulIconLabelStyle` tiles (`.labelStyle(.tile(color))`), Security (lock, clipboard), Reminders, Sync and AutoFill (status from `ASCredentialIdentityStore`), About (Privacy page, version)
 
 ## Key Components
 

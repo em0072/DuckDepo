@@ -10,6 +10,8 @@
 			<dict>
 				<key>ProvidesOneTimeCodes</key>
 				<true/>
+				<key>ProvidesPasskeys</key>
+				<true/>
 				<key>ProvidesPasswords</key>
 				<true/>
 			</dict>
@@ -19,5 +21,7 @@
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.authentication-services-credential-provider-ui</string>
 	</dict>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Face ID unlocks your passwords and confirms passkeys</string>
 </dict>
 </plist>

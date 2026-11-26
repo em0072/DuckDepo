@@ -15,6 +15,8 @@ protocol KeychainStoring: AnyObject {
     @discardableResult func set(_ value: String, forKey key: String) -> Bool
     @discardableResult func delete(_ key: String) -> Bool
     @discardableResult func clear() -> Bool
+    /// The keys of every item DuckDepo has in the keychain.
+    func allKeys() -> [String]
 }
 
 /// Password values live in the shared, iCloud-synchronized keychain group so the AutoFill
@@ -53,5 +55,9 @@ final class Keychain: KeychainStoring {
     @discardableResult
     func clear() -> Bool {
         keychain.clear()
+    }
+
+    func allKeys() -> [String] {
+        keychain.allKeys
     }
 }
