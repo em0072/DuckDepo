@@ -1,8 +1,8 @@
 //
-//  PhotosSection.swift
+//  PhotosSectionView.swift
 //  DuckDepo
 //
-//  Created by Evgeny Mitko on 01/11/2021.
+//  Created by Evgeny Mitko on 04/07/2022.
 //
 
 import PhotosUI
@@ -18,6 +18,8 @@ protocol PhotosSectionViewDelegate {
 struct PhotosSectionView: View {
 
     let photos: [DocumentPhoto]
+    /// For zooming the viewer out of the tapped photo.
+    let namespace: Namespace.ID
     var delegate: PhotosSectionViewDelegate?
 
     @State private var showingPhotoChooser = false
@@ -27,37 +29,48 @@ struct PhotosSectionView: View {
     @State private var cameraImages: [UIImage]?
     @State private var isProcessing = false
 
+    @ScaledMetric(relativeTo: .body) private var cellSize: CGFloat = 84
+
     var body: some View {
         Section {
             ScrollView(.horizontal) {
-                LazyHStack(spacing: 16) {
+                HStack(spacing: 12) {
                     AddCell {
                         showingPhotoChooser = true
                     }
+                    .frame(width: cellSize, height: cellSize)
                     .accessibilityLabel(Text("psv_add_photo"))
                     if isProcessing {
                         ProgressView()
-                            .frame(width: 80)
+                            .frame(width: cellSize, height: cellSize)
                     }
-                    ForEach(photos) { photo in
-                        ZStack(alignment: .topTrailing) {
-                            PhotoCell(image: photo.image) {
-                                delegate?.select(photo: photo)
-                            }
+                    ForEach(Array(photos.enumerated()), id: \.element.id) { index, photo in
+                        PhotoCell(image: photo.image) {
+                            delegate?.select(photo: photo)
+                        }
+                        .matchedTransitionSource(id: photo.id, in: namespace)
+                        .frame(width: cellSize, height: cellSize)
+                        .overlay(alignment: .topTrailing) {
                             Button {
                                 delegate?.delete(photo: photo)
                             } label: {
-                                Image(systemName: "multiply.circle.fill")
-                                    .foregroundStyle(.white, Color.red)
+                                Image(systemName: "xmark.circle.fill")
+                                    .font(.title3)
+                                    .symbolRenderingMode(.palette)
+                                    .foregroundStyle(.white, .black.opacity(0.6))
                             }
-                            .frame(width: 20)
-                            .offset(x: 7, y: -7)
+                            .buttonStyle(.plain)
+                            .padding(4)
                             .accessibilityLabel(Text("psv_delete_photo"))
                         }
+                        .accessibilityElement(children: .contain)
+                        .accessibilityLabel(Text("photo_n_of_m \(index + 1) \(photos.count)"))
                     }
                 }
-                .padding(16)
+                .padding(.vertical, 12)
             }
+            .scrollIndicators(.hidden)
+            .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
             .confirmationDialog("psv_photo_selection_body", isPresented: $showingPhotoChooser, titleVisibility: .visible) {
                 if VNDocumentCameraViewController.isSupported {
                     Button("psv_camera") {
@@ -118,7 +131,8 @@ struct PhotosSectionView: View {
 }
 
 #Preview {
-    List {
-        PhotosSectionView(photos: Document.test.photos)
+    @Previewable @Namespace var namespace
+    Form {
+        PhotosSectionView(photos: Document.test.photos, namespace: namespace)
     }
 }

@@ -34,7 +34,7 @@ struct LockScreenView: View {
                     }
                     .buttonStyle(.borderedProminent)
                     .tint(.duckYellow)
-                    .foregroundStyle(.black)
+                    .foregroundStyle(.onDuckYellow)
                     .controlSize(.large)
                     .disabled(controller.isAuthenticating)
                 }

@@ -1,26 +1,28 @@
 //
-//  NewDepoListViewModel.swift
+//  DepoListViewModel.swift
 //  DuckDepo
 //
-//  Created by Evgeny Mitko on 17/06/2022.
+//  Created by Evgeny Mitko on 01/07/2022.
 //
 
 import Combine
 import Foundation
 
-/// Cheap to create: SwiftUI may build and discard several instances; only the one on screen starts fetching.
 @Observable
 final class DepoListViewModel {
 
     var documents: [Document] = []
+    var searchText = ""
     var isAddingNewDocument = false
 
     @ObservationIgnored private var cancellables = Set<AnyCancellable>()
     @ObservationIgnored private var dataStorage: DocumentsStorage?
     @ObservationIgnored private let makeStorage: () -> DocumentsStorage
+    @ObservationIgnored private let database: DataBase
 
-    init(makeStorage: @escaping () -> DocumentsStorage = { DocumentsStorage() }) {
-        self.makeStorage = makeStorage
+    init(database: DataBase = .shared, makeStorage: (() -> DocumentsStorage)? = nil) {
+        self.database = database
+        self.makeStorage = makeStorage ?? { DocumentsStorage(database: database) }
     }
 
     /// Starts fetching documents. Safe to call more than once.
@@ -35,11 +37,25 @@ final class DepoListViewModel {
             .store(in: &cancellables)
     }
 
+    /// The documents matching the search, by type.
+    var groups: [DocumentGroup] {
+        DocumentSearch.groups(for: documents, matching: searchText)
+    }
+
+    func document(with id: Document.ID?) -> Document? {
+        guard let id else { return nil }
+        return documents.first { $0.id == id }
+    }
+
     var editDocumentViewModel: EditDocumentViewModel {
-        EditDocumentViewModel(type: .new)
+        EditDocumentViewModel(type: .new, database: database)
     }
 
     func addNewDocumentButtonPressed() {
         isAddingNewDocument = true
+    }
+
+    func delete(_ document: Document) {
+        _ = database.delete(document)
     }
 }

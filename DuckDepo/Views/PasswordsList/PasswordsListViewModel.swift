@@ -1,5 +1,5 @@
 //
-//  NewPasswordsListViewModel.swift
+//  PasswordsListViewModel.swift
 //  DuckDepo
 //
 //  Created by Evgeny Mitko on 27/06/2022.
@@ -8,11 +8,11 @@
 import Combine
 import Foundation
 
-/// Cheap to create: SwiftUI may build and discard several instances; only the one on screen starts fetching.
 @Observable
 final class PasswordsListViewModel {
 
     var passwords: [Password] = []
+    var searchText = ""
     var isAddingNewPassword = false
 
     @ObservationIgnored private var cancellables = Set<AnyCancellable>()
@@ -36,7 +36,30 @@ final class PasswordsListViewModel {
             .store(in: &cancellables)
     }
 
+    var filteredPasswords: [Password] {
+        passwords.filter { $0.matches(searchText) }
+    }
+
+    func password(with id: Password.ID?) -> Password? {
+        guard let id else { return nil }
+        return passwords.first { $0.id == id }
+    }
+
     func addNewPasswordButtonPressed() {
         isAddingNewPassword = true
+    }
+
+    func copyLogin(of password: Password) {
+        ClipboardController.shared.copy(string: password.login)
+    }
+
+    /// List items carry no value; this reads it from the keychain.
+    func copyValue(of password: Password) {
+        guard let value = dataStorage?.value(for: password.id), !value.isEmpty else { return }
+        ClipboardController.shared.copy(string: value)
+    }
+
+    func delete(_ password: Password) {
+        dataStorage?.delete(password)
     }
 }

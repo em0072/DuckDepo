@@ -2,7 +2,7 @@
 //  PasswordView.swift
 //  DuckDepo
 //
-//  Created by Evgeny Mitko on 25/11/2021.
+//  Created by Evgeny Mitko on 27/06/2022.
 //
 
 import SwiftUI
@@ -10,10 +10,12 @@ import SwiftUI
 struct PasswordView: View {
 
     @Environment(\.dismiss) private var dismiss
-
     @State var viewModel: PasswordViewModel
+    /// The list's copy, to notice changes that arrive from iCloud.
+    private let password: Password
 
     init(password: Password) {
+        self.password = password
         _viewModel = State(initialValue: PasswordViewModel(password: password))
     }
 
@@ -23,10 +25,13 @@ struct PasswordView: View {
             websiteSection
         }
         .navigationTitle(viewModel.password.name)
-        .onAppear(perform: viewModel.load)
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear(perform: viewModel.load)
+        .onChange(of: password) { _, password in
+            viewModel.listItemChanged(password)
+        }
         .toolbar {
-            ToolbarItemGroup(placement: .topBarTrailing) {
+            ToolbarItemGroup(placement: .primaryAction) {
                 Button {
                     viewModel.showShareAlert = true
                 } label: {
@@ -51,7 +56,7 @@ struct PasswordView: View {
                 ShareSheetView(items: items)
             }
         }
-        .fullScreenCover(isPresented: $viewModel.isEditingPassword) {
+        .sheet(isPresented: $viewModel.isEditingPassword) {
             EditPasswordView(type: .existing(viewModel.password), delegate: viewModel)
         }
         .onChange(of: viewModel.shouldDismissView) { _, shouldDismiss in
@@ -68,24 +73,15 @@ extension PasswordView {
         Section {
             if viewModel.shouldShowCredentialsSection {
                 if viewModel.isLoginExist {
-                    FloatingTextView(title: "pv_login".localized(), value: viewModel.password.login)
+                    FieldValueRow(title: "pv_login".localized(), value: viewModel.password.login)
                 }
                 if viewModel.isPasswordExist {
-                    HStack {
-                        FloatingTextView(title: "pv_password".localized(), value: viewModel.password.value,
-                                         isMonospaced: true, isVisible: $viewModel.isPasswordVisible)
-                        Button {
-                            viewModel.isPasswordVisible.toggle()
-                        } label: {
-                            Image(systemName: viewModel.isPasswordVisible ? "eye.slash" : "eye")
-                        }
-                        .tint(.duckYellow)
-                        .buttonStyle(.plain)
-                        .accessibilityLabel(Text(viewModel.isPasswordVisible ? "pv_hide_password" : "pv_show_password"))
-                    }
+                    FieldValueRow(title: "pv_password".localized(), value: viewModel.password.value,
+                                  isSecret: true, isMonospaced: true)
                 }
             } else {
                 Text("pv_empty_credentials")
+                    .foregroundStyle(.secondary)
             }
         } header: {
             Text("pv_credentials")
@@ -96,7 +92,8 @@ extension PasswordView {
     private var websiteSection: some View {
         if viewModel.isWebsiteExist {
             Section {
-                FloatingTextView(title: "pv_website".localized(), value: viewModel.password.website, url: viewModel.password.websiteURL)
+                FieldValueRow(title: "pv_website".localized(), value: viewModel.password.website,
+                              url: viewModel.password.websiteURL)
             } header: {
                 Text("pv_additional_information")
             }

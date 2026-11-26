@@ -20,14 +20,7 @@ final class DocumentViewModel {
     var showShareOptions = false
     var showShareSheetView = false
     var showEditDocumentView = false
-    var showingImageViewer = false
     var shouldDismissView = false
-
-    var selectedPhoto: DocumentPhoto? {
-        didSet {
-            showingImageViewer = selectedPhoto != nil
-        }
-    }
 
     @ObservationIgnored var itemsToShare = [Any]()
 
@@ -40,6 +33,11 @@ final class DocumentViewModel {
     func load() {
         guard !isLoaded else { return }
         isLoaded = true
+        reload()
+    }
+
+    /// Reads the document again, for when it changed (edited, or synced from another device).
+    func reload() {
         if let full = db.fullDocument(with: document.id) {
             document = full
         }

@@ -16,7 +16,6 @@ final class PasswordViewModel {
     var showShareAlert = false
     var showShareSheetView = false
     var isEditingPassword = false
-    var isPasswordVisible = false
     var shouldDismissView = false
 
     @ObservationIgnored var itemsToShare: [Any]?
@@ -32,6 +31,16 @@ final class PasswordViewModel {
     func load() {
         guard !isLoaded else { return }
         isLoaded = true
+        password.value = storage.value(for: password.id)
+    }
+
+    /// The list's copy changed (edited here, or synced from another device): show its name, login and
+    /// website, and read the value again in case it changed too.
+    func listItemChanged(_ listItem: Password) {
+        guard listItem.id == password.id else { return }
+        password.name = listItem.name
+        password.login = listItem.login
+        password.website = listItem.website
         password.value = storage.value(for: password.id)
     }
 

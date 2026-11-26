@@ -27,21 +27,42 @@ enum FieldDate {
         components(from: storedValue).flatMap { utcCalendar.date(from: $0) }
     }
 
-    /// The day at the start of the day in the user's calendar, for a date picker.
-    static func localDate(from storedValue: String, calendar: Calendar = .current) -> Date? {
+    /// The day at the start of the day in the user's time zone, for a date picker.
+    static func localDate(from storedValue: String, calendar: Calendar = localCalendar) -> Date? {
         components(from: storedValue).flatMap { calendar.date(from: $0) }
     }
 
-    static func storedValue(fromLocalDate date: Date, calendar: Calendar = .current) -> String? {
+    static func storedValue(fromLocalDate date: Date, calendar: Calendar = localCalendar) -> String? {
         storedValue(from: calendar.dateComponents([.year, .month, .day], from: date))
+    }
+
+    /// Gregorian in the user's time zone. Stored days are Gregorian, so converting with `Calendar.current`
+    /// would store the wrong year for someone using, say, the Buddhist or Japanese calendar.
+    static var localCalendar: Calendar {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = .current
+        return calendar
+    }
+
+    /// Whole days from the day of `date` in `calendar`'s time zone to a day stored as midnight UTC.
+    /// Negative when the day has passed.
+    static func days(from date: Date, toUTCDay utcDay: Date, calendar: Calendar = localCalendar) -> Int {
+        let today = calendar.dateComponents([.year, .month, .day], from: date)
+        guard let todayUTC = utcCalendar.date(from: today) else { return 0 }
+        return utcCalendar.dateComponents([.day], from: todayUTC, to: utcDay).day ?? 0
+    }
+
+    /// A day stored as midnight UTC in the user's format.
+    static func displayString(forUTCDay date: Date, locale: Locale = .current) -> String {
+        var style = Date.FormatStyle(date: .long, time: .omitted, locale: locale)
+        style.timeZone = .gmt
+        return date.formatted(style)
     }
 
     /// The day in the user's format, or the value as is if it isn't a stored date.
     static func displayString(for storedValue: String, locale: Locale = .current) -> String {
         guard let date = utcDate(from: storedValue) else { return storedValue }
-        var style = Date.FormatStyle(date: .long, time: .omitted, locale: locale)
-        style.timeZone = .gmt
-        return date.formatted(style)
+        return displayString(forUTCDay: date, locale: locale)
     }
 
     /// Converts a date typed into an older version, only when it can be read just one way:

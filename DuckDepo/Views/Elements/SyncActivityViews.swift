@@ -9,7 +9,12 @@ import SwiftUI
 /// so a fresh install doesn't look like all the data is gone.
 struct DownloadingFromICloudView: View {
 
-    let type: InitialInstructionsView.ViewType
+    enum ViewType {
+        case documents
+        case passwords
+    }
+
+    let type: ViewType
 
     var body: some View {
         ContentUnavailableView {

@@ -2,7 +2,7 @@
 //  ContentView.swift
 //  DuckDepo
 //
-//  Created by Evgeny Mitko on 25/10/2021.
+//  Created by Evgeny Mitko on 01/07/2022.
 //
 
 import SwiftUI
@@ -13,21 +13,15 @@ struct ContentView: View {
 
     var body: some View {
         TabView {
-            DepoListView(viewModel: DepoListViewModel())
-                .tabItem {
-                    Label("Depo", systemImage: "archivebox")
-                }
-                .tag(1)
-            PasswordsListView(viewModel: PasswordsListViewModel())
-                .tabItem {
-                    Label("Passwords", systemImage: "key.fill")
-                }
-                .tag(2)
-            SettingsView()
-                .tabItem {
-                    Label("Settings", systemImage: "gear")
-                }
-                .tag(3)
+            Tab("Depo", systemImage: "archivebox") {
+                DepoListView(viewModel: DepoListViewModel())
+            }
+            Tab("Passwords", systemImage: "key") {
+                PasswordsListView(viewModel: PasswordsListViewModel())
+            }
+            Tab("Settings", systemImage: "gear") {
+                SettingsView()
+            }
         }
         .tint(.duckYellow)
         .onReceive(NotificationCenter.default.publisher(for: .floatingTextFieldCopyNotification)) { _ in

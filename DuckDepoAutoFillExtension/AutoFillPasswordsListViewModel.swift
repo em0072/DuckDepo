@@ -50,13 +50,7 @@ final class AutoFillPasswordsListViewModel {
     }
 
     var filteredPasswords: [Password] {
-        let query = searchText.trimmingCharacters(in: .whitespaces)
-        guard !query.isEmpty else { return passwords }
-        return passwords.filter {
-            $0.name.localizedCaseInsensitiveContains(query)
-                || $0.login.localizedCaseInsensitiveContains(query)
-                || $0.website.localizedCaseInsensitiveContains(query)
-        }
+        passwords.filter { $0.matches(searchText) }
     }
 
     static func recommended(from passwords: [Password], for identifiers: [String]) -> [Password] {

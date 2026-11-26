@@ -20,13 +20,13 @@ struct AutoFillPasswordsListView: View {
                 .navigationTitle("af_nav_title")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
-                    ToolbarItem(placement: .topBarLeading) {
-                        CloseButton {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button(role: .close) {
                             onClose?()
                         }
                     }
                     if viewModel.isStoreReady && !viewModel.isLocked {
-                        ToolbarItem(placement: .topBarTrailing) {
+                        ToolbarItem(placement: .primaryAction) {
                             Button {
                                 viewModel.addNewPasswordButtonPressed()
                             } label: {
@@ -35,7 +35,7 @@ struct AutoFillPasswordsListView: View {
                         }
                     }
                 }
-                .fullScreenCover(isPresented: $viewModel.isAddingNewPassword) {
+                .sheet(isPresented: $viewModel.isAddingNewPassword) {
                     EditPasswordView(type: .new)
                 }
                 .sheet(item: $viewModel.selectedPassword) { password in
@@ -58,7 +58,11 @@ struct AutoFillPasswordsListView: View {
                     viewModel.unlock()
                 }
         } else if viewModel.passwords.isEmpty {
-            InitialInstructionsView(type: .passwords)
+            ContentUnavailableView {
+                Label("ii_headline_passwords", systemImage: "key")
+            } description: {
+                Text("ii_caption_passwords")
+            }
         } else {
             listView
                 .searchable(text: $viewModel.searchText)
@@ -98,9 +102,8 @@ struct AutoFillPasswordsListView: View {
                 viewModel.showPassword(password)
             } label: {
                 Image(systemName: "info.circle")
-                    .foregroundStyle(Color.duckYellow)
             }
-            .buttonStyle(.plain)
+            .buttonStyle(.borderless)
             .accessibilityLabel(Text("af_show_details"))
         }
     }
@@ -121,7 +124,7 @@ struct AutoFillUnlockView: View {
             Button("lock_unlock_passcode", action: onUnlock)
                 .buttonStyle(.borderedProminent)
                 .tint(.duckYellow)
-                .foregroundStyle(.black)
+                .foregroundStyle(.onDuckYellow)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }

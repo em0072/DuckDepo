@@ -2,7 +2,7 @@
 //  SectionView.swift
 //  DuckDepo
 //
-//  Created by Evgeny Mitko on 02/11/2021.
+//  Created by Evgeny Mitko on 04/07/2022.
 //
 
 import SwiftUI
@@ -14,35 +14,38 @@ protocol SectionViewDelegate {
     func fieldIsDuplicate(named name: String, inSection sectionID: UUID) -> Bool
 }
 
-/// Editable sections. Each text field is bound to its field by ID, so deleting a field
-/// can't shift values into the wrong rows.
+/// The document's sections, each with its fields, a way to add fields and a menu to remove the section.
 struct SectionView: View {
 
     @Binding var sections: [DocSection]
     var delegate: SectionViewDelegate?
 
-    @State private var showingAddNewFieldView = false
     @State private var customFieldSectionID: UUID?
+    @State private var customFieldName = ""
     @State private var showDuplicatedAlert = false
 
     var body: some View {
         ForEach($sections) { $section in
             Section {
                 ForEach($section.fields) { $field in
-                    HStack {
-                        fieldEditor($field)
-                        deleteFieldButton(field, sectionID: section.id)
+                    fieldEditor($field)
+                }
+                .onDelete { offsets in
+                    let ids = offsets.map { section.fields[$0].id }
+                    for id in ids {
+                        delegate?.deleteField(id, inSection: section.id)
                     }
                 }
-                addField(for: section)
+                addFieldButton(for: section)
             } header: {
                 sectionHeader(for: section)
             }
         }
-        .sheet(isPresented: $showingAddNewFieldView) {
-            AddNewView(isPresented: $showingAddNewFieldView, duplicateAlertPresented: $showDuplicatedAlert, type: .field, onSave: addCustomField)
-                .presentationDetents([.height(250)])
-                .presentationDragIndicator(.visible)
+        .alert("anv_new_field", isPresented: isAddingCustomField) {
+            TextField("anv_text_filed_new_name_field", text: $customFieldName)
+            Button("add_button", action: addCustomField)
+                .disabled(customFieldName.trimmingCharacters(in: .whitespaces).isEmpty)
+            Button("cancel_button", role: .cancel) {}
         }
         .alert("sv_duplicate_title", isPresented: $showDuplicatedAlert) {
             Button("Ok", role: .cancel) {}
@@ -58,31 +61,20 @@ struct SectionView: View {
            field.wrappedValue.value.isEmpty || FieldDate.components(from: field.wrappedValue.value) != nil {
             DateFieldRow(title: field.wrappedValue.displayTitle, value: field.value)
         } else {
-            FloatingTextField(title: field.wrappedValue.displayTitle, value: field.value)
+            LabeledTextField(title: field.wrappedValue.displayTitle, value: field.value,
+                             kind: field.wrappedValue.isMultiline ? .multiline : .text)
         }
-    }
-
-    private func deleteFieldButton(_ field: Field, sectionID: UUID) -> some View {
-        Button {
-            delegate?.deleteField(field.id, inSection: sectionID)
-        } label: {
-            Image(systemName: "multiply.circle")
-                .foregroundStyle(.red)
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel(Text("sv_delete_field \(field.displayTitle)"))
     }
 
     @ViewBuilder
-    private func addField(for section: DocSection) -> some View {
+    private func addFieldButton(for section: DocSection) -> some View {
         let suggestions = section.missingPredefinedFields
         if suggestions.isEmpty {
             Button {
-                showCustomFieldSheet(for: section)
+                startCustomField(in: section)
             } label: {
-                addFieldButtonLabel
+                Label("sv_add_field", systemImage: "plus.circle.fill")
             }
-            .buttonStyle(RoundedRectYellowButtonStyle())
         } else {
             Menu {
                 ForEach(suggestions, id: \.self) { key in
@@ -90,56 +82,60 @@ struct SectionView: View {
                         delegate?.addField(key.makeField(), toSection: section.id)
                     }
                 }
+                Divider()
                 Button("sv_custom") {
-                    showCustomFieldSheet(for: section)
+                    startCustomField(in: section)
                 }
             } label: {
-                addFieldButtonLabel
+                Label("sv_add_field", systemImage: "plus.circle.fill")
             }
-            .menuStyle(RoundedRectYellowMenuStyle())
         }
-    }
-
-    private var addFieldButtonLabel: some View {
-        Label("sv_add_field", systemImage: "plus")
-            .font(.callout)
-            .bold()
-            .foregroundStyle(Color.duckYellow)
-            .padding(.vertical, 14)
-            .frame(maxWidth: .infinity)
     }
 
     private func sectionHeader(for section: DocSection) -> some View {
         HStack {
             Text(section.displayName)
             Spacer()
-            Button {
-                delegate?.deleteSection(section.id)
+            Menu {
+                Button(role: .destructive) {
+                    delegate?.deleteSection(section.id)
+                } label: {
+                    Label("remove_section", systemImage: "trash")
+                }
             } label: {
-                Image(systemName: "multiply.circle.fill")
-                    .foregroundStyle(.white, .red)
+                Image(systemName: "ellipsis.circle")
+                    .font(.body)
             }
-            .accessibilityLabel(Text("sv_delete_section \(section.displayName)"))
+            .accessibilityLabel(Text("section_options \(section.displayName)"))
         }
     }
 
-    private func showCustomFieldSheet(for section: DocSection) {
-        customFieldSectionID = section.id
-        showingAddNewFieldView = true
+    private var isAddingCustomField: Binding<Bool> {
+        Binding {
+            customFieldSectionID != nil
+        } set: { isPresented in
+            if !isPresented {
+                customFieldSectionID = nil
+            }
+        }
     }
 
-    private func addCustomField(_ name: String) {
-        guard let sectionID = customFieldSectionID else { return }
+    private func startCustomField(in section: DocSection) {
+        customFieldName = ""
+        customFieldSectionID = section.id
+    }
+
+    private func addCustomField() {
+        let name = customFieldName.trimmingCharacters(in: .whitespaces)
+        guard let sectionID = customFieldSectionID, !name.isEmpty else { return }
         if delegate?.fieldIsDuplicate(named: name, inSection: sectionID) ?? false {
             showDuplicatedAlert = true
         } else {
             delegate?.addField(Field(title: name), toSection: sectionID)
-            showingAddNewFieldView = false
         }
     }
 }
 
-/// A date field: "Add Date" until a day is picked, then a date picker.
 struct DateFieldRow: View {
 
     let title: String
@@ -156,13 +152,10 @@ struct DateFieldRow: View {
                 Text(title)
             }
         } else {
-            HStack {
-                Text(title)
-                Spacer()
+            LabeledContent(title) {
                 Button("date_add") {
                     value = FieldDate.storedValue(fromLocalDate: Date()) ?? ""
                 }
-                .tint(.duckYellow)
             }
         }
     }
@@ -174,8 +167,7 @@ struct DateFieldRow: View {
                    fields: [FieldKey.number.makeField(), FieldKey.expiryDate.makeField()]),
         DocSection(name: "Transport", fields: [Field(title: "Make", value: "Audi"), Field(title: "Model")])
     ]
-    List {
+    Form {
         SectionView(sections: $sections)
     }
-    .listStyle(.insetGrouped)
 }

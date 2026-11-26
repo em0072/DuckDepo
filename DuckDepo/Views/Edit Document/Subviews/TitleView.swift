@@ -1,97 +1,35 @@
 //
-//  NameView.swift
+//  TitleView.swift
 //  DuckDepo
 //
-//  Created by Evgeny Mitko on 10/11/2021.
+//  Created by Evgeny Mitko on 04/07/2022.
 //
 
 import SwiftUI
 
+/// The document's name, description and category.
 struct TitleView: View {
-    
+
     @Binding var name: String
     @Binding var description: String
     @Binding var documentType: DocumentType
-    
+
     var body: some View {
         Section {
-            ZStack {
-                VStack(spacing: 0) {
-                    VStack {
-                        FloatingTextField(title: "nv_doc_name".localized(), value: $name, kind: .name)
-
-                        Divider()
-
-                        FloatingTextField(title: "nv_doc_description".localized(), value: $description, kind: .name)
-                            .padding(.top, 4)
-                        
-                        Divider()
-                        
-                        categoryTextField
-                            .padding(.top, 4)
-                    }
-                    .padding(.top, 12)
-                    .padding(.horizontal, 16)
-                    
-                    categoryPickerView
-                }
-            }
-        }
-    }
-    
-}
-
-extension TitleView {
-    private var categoryTextField: some View {
-        HStack {
-            Text("nv_doc_categoory".localized())
-                .foregroundStyle(.secondary)
-                .font(.footnote)
-            Spacer()
-            Text(documentType.localizedName)
-                .font(.footnote)
-        }
-    }
-    
-    private var categoryPickerView: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 14) {
+            LabeledTextField(title: "nv_doc_name".localized(), value: $name, kind: .name)
+            LabeledTextField(title: "nv_doc_description".localized(), value: $description, kind: .name)
+            Picker("nv_doc_categoory", selection: $documentType) {
                 ForEach(DocumentType.allCases) { type in
-                    buttonForCategory(type)
+                    Label(type.localizedName, systemImage: type.symbolName)
+                        .tag(type)
                 }
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 16)
-        }
-    }
-    
-    private func buttonForCategory(_ type: DocumentType) -> some View {
-        Button {
-            documentType = type
-        } label: {
-            imageForCategory(type, selcted: documentType == type)
-        }
-        .frame(width: 35, height: 35)
-        .accessibilityLabel(type.localizedName)
-        .accessibilityAddTraits(documentType == type ? .isSelected : [])
-    }
-    
-    private func imageForCategory(_ type: DocumentType, selcted: Bool) -> some View {
-        if selcted {
-            return type.image
-                .symbolRenderingMode(SymbolRenderingMode.palette)
-                .foregroundStyle(.white, type.iconColor)
-        } else {
-            return type.image
-                .symbolRenderingMode(SymbolRenderingMode.palette)
-                .foregroundStyle(type.iconColor, Color.neumorphicBackground)
-
         }
     }
 }
 
-struct NameView_Previews: PreviewProvider {
-    static var previews: some View {
+#Preview {
+    Form {
         TitleView(name: .constant("Title"), description: .constant("Description"), documentType: .constant(.education))
     }
 }
