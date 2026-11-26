@@ -250,3 +250,8 @@
 "icloud_error_not_signed_in" = "Войдите в iCloud в Настройках, чтобы включить синхронизацию.";
 "icloud_error_network" = "Нет подключения к интернету. DuckDepo синхронизирует данные, когда связь появится.";
 "Ok" = "ОК";
+
+"sync_subtitle_syncing" = "Синхронизация с iCloud…";
+"sync_downloading_title" = "Загрузка из iCloud";
+"sync_downloading_documents" = "Документы появятся здесь по мере загрузки.";
+"sync_downloading_passwords" = "Пароли появятся здесь по мере загрузки.";

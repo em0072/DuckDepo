@@ -31,8 +31,8 @@
 "Notes" = "Notes";
 
 //InitialInstructionsView
-"ii_headline_documents" = "You'll find you documents here!";
-"ii_headline_passwords" = "You'll find you passwords here!";
+"ii_headline_documents" = "You'll find your documents here!";
+"ii_headline_passwords" = "You'll find your passwords here!";
 "ii_caption_documents" = "Your documents are stored encrypted on your device and your iCloud account, which means that your information is fully encrypted and available only for you.";
 "ii_caption_passwords" = "Your passwords are stored encrypted on your device and your iCloud account, which means that your information is fully encrypted and available only for you.";
 
@@ -251,3 +251,8 @@
 "icloud_error_not_signed_in" = "Sign in to iCloud in Settings to sync.";
 "icloud_error_network" = "No internet connection. DuckDepo will sync when you're back online.";
 "Ok" = "OK";
+
+"sync_subtitle_syncing" = "Syncing with iCloud…";
+"sync_downloading_title" = "Downloading from iCloud";
+"sync_downloading_documents" = "Your documents will appear here as they arrive.";
+"sync_downloading_passwords" = "Your passwords will appear here as they arrive.";

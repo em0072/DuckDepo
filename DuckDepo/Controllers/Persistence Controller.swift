@@ -280,11 +280,17 @@ final class PersistenceController {
     /// then deploy the schema to Production in the CloudKit Console.
     private func initializeCloudKitSchemaIfRequested() {
         guard ProcessInfo.processInfo.arguments.contains("-InitializeCloudKitSchema") else { return }
-        do {
-            try container.initializeCloudKitSchema(options: [])
-            logger.notice("CloudKit schema initialized")
-        } catch {
-            logger.error("CloudKit schema initialization failed: \(String(describing: error), privacy: .public)")
+        // Not on the main thread: the call waits for CloudKit, and CloudKit delivers its sync events to
+        // main-queue observers (SyncMonitor) while it works, so blocking main stalls it until the 30 s timeout.
+        let container = container
+        let logger = logger
+        DispatchQueue.global(qos: .userInitiated).async {
+            do {
+                try container.initializeCloudKitSchema(options: [])
+                logger.notice("CloudKit schema initialized")
+            } catch {
+                logger.error("CloudKit schema initialization failed: \(String(describing: error), privacy: .public)")
+            }
         }
     }
     #endif

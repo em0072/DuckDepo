@@ -10,17 +10,21 @@ import SwiftUI
 struct DepoListView: View {
 
     @StateObject var viewModel: DepoListViewModel
+    @ObservedObject private var syncMonitor = SyncMonitor.shared
 
     var body: some View {
         NavigationSplitView {
             Group {
-                if viewModel.documents.isEmpty {
-                    InitialInstructionsView(type: .documents)
-                } else {
+                if !viewModel.documents.isEmpty {
                     listView
+                } else if syncMonitor.showsActivity && syncMonitor.isDownloading {
+                    DownloadingFromICloudView(type: .documents)
+                } else {
+                    InitialInstructionsView(type: .documents)
                 }
             }
             .navigationTitle("🦆 Depo")
+            .syncActivitySubtitle(syncMonitor)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: viewModel.addNewDocumentButtonPressed) {

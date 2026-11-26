@@ -16,11 +16,13 @@ struct LockScreenView: View {
             Color(uiColor: .systemBackground)
                 .ignoresSafeArea()
             VStack(spacing: 20) {
-                Image(.duckForLaunchScreen)
+                // The app icon in miniature: same duck and background as the icon and launch screen.
+                Image(.launchDuck)
                     .resizable()
                     .scaledToFit()
+                    .padding(18)
                     .frame(width: 120, height: 120)
-                    .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
+                    .background(Color(.launchBackground), in: RoundedRectangle(cornerRadius: 28, style: .continuous))
                     .accessibilityHidden(true)
                 if controller.isLocked {
                     Text("lock_title")

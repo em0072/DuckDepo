@@ -10,21 +10,25 @@ import SwiftUI
 struct PasswordsListView: View {
 
     @StateObject var viewModel: PasswordsListViewModel
+    @ObservedObject private var syncMonitor = SyncMonitor.shared
 
     var body: some View {
         NavigationSplitView {
             Group {
-                if viewModel.passwords.isEmpty {
-                    InitialInstructionsView(type: .passwords)
-                } else {
+                if !viewModel.passwords.isEmpty {
                     List(viewModel.passwords) { password in
                         NavigationLink(value: password) {
                             PasswordRow(name: password.name, login: password.login)
                         }
                     }
+                } else if syncMonitor.showsActivity && syncMonitor.isDownloading {
+                    DownloadingFromICloudView(type: .passwords)
+                } else {
+                    InitialInstructionsView(type: .passwords)
                 }
             }
             .navigationTitle("plv_title")
+            .syncActivitySubtitle(syncMonitor)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: viewModel.addNewPasswordButtonPressed) {

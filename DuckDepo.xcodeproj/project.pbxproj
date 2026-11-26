@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7D1C0A1E2F3A4B5C6D7E8F91 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 7D1C0A1E2F3A4B5C6D7E8F90 /* AppIcon.icon */; };
 		7502B5EC27312E3C00E9F0C8 /* AddSectionMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7502B5EB27312E3C00E9F0C8 /* AddSectionMenu.swift */; };
 		7502B5F027316F2E00E9F0C8 /* SectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7502B5EF27316F2E00E9F0C8 /* SectionView.swift */; };
 		7502B5F227318F7400E9F0C8 /* FloatingTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7502B5F127318F7300E9F0C8 /* FloatingTextView.swift */; };
@@ -167,6 +168,7 @@
 		F992C26682E6C96C8DB7973B /* EditDocumentViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02EF417E05BFE534BAD5A7FC /* EditDocumentViewModelTests.swift */; };
 		713A2797F7374219C61DEA95 /* AppLockTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C443DA79BF20ABCBD0A21403 /* AppLockTests.swift */; };
 		D9556BB038794C91A2012DE1 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 27CDE854F84CA890CFE17BDD /* InfoPlist.strings */; };
+		41492C720A32FC2B6B440E24 /* SyncActivityViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46C0C0F8A9762C64012677A8 /* SyncActivityViews.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -201,6 +203,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7D1C0A1E2F3A4B5C6D7E8F90 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		7502B5EB27312E3C00E9F0C8 /* AddSectionMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSectionMenu.swift; sourceTree = "<group>"; };
 		7502B5EF27316F2E00E9F0C8 /* SectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionView.swift; sourceTree = "<group>"; };
 		7502B5F127318F7300E9F0C8 /* FloatingTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingTextView.swift; sourceTree = "<group>"; };
@@ -318,6 +321,7 @@
 		C443DA79BF20ABCBD0A21403 /* AppLockTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLockTests.swift; sourceTree = "<group>"; };
 		F799B40059C701DBB8FF5EF2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		29F58F57816F8D1EA560A97E /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		46C0C0F8A9762C64012677A8 /* SyncActivityViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncActivityViews.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -432,6 +436,7 @@
 		756A0D5A2758B7BB00CD29E0 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				7D1C0A1E2F3A4B5C6D7E8F90 /* AppIcon.icon */,
 				756AF0B32726C324001CB821 /* Assets.xcassets */,
 				75973026273A7D2600A105A7 /* Predefiened Field Options.json */,
 				756A0D5E2758B99500CD29E0 /* Launch Screen.storyboard */,
@@ -570,6 +575,7 @@
 				75102F6228607C0800464528 /* ImageViewer.swift */,
 				757DB2C42A582F9B008B8A54 /* CloseButton.swift */,
 				756204D22C2AB4B200855C1E /* ContextMenuView.swift */,
+				46C0C0F8A9762C64012677A8 /* SyncActivityViews.swift */,
 			);
 			path = Elements;
 			sourceTree = "<group>";
@@ -834,6 +840,7 @@
 				756AF0B72726C324001CB821 /* Preview Assets.xcassets in Resources */,
 				756A0D5F2758B99500CD29E0 /* Launch Screen.storyboard in Resources */,
 				756AF0B42726C324001CB821 /* Assets.xcassets in Resources */,
+				7D1C0A1E2F3A4B5C6D7E8F91 /* AppIcon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -947,6 +954,7 @@
 				7EFAAFE2189009788EF5B691 /* DomainMatcher.swift in Sources */,
 				E3A15F18E769B9727C83802B /* LockScreenView.swift in Sources */,
 				2260C6BDDFEFF8F8B49F47CF /* ICloudSection.swift in Sources */,
+				41492C720A32FC2B6B440E24 /* SyncActivityViews.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
