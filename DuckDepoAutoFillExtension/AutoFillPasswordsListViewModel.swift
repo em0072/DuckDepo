@@ -9,22 +9,23 @@ import AuthenticationServices
 import Combine
 import Foundation
 
-final class AutoFillPasswordsListViewModel: ObservableObject {
+@Observable
+final class AutoFillPasswordsListViewModel {
 
-    @Published var passwords: [Password] = []
-    @Published var recommendedPasswords: [Password] = []
-    @Published var selectedPassword: Password?
-    @Published var isAddingNewPassword = false
-    @Published var searchText = ""
-    @Published private(set) var isLocked: Bool
+    var passwords: [Password] = []
+    var recommendedPasswords: [Password] = []
+    var selectedPassword: Password?
+    var isAddingNewPassword = false
+    var searchText = ""
+    private(set) var isLocked: Bool
 
     let identifiers: [String]
     /// `false` until the app has been opened once after updating and moved its data where the extension can read it.
     let isStoreReady: Bool
 
-    private let lock: BiometricController
-    private var storage: PasswordsStorage?
-    private var cancellables = Set<AnyCancellable>()
+    @ObservationIgnored private let lock: BiometricController
+    @ObservationIgnored private var storage: PasswordsStorage?
+    @ObservationIgnored private var cancellables = Set<AnyCancellable>()
 
     init(identifiers: [String],
          isStoreReady: Bool = DefaultsController.shared.isSharedStoreReady,

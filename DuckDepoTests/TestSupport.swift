@@ -69,14 +69,22 @@ enum TestStack {
 }
 
 extension DocumentPhoto {
-    /// A small solid-color photo.
-    static func sample(width: Int = 40, height: Int = 30) -> DocumentPhoto {
+    /// A small solid-color photo. Photos are identified by their bytes, so use different colors for different photos.
+    static func sample(width: Int = 40, height: Int = 30, color: UIColor = .systemYellow) -> DocumentPhoto {
         let format = UIGraphicsImageRendererFormat.default()
         format.scale = 1
         let image = UIGraphicsImageRenderer(size: CGSize(width: width, height: height), format: format).image { context in
-            UIColor.systemYellow.setFill()
+            color.setFill()
             context.fill(CGRect(x: 0, y: 0, width: width, height: height))
         }
         return DocumentPhoto(image: image)!
+    }
+}
+
+extension DDDocument {
+    /// What version 2.6 writes: photos only as an archived array in `photoData`.
+    func setPhotosLikeVersion26(_ photos: [DocumentPhoto]) {
+        photoData = photos.isEmpty ? nil : try? NSKeyedArchiver.archivedData(
+            withRootObject: photos.map { $0.data as NSData } as NSArray, requiringSecureCoding: true)
     }
 }

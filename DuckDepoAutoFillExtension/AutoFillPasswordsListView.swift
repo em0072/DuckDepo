@@ -10,7 +10,7 @@ import SwiftUI
 
 struct AutoFillPasswordsListView: View {
 
-    @StateObject var viewModel: AutoFillPasswordsListViewModel
+    @State var viewModel: AutoFillPasswordsListViewModel
     var onClose: (() -> Void)?
     var onSelect: ((ASPasswordCredential) -> Void)?
 

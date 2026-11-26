@@ -20,6 +20,8 @@ extension DDField {
     @NSManaged public var value: String?
     @NSManaged public var order: Int32
     @NSManaged public var type: String?
+    /// A `FieldKey` raw value for predefined fields (2.7+).
+    @NSManaged public var key: String?
     @NSManaged public var section: DDSection?
 
 }
@@ -34,6 +36,7 @@ extension DDField {
     
     convenience init(viewContext: NSManagedObjectContext, object: Field, order: Int, section: DDSection?) {
         self.init(context: viewContext)
+        key = object.key
         title = object.title
         value = object.value
         type = object.type.rawValue
@@ -42,7 +45,7 @@ extension DDField {
     }
 
     func convert() -> Field {
-        Field(title: title ?? "", value: value ?? "", type: Field.FieldType(rawValue: type ?? "") ?? .string)
+        Field(key: key, title: title ?? "", value: value ?? "", type: Field.FieldType(rawValue: type ?? "") ?? .string)
     }
 }
 

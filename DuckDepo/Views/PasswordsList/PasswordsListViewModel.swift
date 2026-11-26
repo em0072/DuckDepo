@@ -8,18 +8,28 @@
 import Combine
 import Foundation
 
-final class PasswordsListViewModel: ObservableObject {
+/// Cheap to create: SwiftUI may build and discard several instances; only the one on screen starts fetching.
+@Observable
+final class PasswordsListViewModel {
 
-    @Published var passwords: [Password] = []
-    @Published var isAddingNewPassword = false
+    var passwords: [Password] = []
+    var isAddingNewPassword = false
 
-    private var cancellables = Set<AnyCancellable>()
-    private let dataStorage: PasswordsStorage
+    @ObservationIgnored private var cancellables = Set<AnyCancellable>()
+    @ObservationIgnored private var dataStorage: PasswordsStorage?
+    @ObservationIgnored private let makeStorage: () -> PasswordsStorage
 
-    init(dataStorage: PasswordsStorage = PasswordsStorage()) {
-        self.dataStorage = dataStorage
-        dataStorage.startObserving()
-        dataStorage.passwords
+    init(makeStorage: @escaping () -> PasswordsStorage = { PasswordsStorage() }) {
+        self.makeStorage = makeStorage
+    }
+
+    /// Starts fetching passwords. Safe to call more than once.
+    func start() {
+        guard dataStorage == nil else { return }
+        let storage = makeStorage()
+        dataStorage = storage
+        storage.startObserving()
+        storage.passwords
             .sink { [weak self] passwords in
                 self?.passwords = passwords
             }

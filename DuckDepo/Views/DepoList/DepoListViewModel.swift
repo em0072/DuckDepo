@@ -8,17 +8,27 @@
 import Combine
 import Foundation
 
-final class DepoListViewModel: ObservableObject {
+/// Cheap to create: SwiftUI may build and discard several instances; only the one on screen starts fetching.
+@Observable
+final class DepoListViewModel {
 
-    @Published var documents: [Document] = []
-    @Published var isAddingNewDocument = false
+    var documents: [Document] = []
+    var isAddingNewDocument = false
 
-    private var cancellables = Set<AnyCancellable>()
-    private let dataStorage: DocumentsStorage
+    @ObservationIgnored private var cancellables = Set<AnyCancellable>()
+    @ObservationIgnored private var dataStorage: DocumentsStorage?
+    @ObservationIgnored private let makeStorage: () -> DocumentsStorage
 
-    init(dataStorage: DocumentsStorage = DocumentsStorage()) {
-        self.dataStorage = dataStorage
-        dataStorage.documents
+    init(makeStorage: @escaping () -> DocumentsStorage = { DocumentsStorage() }) {
+        self.makeStorage = makeStorage
+    }
+
+    /// Starts fetching documents. Safe to call more than once.
+    func start() {
+        guard dataStorage == nil else { return }
+        let storage = makeStorage()
+        dataStorage = storage
+        storage.documents
             .sink { [weak self] documents in
                 self?.documents = documents
             }

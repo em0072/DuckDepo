@@ -52,7 +52,19 @@ struct DuckDepoApp: App {
         let persistence = PersistenceController.shared
         guard persistence.isLoaded else { return }
         persistence.mergeChangesFromOtherProcesses()
-        LegacyDataMigration.run(in: persistence.context, keychain: Keychain.shared)
-        CredentialIdentityStoreController.shared.refresh()
+        // Converting photos reads every photo, so do it once per launch. Until then a document shows
+        // its old photo data whenever that is newer (see `DDDocument.photos()`).
+        let convertPhotos = !LaunchState.didConvertPhotos
+        LaunchState.didConvertPhotos = true
+        persistence.performMaintenance { context in
+            LegacyDataMigration.run(in: context, keychain: Keychain.shared, convertPhotos: convertPhotos)
+            DispatchQueue.main.async {
+                CredentialIdentityStoreController.shared.refresh()
+            }
+        }
     }
+}
+
+private enum LaunchState {
+    static var didConvertPhotos = false
 }

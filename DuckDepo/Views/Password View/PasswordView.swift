@@ -11,10 +11,10 @@ struct PasswordView: View {
 
     @Environment(\.dismiss) private var dismiss
 
-    @StateObject var viewModel: PasswordViewModel
+    @State var viewModel: PasswordViewModel
 
     init(password: Password) {
-        _viewModel = StateObject(wrappedValue: PasswordViewModel(password: password))
+        _viewModel = State(initialValue: PasswordViewModel(password: password))
     }
 
     var body: some View {
@@ -23,6 +23,7 @@ struct PasswordView: View {
             websiteSection
         }
         .navigationTitle(viewModel.password.name)
+        .onAppear(perform: viewModel.load)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItemGroup(placement: .topBarTrailing) {

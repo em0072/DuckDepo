@@ -10,19 +10,20 @@ import SwiftUI
 struct EditPasswordView: View {
     @Environment(\.dismiss) private var dismiss
 
-    /// A `@StateObject`, so typed values survive the parent redrawing (e.g. when iCloud delivers changes).
-    @StateObject private var viewModel: EditPasswordViewModel
+    /// `@State`, so typed values survive the parent redrawing (e.g. when iCloud delivers changes).
+    @State private var viewModel: EditPasswordViewModel
     @State private var isShowingDeleteAlert = false
     @State private var isShowingPassGenerator = false
     @State private var isShowingDiscardDialog = false
 
     init(type: EditPasswordViewModel.PasswordType = .new, delegate: EditPasswordViewModelDelegate? = nil) {
-        _viewModel = StateObject(wrappedValue: EditPasswordViewModel(type: type, delegate: delegate))
+        _viewModel = State(initialValue: EditPasswordViewModel(type: type, delegate: delegate))
     }
 
     var body: some View {
         NavigationStack {
             contentView
+                .onAppear(perform: viewModel.load)
                 .navigationTitle(viewModel.viewTitle)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {

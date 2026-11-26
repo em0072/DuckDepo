@@ -16,26 +16,42 @@ import os
 ///
 /// This migration keeps existing IDs, never overwrites a keychain value, and clears the old copy once
 /// the keychain holds the value, so it has nothing left to do afterwards.
+///
+/// Version 2.7 adds keys to predefined sections and fields, real date fields, an expiry date per document,
+/// and a record per photo. Every step gives the same result on every device, so two devices migrating
+/// the same synced data agree. Version 2.6 keeps writing sections, fields and `photoData` without these,
+/// so each step runs again for whatever it changed.
 enum LegacyDataMigration {
 
     struct Result: Equatable {
         var movedPasswordValues = 0
         var assignedPasswordIDs = 0
         var assignedDocumentIDs = 0
+        var assignedSectionKeys = 0
+        var assignedFieldKeys = 0
+        var convertedDates = 0
+        var updatedExpiryDates = 0
+        var convertedPhotoDocuments = 0
+        var removedDuplicatePhotos = 0
 
         var didChange: Bool {
-            movedPasswordValues + assignedPasswordIDs + assignedDocumentIDs > 0
+            movedPasswordValues + assignedPasswordIDs + assignedDocumentIDs + assignedSectionKeys + assignedFieldKeys
+                + convertedDates + updatedExpiryDates + convertedPhotoDocuments + removedDuplicatePhotos > 0
         }
     }
 
     private static let logger = Logger(subsystem: "DuckDepo", category: "Migration")
 
     @discardableResult
-    static func run(in context: NSManagedObjectContext, keychain: KeychainStoring) -> Result {
+    /// - Parameter convertPhotos: Reads every document's photo data, so the app does it once per launch.
+    static func run(in context: NSManagedObjectContext, keychain: KeychainStoring, convertPhotos: Bool = true) -> Result {
         var result = Result()
         context.performAndWait {
             migratePasswords(in: context, keychain: keychain, result: &result)
             assignDocumentIDs(in: context, result: &result)
+            assignSectionKeys(in: context, result: &result)
+            assignFieldKeysAndConvertDates(in: context, result: &result)
+            updateDocuments(in: context, convertPhotos: convertPhotos, result: &result)
             guard context.hasChanges else { return }
             do {
                 try context.save()
@@ -46,7 +62,7 @@ enum LegacyDataMigration {
             }
         }
         if result.didChange {
-            logger.notice("Migrated \(result.movedPasswordValues) password values, \(result.assignedPasswordIDs) password IDs, \(result.assignedDocumentIDs) document IDs")
+            logger.notice("Migrated \(result.movedPasswordValues) password values, \(result.assignedPasswordIDs) password IDs, \(result.assignedDocumentIDs) document IDs, \(result.assignedSectionKeys) section keys, \(result.assignedFieldKeys) field keys, \(result.convertedDates) dates, \(result.updatedExpiryDates) expiry dates, \(result.convertedPhotoDocuments) photo sets; removed \(result.removedDuplicatePhotos) duplicate photos")
         }
         return result
     }
@@ -81,6 +97,59 @@ enum LegacyDataMigration {
         for document in documents {
             document.identifier = UUID()
             result.assignedDocumentIDs += 1
+        }
+    }
+
+    private static func assignSectionKeys(in context: NSManagedObjectContext, result: inout Result) {
+        let request = DDSection.fetchRequest()
+        request.predicate = NSPredicate(format: "key == nil")
+        guard let sections = try? context.fetch(request) else { return }
+        for section in sections {
+            guard let key = FieldCatalog.sectionKey(forStoredName: section.name ?? "") else { continue }
+            section.key = key.rawValue
+            result.assignedSectionKeys += 1
+        }
+    }
+
+    /// Keys fields by their stored title, then turns predefined date fields whose text reads as exactly
+    /// one day into real dates. Text that could mean two days (01/02/2032) is left as typed.
+    private static func assignFieldKeysAndConvertDates(in context: NSManagedObjectContext, result: inout Result) {
+        let request = DDField.fetchRequest()
+        request.predicate = NSPredicate(format: "key == nil OR type == nil OR type != %@", Field.FieldType.date.rawValue)
+        guard let fields = try? context.fetch(request) else { return }
+        for field in fields {
+            if field.key == nil, let key = FieldCatalog.fieldKey(forStoredTitle: field.title ?? "") {
+                field.key = key.rawValue
+                result.assignedFieldKeys += 1
+            }
+            guard let key = field.key.flatMap(FieldKey.init(rawValue:)), key.type == .date,
+                  field.type != Field.FieldType.date.rawValue else { continue }
+            let text = field.value ?? ""
+            if text.isEmpty {
+                field.type = Field.FieldType.date.rawValue
+            } else if let day = FieldDate.parseLegacy(text) {
+                field.value = day
+                field.type = Field.FieldType.date.rawValue
+                result.convertedDates += 1
+            }
+        }
+    }
+
+    /// Converts photos to records, removes duplicate records and fills in expiry dates.
+    private static func updateDocuments(in context: NSManagedObjectContext, convertPhotos: Bool, result: inout Result) {
+        let request = DDDocument.fetchRequest()
+        request.relationshipKeyPathsForPrefetching = ["sections", "sections.fields", "photoRecords"]
+        guard let documents = try? context.fetch(request) else { return }
+        for document in documents {
+            if convertPhotos {
+                if document.convertLegacyPhotosIfNeeded() {
+                    result.convertedPhotoDocuments += 1
+                }
+                result.removedDuplicatePhotos += document.removeDuplicatePhotoRecords()
+            }
+            if document.refreshExpiryDate() {
+                result.updatedExpiryDates += 1
+            }
         }
     }
 }

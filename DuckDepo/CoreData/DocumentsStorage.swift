@@ -126,6 +126,8 @@ extension DataBase {
         stored.name = document.name
         stored.updateType(newType: document.documentType)
         stored.documentDescription = document.description
+        stored.updatedAt = Date()
+        stored.expiresAt = document.expiryDate
         stored.setPhotos(document.photos)
         for (index, section) in document.sections.enumerated() {
             stored.addToSections(DDSection(viewContext: context, object: section, order: index, document: stored))

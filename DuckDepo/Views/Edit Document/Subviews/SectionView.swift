@@ -9,9 +9,9 @@ import SwiftUI
 
 protocol SectionViewDelegate {
     func deleteSection(_ sectionID: UUID)
-    func addField(named name: String, toSection sectionID: UUID)
+    func addField(_ field: Field, toSection sectionID: UUID)
     func deleteField(_ fieldID: UUID, inSection sectionID: UUID)
-    func fieldIsDuplicate(_ name: String, inSection sectionID: UUID) -> Bool
+    func fieldIsDuplicate(named name: String, inSection sectionID: UUID) -> Bool
 }
 
 /// Editable sections. Each text field is bound to its field by ID, so deleting a field
@@ -19,7 +19,6 @@ protocol SectionViewDelegate {
 struct SectionView: View {
 
     @Binding var sections: [DocSection]
-    var options: [SectionOption]
     var delegate: SectionViewDelegate?
 
     @State private var showingAddNewFieldView = false
@@ -31,7 +30,7 @@ struct SectionView: View {
             Section {
                 ForEach($section.fields) { $field in
                     HStack {
-                        FloatingTextField(title: field.title, value: $field.value)
+                        fieldEditor($field)
                         deleteFieldButton(field, sectionID: section.id)
                     }
                 }
@@ -52,6 +51,17 @@ struct SectionView: View {
         }
     }
 
+    @ViewBuilder
+    private func fieldEditor(_ field: Binding<Field>) -> some View {
+        // A date field whose text an older version wrote and that couldn't be read as one day stays text.
+        if field.wrappedValue.type == .date,
+           field.wrappedValue.value.isEmpty || FieldDate.components(from: field.wrappedValue.value) != nil {
+            DateFieldRow(title: field.wrappedValue.displayTitle, value: field.value)
+        } else {
+            FloatingTextField(title: field.wrappedValue.displayTitle, value: field.value)
+        }
+    }
+
     private func deleteFieldButton(_ field: Field, sectionID: UUID) -> some View {
         Button {
             delegate?.deleteField(field.id, inSection: sectionID)
@@ -60,12 +70,12 @@ struct SectionView: View {
                 .foregroundStyle(.red)
         }
         .buttonStyle(.plain)
-        .accessibilityLabel(Text("sv_delete_field \(field.title)"))
+        .accessibilityLabel(Text("sv_delete_field \(field.displayTitle)"))
     }
 
     @ViewBuilder
     private func addField(for section: DocSection) -> some View {
-        let suggestions = possibleFields(in: section)
+        let suggestions = section.missingPredefinedFields
         if suggestions.isEmpty {
             Button {
                 showCustomFieldSheet(for: section)
@@ -75,9 +85,9 @@ struct SectionView: View {
             .buttonStyle(RoundedRectYellowButtonStyle())
         } else {
             Menu {
-                ForEach(suggestions, id: \.self) { name in
-                    Button(name) {
-                        delegate?.addField(named: name, toSection: section.id)
+                ForEach(suggestions, id: \.self) { key in
+                    Button(key.localizedName) {
+                        delegate?.addField(key.makeField(), toSection: section.id)
                     }
                 }
                 Button("sv_custom") {
@@ -99,16 +109,9 @@ struct SectionView: View {
             .frame(maxWidth: .infinity)
     }
 
-    private func possibleFields(in section: DocSection) -> [String] {
-        guard let option = options.first(where: { $0.name == section.name }) else { return [] }
-        return option.fields.map(\.name).filter { name in
-            !(delegate?.fieldIsDuplicate(name, inSection: section.id) ?? false)
-        }
-    }
-
     private func sectionHeader(for section: DocSection) -> some View {
         HStack {
-            Text(section.name)
+            Text(section.displayName)
             Spacer()
             Button {
                 delegate?.deleteSection(section.id)
@@ -116,7 +119,7 @@ struct SectionView: View {
                 Image(systemName: "multiply.circle.fill")
                     .foregroundStyle(.white, .red)
             }
-            .accessibilityLabel(Text("sv_delete_section \(section.name)"))
+            .accessibilityLabel(Text("sv_delete_section \(section.displayName)"))
         }
     }
 
@@ -127,22 +130,52 @@ struct SectionView: View {
 
     private func addCustomField(_ name: String) {
         guard let sectionID = customFieldSectionID else { return }
-        if delegate?.fieldIsDuplicate(name, inSection: sectionID) ?? false {
+        if delegate?.fieldIsDuplicate(named: name, inSection: sectionID) ?? false {
             showDuplicatedAlert = true
         } else {
-            delegate?.addField(named: name, toSection: sectionID)
+            delegate?.addField(Field(title: name), toSection: sectionID)
             showingAddNewFieldView = false
+        }
+    }
+}
+
+/// A date field: "Add Date" until a day is picked, then a date picker.
+struct DateFieldRow: View {
+
+    let title: String
+    /// "yyyy-MM-dd", or empty.
+    @Binding var value: String
+
+    var body: some View {
+        if let date = FieldDate.localDate(from: value) {
+            DatePicker(selection: Binding(get: { date }, set: { newDate in
+                if let stored = FieldDate.storedValue(fromLocalDate: newDate) {
+                    value = stored
+                }
+            }), displayedComponents: .date) {
+                Text(title)
+            }
+        } else {
+            HStack {
+                Text(title)
+                Spacer()
+                Button("date_add") {
+                    value = FieldDate.storedValue(fromLocalDate: Date()) ?? ""
+                }
+                .tint(.duckYellow)
+            }
         }
     }
 }
 
 #Preview {
     @Previewable @State var sections = [
-        DocSection(name: "IDs", fields: [Field(title: "Number", value: "12324311"), Field(title: "Date", value: "01.01.2022")]),
+        DocSection(key: SectionKey.documentInfo.rawValue, name: "Document Info",
+                   fields: [FieldKey.number.makeField(), FieldKey.expiryDate.makeField()]),
         DocSection(name: "Transport", fields: [Field(title: "Make", value: "Audi"), Field(title: "Model")])
     ]
     List {
-        SectionView(sections: $sections, options: InputOption().sections)
+        SectionView(sections: $sections)
     }
     .listStyle(.insetGrouped)
 }

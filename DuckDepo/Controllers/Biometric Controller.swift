@@ -7,6 +7,7 @@
 
 import Foundation
 import LocalAuthentication
+import Observation
 
 /// App lock state.
 ///
@@ -14,7 +15,8 @@ import LocalAuthentication
 ///   or a kill can't leave the app unlocked.
 /// - `isObscured` hides the content whenever the app isn't active (app switcher snapshot, Control Center).
 /// - The "ask after" delay counts from the moment the app went to the background.
-final class BiometricController: ObservableObject {
+@Observable
+final class BiometricController {
 
     enum BiometricType {
         case none
@@ -49,7 +51,7 @@ final class BiometricController: ObservableObject {
 
     static let shared = BiometricController()
 
-    @Published var isBiometryEnabled: Bool {
+    var isBiometryEnabled: Bool {
         didSet {
             defaults.isBiometryEnabled = isBiometryEnabled
             if !isBiometryEnabled {
@@ -59,26 +61,35 @@ final class BiometricController: ObservableObject {
         }
     }
 
-    @Published var biometricDelay: BiometricDelay {
+    var biometricDelay: BiometricDelay {
         didSet {
             defaults.biometricDelay = biometricDelay.rawValue
         }
     }
 
-    @Published private(set) var isLocked: Bool
-    @Published private(set) var isObscured = false
-    @Published private(set) var isAuthenticating = false
+    private(set) var isLocked: Bool {
+        didSet { reportContentHidden() }
+    }
+    private(set) var isObscured = false {
+        didSet { reportContentHidden() }
+    }
+    private(set) var isAuthenticating = false
+
+    /// Called synchronously whenever `isContentHidden` changes. Observation reports changes later, which
+    /// is too late for the cover to be in place before the app-switcher snapshot.
+    @ObservationIgnored var onContentHiddenChange: ((Bool) -> Void)?
+    @ObservationIgnored private var reportedContentHidden: Bool?
 
     /// `true` while content must be hidden.
     var isContentHidden: Bool {
         isLocked || isObscured
     }
 
-    private let defaults: DefaultsController
-    private let now: () -> Date
-    private let canAuthenticate: () -> Bool
-    private let authenticator: Authenticator
-    private var backgroundedAt: Date?
+    @ObservationIgnored private let defaults: DefaultsController
+    @ObservationIgnored private let now: () -> Date
+    @ObservationIgnored private let canAuthenticate: () -> Bool
+    @ObservationIgnored private let authenticator: Authenticator
+    @ObservationIgnored private var backgroundedAt: Date?
 
     init(
         defaults: DefaultsController = .shared,
@@ -132,6 +143,13 @@ final class BiometricController: ObservableObject {
         if biometricDelay == .none {
             isLocked = true
         }
+    }
+
+    private func reportContentHidden() {
+        let hidden = isContentHidden
+        guard hidden != reportedContentHidden else { return }
+        reportedContentHidden = hidden
+        onContentHiddenChange?(hidden)
     }
 
     // MARK: - Authentication

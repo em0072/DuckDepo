@@ -11,10 +11,10 @@ struct DocumentView: View {
 
     @Environment(\.dismiss) private var dismiss
 
-    @StateObject var viewModel: DocumentViewModel
+    @State var viewModel: DocumentViewModel
 
     init(document: Document) {
-        _viewModel = StateObject(wrappedValue: DocumentViewModel(document: document))
+        _viewModel = State(initialValue: DocumentViewModel(document: document))
     }
 
     var body: some View {
@@ -25,6 +25,7 @@ struct DocumentView: View {
             }
         }
         .listStyle(.insetGrouped)
+        .onAppear(perform: viewModel.load)
         .toolbar {
             ToolbarItem(placement: .principal) {
                 DocumentToolbarTitleView(icon: viewModel.document.documentType.image,

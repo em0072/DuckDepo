@@ -8,30 +8,41 @@
 import Foundation
 import PDFKit
 
-final class DocumentViewModel: ObservableObject {
+/// Cheap to create: SwiftUI may build and discard several instances; the one on screen loads in `load()`.
+@Observable
+final class DocumentViewModel {
 
-    private let db: DataBase
+    @ObservationIgnored private let db: DataBase
+    @ObservationIgnored private var isLoaded = false
 
-    @Published var document: Document
+    var document: Document
 
-    @Published var showShareOptions = false
-    @Published var showShareSheetView = false
-    @Published var showEditDocumentView = false
-    @Published var showingImageViewer = false
-    @Published var shouldDismissView = false
+    var showShareOptions = false
+    var showShareSheetView = false
+    var showEditDocumentView = false
+    var showingImageViewer = false
+    var shouldDismissView = false
 
-    @Published var selectedPhoto: DocumentPhoto? {
+    var selectedPhoto: DocumentPhoto? {
         didSet {
             showingImageViewer = selectedPhoto != nil
         }
     }
 
-    var itemsToShare = [Any]()
+    @ObservationIgnored var itemsToShare = [Any]()
 
-    /// `document` usually comes from the list, which doesn't load photos, so read the full document here.
     init(document: Document, database: DataBase = .shared) {
         db = database
-        self.document = database.fullDocument(with: document.id) ?? document
+        self.document = document
+    }
+
+    /// `document` usually comes from the list, which doesn't load photos, so read the full document once.
+    func load() {
+        guard !isLoaded else { return }
+        isLoaded = true
+        if let full = db.fullDocument(with: document.id) {
+            document = full
+        }
     }
 
     var editDocumentViewModel: EditDocumentViewModel {
@@ -78,9 +89,9 @@ final class DocumentViewModel: ObservableObject {
     private func makeShareText() -> String {
         var text = "dv_share_details_title".localized() + document.name + "\n\n"
         for section in document.sectionsWithValues {
-            text += section.name + ":\n"
+            text += section.displayName + ":\n"
             for field in section.fields {
-                text += "\(field.title): \(field.value)\n"
+                text += "\(field.displayTitle): \(field.displayValue)\n"
             }
             text += "\n"
         }

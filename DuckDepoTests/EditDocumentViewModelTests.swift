@@ -14,10 +14,10 @@ struct EditDocumentViewModelTests {
     private func makeViewModel() -> EditDocumentViewModel {
         let viewModel = EditDocumentViewModel(type: .new, database: database)
         viewModel.document.name = "Licence"
-        viewModel.addNewSection("Document Info")
+        viewModel.addNewSection(DocSection(name: "Document Info"))
         let sectionID = viewModel.document.sections[0].id
         for title in ["A", "B", "C"] {
-            viewModel.addField(named: title, toSection: sectionID)
+            viewModel.addField(Field(title: title), toSection: sectionID)
         }
         for index in 0..<3 {
             viewModel.document.sections[0].fields[index].value = "value-\(index)"
@@ -61,6 +61,7 @@ struct EditDocumentViewModelTests {
         listItem.photos = []
 
         let viewModel = EditDocumentViewModel(type: .existing(listItem), database: database)
+        viewModel.load()
 
         #expect(viewModel.document.photos.map(\.data) == [photo.data])
         #expect(!viewModel.hasChanges)

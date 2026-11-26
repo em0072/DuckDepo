@@ -3,13 +3,12 @@
 //  DuckDepo
 //
 
-import Combine
 import SwiftUI
 import UIKit
 
 /// Opaque cover shown above everything (including sheets) while the app is locked or inactive.
 struct LockScreenView: View {
-    @ObservedObject var controller: BiometricController
+    let controller: BiometricController
 
     var body: some View {
         ZStack {
@@ -71,7 +70,6 @@ final class LockWindowPresenter {
     static let shared = LockWindowPresenter()
 
     private var windows: [ObjectIdentifier: UIWindow] = [:]
-    private var cancellable: AnyCancellable?
 
     func attach(to scene: UIWindowScene, controller: BiometricController = .shared) {
         let key = ObjectIdentifier(scene)
@@ -85,14 +83,9 @@ final class LockWindowPresenter {
         window.isHidden = !controller.isContentHidden
         windows[key] = window
 
-        if cancellable == nil {
-            // `@Published` emits synchronously, so the cover is in place before the app-switcher snapshot.
-            cancellable = Publishers.CombineLatest(controller.$isLocked, controller.$isObscured)
-                .map { $0 || $1 }
-                .removeDuplicates()
-                .sink { [weak self] isContentHidden in
-                    self?.update(hidden: !isContentHidden)
-                }
+        // Synchronous, so the cover is in place before the app-switcher snapshot.
+        controller.onContentHiddenChange = { [weak self] isContentHidden in
+            self?.update(hidden: !isContentHidden)
         }
         update(hidden: !controller.isContentHidden)
     }

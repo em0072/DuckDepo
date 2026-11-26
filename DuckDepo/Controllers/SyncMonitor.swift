@@ -6,9 +6,11 @@
 import CloudKit
 import CoreData
 import Foundation
+import Observation
 
 /// Reports iCloud account status and the outcome of CloudKit sync, for display in Settings.
-final class SyncMonitor: ObservableObject {
+@Observable
+final class SyncMonitor {
 
     enum AccountStatus: Equatable {
         case checking
@@ -21,20 +23,20 @@ final class SyncMonitor: ObservableObject {
 
     static let shared = SyncMonitor()
 
-    @Published private(set) var accountStatus: AccountStatus = .checking
-    @Published private(set) var isSyncing = false
+    private(set) var accountStatus: AccountStatus = .checking
+    private(set) var isSyncing = false
     /// True while CloudKit is setting up or downloading changes.
-    @Published private(set) var isDownloading = false
+    private(set) var isDownloading = false
     /// `isSyncing`, but only once a sync has lasted long enough to be worth showing. The export after
     /// each edit and the routine check on every launch finish well under a second and would just flicker.
-    @Published private(set) var showsActivity = false
-    @Published private(set) var lastSyncDate: Date?
-    @Published private(set) var lastErrorDescription: String?
+    private(set) var showsActivity = false
+    private(set) var lastSyncDate: Date?
+    private(set) var lastErrorDescription: String?
 
-    private let container: CKContainer
-    private var runningEvents: [UUID: NSPersistentCloudKitContainer.EventType] = [:]
-    private var activityUpdate: DispatchWorkItem?
-    private var observers: [NSObjectProtocol] = []
+    @ObservationIgnored private let container: CKContainer
+    @ObservationIgnored private var runningEvents: [UUID: NSPersistentCloudKitContainer.EventType] = [:]
+    @ObservationIgnored private var activityUpdate: DispatchWorkItem?
+    @ObservationIgnored private var observers: [NSObjectProtocol] = []
 
     init(containerIdentifier: String = PersistenceController.cloudKitContainerIdentifier) {
         container = CKContainer(identifier: containerIdentifier)
