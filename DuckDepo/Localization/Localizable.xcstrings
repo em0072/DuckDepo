@@ -3596,13 +3596,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Find documents by name or by anything in their fields, and passwords by name, login or website."
+            "value" : "Find documents by name, by anything in their fields or by text in their photos, and passwords by name, login or website."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ищите документы по названию или по любому полю, а пароли — по названию, логину или сайту."
+            "value" : "Ищите документы по названию, по любому полю или по тексту на фото, а пароли — по названию, логину или сайту."
           }
         }
       }
@@ -3620,6 +3620,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Поиск по Depo"
+          }
+        }
+      }
+    },
+    "search_photo_match %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In a photo: %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "На фото: %@"
           }
         }
       }

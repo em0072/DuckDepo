@@ -8,6 +8,8 @@ import SwiftUI
 struct DocumentRow: View {
 
     let document: Document
+    /// Search results found by a photo's text: an excerpt of it, and the words searched for, to highlight.
+    var photoMatch: (excerpt: String, query: String)?
 
     @ScaledMetric(relativeTo: .body) private var iconSize: CGFloat = 44
 
@@ -23,6 +25,9 @@ struct DocumentRow: View {
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
+                if let photoMatch {
+                    PhotoMatchLine(excerpt: photoMatch.excerpt, query: photoMatch.query)
+                }
                 if let status = document.expiryStatus {
                     ExpiryBadge(status: status)
                         .padding(.top, 2)
@@ -31,6 +36,35 @@ struct DocumentRow: View {
         }
         .padding(.vertical, 2)
         .accessibilityElement(children: .combine)
+    }
+}
+
+/// Where a search found the document: text in one of its photos, with the searched words in bold.
+private struct PhotoMatchLine: View {
+
+    let excerpt: String
+    let query: String
+
+    var body: some View {
+        HStack(alignment: .firstTextBaseline, spacing: 4) {
+            Image(systemName: "text.viewfinder")
+                .accessibilityHidden(true)
+            Text(highlighted)
+                .lineLimit(2)
+        }
+        .font(.caption)
+        .foregroundStyle(.secondary)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text("search_photo_match \(excerpt)"))
+    }
+
+    private var highlighted: AttributedString {
+        var text = AttributedString(excerpt)
+        if let range = text.range(of: query, options: [.caseInsensitive, .diacriticInsensitive]) {
+            text[range].font = .caption.weight(.semibold)
+            text[range].foregroundColor = .primary
+        }
+        return text
     }
 }
 

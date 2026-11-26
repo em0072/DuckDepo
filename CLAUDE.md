@@ -49,6 +49,7 @@ xcodebuild -project DuckDepo.xcodeproj -scheme DuckDepo clean
 ### Scanning (`DuckDepo/Scanning/`)
 - Everything runs on the device. `DocumentScanner.draft(from:)`: Vision text recognition (`DocumentReader`, language correction off), then exact parsers (`MRZParser` for passport/ID zones with check digits, `DrivingLicenceParser` for the numbered fields of EU and Russian licences, VINs), then `ModelExtractor` (on-device `SystemLanguageModel` only, never the Private Cloud Compute model) for fields still empty
 - The model doesn't support Russian (skipped for mostly-Cyrillic text) and makes values up: `ScanReading.add(_:text:)` keeps only values printed in the recognized text. It's prewarmed when a scan starts and given 6 s
+- Search inside photos: `PhotoIndexer` reads every document photo's text in the background (on launch and when documents change) into `PhotoTextIndex`, a local file only on this device (complete file protection, excluded from backups, nothing syncs; keys are document ID + content-derived photo ID). `SearchViewModel` adds photo matches with an excerpt
 - The result opens in the editor (`EditDocumentViewModel.Mode.scanned`) with a banner and per-field `ScanMarker`s (verified / read / suggested) that disappear once a value is edited; nothing is saved until confirmed
 
 ### Security Architecture
