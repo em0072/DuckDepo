@@ -14,12 +14,16 @@ final class EditDocumentViewModel {
     enum Mode {
         case new
         case existing(Document)
+        /// A new document filled in from a scan, to review before saving.
+        case scanned(ScanDraft)
     }
 
     @ObservationIgnored private let db: DataBase
     private var originalDocument: Document
     @ObservationIgnored private let onDismiss: ((Document?) -> Void)?
     @ObservationIgnored private var isLoaded = false
+    /// The values a scan filled in, and how sure it was of each.
+    @ObservationIgnored private let scannedValues: [Field.ID: (value: String, confidence: ScanConfidence)]
 
     let type: Mode
 
@@ -34,15 +38,38 @@ final class EditDocumentViewModel {
         self.type = type
         self.db = database
         self.onDismiss = onDismiss
-        let initial: Document
+        var scannedValues: [Field.ID: (value: String, confidence: ScanConfidence)] = [:]
         switch type {
         case .new:
-            initial = Document()
+            let initial = Document()
+            document = initial
+            originalDocument = initial
         case .existing(let document):
-            initial = document
+            self.document = document
+            originalDocument = document
+        case .scanned(let draft):
+            document = draft.document
+            // Compared with an empty document, so closing asks before throwing the scan away.
+            originalDocument = Document(id: draft.document.id)
+            for field in draft.document.sections.flatMap(\.fields) {
+                if let confidence = draft.confidence[field.id] {
+                    scannedValues[field.id] = (field.value, confidence)
+                }
+            }
         }
-        document = initial
-        originalDocument = initial
+        self.scannedValues = scannedValues
+    }
+
+    /// How a field's value got there from a scan. Nil once the user changes it: then it's theirs.
+    func scanConfidence(for field: Field) -> ScanConfidence? {
+        guard let scanned = scannedValues[field.id], scanned.value == field.value else { return nil }
+        return scanned.confidence
+    }
+
+    /// For a scanned document: whether the scan found nothing to fill in. Nil for other documents.
+    var scanFoundNothing: Bool? {
+        guard case .scanned(let draft) = type else { return nil }
+        return draft.isEmpty
     }
 
     /// For an existing document, edits start from the stored version (with photos), not the caller's copy.
@@ -56,8 +83,8 @@ final class EditDocumentViewModel {
     }
 
     var isNew: Bool {
-        if case .new = type { return true }
-        return false
+        if case .existing = type { return false }
+        return true
     }
 
     var hasChanges: Bool {
@@ -70,7 +97,7 @@ final class EditDocumentViewModel {
 
     var viewTitle: LocalizedStringKey {
         switch type {
-        case .new: return "add_new_doc"
+        case .new, .scanned: return "add_new_doc"
         case .existing(let document): return "edit \(document.name)"
         }
     }

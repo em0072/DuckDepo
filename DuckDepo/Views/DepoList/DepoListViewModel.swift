@@ -12,7 +12,6 @@ import Foundation
 final class DepoListViewModel {
 
     var documents: [Document] = []
-    var searchText = ""
     var isAddingNewDocument = false
 
     @ObservationIgnored private var cancellables = Set<AnyCancellable>()
@@ -37,9 +36,9 @@ final class DepoListViewModel {
             .store(in: &cancellables)
     }
 
-    /// The documents matching the search, by type.
+    /// The documents by type. Searching happens in the search tab.
     var groups: [DocumentGroup] {
-        DocumentSearch.groups(for: documents, matching: searchText)
+        DocumentSearch.groups(for: documents, matching: "")
     }
 
     func document(with id: Document.ID?) -> Document? {

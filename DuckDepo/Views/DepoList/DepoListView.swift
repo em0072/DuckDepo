@@ -13,6 +13,8 @@ struct DepoListView: View {
     @State private var selection: Document.ID?
     @State private var documentToEdit: Document?
     @State private var documentToDelete: Document?
+    @State private var scanSource: ScanSource?
+    @State private var scanDraft: ScanDraft?
     private var syncMonitor = SyncMonitor.shared
 
     init(viewModel: DepoListViewModel) {
@@ -26,7 +28,9 @@ struct DepoListView: View {
                 .syncActivitySubtitle(syncMonitor)
                 .toolbar {
                     ToolbarItem(placement: .primaryAction) {
-                        Button(action: viewModel.addNewDocumentButtonPressed) {
+                        Menu {
+                            addDocumentActions
+                        } label: {
                             Label("add_new_doc", systemImage: "plus")
                         }
                     }
@@ -47,6 +51,12 @@ struct DepoListView: View {
         }
         .sheet(item: $documentToEdit) { document in
             EditDocumentView(viewModel: EditDocumentViewModel(type: .existing(document)))
+        }
+        .scanFlow(source: $scanSource) { draft in
+            scanDraft = draft
+        }
+        .sheet(item: $scanDraft) { draft in
+            EditDocumentView(viewModel: EditDocumentViewModel(type: .scanned(draft)))
         }
         .alert("delete_confirmation_title", isPresented: isConfirmingDelete, presenting: documentToDelete) { document in
             Button("delete", role: .destructive) {
@@ -74,14 +84,17 @@ struct DepoListView: View {
                 } description: {
                     Text("ii_caption_documents")
                 } actions: {
-                    Button("add_new_doc", action: viewModel.addNewDocumentButtonPressed)
-                        .buttonStyle(.borderedProminent)
-                        .foregroundStyle(.onDuckYellow)
+                    Menu {
+                        addDocumentActions
+                    } label: {
+                        Text("add_new_doc")
+                            .foregroundStyle(.onDuckYellow)
+                    }
+                    .buttonStyle(.borderedProminent)
                 }
             }
         } else {
             listView
-                .searchable(text: $viewModel.searchText, prompt: Text("dl_search_prompt"))
         }
     }
 
@@ -123,11 +136,24 @@ struct DepoListView: View {
                 }
             }
         }
-        .overlay {
-            if viewModel.groups.isEmpty {
-                ContentUnavailableView.search(text: viewModel.searchText)
+    }
+
+    /// Scan from the camera, Photos or Files, or fill in a blank document.
+    @ViewBuilder
+    private var addDocumentActions: some View {
+        if ScanSource.isCameraAvailable {
+            Button("scan_camera", systemImage: "doc.viewfinder") {
+                scanSource = .camera
             }
         }
+        Button("scan_photos", systemImage: "photo.on.rectangle") {
+            scanSource = .photos
+        }
+        Button("scan_files", systemImage: "folder") {
+            scanSource = .files
+        }
+        Divider()
+        Button("scan_manual", systemImage: "square.and.pencil", action: viewModel.addNewDocumentButtonPressed)
     }
 
     private var isConfirmingDelete: Binding<Bool> {

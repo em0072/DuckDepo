@@ -6,7 +6,8 @@
 import SwiftUI
 
 /// A text field with its title above it, so the title stays visible once the field is filled in.
-struct LabeledTextField: View {
+/// An accessory, if any, follows the title.
+struct LabeledTextField<Accessory: View>: View {
 
     /// Input traits. Credentials must never be auto-capitalized or auto-corrected.
     enum Kind {
@@ -44,15 +45,20 @@ struct LabeledTextField: View {
     let title: String
     @Binding var value: String
     var kind: Kind = .text
+    @ViewBuilder var accessory: Accessory
 
     @FocusState private var isFocused: Bool
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(title)
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-                .accessibilityHidden(true)
+            HStack(spacing: 4) {
+                Text(title)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .accessibilityHidden(true)
+                accessory
+                    .font(.footnote)
+            }
             textField
                 .focused($isFocused)
                 .accessibilityLabel(title)
@@ -76,6 +82,14 @@ struct LabeledTextField: View {
                 .lineLimit(1...8)
         } else {
             TextField("", text: $value)
+        }
+    }
+}
+
+extension LabeledTextField where Accessory == EmptyView {
+    init(title: String, value: Binding<String>, kind: Kind = .text) {
+        self.init(title: title, value: value, kind: kind) {
+            EmptyView()
         }
     }
 }

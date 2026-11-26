@@ -77,12 +77,11 @@ struct PasswordsListView: View {
             }
         } else {
             listView
-                .searchable(text: $viewModel.searchText, prompt: Text("pl_search_prompt"))
         }
     }
 
     private var listView: some View {
-        List(viewModel.filteredPasswords, selection: $selection) { password in
+        List(viewModel.passwords, selection: $selection) { password in
             PasswordRow(name: password.name, login: password.login)
                 .tag(password.id)
                 .swipeActions(edge: .leading) {
@@ -112,11 +111,6 @@ struct PasswordsListView: View {
                 .contextMenu {
                     contextMenu(for: password)
                 }
-        }
-        .overlay {
-            if viewModel.filteredPasswords.isEmpty {
-                ContentUnavailableView.search(text: viewModel.searchText)
-            }
         }
     }
 

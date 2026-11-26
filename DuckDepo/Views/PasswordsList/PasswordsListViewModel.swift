@@ -12,7 +12,6 @@ import Foundation
 final class PasswordsListViewModel {
 
     var passwords: [Password] = []
-    var searchText = ""
     var isAddingNewPassword = false
 
     @ObservationIgnored private var cancellables = Set<AnyCancellable>()
@@ -34,10 +33,6 @@ final class PasswordsListViewModel {
                 self?.passwords = passwords
             }
             .store(in: &cancellables)
-    }
-
-    var filteredPasswords: [Password] {
-        passwords.filter { $0.matches(searchText) }
     }
 
     func password(with id: Password.ID?) -> Password? {

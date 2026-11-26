@@ -19,6 +19,8 @@ struct SectionView: View {
 
     @Binding var sections: [DocSection]
     var delegate: SectionViewDelegate?
+    /// How a field's value got there from a scan, if it did and hasn't been changed since.
+    var scanConfidence: (Field) -> ScanConfidence? = { _ in nil }
 
     @State private var customFieldSectionID: UUID?
     @State private var customFieldName = ""
@@ -57,12 +59,17 @@ struct SectionView: View {
     @ViewBuilder
     private func fieldEditor(_ field: Binding<Field>) -> some View {
         // A date field whose text an older version wrote and that couldn't be read as one day stays text.
+        let confidence = scanConfidence(field.wrappedValue)
         if field.wrappedValue.type == .date,
            field.wrappedValue.value.isEmpty || FieldDate.components(from: field.wrappedValue.value) != nil {
-            DateFieldRow(title: field.wrappedValue.displayTitle, value: field.value)
+            DateFieldRow(title: field.wrappedValue.displayTitle, value: field.value, scanConfidence: confidence)
         } else {
             LabeledTextField(title: field.wrappedValue.displayTitle, value: field.value,
-                             kind: field.wrappedValue.isMultiline ? .multiline : .text)
+                             kind: field.wrappedValue.isMultiline ? .multiline : .text) {
+                if let confidence {
+                    ScanMarker(confidence: confidence)
+                }
+            }
         }
     }
 
@@ -141,6 +148,7 @@ struct DateFieldRow: View {
     let title: String
     /// "yyyy-MM-dd", or empty.
     @Binding var value: String
+    var scanConfidence: ScanConfidence?
 
     var body: some View {
         if let date = FieldDate.localDate(from: value) {
@@ -149,7 +157,13 @@ struct DateFieldRow: View {
                     value = stored
                 }
             }), displayedComponents: .date) {
-                Text(title)
+                HStack(spacing: 4) {
+                    Text(title)
+                    if let scanConfidence {
+                        ScanMarker(confidence: scanConfidence)
+                            .font(.footnote)
+                    }
+                }
             }
         } else {
             LabeledContent(title) {
