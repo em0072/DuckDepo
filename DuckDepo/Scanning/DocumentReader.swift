@@ -45,9 +45,10 @@ enum DocumentReader {
         guard let document = PDFDocument(url: url) else { return [] }
         return (0..<min(document.pageCount, maximumPages)).compactMap { index in
             guard let page = document.page(at: index) else { return nil }
-            let bounds = page.bounds(for: .mediaBox)
+            // The crop box is what viewers show (it's the media box when the page has none).
+            let bounds = page.bounds(for: .cropBox)
             let scale = 2000 / max(bounds.width, bounds.height, 1)
-            return page.thumbnail(of: CGSize(width: bounds.width * scale, height: bounds.height * scale), for: .mediaBox)
+            return page.thumbnail(of: CGSize(width: bounds.width * scale, height: bounds.height * scale), for: .cropBox)
         }
     }
 }

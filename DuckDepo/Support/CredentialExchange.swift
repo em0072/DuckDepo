@@ -126,13 +126,9 @@ enum CredentialExchange {
     /// "Title: value" lines, and a last line saying it came from DuckDepo, by which DuckDepo knows its
     /// own note when the document comes back.
     static func summary(of document: Document) -> String {
-        var blocks = [document.description].filter { !$0.isEmpty }
-        for section in document.sectionsWithValues {
-            let lines = [section.displayName] + section.fields.map { "\($0.displayTitle): \($0.displayValue)" }
-            blocks.append(lines.joined(separator: "\n"))
-        }
-        blocks.append(noteFooterKey.localized())
-        return blocks.joined(separator: "\n\n")
+        [document.description, document.sectionsText, noteFooterKey.localized()]
+            .filter { !$0.isEmpty }
+            .joined(separator: "\n\n")
     }
 
     private static let noteFooterKey = "cx_note_footer"

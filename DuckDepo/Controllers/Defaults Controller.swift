@@ -26,8 +26,8 @@ final class DefaultsController {
     }
 
     static let shared: DefaultsController = {
-        #if AUTOFILL_EXTENSION
-        // Only the app owns the old settings; the extension must not mark them as migrated.
+        #if AUTOFILL_EXTENSION || SHARE_EXTENSION
+        // Only the app owns the old settings; an extension must not mark them as migrated.
         return DefaultsController(defaults: AppGroup.userDefaults, legacyDefaults: nil)
         #else
         return DefaultsController(defaults: AppGroup.userDefaults, legacyDefaults: .standard)

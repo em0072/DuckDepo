@@ -35,21 +35,29 @@ struct PhotosSectionView: View {
         Section {
             ScrollView(.horizontal) {
                 HStack(spacing: 12) {
-                    AddCell {
-                        showingPhotoChooser = true
+                    if remainingPhotos > 0 {
+                        AddCell {
+                            #if SHARE_EXTENSION
+                            // Extensions can't use the camera: nothing to choose between.
+                            showingPhotoPicker = true
+                            #else
+                            showingPhotoChooser = true
+                            #endif
+                        }
+                        .frame(width: cellSize, height: cellSize)
+                        .accessibilityLabel(Text("psv_add_photo"))
                     }
-                    .frame(width: cellSize, height: cellSize)
-                    .accessibilityLabel(Text("psv_add_photo"))
                     if isProcessing {
                         ProgressView()
                             .frame(width: cellSize, height: cellSize)
                     }
                     ForEach(Array(photos.enumerated()), id: \.element.id) { index, photo in
-                        PhotoCell(image: photo.image) {
+                        let size = CGSize(width: width(of: photo), height: cellSize)
+                        PhotoCell(photo: photo, size: size) {
                             delegate?.select(photo: photo)
                         }
                         .matchedTransitionSource(id: photo.id, in: namespace)
-                        .frame(width: width(of: photo), height: cellSize)
+                        .frame(width: size.width, height: size.height)
                         .overlay(alignment: .topTrailing) {
                             Button {
                                 delegate?.delete(photo: photo)
@@ -71,6 +79,7 @@ struct PhotosSectionView: View {
             }
             .scrollIndicators(.hidden)
             .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
+            #if !SHARE_EXTENSION
             .confirmationDialog("psv_photo_selection_body", isPresented: $showingPhotoChooser, titleVisibility: .visible) {
                 if VNDocumentCameraViewController.isSupported {
                     Button("psv_camera") {
@@ -81,38 +90,59 @@ struct PhotosSectionView: View {
                     showingPhotoPicker = true
                 }
             }
-            .photosPicker(isPresented: $showingPhotoPicker, selection: $pickerItems, maxSelectionCount: 10, matching: .images)
+            #endif
+            .photosPicker(isPresented: $showingPhotoPicker, selection: $pickerItems,
+                          maxSelectionCount: min(10, max(1, remainingPhotos)), matching: .images)
             .onChange(of: pickerItems) { _, items in
                 guard !items.isEmpty else { return }
                 loadPickedItems(items)
             }
+            #if !SHARE_EXTENSION
             .fullScreenCover(isPresented: $showingCameraView, onDismiss: onCameraDismiss) {
                 CameraPickerView(imageArray: $cameraImages)
                     .ignoresSafeArea()
             }
+            #endif
         } header: {
             Text("psv_photos")
         }
     }
 
+    /// How many more photos can be added. The share extension takes no more than it takes from a share:
+    /// it has little memory.
+    private var remainingPhotos: Int {
+        #if SHARE_EXTENSION
+        PageImport.maximumSharedPages - photos.count
+        #else
+        .max
+        #endif
+    }
+
     /// The photo's own shape at the strip's height, as on the document's page.
     private func width(of photo: DocumentPhoto) -> CGFloat {
-        let size = photo.image.size
+        let size = photo.size
         guard size.height > 0 else { return cellSize }
         return min(max(cellSize * size.width / size.height, cellSize * 0.6), cellSize * 1.8)
     }
 
+    /// One at a time, each read at the size it's stored at: a photo decoded at full size takes about
+    /// 100 MB, more than the share extension has.
     private func loadPickedItems(_ items: [PhotosPickerItem]) {
         pickerItems = []
         isProcessing = true
         Task {
-            var images: [UIImage] = []
-            for item in items {
-                if let data = try? await item.loadTransferable(type: Data.self), let image = UIImage(data: data) {
-                    images.append(image)
+            var photos: [DocumentPhoto] = []
+            for item in items.prefix(max(0, remainingPhotos)) {
+                guard let data = try? await item.loadTransferable(type: Data.self) else { continue }
+                let photo = await Task.detached(priority: .userInitiated) {
+                    PageImport.photo(fromImageData: data)
+                }.value
+                if let photo {
+                    photos.append(photo)
                 }
             }
-            await addEncoded(images)
+            isProcessing = false
+            delegate?.add(photos: photos)
         }
     }
 

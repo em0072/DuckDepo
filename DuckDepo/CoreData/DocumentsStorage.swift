@@ -102,7 +102,7 @@ extension DataBase {
     @discardableResult
     func save(_ document: Document) -> Bool {
         _ = DDDocument(viewContext: context, object: document, order: fetchDocumentCount())
-        return save()
+        return saveOrRollBack()
     }
 
     /// Adds many documents in one save, after the existing ones. A document already stored (by ID) is
@@ -119,11 +119,39 @@ extension DataBase {
         for (offset, document) in new.enumerated() {
             _ = DDDocument(viewContext: context, object: document, order: first + offset)
         }
-        guard save() else {
-            context.rollback()
-            return nil
+        return saveOrRollBack() ? new.count : nil
+    }
+
+    enum PhotosAddition: Equatable {
+        case saved
+        /// The document's photos take too much memory to add to in the share extension.
+        case tooLarge
+        case failed
+    }
+
+    /// In the share extension, adding pages reads a copy of the document's photos (the one version 2.6
+    /// reads, which has to be rewritten); past this it could run out of memory.
+    static let maximumPhotoBytesToAddTo = 30_000_000
+
+    /// Adds photos after a document's own, leaving out ones it already has. Only the photos change, and the
+    /// others aren't decoded: this runs in the share extension, whose copy of the rest may be out of date
+    /// (it doesn't sync) and which has little memory.
+    @discardableResult
+    func addPhotos(_ photos: [DocumentPhoto], toDocumentWith id: UUID,
+                   maximumExistingBytes: Int = maximumPhotoBytesToAddTo) -> PhotosAddition {
+        readLatestStoredData()
+        guard let stored = DDDocument.fetchDocument(with: id, viewContext: context) else { return .failed }
+        guard (stored.photoData?.count ?? 0) <= maximumExistingBytes else {
+            context.refresh(stored, mergeChanges: false)
+            return .tooLarge
         }
-        return new.count
+        if stored.appendPhotos(photos) > 0 {
+            stored.updatedAt = Date()
+        }
+        guard saveOrRollBack() else { return .failed }
+        // Lets go of the photo data just read.
+        context.refresh(stored, mergeChanges: false)
+        return .saved
     }
 
     /// Every document without photos.
@@ -158,7 +186,7 @@ extension DataBase {
         for (index, section) in document.sections.enumerated() {
             stored.addToSections(DDSection(viewContext: context, object: section, order: index, document: stored))
         }
-        return save()
+        return saveOrRollBack()
     }
 
     func fetchDocumentCount() -> Int {

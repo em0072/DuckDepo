@@ -17,7 +17,6 @@ final class DocumentViewModel {
 
     var document: Document
 
-    var showShareOptions = false
     var showShareSheetView = false
     var showEditDocumentView = false
     var shouldDismissView = false
@@ -54,24 +53,17 @@ final class DocumentViewModel {
         }
     }
 
-    func shareButtonPressed() {
-        if document.photos.isEmpty {
-            shareTextButtonPressed()
-        } else {
-            showShareOptions = true
-        }
-    }
-
     func sharePhotosAndTextButtonPressed() {
-        share(items: [makePhotosPDF().dataRepresentation() as Any, makeShareText()])
+        share(items: [makePhotosPDF().dataRepresentation() as Any, document.plainText])
     }
 
     func sharePhotosButtonPressed() {
         share(items: [makePhotosPDF().dataRepresentation() as Any])
     }
 
-    func shareTextButtonPressed() {
-        share(items: [makeShareText()])
+    /// Every field at once, like the copy buttons: local only, and gone after the clipboard lifetime.
+    func copyAllButtonPressed() {
+        ClipboardController.shared.copy(string: document.plainText)
     }
 
     private func makePhotosPDF() -> PDFDocument {
@@ -82,19 +74,6 @@ final class DocumentViewModel {
             }
         }
         return pdfDocument
-    }
-
-    private func makeShareText() -> String {
-        var text = "dv_share_details_title".localized() + document.name + "\n\n"
-        for section in document.sectionsWithValues {
-            text += section.displayName + ":\n"
-            for field in section.fields {
-                text += "\(field.displayTitle): \(field.displayValue)\n"
-            }
-            text += "\n"
-        }
-        text += "dv_share_caption".localized() + "\nhttps://DuckDepo.com"
-        return text
     }
 
     private func share(items: [Any]) {

@@ -79,9 +79,17 @@ struct Document: Identifiable, Hashable {
 }
 
 /// A stored photo. Holds the JPEG data exactly as saved so editing a document never re-encodes it.
+///
+/// It keeps no decoded image: a decoded page takes about 20 MB, and documents keep their photos for as
+/// long as they're open (the share extension can't hold ten of them). `image` decodes on demand.
 struct DocumentPhoto: Identifiable, Hashable {
     /// Longest side of newly added photos, in pixels. Large enough to read small print.
     static let maxPixelSize: CGFloat = 2560
+    /// Pages more than twice as long as they're wide (a full-page screenshot) keep this many pixels
+    /// instead, so their text stays readable.
+    static let maxPixelCount: CGFloat = maxPixelSize * maxPixelSize / 2
+    /// The longest side even then.
+    static let maxLongSide: CGFloat = maxPixelSize * 4
     static let compressionQuality: CGFloat = 0.8
     /// Longest side of list thumbnails, in pixels.
     static let thumbnailPixelSize: CGFloat = 400
@@ -90,13 +98,49 @@ struct DocumentPhoto: Identifiable, Hashable {
     /// devices that convert the same old photos to photo records recognise the copies as duplicates.
     let id: UUID
     let data: Data
-    let image: UIImage
+    /// In pixels, turned the way the photo is shown.
+    let size: CGSize
 
     init?(data: Data) {
+        // Reads only the header.
         guard let image = UIImage(data: data) else { return nil }
         self.id = Self.identifier(for: data)
         self.data = data
-        self.image = image
+        self.size = image.size
+    }
+
+    /// The photo at full size, decoded when it's drawn. A new image each time, so its pixels go away with
+    /// it: keep it only while it's on screen.
+    var image: UIImage {
+        UIImage(data: data) ?? UIImage()
+    }
+
+    /// A copy at most `maxPixelSize` on its longest side, made without decoding the full image.
+    func downsampled(toMaxPixelSize maxPixelSize: CGFloat) -> UIImage? {
+        downsampledImage(toMaxPixelSize: maxPixelSize).map { UIImage(cgImage: $0) }
+    }
+
+    private func downsampledImage(toMaxPixelSize maxPixelSize: CGFloat) -> CGImage? {
+        guard let source = CGImageSourceCreateWithData(data as CFData, nil) else { return nil }
+        let options: [CFString: Any] = [
+            kCGImageSourceCreateThumbnailFromImageAlways: true,
+            kCGImageSourceCreateThumbnailWithTransform: true,
+            kCGImageSourceShouldCacheImmediately: true,
+            kCGImageSourceThumbnailMaxPixelSize: max(1, maxPixelSize.rounded(.up)),
+        ]
+        return CGImageSourceCreateThumbnailAtIndex(source, 0, options as CFDictionary)
+    }
+
+    /// How much to scale an image of `size` (pixels, or points for a PDF page) to store it: its longest
+    /// side to `maxPixelSize`, or for a long, narrow page, to `maxPixelCount` pixels. Images aren't scaled
+    /// up; PDF pages are, since they're drawn at whatever size.
+    static func storedScale(for size: CGSize, scalingUp: Bool = false) -> CGFloat {
+        let longest = max(size.width, size.height)
+        guard size.width > 0, size.height > 0 else { return 1 }
+        let bySide = maxPixelSize / longest
+        let byCount = (maxPixelCount / (size.width * size.height)).squareRoot()
+        let scale = min(max(bySide, byCount), maxLongSide / longest)
+        return scalingUp ? scale : min(scale, 1)
     }
 
     static func identifier(for data: Data) -> UUID {
@@ -109,13 +153,7 @@ struct DocumentPhoto: Identifiable, Hashable {
 
     /// A small JPEG for lists, made without decoding the full image.
     func makeThumbnailData() -> Data? {
-        guard let source = CGImageSourceCreateWithData(data as CFData, nil) else { return nil }
-        let options: [CFString: Any] = [
-            kCGImageSourceCreateThumbnailFromImageAlways: true,
-            kCGImageSourceCreateThumbnailWithTransform: true,
-            kCGImageSourceThumbnailMaxPixelSize: Self.thumbnailPixelSize,
-        ]
-        guard let thumbnail = CGImageSourceCreateThumbnailAtIndex(source, 0, options as CFDictionary) else { return nil }
+        guard let thumbnail = downsampledImage(toMaxPixelSize: Self.thumbnailPixelSize) else { return nil }
         let output = NSMutableData()
         guard let destination = CGImageDestinationCreateWithData(output, UTType.jpeg.identifier as CFString, 1, nil) else { return nil }
         CGImageDestinationAddImage(destination, thumbnail, [kCGImageDestinationLossyCompressionQuality: 0.7] as CFDictionary)
@@ -123,10 +161,10 @@ struct DocumentPhoto: Identifiable, Hashable {
         return output as Data
     }
 
-    /// Encodes a new photo once: scaled down to `maxPixelSize` and compressed as JPEG.
+    /// Encodes a new photo once: scaled down (`storedScale`) and compressed as JPEG.
     init?(image: UIImage) {
-        let scaled = image.scaledDown(toMaxPixelSize: Self.maxPixelSize)
-        guard let data = scaled.jpegData(compressionQuality: Self.compressionQuality) else { return nil }
+        let prepared = image.preparedForStorage()
+        guard let data = prepared.jpegData(compressionQuality: Self.compressionQuality) else { return nil }
         self.init(data: data)
     }
 

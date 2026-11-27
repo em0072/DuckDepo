@@ -29,6 +29,29 @@ final class DataBase {
         persistenceController.saveContext()
     }
 
+    /// Saves, or when that fails undoes the unsaved changes, so the next save doesn't commit them too.
+    func saveOrRollBack() -> Bool {
+        guard save() else {
+            context.rollback()
+            return false
+        }
+        return true
+    }
+
+    /// Reads what's stored now from here on. The extensions don't merge other processes' changes, so their
+    /// context would otherwise keep reading the store as it was when they started.
+    func readLatestStoredData() {
+        // `/dev/null` stores (tests) don't support query generations.
+        if persistenceController.role != .inMemory {
+            do {
+                try context.setQueryGenerationFrom(.current)
+            } catch {
+                logger.error("Moving to the current generation failed: \(String(describing: error), privacy: .public)")
+            }
+        }
+        context.refreshAllObjects()
+    }
+
     /// Deletes all documents, folders and passwords on this device and, through iCloud, on the user's other devices.
     func deleteEverything(keychain: KeychainStoring = Keychain.shared) {
         let entityNames = [DDDocument.entityName, DDPassword.entityName, "DDFolder"]

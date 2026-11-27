@@ -1,0 +1,24 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "NSFaceIDUsageDescription" : {
+      "comment" : "Face ID prompt in the share extension, before listing documents to add pages to.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Face ID unlocks your documents to add to one of them"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Face ID открывает ваши документы, чтобы добавить в один из них"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

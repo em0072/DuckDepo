@@ -57,7 +57,7 @@ struct PhotoGallery: View {
 
     /// The photo's own shape at the row's height, kept from getting too narrow or too wide.
     private func width(of photo: DocumentPhoto) -> CGFloat {
-        let size = photo.image.size
+        let size = photo.size
         guard size.height > 0 else { return height }
         return min(max(height * size.width / size.height, height * 0.6), height * 1.8)
     }
@@ -107,13 +107,13 @@ private struct GalleryImage: View {
                     .fill(.quaternary)
             }
         }
-        .aspectRatio(photo.image.size, contentMode: contentMode)
+        .aspectRatio(photo.size, contentMode: contentMode)
         .task(id: photo.id) {
-            let source = photo.image
-            let pixels = CGSize(width: source.size.width * source.scale, height: source.size.height * source.scale)
-            let scale = min(1, maxPixelSize / max(pixels.width, pixels.height, 1))
-            let size = CGSize(width: pixels.width * scale, height: pixels.height * scale)
-            image = await source.byPreparingThumbnail(ofSize: size) ?? source
+            let photo = photo
+            let maxPixelSize = maxPixelSize
+            image = await Task.detached(priority: .userInitiated) {
+                photo.downsampled(toMaxPixelSize: maxPixelSize)
+            }.value ?? photo.image
         }
     }
 }
