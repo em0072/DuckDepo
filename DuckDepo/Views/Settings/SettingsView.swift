@@ -11,6 +11,7 @@ struct SettingsView: View {
     @State private var exporter = CredentialExporter()
     @Bindable private var biometricController = BiometricController.shared
     private let syncMonitor = SyncMonitor.shared
+    private let passwordHealth = PasswordHealthMonitor.shared
     @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
@@ -19,11 +20,13 @@ struct SettingsView: View {
                 Section {
                     OverviewCard(documentCount: viewModel.documentCount,
                                  passwordCount: viewModel.passwordCount,
-                                 renewalCount: viewModel.renewalCount)
+                                 renewalCount: viewModel.renewalCount,
+                                 toFixCount: passwordHealth.isLoaded ? passwordHealth.report.toFixCount : nil)
                 }
                 SecuritySection(isBiometryEnabled: $biometricController.isBiometryEnabled,
                                 biometryDelay: $biometricController.biometricDelay,
                                 clipboardLifetime: $viewModel.clipboardLifetime)
+                PasswordHealthSection(monitor: passwordHealth)
                 RemindersSection(viewModel: viewModel)
                 SyncSection(monitor: syncMonitor, viewModel: viewModel)
                 TransferSection(exporter: exporter)
@@ -38,13 +41,18 @@ struct SettingsView: View {
             Text(exporter.failure ?? "")
         }
         .pillNotification(text: exporter.doneMessage, show: $exporter.isShowingDone)
-        .onAppear(perform: viewModel.start)
+        .onAppear {
+            viewModel.start()
+            passwordHealth.start()
+        }
         .task {
             await viewModel.refreshSystemState()
         }
         .onChange(of: scenePhase) { _, phase in
-            // The user may have turned AutoFill or notifications on or off in Settings.
+            // The user may have turned AutoFill or notifications on or off in Settings, and a password
+            // may have changed on another device (only in the keychain).
             if phase == .active {
+                passwordHealth.refresh()
                 Task {
                     await viewModel.refreshSystemState()
                 }

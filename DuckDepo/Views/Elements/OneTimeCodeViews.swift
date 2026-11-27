@@ -12,10 +12,12 @@ struct OneTimeCodeText: View {
 
     var body: some View {
         TimelineView(.periodic(from: .now, by: 1)) { context in
-            Text(OneTimeCode.formatted(code.code(at: context.date)))
+            let current = code.code(at: context.date)
+            Text(OneTimeCode.formatted(current))
                 .font(.body.monospacedDigit().weight(.semibold))
                 .foregroundStyle(.tint)
                 .contentTransition(.numericText())
+                .animation(.default, value: current)
         }
     }
 }
@@ -77,6 +79,8 @@ private struct CountdownRing: View {
             Text(remaining, format: .number)
                 .font(.caption2.monospacedDigit().weight(.semibold))
                 .foregroundStyle(remaining <= 5 ? .red : .secondary)
+                .contentTransition(.numericText(countsDown: true))
+                .animation(.default, value: remaining)
         }
         .frame(width: size, height: size)
         .accessibilityHidden(true)

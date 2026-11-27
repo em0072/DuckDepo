@@ -20,11 +20,13 @@ struct TransferSection: View {
                 LabeledContent {
                     if exporter.isExporting {
                         ProgressView()
+                            .transition(.opacity)
                     }
                 } label: {
                     Label("sv_export", systemImage: "square.and.arrow.up")
                         .labelStyle(.tile(.blue))
                 }
+                .animation(.default, value: exporter.isExporting)
             }
             .foregroundStyle(.primary)
             .disabled(exporter.isExporting)

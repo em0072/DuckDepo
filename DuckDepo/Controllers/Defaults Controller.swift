@@ -19,6 +19,8 @@ final class DefaultsController {
         static let clipboardLifetime = "clipboardLifetime"
         static let areExpiryRemindersEnabled = "expiryRemindersEnabled"
         static let reminderSchedule = "reminderSchedule"
+        static let checksLeakedPasswords = "checksLeakedPasswords"
+        static let showsPasswordHealthInPasswords = "showsPasswordHealthInPasswords"
         static func historyToken(_ author: String) -> String { "historyToken.\(author)" }
 
         /// Keys from older versions that are no longer used.
@@ -74,6 +76,20 @@ final class DefaultsController {
     var reminderSchedule: Int {
         get { defaults.integer(forKey: Keys.reminderSchedule) }
         set { defaults.set(newValue, forKey: Keys.reminderSchedule) }
+    }
+
+    // MARK: - Password health
+
+    /// Off until the user turns it on: the check goes online (Have I Been Pwned).
+    var checksLeakedPasswords: Bool {
+        get { defaults.bool(forKey: Keys.checksLeakedPasswords) }
+        set { defaults.set(newValue, forKey: Keys.checksLeakedPasswords) }
+    }
+
+    /// Password Health at the top of Passwords too, not only in Settings. Off until turned on.
+    var showsPasswordHealthInPasswords: Bool {
+        get { defaults.bool(forKey: Keys.showsPasswordHealthInPasswords) }
+        set { defaults.set(newValue, forKey: Keys.showsPasswordHealthInPasswords) }
     }
 
     // MARK: - Store

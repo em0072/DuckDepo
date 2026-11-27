@@ -45,6 +45,7 @@ struct PrivacyView: View {
         Point(title: "privacy_icloud_title", body: "privacy_icloud_body", systemImage: "icloud.fill", color: .blue),
         Point(title: "privacy_passwords_title", body: "privacy_passwords_body", systemImage: "key.fill", color: .indigo),
         Point(title: "privacy_scan_title", body: "privacy_scan_body", systemImage: "text.viewfinder", color: .orange),
+        Point(title: "privacy_leaks_title", body: "privacy_leaks_body", systemImage: "network.badge.shield.half.filled", color: .red),
         Point(title: "privacy_clipboard_title", body: "privacy_clipboard_body", systemImage: "doc.on.clipboard.fill", color: .teal),
         Point(title: "privacy_tracking_title", body: "privacy_tracking_body", systemImage: "eye.slash.fill", color: .green),
     ]

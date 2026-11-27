@@ -49,9 +49,14 @@ private struct ScanFlow: ViewModifier {
             }
             .disabled(isReading)
             .overlay {
-                if isReading {
-                    ReadingOverlay()
+                // Animated here only: the editor the scan opens has its own presentation.
+                ZStack {
+                    if isReading {
+                        ReadingOverlay()
+                            .transition(.opacity)
+                    }
                 }
+                .animation(.easeInOut(duration: 0.2), value: isReading)
             }
             .fullScreenCover(isPresented: isPresenting(.camera), onDismiss: readCameraPages) {
                 CameraPickerView(imageArray: $cameraImages)

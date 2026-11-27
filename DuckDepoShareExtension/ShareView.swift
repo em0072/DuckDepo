@@ -17,6 +17,7 @@ struct ShareView: View {
     var body: some View {
         NavigationStack {
             content
+                .animation(.default, value: model.stage)
                 .navigationTitle("share_title")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
@@ -151,11 +152,15 @@ private struct DocumentPicker: View {
         }
         .disabled(model.isSaving)
         .overlay {
-            if model.isSaving {
-                ProgressView()
-            } else if model.filteredDocuments.isEmpty {
-                ContentUnavailableView.search(text: model.query)
+            ZStack {
+                if model.isSaving {
+                    ProgressView()
+                        .transition(.opacity)
+                } else if model.filteredDocuments.isEmpty {
+                    ContentUnavailableView.search(text: model.query)
+                }
             }
+            .animation(.default, value: model.isSaving)
         }
         .searchable(text: $model.query)
         .navigationTitle("share_choose_document")

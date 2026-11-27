@@ -60,7 +60,9 @@ struct DepoListView: View {
         }
         .alert("delete_confirmation_title", isPresented: isConfirmingDelete, presenting: documentToDelete) { document in
             Button("delete", role: .destructive) {
-                viewModel.delete(document)
+                withAnimation {
+                    viewModel.delete(document)
+                }
             }
         } message: { _ in
             Text("delete_confirmation_body")

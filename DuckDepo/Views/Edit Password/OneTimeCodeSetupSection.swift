@@ -81,7 +81,9 @@ private struct OneTimeCodeSetupPresentations: ViewModifier {
                     .autocorrectionDisabled()
                     .textInputAutocapitalization(.characters)
                 Button("add_button") {
-                    viewModel.setUpOneTimeCode(from: setup.setupKey)
+                    withAnimation {
+                        viewModel.setUpOneTimeCode(from: setup.setupKey)
+                    }
                 }
                 Button("cancel_button", role: .cancel) {}
             } message: {
@@ -103,7 +105,9 @@ private struct OneTimeCodeSetupPresentations: ViewModifier {
             .fullScreenCover(isPresented: $setup.isScanning) {
                 QRCodeScannerView { payload in
                     setup.isScanning = false
-                    viewModel.setUpOneTimeCode(from: payload)
+                    withAnimation {
+                        viewModel.setUpOneTimeCode(from: payload)
+                    }
                 }
             }
     }
@@ -115,7 +119,9 @@ private struct OneTimeCodeSetupPresentations: ViewModifier {
         }
         let codes = await DocumentReader.qrCodes(in: image)
         // A screenshot may hold other QR codes too; take the setup one.
-        viewModel.setUpOneTimeCode(from: codes.first { OneTimeCode(text: $0) != nil } ?? "")
+        withAnimation {
+            viewModel.setUpOneTimeCode(from: codes.first { OneTimeCode(text: $0) != nil } ?? "")
+        }
     }
 }
 
