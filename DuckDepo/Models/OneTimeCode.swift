@@ -53,7 +53,9 @@ struct OneTimeCode: Equatable {
         guard let components = URLComponents(string: uri), components.host?.lowercased() == "totp" else { return nil }
         let items = Dictionary((components.queryItems ?? []).map { ($0.name.lowercased(), $0.value ?? "") },
                                uniquingKeysWith: { first, _ in first })
-        guard let secret = items["secret"].flatMap(Self.base32Decode), secret.count >= Self.minimumSecretLength else { return nil }
+        // A link comes from a site or another app rather than typing, so any secret it has is taken
+        // (some are shorter than a typed key must be).
+        guard let secret = items["secret"].flatMap(Self.base32Decode), !secret.isEmpty else { return nil }
         let algorithm = items["algorithm"].flatMap { Algorithm(rawValue: $0.uppercased()) } ?? .sha1
         let digits = items["digits"].flatMap(Int.init) ?? 6
         let period = items["period"].flatMap(Int.init) ?? 30

@@ -117,6 +117,100 @@ final class PasswordsStorage: NSObject {
         return true
     }
 
+    // MARK: - Import and export
+    //
+    // An import writes secrets with the static functions below (keychain only, so they can run off the
+    // main thread), then stores the records on the main thread.
+
+    /// Adds many passwords at once with one AutoFill refresh. Passwords already stored (by ID) are left
+    /// alone, and so is a password whose value can't be written. Returns how many were added, or nil if
+    /// the save failed (then nothing was).
+    func add(_ passwords: [Password]) -> Int? {
+        let stored = storedIDs(among: passwords.map(\.id))
+        let new = passwords.filter { !stored.contains($0.id) }
+        let written = Self.writeSecrets(of: new, keychain: keychain)
+        guard insertRecords(for: written) else { return nil }
+        if !written.isEmpty {
+            identityStore?.refresh(context: context, keychain: keychain)
+        }
+        return written.count
+    }
+
+    /// The IDs among these that are already stored.
+    func storedIDs(among ids: [UUID]) -> Set<UUID> {
+        guard !ids.isEmpty else { return [] }
+        let request = DDPassword.fetchRequest()
+        request.predicate = NSPredicate(format: "id IN %@", ids)
+        return Set(((try? context.fetch(request)) ?? []).compactMap(\.id))
+    }
+
+    /// Writes the values and codes of new passwords and returns the ones written; a password whose
+    /// secrets can't all be written has none left behind.
+    static func writeSecrets(of passwords: [Password], keychain: KeychainStoring) -> [Password] {
+        passwords.filter { password in
+            let codeKey = oneTimeCodeKey(for: password.id)
+            let isWritten = keychain.set(password.value, forKey: password.id.uuidString)
+                && (password.oneTimeCode.isEmpty || keychain.set(password.oneTimeCode, forKey: codeKey))
+            if !isWritten {
+                keychain.delete(password.id.uuidString)
+                keychain.delete(codeKey)
+            }
+            return isWritten
+        }
+    }
+
+    /// Stores the records of passwords whose secrets are written, in one save. If the save fails, nothing
+    /// is stored and their secrets are removed.
+    func insertRecords(for passwords: [Password]) -> Bool {
+        guard !passwords.isEmpty else { return true }
+        for password in passwords {
+            let object = DDPassword(context: context)
+            object.id = password.id
+            object.update(name: password.name, login: password.login, website: password.website)
+        }
+        guard database.save() else {
+            context.rollback()
+            for password in passwords {
+                keychain.delete(password.id.uuidString)
+                keychain.delete(Self.oneTimeCodeKey(for: password.id))
+            }
+            return false
+        }
+        return true
+    }
+
+    /// Gives saved passwords codes they still don't have, checking again now (one may have arrived from
+    /// another device meanwhile). Nothing here depends on Core Data, so nothing is undone later.
+    static func addCodes(_ codes: [UUID: String], keychain: KeychainStoring) -> (written: Int, failed: Int) {
+        var written = 0
+        var failed = 0
+        for (id, code) in codes {
+            let key = oneTimeCodeKey(for: id)
+            guard (keychain.string(forKey: key) ?? "").isEmpty else { continue }
+            if keychain.set(code, forKey: key) {
+                written += 1
+            } else {
+                failed += 1
+            }
+        }
+        return (written, failed)
+    }
+
+    /// Every password, without values: what an export reads secrets for.
+    func allRecords() -> [Password] {
+        ((try? context.fetch(DDPassword.fetchRequest())) ?? []).compactMap { $0.convert() }
+    }
+
+    /// These passwords with their values and codes. Keychain only.
+    static func withSecrets(_ passwords: [Password], keychain: KeychainStoring) -> [Password] {
+        passwords.map { password in
+            var password = password
+            password.value = keychain.string(forKey: password.id.uuidString) ?? ""
+            password.oneTimeCode = keychain.string(forKey: oneTimeCodeKey(for: password.id)) ?? ""
+            return password
+        }
+    }
+
     func delete(_ password: Password) {
         guard let object = fetch(with: password.id) else { return }
         context.delete(object)
