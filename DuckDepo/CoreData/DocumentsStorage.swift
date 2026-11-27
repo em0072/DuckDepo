@@ -105,6 +105,32 @@ extension DataBase {
         return save()
     }
 
+    /// Adds many documents in one save, after the existing ones. A document already stored (by ID) is
+    /// left alone. Returns how many were added, or nil if the save failed (then none were).
+    @discardableResult
+    func add(_ documents: [Document]) -> Int? {
+        guard !documents.isEmpty else { return 0 }
+        let request = DDDocument.fetchRequest()
+        request.predicate = NSPredicate(format: "identifier IN %@", documents.map(\.id))
+        let stored = Set(((try? context.fetch(request)) ?? []).compactMap(\.identifier))
+        let new = documents.filter { !stored.contains($0.id) }
+        guard !new.isEmpty else { return 0 }
+        let first = fetchDocumentCount()
+        for (offset, document) in new.enumerated() {
+            _ = DDDocument(viewContext: context, object: document, order: first + offset)
+        }
+        guard save() else {
+            context.rollback()
+            return nil
+        }
+        return new.count
+    }
+
+    /// Every document without photos.
+    func allDocuments() -> [Document] {
+        ((try? context.fetch(DDDocument.fetchRequest())) ?? []).map { $0.convert(includePhotos: false) }
+    }
+
     func fetchFromDB(_ document: Document) -> DDDocument? {
         DDDocument.fetchDocument(with: document.id, viewContext: context)
     }

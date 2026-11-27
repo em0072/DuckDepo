@@ -139,22 +139,26 @@ enum FieldCatalog {
     private static let fieldLookup: [String: FieldKey] = lookup(FieldKey.allCases) { ($0.localizationKey, $0.formerNames) }
 
     private static func lookup<Key>(_ keys: [Key], names: (Key) -> (String, [String])) -> [String: Key] {
-        let bundles = Bundle.main.localizations.compactMap { localization in
-            Bundle.main.path(forResource: localization, ofType: "lproj").flatMap(Bundle.init(path:))
-        }
         var table: [String: Key] = [:]
         for key in keys {
             let (localizationKey, formerNames) = names(key)
-            var all = [localizationKey] + formerNames
-            all += bundles.map { $0.localizedString(forKey: localizationKey, value: localizationKey, table: nil) }
-            for name in all where table[normalized(name)] == nil {
+            for name in translations(of: localizationKey) + formerNames where table[normalized(name)] == nil {
                 table[normalized(name)] = key
             }
         }
         return table
     }
 
-    private static func normalized(_ name: String) -> String {
+    /// The key and its text in every language the app ships.
+    static func translations(of localizationKey: String) -> [String] {
+        [localizationKey] + bundles.map { $0.localizedString(forKey: localizationKey, value: localizationKey, table: nil) }
+    }
+
+    private static let bundles: [Bundle] = Bundle.main.localizations.compactMap { localization in
+        Bundle.main.path(forResource: localization, ofType: "lproj").flatMap(Bundle.init(path:))
+    }
+
+    static func normalized(_ name: String) -> String {
         name.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
     }
 }

@@ -205,6 +205,11 @@
 		41C34986265A1DE7D1F9CF97 /* PasskeyViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73356F4CB6D0C5E72D2BE890 /* PasskeyViews.swift */; };
 		62D48BDF197564B0C09A1C5C /* PasskeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73DD99B0C14AACDD7FE8C156 /* PasskeyView.swift */; };
 		6A0CF3BE97F690C6514400AC /* ColorfulIconLabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75088876273E9736009A7D3B /* ColorfulIconLabelStyle.swift */; };
+		BB7D4AF3F22205D740798417 /* CredentialExchange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737665CC27F18E9D53123555 /* CredentialExchange.swift */; };
+		F7682F19A3DF10F91E2017FC /* CredentialTransfer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35B8F0A20716335A5B969865 /* CredentialTransfer.swift */; };
+		9C2D05B3C9250BC8A8792AB7 /* ImportSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9CC5F858E919CE48C9DC53 /* ImportSheet.swift */; };
+		8A13D803B72E48089B809F6F /* TransferSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5028692D7ED60F3B8AF1235 /* TransferSection.swift */; };
+		91E3016554134D180A4353AA /* CredentialExchangeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D520DE4D4E0E0E8272C082 /* CredentialExchangeTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -386,6 +391,11 @@
 		4D9E429AE6F34417F2F67676 /* PasskeyRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasskeyRow.swift; sourceTree = "<group>"; };
 		73356F4CB6D0C5E72D2BE890 /* PasskeyViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasskeyViews.swift; sourceTree = "<group>"; };
 		73DD99B0C14AACDD7FE8C156 /* PasskeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasskeyView.swift; sourceTree = "<group>"; };
+		737665CC27F18E9D53123555 /* CredentialExchange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialExchange.swift; sourceTree = "<group>"; };
+		35B8F0A20716335A5B969865 /* CredentialTransfer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialTransfer.swift; sourceTree = "<group>"; };
+		DE9CC5F858E919CE48C9DC53 /* ImportSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportSheet.swift; sourceTree = "<group>"; };
+		D5028692D7ED60F3B8AF1235 /* TransferSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferSection.swift; sourceTree = "<group>"; };
+		62D520DE4D4E0E0E8272C082 /* CredentialExchangeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialExchangeTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -588,6 +598,8 @@
 				AFDA1ADCD51BA9143D796456 /* SecuritySection.swift */,
 				E2863BF1ADD7016804300B8F /* RemindersSection.swift */,
 				17BE2A08EF4761B7B69E86A6 /* AboutSection.swift */,
+				DE9CC5F858E919CE48C9DC53 /* ImportSheet.swift */,
+				D5028692D7ED60F3B8AF1235 /* TransferSection.swift */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -676,6 +688,8 @@
 			children = (
 				75A140D42869F5CB004A47A8 /* CredentialIdentityStoreController.swift */,
 				E9BF757513E87C35143D39AA /* LegacyDataMigration.swift */,
+				737665CC27F18E9D53123555 /* CredentialExchange.swift */,
+				35B8F0A20716335A5B969865 /* CredentialTransfer.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -794,6 +808,7 @@
 				4EA96E14BD30AC74754478FA /* PhotoSearchTests.swift */,
 				ED4B936F2E4E1B4487B15588 /* OneTimeCodeTests.swift */,
 				D7863A4605FE81DB4902FBE5 /* PasskeyTests.swift */,
+				62D520DE4D4E0E0E8272C082 /* CredentialExchangeTests.swift */,
 			);
 			path = DuckDepoTests;
 			sourceTree = "<group>";
@@ -1089,6 +1104,10 @@
 				636548C5A43D7A2637BE1EA7 /* UserVerification.swift in Sources */,
 				DF46D05E22B1CB49F72AF0C7 /* PasskeyRow.swift in Sources */,
 				62D48BDF197564B0C09A1C5C /* PasskeyView.swift in Sources */,
+				BB7D4AF3F22205D740798417 /* CredentialExchange.swift in Sources */,
+				F7682F19A3DF10F91E2017FC /* CredentialTransfer.swift in Sources */,
+				9C2D05B3C9250BC8A8792AB7 /* ImportSheet.swift in Sources */,
+				8A13D803B72E48089B809F6F /* TransferSection.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1177,6 +1196,7 @@
 				3937FD628A1749AAF3D4E9AE /* PhotoSearchTests.swift in Sources */,
 				EFF43D162E946D5CECFEFE41 /* OneTimeCodeTests.swift in Sources */,
 				70192388278E0957587D66CB /* PasskeyTests.swift in Sources */,
+				91E3016554134D180A4353AA /* CredentialExchangeTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

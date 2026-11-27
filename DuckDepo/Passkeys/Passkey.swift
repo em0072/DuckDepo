@@ -97,12 +97,42 @@ final class PasskeyStorage {
             .flatMap { try? JSONDecoder().decode(Passkey.self, from: Data($0.utf8)) }
     }
 
+    /// Every passkey with its key, for an export.
+    func allWithKeys() -> [Passkey] {
+        let decoder = JSONDecoder()
+        return keychain.strings(service: Self.service).values
+            .compactMap { try? decoder.decode(Passkey.self, from: Data($0.utf8)) }
+            .sorted { ($0.relyingParty, $0.userName, $0.createdAt) < ($1.relyingParty, $1.userName, $1.createdAt) }
+    }
+
     @discardableResult
     func save(_ passkey: Passkey) -> Bool {
-        guard let data = try? JSONEncoder().encode(passkey), let json = String(data: data, encoding: .utf8),
-              keychain.set(json, forKey: Self.key(for: passkey.credentialID), service: Self.service) else { return false }
+        guard write(passkey) else { return false }
         NotificationCenter.default.post(name: Self.didChange, object: keychain)
         return true
+    }
+
+    /// Adds passkeys an import brought, telling screens once. One whose credential ID is already here is
+    /// left as it is. Returns how many were added and how many couldn't be written.
+    func add(_ passkeys: [Passkey]) -> (added: Int, failed: Int) {
+        var added = 0
+        var failed = 0
+        for passkey in passkeys where keychain.string(forKey: Self.key(for: passkey.credentialID)) == nil {
+            if write(passkey) {
+                added += 1
+            } else {
+                failed += 1
+            }
+        }
+        if added > 0 {
+            NotificationCenter.default.post(name: Self.didChange, object: keychain)
+        }
+        return (added, failed)
+    }
+
+    private func write(_ passkey: Passkey) -> Bool {
+        guard let data = try? JSONEncoder().encode(passkey), let json = String(data: data, encoding: .utf8) else { return false }
+        return keychain.set(json, forKey: Self.key(for: passkey.credentialID), service: Self.service)
     }
 
     /// Saves a site's new passkey and deletes the ones it made before for the same account (same site and
