@@ -16,6 +16,7 @@ struct PasswordsListView: View {
     @Environment(\.openURL) private var openURL
     @Environment(\.scenePhase) private var scenePhase
     private var syncMonitor = SyncMonitor.shared
+    private var health = PasswordHealthMonitor.shared
 
     init(viewModel: PasswordsListViewModel) {
         _viewModel = State(initialValue: viewModel)
@@ -33,9 +34,16 @@ struct PasswordsListView: View {
                         }
                     }
                 }
-                .onAppear(perform: viewModel.start)
+                .onAppear {
+                    viewModel.start()
+                    health.start()
+                }
         } detail: {
-            if let password = viewModel.password(with: selection) {
+            if selection == PasswordHealthView.selectionID {
+                NavigationStack {
+                    PasswordHealthView()
+                }
+            } else if let password = viewModel.password(with: selection) {
                 PasswordView(password: password)
                     .id(password.id)
             } else if let passkey = viewModel.passkey(with: selection) {
@@ -54,14 +62,18 @@ struct PasswordsListView: View {
         }
         .alert("epv_delete_alert_title", isPresented: isConfirmingDelete, presenting: passwordToDelete) { password in
             Button("epv_delete_alert_delete", role: .destructive) {
-                viewModel.delete(password)
+                withAnimation {
+                    viewModel.delete(password)
+                }
             }
         } message: { _ in
             Text("epv_delete_alert_body")
         }
         .alert("passkey_delete_title", isPresented: isConfirmingPasskeyDelete, presenting: passkeyToDelete) { passkey in
             Button("delete", role: .destructive) {
-                viewModel.delete(passkey)
+                withAnimation {
+                    viewModel.delete(passkey)
+                }
             }
         } message: { passkey in
             Text("passkey_delete_body \(passkey.relyingParty)")
@@ -72,16 +84,25 @@ struct PasswordsListView: View {
         .onChange(of: viewModel.passkeys) {
             clearDeletedSelection()
         }
-        // Passkeys are made in AutoFill, another process; look again when coming back.
+        // Passkeys are made in AutoFill, another process; look again when coming back. A password changed
+        // on another device changes only the keychain.
         .onChange(of: scenePhase) { _, phase in
             if phase == .active {
                 viewModel.reloadPasskeys()
+                health.refresh()
             }
+        }
+        .onChange(of: health.showsInPasswords) {
+            clearDeletedSelection()
         }
     }
 
     private func clearDeletedSelection() {
-        if viewModel.password(with: selection) == nil && viewModel.passkey(with: selection) == nil {
+        if selection == PasswordHealthView.selectionID {
+            if !health.showsInPasswords {
+                selection = nil
+            }
+        } else if viewModel.password(with: selection) == nil && viewModel.passkey(with: selection) == nil {
             selection = nil
         }
     }
@@ -109,6 +130,12 @@ struct PasswordsListView: View {
 
     private var listView: some View {
         List(selection: $selection) {
+            if health.showsInPasswords {
+                Section {
+                    PasswordHealthLabel(toFixCount: health.report.toFixCount, isLoaded: health.isLoaded)
+                        .tag(PasswordHealthView.selectionID)
+                }
+            }
             Section {
                 ForEach(viewModel.passwords) { password in
                     passwordRow(password)

@@ -111,9 +111,12 @@ private struct GalleryImage: View {
         .task(id: photo.id) {
             let photo = photo
             let maxPixelSize = maxPixelSize
-            image = await Task.detached(priority: .userInitiated) {
+            let decoded = await Task.detached(priority: .userInitiated) {
                 photo.downsampled(toMaxPixelSize: maxPixelSize)
             }.value ?? photo.image
+            withAnimation(.easeOut(duration: 0.2)) {
+                image = decoded
+            }
         }
     }
 }

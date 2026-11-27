@@ -7,6 +7,7 @@
 
 import Combine
 import Foundation
+import SwiftUI
 
 @Observable
 final class PasswordsListViewModel {
@@ -33,7 +34,7 @@ final class PasswordsListViewModel {
         let storage = makeStorage()
         dataStorage = storage
         storage.startObserving()
-        reloadPasskeys()
+        reloadPasskeys(animated: false)
         storage.passwords
             .sink { [weak self] passwords in
                 self?.passwords = passwords
@@ -72,9 +73,15 @@ final class PasswordsListViewModel {
 
     // MARK: - Passkeys
 
-    func reloadPasskeys() {
+    /// Animated, except the first time (the list appearing).
+    func reloadPasskeys(animated: Bool = true) {
         let passkeys = passkeyStorage.all()
-        if passkeys != self.passkeys {
+        guard passkeys != self.passkeys else { return }
+        if animated {
+            withAnimation {
+                self.passkeys = passkeys
+            }
+        } else {
             self.passkeys = passkeys
         }
     }

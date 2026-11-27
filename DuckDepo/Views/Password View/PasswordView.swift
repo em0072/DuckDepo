@@ -21,14 +21,28 @@ struct PasswordView: View {
 
     var body: some View {
         List {
+            #if !AUTOFILL_EXTENSION
+            PasswordHealthWarningSection(password: viewModel.password)
+            #endif
             credentialsSection
             websiteSection
+            #if !AUTOFILL_EXTENSION
+            PasswordHealthHiddenNote(password: viewModel.password)
+            #endif
         }
         .navigationTitle(viewModel.password.name)
         .navigationBarTitleDisplayMode(.inline)
-        .onAppear(perform: viewModel.load)
+        .onAppear {
+            viewModel.load()
+            #if !AUTOFILL_EXTENSION
+            PasswordHealthMonitor.shared.start()
+            #endif
+        }
         .onChange(of: password) { _, password in
-            viewModel.listItemChanged(password)
+            // A change from iCloud or the list; the first load (onAppear) isn't animated.
+            withAnimation {
+                viewModel.listItemChanged(password)
+            }
         }
         .toolbar {
             ToolbarItemGroup(placement: .primaryAction) {

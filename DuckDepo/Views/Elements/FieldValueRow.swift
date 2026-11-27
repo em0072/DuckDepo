@@ -30,9 +30,12 @@ struct FieldValueRow: View {
             .accessibilityElement(children: .combine)
             if isSecret {
                 Button {
-                    isRevealed.toggle()
+                    withAnimation {
+                        isRevealed.toggle()
+                    }
                 } label: {
                     Image(systemName: isRevealed ? "eye.slash" : "eye")
+                        .contentTransition(.symbolEffect(.replace))
                 }
                 .accessibilityLabel(Text(isRevealed ? "hide_value \(title)" : "show_value \(title)"))
             }

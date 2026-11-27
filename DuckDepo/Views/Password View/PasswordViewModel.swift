@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 /// Cheap to create: SwiftUI may build and discard several instances; the one on screen loads in `load()`.
 @Observable
@@ -97,7 +98,9 @@ final class PasswordViewModel {
 extension PasswordViewModel: EditPasswordViewModelDelegate {
 
     func passwordUpdated(_ password: Password) {
-        self.password = password
+        withAnimation {
+            self.password = password
+        }
     }
 
     func passwordDeleted() {

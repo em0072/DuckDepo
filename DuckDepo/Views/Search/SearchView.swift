@@ -15,6 +15,7 @@ struct SearchView: View {
     var body: some View {
         NavigationStack(path: $path) {
             content
+                .animation(.default, value: viewModel.isSearching)
                 .navigationTitle("search_title")
                 .navigationDestination(for: SearchDestination.self, destination: destination)
         }

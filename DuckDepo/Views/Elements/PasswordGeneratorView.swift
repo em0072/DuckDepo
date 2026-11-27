@@ -27,8 +27,9 @@ struct PasswordGeneratorView: View {
                             .font(.title3.monospaced().weight(.semibold))
                             .lineLimit(1)
                             .minimumScaleFactor(0.5)
+                            .contentTransition(.numericText())
                             .frame(maxWidth: .infinity, alignment: .leading)
-                        Button(action: generatePassword) {
+                        Button(action: regenerate) {
                             Image(systemName: "arrow.clockwise")
                         }
                         .buttonStyle(.borderless)
@@ -40,6 +41,8 @@ struct PasswordGeneratorView: View {
                         LabeledContent("pgv_num_of_symbols") {
                             Text(Int(length), format: .number)
                                 .monospacedDigit()
+                                .contentTransition(.numericText(value: length))
+                                .animation(.snappy, value: length)
                         }
                         Slider(value: $length, in: 8...32, step: 1) {
                             Text("pgv_num_of_symbols")
@@ -66,11 +69,18 @@ struct PasswordGeneratorView: View {
                 }
             }
         }
+        // Not animated while the sheet comes up.
         .onAppear(perform: generatePassword)
-        .onChange(of: length) { generatePassword() }
-        .onChange(of: useNumbers) { generatePassword() }
-        .onChange(of: useCapitals) { generatePassword() }
-        .onChange(of: useSymbols) { generatePassword() }
+        .onChange(of: length) { regenerate() }
+        .onChange(of: useNumbers) { regenerate() }
+        .onChange(of: useCapitals) { regenerate() }
+        .onChange(of: useSymbols) { regenerate() }
+    }
+
+    private func regenerate() {
+        withAnimation(.snappy) {
+            generatePassword()
+        }
     }
 
     private func generatePassword() {

@@ -284,6 +284,15 @@
 		37F02EC04D62EDBA85A51BC7 /* Pill Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75AB83E02733E2C9000618F1 /* Pill Notification.swift */; };
 		66CCC0B01ED5CA266623EFC1 /* ShareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F995FA16D546D1CF8225DF0 /* ShareTests.swift */; };
 		5A1E0C0DE5A1E0C0DE5A1E02 /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 5A1E0C0DE5A1E0C0DE5A1E01 /* InfoPlist.xcstrings */; };
+		2D24B00D4479C516EA9145F8 /* PasswordStrength.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534B11FB42EE9ED5038162C1 /* PasswordStrength.swift */; };
+		671D7F9C8D7E599BB80935E2 /* CommonPasswords.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99423350F74B57A49DA6FBF /* CommonPasswords.swift */; };
+		758AD664529E77CBB3E63B5F /* PasswordHealth.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9EC2E9C964A6A38C862241C /* PasswordHealth.swift */; };
+		2476ADE4E4BC39B2D8FA15BC /* PwnedPasswords.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88025E0AEA11EA748DF32D34 /* PwnedPasswords.swift */; };
+		23084A057672C12C1E685736 /* LeakCheckCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046E4D2AAB4638566FE1C75E /* LeakCheckCache.swift */; };
+		24C179ABD8BB86C6305B1E20 /* PasswordHealthMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C2BB204D87AC6751276E5F /* PasswordHealthMonitor.swift */; };
+		DC7083C2BFEBC921B13A8C40 /* PasswordHealthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9E80725B5DAB541AE6CFB5A /* PasswordHealthView.swift */; };
+		E296A2238AE4E4595A3C4F0E /* PasswordHealthSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25345FD7C7913128E0C78FCD /* PasswordHealthSection.swift */; };
+		0BB1471DE57B71BF4DE2176C /* PasswordHealthTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10FA6DA20F3B618D14C7C4D0 /* PasswordHealthTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -488,6 +497,15 @@
 		F61511A902437DC91F1BD8AA /* DocumentText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentText.swift; sourceTree = "<group>"; };
 		7F995FA16D546D1CF8225DF0 /* ShareTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareTests.swift; sourceTree = "<group>"; };
 		5A1E0C0DE5A1E0C0DE5A1E01 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
+		534B11FB42EE9ED5038162C1 /* PasswordStrength.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordStrength.swift; sourceTree = "<group>"; };
+		E99423350F74B57A49DA6FBF /* CommonPasswords.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonPasswords.swift; sourceTree = "<group>"; };
+		B9EC2E9C964A6A38C862241C /* PasswordHealth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordHealth.swift; sourceTree = "<group>"; };
+		88025E0AEA11EA748DF32D34 /* PwnedPasswords.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PwnedPasswords.swift; sourceTree = "<group>"; };
+		046E4D2AAB4638566FE1C75E /* LeakCheckCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeakCheckCache.swift; sourceTree = "<group>"; };
+		05C2BB204D87AC6751276E5F /* PasswordHealthMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordHealthMonitor.swift; sourceTree = "<group>"; };
+		F9E80725B5DAB541AE6CFB5A /* PasswordHealthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordHealthView.swift; sourceTree = "<group>"; };
+		25345FD7C7913128E0C78FCD /* PasswordHealthSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordHealthSection.swift; sourceTree = "<group>"; };
+		10FA6DA20F3B618D14C7C4D0 /* PasswordHealthTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordHealthTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -671,6 +689,7 @@
 				756AF0B52726C324001CB821 /* Preview Content */,
 				8B323570D6AE7973FF27D8E8 /* Scanning */,
 				4413A337421FF3CA7951F1D0 /* Passkeys */,
+				DAED3D99D14162F30CBFD274 /* PasswordHealth */,
 			);
 			path = DuckDepo;
 			sourceTree = "<group>";
@@ -703,6 +722,7 @@
 				17BE2A08EF4761B7B69E86A6 /* AboutSection.swift */,
 				DE9CC5F858E919CE48C9DC53 /* ImportSheet.swift */,
 				D5028692D7ED60F3B8AF1235 /* TransferSection.swift */,
+				25345FD7C7913128E0C78FCD /* PasswordHealthSection.swift */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -722,6 +742,7 @@
 				75A021EB27343B10001484BA /* UIViewControllerRepresentable */,
 				C57B170C7E121D682E02A908 /* Lock */,
 				A040DD7831842DB479E031FA /* Search */,
+				E6AA992CA44B94ADFDB1C4F2 /* PasswordHealth */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -913,6 +934,7 @@
 				D7863A4605FE81DB4902FBE5 /* PasskeyTests.swift */,
 				62D520DE4D4E0E0E8272C082 /* CredentialExchangeTests.swift */,
 				7F995FA16D546D1CF8225DF0 /* ShareTests.swift */,
+				10FA6DA20F3B618D14C7C4D0 /* PasswordHealthTests.swift */,
 			);
 			path = DuckDepoTests;
 			sourceTree = "<group>";
@@ -965,6 +987,27 @@
 				A0E31BDA37207445E4B5768C /* ShareView.swift */,
 			);
 			path = DuckDepoShareExtension;
+			sourceTree = "<group>";
+		};
+		DAED3D99D14162F30CBFD274 /* PasswordHealth */ = {
+			isa = PBXGroup;
+			children = (
+				534B11FB42EE9ED5038162C1 /* PasswordStrength.swift */,
+				E99423350F74B57A49DA6FBF /* CommonPasswords.swift */,
+				B9EC2E9C964A6A38C862241C /* PasswordHealth.swift */,
+				88025E0AEA11EA748DF32D34 /* PwnedPasswords.swift */,
+				046E4D2AAB4638566FE1C75E /* LeakCheckCache.swift */,
+				05C2BB204D87AC6751276E5F /* PasswordHealthMonitor.swift */,
+			);
+			path = PasswordHealth;
+			sourceTree = "<group>";
+		};
+		E6AA992CA44B94ADFDB1C4F2 /* PasswordHealth */ = {
+			isa = PBXGroup;
+			children = (
+				F9E80725B5DAB541AE6CFB5A /* PasswordHealthView.swift */,
+			);
+			path = PasswordHealth;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1263,6 +1306,14 @@
 				8A13D803B72E48089B809F6F /* TransferSection.swift in Sources */,
 				476442637096AD56638B1323 /* PageImport.swift in Sources */,
 				EEE9904659396CEDA8C85893 /* DocumentText.swift in Sources */,
+				2D24B00D4479C516EA9145F8 /* PasswordStrength.swift in Sources */,
+				671D7F9C8D7E599BB80935E2 /* CommonPasswords.swift in Sources */,
+				758AD664529E77CBB3E63B5F /* PasswordHealth.swift in Sources */,
+				2476ADE4E4BC39B2D8FA15BC /* PwnedPasswords.swift in Sources */,
+				23084A057672C12C1E685736 /* LeakCheckCache.swift in Sources */,
+				24C179ABD8BB86C6305B1E20 /* PasswordHealthMonitor.swift in Sources */,
+				DC7083C2BFEBC921B13A8C40 /* PasswordHealthView.swift in Sources */,
+				E296A2238AE4E4595A3C4F0E /* PasswordHealthSection.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1353,6 +1404,7 @@
 				70192388278E0957587D66CB /* PasskeyTests.swift in Sources */,
 				91E3016554134D180A4353AA /* CredentialExchangeTests.swift in Sources */,
 				66CCC0B01ED5CA266623EFC1 /* ShareTests.swift in Sources */,
+				0BB1471DE57B71BF4DE2176C /* PasswordHealthTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

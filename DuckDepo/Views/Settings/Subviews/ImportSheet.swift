@@ -23,6 +23,7 @@ struct ImportSheet: View {
                         ProgressView(value: progress) {
                             Text("import_in_progress")
                         }
+                        .animation(.linear, value: progress)
                     }
                 }
                 if plan.isEmpty {
@@ -49,6 +50,7 @@ struct ImportSheet: View {
                     }
                 }
             }
+            .animation(.default, value: isImporting)
             .navigationTitle("import_title")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

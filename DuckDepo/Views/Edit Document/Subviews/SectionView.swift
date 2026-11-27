@@ -66,9 +66,14 @@ struct SectionView: View {
         } else {
             LabeledTextField(title: field.wrappedValue.displayTitle, value: field.value,
                              kind: field.wrappedValue.isMultiline ? .multiline : .text) {
-                if let confidence {
-                    ScanMarker(confidence: confidence)
+                // Only the marker animates, so typing doesn't.
+                ZStack {
+                    if let confidence {
+                        ScanMarker(confidence: confidence)
+                            .transition(.opacity)
+                    }
                 }
+                .animation(.default, value: confidence)
             }
         }
     }
@@ -168,7 +173,9 @@ struct DateFieldRow: View {
         } else {
             LabeledContent(title) {
                 Button("date_add") {
-                    value = FieldDate.storedValue(fromLocalDate: Date()) ?? ""
+                    withAnimation {
+                        value = FieldDate.storedValue(fromLocalDate: Date()) ?? ""
+                    }
                 }
             }
         }

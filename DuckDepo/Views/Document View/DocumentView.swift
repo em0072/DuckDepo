@@ -50,7 +50,10 @@ struct DocumentView: View {
         .navigationBarTitleDisplayMode(.inline)
         .onAppear(perform: viewModel.load)
         .onChange(of: document) {
-            viewModel.reload()
+            // A change from iCloud or another screen; the first load (onAppear) isn't animated.
+            withAnimation {
+                viewModel.reload()
+            }
         }
         .toolbar {
             ToolbarItemGroup(placement: .primaryAction) {
@@ -112,6 +115,7 @@ private struct ExpiryRow: View {
             } icon: {
                 Image(systemName: status.systemImage)
                     .foregroundStyle(status.color)
+                    .contentTransition(.symbolEffect(.replace))
             }
         }
     }

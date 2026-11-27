@@ -129,7 +129,9 @@ struct PhotosSectionView: View {
     /// 100 MB, more than the share extension has.
     private func loadPickedItems(_ items: [PhotosPickerItem]) {
         pickerItems = []
-        isProcessing = true
+        withAnimation {
+            isProcessing = true
+        }
         Task {
             var photos: [DocumentPhoto] = []
             for item in items.prefix(max(0, remainingPhotos)) {
@@ -141,15 +143,19 @@ struct PhotosSectionView: View {
                     photos.append(photo)
                 }
             }
-            isProcessing = false
-            delegate?.add(photos: photos)
+            withAnimation {
+                isProcessing = false
+                delegate?.add(photos: photos)
+            }
         }
     }
 
     private func onCameraDismiss() {
         guard let images = cameraImages, !images.isEmpty else { return }
         cameraImages = nil
-        isProcessing = true
+        withAnimation {
+            isProcessing = true
+        }
         Task {
             await addEncoded(images)
         }
@@ -161,8 +167,10 @@ struct PhotosSectionView: View {
             images.compactMap(DocumentPhoto.init(image:))
         }.value
         await MainActor.run {
-            isProcessing = false
-            delegate?.add(photos: photos)
+            withAnimation {
+                isProcessing = false
+                delegate?.add(photos: photos)
+            }
         }
     }
 }

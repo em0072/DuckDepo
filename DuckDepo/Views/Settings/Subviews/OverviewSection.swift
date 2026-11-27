@@ -11,6 +11,8 @@ struct OverviewCard: View {
     let documentCount: Int
     let passwordCount: Int
     let renewalCount: Int
+    /// Passwords Password Health says to fix; nil until it has read them.
+    let toFixCount: Int?
 
     @ScaledMetric(relativeTo: .title3) private var duckSize: CGFloat = 52
 
@@ -28,13 +30,43 @@ struct OverviewCard: View {
                 }
             }
             .accessibilityElement(children: .combine)
-            HStack(spacing: 8) {
-                StatTile(value: documentCount, title: "sv_stat_documents", color: .primary)
-                StatTile(value: passwordCount, title: "sv_stat_passwords", color: .primary)
-                StatTile(value: renewalCount, title: "sv_stat_renewal", color: renewalCount > 0 ? .orange : .primary)
+            // Four in a row while their labels fit; two by two at large text sizes and in longer languages.
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: 8) {
+                    documentsTile
+                    passwordsTile
+                    renewalTile
+                    toFixTile
+                }
+                Grid(horizontalSpacing: 8, verticalSpacing: 8) {
+                    GridRow {
+                        documentsTile
+                        passwordsTile
+                    }
+                    GridRow {
+                        renewalTile
+                        toFixTile
+                    }
+                }
             }
         }
         .padding(.vertical, 6)
+    }
+
+    private var documentsTile: some View {
+        StatTile(value: documentCount, title: "sv_stat_documents", color: .primary)
+    }
+
+    private var passwordsTile: some View {
+        StatTile(value: passwordCount, title: "sv_stat_passwords", color: .primary)
+    }
+
+    private var renewalTile: some View {
+        StatTile(value: renewalCount, title: "sv_stat_renewal", color: renewalCount > 0 ? .orange : .primary)
+    }
+
+    private var toFixTile: some View {
+        StatTile(value: toFixCount, title: "sv_stat_to_fix", color: (toFixCount ?? 0) > 0 ? .orange : .primary)
     }
 }
 
@@ -58,17 +90,25 @@ private struct DuckTile: View {
 
 private struct StatTile: View {
 
-    let value: Int
+    /// Nil while not known yet.
+    let value: Int?
     let title: LocalizedStringKey
     let color: Color
 
     var body: some View {
         VStack(spacing: 2) {
-            Text(value, format: .number)
-                .font(.title2.weight(.semibold))
-                .monospacedDigit()
-                .foregroundStyle(color)
-                .contentTransition(.numericText())
+            Group {
+                if let value {
+                    Text(value, format: .number)
+                        .foregroundStyle(color)
+                } else {
+                    Text(verbatim: "–")
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .font(.title2.weight(.semibold))
+            .monospacedDigit()
+            .contentTransition(.numericText())
             Text(title)
                 .font(.caption)
                 .foregroundStyle(.secondary)
@@ -85,7 +125,7 @@ private struct StatTile: View {
 #Preview {
     List {
         Section {
-            OverviewCard(documentCount: 12, passwordCount: 13, renewalCount: 2)
+            OverviewCard(documentCount: 12, passwordCount: 13, renewalCount: 2, toFixCount: 3)
         }
     }
 }

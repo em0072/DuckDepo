@@ -6,6 +6,7 @@
 import AuthenticationServices
 import Combine
 import Foundation
+import SwiftUI
 
 /// Cheap to create: the counts load in `start()`, the system's state in `refreshSystemState()`.
 @Observable
@@ -74,24 +75,46 @@ final class SettingsViewModel {
             .store(in: &cancellables)
         countPasswords()
         countPasskeys()
+        animatesChanges = true
+    }
+
+    /// Counts tick over when they change, but not when the screen first fills them in.
+    @ObservationIgnored private var animatesChanges = false
+
+    private func change(_ body: () -> Void) {
+        if animatesChanges {
+            withAnimation {
+                body()
+            }
+        } else {
+            body()
+        }
     }
 
     private func countPasskeys() {
-        passkeyCount = passkeyStorage.count()
+        let count = passkeyStorage.count()
+        guard count != passkeyCount else { return }
+        change { passkeyCount = count }
     }
 
     private func update(with documents: [Document]) {
-        documentCount = documents.count
-        renewalCount = documents.filter { document in
+        let renewal = documents.filter { document in
             switch document.expiryStatus {
             case .expired, .expiresSoon: true
             case .valid, nil: false
             }
         }.count
+        guard documents.count != documentCount || renewal != renewalCount else { return }
+        change {
+            documentCount = documents.count
+            renewalCount = renewal
+        }
     }
 
     private func countPasswords() {
-        savedPasswordCount = database.fetchCount(for: DDPassword.self)
+        let count = database.fetchCount(for: DDPassword.self)
+        guard count != savedPasswordCount else { return }
+        change { savedPasswordCount = count }
     }
 
     // MARK: - Reminders
@@ -100,13 +123,17 @@ final class SettingsViewModel {
         if isOn {
             let granted = await reminders.enable()
             await MainActor.run {
-                areRemindersEnabled = granted
-                areNotificationsBlocked = !granted
+                withAnimation {
+                    areRemindersEnabled = granted
+                    areNotificationsBlocked = !granted
+                }
             }
         } else {
             reminders.disable()
-            areRemindersEnabled = false
-            areNotificationsBlocked = false
+            withAnimation {
+                areRemindersEnabled = false
+                areNotificationsBlocked = false
+            }
         }
     }
 
@@ -119,9 +146,11 @@ final class SettingsViewModel {
         let blocked = reminders.isEnabled ? !(await reminders.isAuthorized()) : false
         let passkeys = passkeyStorage.count()
         await MainActor.run {
-            isAutoFillEnabled = autoFill
-            areNotificationsBlocked = blocked
-            passkeyCount = passkeys
+            withAnimation {
+                isAutoFillEnabled = autoFill
+                areNotificationsBlocked = blocked
+                passkeyCount = passkeys
+            }
         }
     }
 
@@ -145,6 +174,7 @@ final class SettingsViewModel {
     func deleteEverything() {
         database.deleteEverything()
         PhotoTextIndex.shared.removeAll()
+        PasswordHealthMonitor.shared.reset()
         countPasswords()
         countPasskeys()
     }

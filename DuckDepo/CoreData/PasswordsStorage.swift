@@ -7,6 +7,7 @@
 
 import Combine
 import CoreData
+import CryptoKit
 import Foundation
 
 /// Password records live in Core Data; their values live in the keychain.
@@ -15,6 +16,11 @@ import Foundation
 final class PasswordsStorage: NSObject {
 
     let passwords = CurrentValueSubject<[Password], Never>([])
+
+    /// Posted after this process saves, adds or deletes passwords. A new value alone changes nothing in
+    /// Core Data, so `passwords` doesn't publish for it. The object is the keychain written to, so
+    /// listeners hear only about their own store (tests use one each).
+    static let didChange = Notification.Name("DuckDepo.passwordsDidChange")
 
     private let database: DataBase
     private let keychain: KeychainStoring
@@ -94,6 +100,57 @@ final class PasswordsStorage: NSObject {
         id.uuidString + ".otp"
     }
 
+    // MARK: - Hidden health warnings
+
+    /// What the user hid: the health issues a password had while its value had this hash. In the keychain
+    /// next to the password, so it syncs the same way without a CloudKit field. The warnings show again for
+    /// a new value, however it was changed (another device, an older version), and for an issue that
+    /// wasn't there when they were hidden (a leak found later).
+    struct HiddenWarnings: Equatable {
+        let valueHash: String
+        let issues: Set<String>
+    }
+
+    static func hiddenWarningKey(for id: UUID) -> String {
+        id.uuidString + ".health"
+    }
+
+    private static let hiddenWarningVersion = "v1"
+
+    /// SHA-1 of a value, uppercase hex: what finds reuse, what the leak check looks up, and what a hidden
+    /// warning is tied to.
+    static func valueHash(of value: String) -> String {
+        Insecure.SHA1.hash(data: Data(value.utf8)).map { String(format: "%02X", $0) }.joined()
+    }
+
+    /// Hides `issues` (the ones the password has now) for its current value. False if nothing was written.
+    @discardableResult
+    func hideWarnings(_ issues: Set<String>, for id: UUID) -> Bool {
+        guard let value = keychain.string(forKey: id.uuidString), !value.isEmpty, !issues.isEmpty else { return false }
+        let marker = [Self.hiddenWarningVersion, Self.valueHash(of: value), issues.sorted().joined(separator: ",")]
+            .joined(separator: ":")
+        return keychain.set(marker, forKey: Self.hiddenWarningKey(for: id))
+    }
+
+    @discardableResult
+    func showWarnings(for id: UUID) -> Bool {
+        let key = Self.hiddenWarningKey(for: id)
+        return keychain.delete(key) || keychain.string(forKey: key) == nil
+    }
+
+    /// What's hidden for the passwords among these. Keychain only.
+    static func hiddenWarnings(among ids: [UUID], keychain: KeychainStoring) -> [UUID: HiddenWarnings] {
+        var hidden: [UUID: HiddenWarnings] = [:]
+        for id in ids {
+            guard let marker = keychain.string(forKey: hiddenWarningKey(for: id)) else { continue }
+            let parts = marker.split(separator: ":", omittingEmptySubsequences: false)
+            guard parts.count == 3, parts[0] == hiddenWarningVersion, !parts[1].isEmpty else { continue }
+            hidden[id] = HiddenWarnings(valueHash: String(parts[1]),
+                                        issues: Set(parts[2].split(separator: ",").map(String.init)))
+        }
+        return hidden
+    }
+
     /// Inserts or updates the record and its keychain value. Returns `false` if nothing was saved.
     @discardableResult
     func save(_ password: Password) -> Bool {
@@ -114,6 +171,7 @@ final class PasswordsStorage: NSObject {
             return false
         }
         identityStore?.refresh(context: context, keychain: keychain)
+        postDidChange()
         return true
     }
 
@@ -132,6 +190,7 @@ final class PasswordsStorage: NSObject {
         guard insertRecords(for: written) else { return nil }
         if !written.isEmpty {
             identityStore?.refresh(context: context, keychain: keychain)
+            postDidChange()
         }
         return written.count
     }
@@ -217,7 +276,9 @@ final class PasswordsStorage: NSObject {
         if database.save() {
             keychain.delete(password.id.uuidString)
             keychain.delete(Self.oneTimeCodeKey(for: password.id))
+            keychain.delete(Self.hiddenWarningKey(for: password.id))
             identityStore?.refresh(context: context, keychain: keychain)
+            postDidChange()
         }
     }
 
@@ -228,6 +289,10 @@ final class PasswordsStorage: NSObject {
             return true
         }
         return keychain.set(password.oneTimeCode, forKey: key)
+    }
+
+    private func postDidChange() {
+        NotificationCenter.default.post(name: Self.didChange, object: keychain)
     }
 
     func count() -> Int {

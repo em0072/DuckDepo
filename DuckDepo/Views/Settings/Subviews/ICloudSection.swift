@@ -15,6 +15,8 @@ struct SyncSection: View {
         Section {
             LabeledContent {
                 statusView
+                    .animation(.default, value: monitor.accountStatus)
+                    .animation(.default, value: monitor.isSyncing)
             } label: {
                 Label("icloud_sync", systemImage: "icloud.fill")
                     .labelStyle(.tile(.blue))
@@ -41,6 +43,8 @@ struct SyncSection: View {
         } footer: {
             Text("icloud_keychain_footer")
         }
+        // The error row comes and goes with the sync's outcome.
+        .animation(.default, value: monitor.lastErrorDescription)
         .onAppear(perform: monitor.refreshAccountStatus)
     }
 

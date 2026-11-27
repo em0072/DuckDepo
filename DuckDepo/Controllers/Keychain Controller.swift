@@ -34,10 +34,12 @@ final class Keychain: KeychainStoring {
     private let accessGroup: String
     private let logger = Logger(subsystem: "DuckDepo", category: "Keychain")
 
-    init(accessGroup: String = "65952893XA.group.evgenymitko.duckdepo") {
+    /// `synchronizable` false keeps items on this device (and out of iCloud Keychain); such an instance sees
+    /// only its own kind of item. `clear()` on the shared, synced one removes both kinds.
+    init(accessGroup: String = "65952893XA.group.evgenymitko.duckdepo", synchronizable: Bool = true) {
         self.accessGroup = accessGroup
         keychain = KeychainSwift()
-        keychain.synchronizable = true
+        keychain.synchronizable = synchronizable
         keychain.accessGroup = accessGroup
     }
 

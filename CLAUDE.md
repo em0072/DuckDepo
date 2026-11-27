@@ -64,6 +64,12 @@ xcodebuild -project DuckDepo.xcodeproj -scheme DuckDepo clean
     - Codes go with the login their account names. One document per typed credential. A typed document keeps its type over tags. Text dates become days. Each custom group is its own section. DuckDepo's own note (by its footer) is dropped when fields came too, kept as notes when it's all there is (Passwords). Passwords sends note-only items as an empty login. Cards, Wi-Fi, SSH/API keys (with what came with them) and notes on passwords are counted, not imported.
     - Saving runs once per plan, in batches of 100 (keychain writes off the main thread, then one save), skips IDs already stored, re-checks that a saved password still has no code before giving it one, and refreshes AutoFill once. Code links with short secrets are read (typed keys still need 80 bits)
 - **App Locking**: `BiometricController` + `LockWindowPresenter` (a separate window above all sheets). Lock state is never persisted; the app always starts locked when the lock is on
+- **Password Health** (`DuckDepo/PasswordHealth/`, app only):
+  - `PasswordHealthMonitor.shared` reads values from the keychain off the main thread, hashes and judges them, and keeps only `PasswordHealth` (list items, issues, no values). One pass at a time: a refresh during a pass asks for another after it (`requestPass`), never cancels it. `start()` again refreshes, so screens call it on appear. `isLoaded` false means not read yet (summary and tiles stay neutral, never "no issues")
+  - Reuse by SHA-1 (`PasswordsStorage.valueHash`). Strength by `PasswordStrength`, on device, first 256 characters: `CommonPasswords` as typed or with look-alikes ("1" as i and l) and up to 6 digits or symbols around it; then words, runs (alphabet, digits, keyboard rows, shifted digits, keyboard walks like 1q2w/1qaz), repeats (one character, or a 2–6 character chunk) and years cost a few bits each; caseless scripts count as a large alphabet; under 36 bits or 8 characters is weak
+  - Leak check off by default (`checksLeakedPasswords`): `PwnedPasswords` sends 5 hex digits of the SHA-1 to Have I Been Pwned's padded range API (fixed headers, ephemeral session) and rejects anything that isn't a hash list. Each prefix's answer goes to `LeakCheckCache` as it arrives (local file, complete protection, HMAC under a this-device keychain key): leaked stays leaked while the password has that value, safe is rechecked after a week; entries for gone values are pruned. Turning it off or Delete All Data bumps a generation so a lookup in flight records nothing
+  - "Hide Warning" is `<id>.health` = `v1:<value SHA-1>:<issue kinds>` in the synced keychain next to the value: hidden only while the value matches and no new kind of issue appears (a leak found later shows it again). `PasswordsStorage.didChange` (object: the keychain) covers value-only edits
+  - Shown in Settings (To Fix tile, "–" until loaded; four tiles in a row or 2×2 when they don't fit; section with the screen and both switches) and, when `showsPasswordHealthInPasswords`, at the top of Passwords. Rows open the password by ID (`navigationDestination(item:)`), so moving rows don't close it. Each password's screen shows its warning at the top, or once hidden only a small note with Show Warning at the bottom (not in AutoFill). The Privacy page lists the leak check
 - **LegacyDataMigration**: idempotent repair of v1 data, runs on every activation
 
 ### Navigation Structure
@@ -72,7 +78,7 @@ xcodebuild -project DuckDepo.xcodeproj -scheme DuckDepo clean
 - Editors are sheets with close/confirm toolbar buttons (`Button(role: .close)` / `.confirm`) and a discard confirmation
 - Photos open in `PhotoViewer` (full screen, zoom transition from the tapped photo; only the page on screen and its neighbours hold a full-size image); on the document they show in `PhotoGallery` (a row at each photo's own shape, or one photo at full width); the editor's strip draws `PhotoThumbnails` (cached copies sized to the cell)
 - A document's share menu: Share as Text and Copy All (`Document.plainText`: name, description, filled-in fields by section; Copy All goes through `ClipboardController`), and its photos as a PDF
-- Settings: an overview card (counts, with passkeys counted as passwords; documents to renew), rows with `ColorfulIconLabelStyle` tiles (`.labelStyle(.tile(color))`), Security (lock, clipboard), Reminders, Sync and AutoFill (status from `ASCredentialIdentityStore`), Import and Export (`TransferSection`, `ImportGuideView`), About (Privacy page, version)
+- Settings: an overview card (counts, with passkeys counted as passwords; documents to renew; passwords to fix), rows with `ColorfulIconLabelStyle` tiles (`.labelStyle(.tile(color))`), Security (lock, clipboard), Password Health, Reminders, Sync and AutoFill (status from `ASCredentialIdentityStore`), Import and Export (`TransferSection`, `ImportGuideView`), About (Privacy page, version)
 
 ## Key Components
 
@@ -135,6 +141,7 @@ Target `DuckDepoTests` (Swift Testing, hosted by the app). The app skips its dat
 - Environment injection for Core Data context
 - Storage classes publish lists with Combine; view models subscribe in `start()`
 - List items carry no photos (only `Document.thumbnail`); detail screens load the full document in `load()` and reload when the list item changes (sync)
+- Animation: changes the user makes animate (`withAnimation` at the call site: deletes, edits coming back from an editor, toggles via `$x.animation()`, model writes after the first load); counts use `.contentTransition(.numericText())`, changing symbols `.symbolEffect(.replace)`. Never animate a screen's first load (`onAppear`/`start()`), whole lists arriving from iCloud, or the lock window (a fade would show in the app-switcher snapshot). Scope `.animation(_:value:)` to the view that changes, so typing and selection aren't animated
 
 ## File Organization
 

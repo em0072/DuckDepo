@@ -7,6 +7,7 @@
 
 import Foundation
 import PDFKit
+import SwiftUI
 
 /// Cheap to create: SwiftUI may build and discard several instances; the one on screen loads in `load()`.
 @Observable
@@ -49,7 +50,10 @@ final class DocumentViewModel {
                 shouldDismissView = true
                 return
             }
-            self.document = db.fullDocument(with: document.id) ?? document
+            let updated = db.fullDocument(with: document.id) ?? document
+            withAnimation {
+                self.document = updated
+            }
         }
     }
 
