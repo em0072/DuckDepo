@@ -54,20 +54,11 @@ struct DocumentView: View {
         }
         .toolbar {
             ToolbarItemGroup(placement: .primaryAction) {
-                Button(action: viewModel.shareButtonPressed) {
-                    Label("dv_share_doc_title", systemImage: "square.and.arrow.up")
-                }
+                shareMenu
                 Button(action: viewModel.editButtonPressed) {
                     Label("edit_button", systemImage: "pencil")
                 }
             }
-        }
-        .confirmationDialog("dv_share_doc_title", isPresented: $viewModel.showShareOptions, titleVisibility: .visible) {
-            Button("dv_share_photo_and_text", action: viewModel.sharePhotosAndTextButtonPressed)
-            Button("dv_share_photo", action: viewModel.sharePhotosButtonPressed)
-            Button("dv_share_text", action: viewModel.shareTextButtonPressed)
-        } message: {
-            Text("dv_share_doc_body")
         }
         .sheet(isPresented: $viewModel.showShareSheetView, onDismiss: viewModel.onShareSheetDismiss) {
             ShareSheetView(items: viewModel.itemsToShare)
@@ -84,6 +75,24 @@ struct DocumentView: View {
             if shouldDismiss {
                 dismiss()
             }
+        }
+    }
+
+    /// The whole document as text (shared, or copied in one go instead of field by field), or its photos.
+    private var shareMenu: some View {
+        Menu {
+            ShareLink(item: viewModel.document.plainText) {
+                Label("dv_share_text", systemImage: "text.alignleft")
+            }
+            Button("dv_copy_all", systemImage: "doc.on.doc", action: viewModel.copyAllButtonPressed)
+            if !viewModel.document.photos.isEmpty {
+                Section {
+                    Button("dv_share_photo", systemImage: "photo.on.rectangle", action: viewModel.sharePhotosButtonPressed)
+                    Button("dv_share_photo_and_text", systemImage: "doc.richtext", action: viewModel.sharePhotosAndTextButtonPressed)
+                }
+            }
+        } label: {
+            Label("dv_share_doc_title", systemImage: "square.and.arrow.up")
         }
     }
 }

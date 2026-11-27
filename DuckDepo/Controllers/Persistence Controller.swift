@@ -8,7 +8,7 @@
 import CoreData
 import CloudKit
 import os
-#if !AUTOFILL_EXTENSION
+#if !AUTOFILL_EXTENSION && !SHARE_EXTENSION
 import UIKit
 #endif
 
@@ -17,21 +17,24 @@ extension Notification.Name {
     static let persistentStoresDidLoad = Notification.Name("DuckDepo.persistentStoresDidLoad")
 }
 
-/// Owns the Core Data stack shared by the app and the AutoFill extension.
+/// Owns the Core Data stack shared by the app and its extensions (AutoFill, Share).
 ///
-/// - The store lives in the App Group container so both processes read the same data.
-/// - Only the app mirrors the store to CloudKit. The extension opens the same file without
-///   CloudKit; its writes are recorded in persistent history and exported the next time the app runs.
+/// - The store lives in the App Group container so every process reads the same data.
+/// - Only the app mirrors the store to CloudKit. The extensions open the same file without
+///   CloudKit; their writes are recorded in persistent history and exported the next time the app runs.
 final class PersistenceController {
 
     enum Role {
         case app
         case autoFill
+        case share
         case inMemory
 
         static var current: Role {
             #if AUTOFILL_EXTENSION
             return .autoFill
+            #elseif SHARE_EXTENSION
+            return .share
             #else
             return .app
             #endif
@@ -41,9 +44,13 @@ final class PersistenceController {
             switch self {
             case .app: return "app"
             case .autoFill: return "autofill"
+            case .share: return "share"
             case .inMemory: return "tests"
             }
         }
+
+        /// The extensions, whose writes the app merges from persistent history.
+        static let extensions: [Role] = [.autoFill, .share]
     }
 
     static let cloudKitContainerIdentifier = "iCloud.DuckDepo"
@@ -186,7 +193,7 @@ final class PersistenceController {
     }
 
     private func loadStoreWhenPossible() {
-        #if !AUTOFILL_EXTENSION
+        #if !AUTOFILL_EXTENSION && !SHARE_EXTENSION
         // The store is protected with `.complete`, so it can't be opened while the device is locked
         // (e.g. a background CloudKit push). Wait for the user to unlock instead of crashing.
         if role == .app, Thread.isMainThread, !UIApplication.shared.isProtectedDataAvailable {
@@ -338,13 +345,16 @@ extension PersistenceController {
         }
     }
 
+    /// The history transactions the app merges: the extensions' writes.
+    static let extensionTransactions = NSPredicate(format: "author IN %@", Role.extensions.map(\.transactionAuthor))
+
     private func processHistory() {
         let taskContext = container.newBackgroundContext()
         var transactions: [NSPersistentHistoryTransaction] = []
         taskContext.performAndWait {
             let request = NSPersistentHistoryChangeRequest.fetchHistory(after: historyToken)
             if let fetchRequest = NSPersistentHistoryTransaction.fetchRequest {
-                fetchRequest.predicate = NSPredicate(format: "author == %@", Role.autoFill.transactionAuthor)
+                fetchRequest.predicate = Self.extensionTransactions
                 request.fetchRequest = fetchRequest
             }
             do {

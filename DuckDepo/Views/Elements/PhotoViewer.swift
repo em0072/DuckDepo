@@ -28,7 +28,8 @@ struct PhotoViewer: View {
             ScrollView(.horizontal) {
                 LazyHStack(spacing: 0) {
                     ForEach(Array(photos.enumerated()), id: \.element.id) { index, photo in
-                        ZoomableImage(image: photo.image, onTap: toggleControls, onPullToClose: { dismiss() })
+                        ZoomableImage(photo: photo, isLoaded: abs(index - currentIndex) <= 1,
+                                      onTap: toggleControls, onPullToClose: { dismiss() })
                             .containerRelativeFrame([.horizontal, .vertical])
                             .accessibilityElement()
                             .accessibilityLabel(Text("photo_n_of_m \(index + 1) \(photos.count)"))
@@ -69,7 +70,8 @@ struct PhotoViewer: View {
         if let photo = currentPhoto {
             ToolbarItem(placement: .bottomBar) {
                 ShareLink(item: SharedPhoto(data: photo.data),
-                          preview: SharePreview(Text("dv_photos"), image: Image(uiImage: photo.image))) {
+                          preview: SharePreview(Text("dv_photos"),
+                                                image: Image(uiImage: PhotoThumbnails.image(for: photo, filling: CGSize(width: 64, height: 64), scale: 3)))) {
                     Label("pv_share_alert_button", systemImage: "square.and.arrow.up")
                 }
             }
@@ -87,6 +89,10 @@ struct PhotoViewer: View {
 
     private var currentPhoto: DocumentPhoto? {
         photos.first { $0.id == currentPhotoID } ?? photos.first
+    }
+
+    private var currentIndex: Int {
+        photos.firstIndex { $0.id == currentPhotoID } ?? 0
     }
 
     private var title: Text {
@@ -121,20 +127,30 @@ private struct SharedPhoto: Transferable {
 
 private struct ZoomableImage: UIViewRepresentable {
 
-    let image: UIImage
+    let photo: DocumentPhoto
+    /// Only the photo on screen and its neighbours hold their full-size image: a decoded page takes
+    /// about 20 MB.
+    let isLoaded: Bool
     let onTap: () -> Void
     let onPullToClose: () -> Void
 
     func makeUIView(context: Context) -> ZoomingImageScrollView {
-        ZoomingImageScrollView(image: image)
+        let view = ZoomingImageScrollView()
+        showImage(in: view)
+        return view
     }
 
     func updateUIView(_ view: ZoomingImageScrollView, context: Context) {
         view.onTap = onTap
         view.onPullToClose = onPullToClose
-        if view.image !== image {
-            view.image = image
-        }
+        showImage(in: view)
+    }
+
+    private func showImage(in view: ZoomingImageScrollView) {
+        let shown = isLoaded ? photo.id : nil
+        guard view.photoID != shown else { return }
+        view.photoID = shown
+        view.image = isLoaded ? photo.image : nil
     }
 }
 
@@ -143,6 +159,8 @@ final class ZoomingImageScrollView: UIScrollView, UIScrollViewDelegate {
 
     var onTap: (() -> Void)?
     var onPullToClose: (() -> Void)?
+    /// The photo whose image is shown, if any.
+    var photoID: DocumentPhoto.ID?
 
     var image: UIImage? {
         get { imageView.image }
@@ -161,7 +179,7 @@ final class ZoomingImageScrollView: UIScrollView, UIScrollViewDelegate {
     /// The size the photo was last fitted to, to fit it again only when the size changes (rotation).
     private var fittedBoundsSize: CGSize = .zero
 
-    init(image: UIImage) {
+    init() {
         super.init(frame: .zero)
         delegate = self
         showsVerticalScrollIndicator = false
@@ -174,7 +192,6 @@ final class ZoomingImageScrollView: UIScrollView, UIScrollViewDelegate {
         // No dimming under the bars: the photo should show edge to edge.
         topEdgeEffect.isHidden = true
         bottomEdgeEffect.isHidden = true
-        imageView.image = image
         imageView.contentMode = .scaleAspectFit
         addSubview(imageView)
 

@@ -106,6 +106,36 @@ extension DDDocument {
         }
     }
 
+    /// Adds photos after the others, leaving out ones it has, without decoding any image or rewriting the
+    /// others: for the share extension, which has little memory. Keeps the `photoData` copy in step.
+    /// Returns how many were added.
+    @discardableResult
+    func appendPhotos(_ photos: [DocumentPhoto]) -> Int {
+        guard let context = managedObjectContext else { return 0 }
+        return autoreleasepool {
+            var items = photoDataItems()
+            let key = Self.legacyPhotosKey(for: items)
+            if !items.isEmpty, legacyPhotosKey != key || photoRecordList().isEmpty {
+                // The copy has the photos: version 2.6 changed it, or the records haven't arrived from
+                // iCloud yet. They become records first, as `photos()` would read them.
+                syncPhotoRecords(with: items.compactMap(DocumentPhoto.init(data:)))
+                legacyPhotosKey = key
+            }
+            let records = photoRecordList()
+            var seen = Set(records.compactMap(\.identifier))
+            let new = photos.filter { seen.insert($0.id).inserted }
+            guard !new.isEmpty else { return 0 }
+            let first = Int(records.map(\.order).max() ?? -1) + 1
+            for (offset, photo) in new.enumerated() {
+                _ = DDPhoto(context: context, photo: photo, order: first + offset, document: self)
+            }
+            items += new.map(\.data)
+            photoData = Self.archive(items)
+            legacyPhotosKey = Self.legacyPhotosKey(for: items)
+            return new.count
+        }
+    }
+
     /// Converts `photoData` to records if it was never converted or version 2.6 changed it since.
     /// Returns whether anything changed.
     @discardableResult

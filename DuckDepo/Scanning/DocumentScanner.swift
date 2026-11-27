@@ -36,6 +36,17 @@ enum DocumentScanner {
         return makeDraft(from: reading, photos: await photos)
     }
 
+    /// For photos already made (shared from another app), so they aren't compressed again.
+    static func draft(from photos: [DocumentPhoto], today: Date = .now) async -> ScanDraft {
+        var lines: [String] = []
+        for photo in photos.prefix(maximumPagesRead) {
+            // A decoded page only while it's read: `image` is a new one each time.
+            lines += await DocumentReader.lines(in: photo.image)
+        }
+        let reading = await reading(from: lines, today: today)
+        return makeDraft(from: reading, photos: photos)
+    }
+
     static func reading(from lines: [String], today: Date = .now, useModel: Bool = true) async -> ScanReading {
         var reading = ScanReading()
         if let mrz = MRZParser.parse(lines: lines, today: today) {

@@ -1310,6 +1310,23 @@
         }
       }
     },
+    "dv_copy_all" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy All"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скопировать всё"
+          }
+        }
+      }
+    },
     "dv_copy_to_clipboard" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1361,57 +1378,6 @@
         }
       }
     },
-    "dv_share_caption" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Shared with 🦆 DuckDepo."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Я использую 🦆 DuckDepo для хранения документов."
-          }
-        }
-      }
-    },
-    "dv_share_details_title" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Here is details of "
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Вот детали "
-          }
-        }
-      }
-    },
-    "dv_share_doc_body" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Would you like to share document photos, text information or all together?"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Вы хотите поделиться фото, текстом или всем вместе?"
-          }
-        }
-      }
-    },
     "dv_share_doc_title" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1435,13 +1401,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Photos only"
+            "value" : "Share Photos"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Только фото"
+            "value" : "Поделиться фото"
           }
         }
       }
@@ -1452,13 +1418,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Photos and text"
+            "value" : "Share Photos and Text"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Фото и текст"
+            "value" : "Поделиться фото и текстом"
           }
         }
       }
@@ -1469,13 +1435,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Text only"
+            "value" : "Share as Text"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Только текст"
+            "value" : "Поделиться текстом"
           }
         }
       }
@@ -4844,6 +4810,295 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Пол"
+          }
+        }
+      }
+    },
+    "share_add_to_existing" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add to a Document"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Добавить в документ"
+          }
+        }
+      }
+    },
+    "share_add_to_existing_detail" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The pages go after its photos."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Страницы добавятся после его фото."
+          }
+        }
+      }
+    },
+    "share_choose_document" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose a Document"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выберите документ"
+          }
+        }
+      }
+    },
+    "share_document_too_large" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This document has too many photos to add pages to it from here. Add them in DuckDepo."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "В этом документе слишком много фото, чтобы добавить страницы отсюда. Добавьте их в DuckDepo."
+          }
+        }
+      }
+    },
+    "share_failed_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn’t Save"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось сохранить"
+          }
+        }
+      }
+    },
+    "share_loading" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preparing pages…"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Подготовка страниц…"
+          }
+        }
+      }
+    },
+    "share_new_document" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New Document"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Новый документ"
+          }
+        }
+      }
+    },
+    "share_new_document_detail" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DuckDepo reads it and fills in what it can, on this device."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DuckDepo прочитает его и заполнит, что сможет, на этом устройстве."
+          }
+        }
+      }
+    },
+    "share_nothing_body" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DuckDepo can save photos, images and PDFs."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DuckDepo может сохранять фото, изображения и PDF."
+          }
+        }
+      }
+    },
+    "share_nothing_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nothing to Save"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нечего сохранить"
+          }
+        }
+      }
+    },
+    "share_open_app_body" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DuckDepo needs to finish setting up after the update. Open it once, then share again."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DuckDepo нужно завершить настройку после обновления. Откройте его один раз и поделитесь снова."
+          }
+        }
+      }
+    },
+    "share_open_app_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open DuckDepo First"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сначала откройте DuckDepo"
+          }
+        }
+      }
+    },
+    "share_pages_truncated %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Only the first %lld pages are added."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Будут добавлены только первые страницы: %lld."
+          }
+        }
+      }
+    },
+    "share_reading" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reading the document…"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Чтение документа…"
+          }
+        }
+      }
+    },
+    "share_save_failed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The pages couldn’t be added. Try again."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось добавить страницы. Попробуйте ещё раз."
+          }
+        }
+      }
+    },
+    "share_store_unavailable" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DuckDepo couldn’t open its data. Try again."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DuckDepo не удалось открыть свои данные. Попробуйте ещё раз."
+          }
+        }
+      }
+    },
+    "share_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save to DuckDepo"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сохранить в DuckDepo"
           }
         }
       }

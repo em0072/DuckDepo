@@ -26,7 +26,8 @@ xcodebuild -project DuckDepo.xcodeproj -scheme DuckDepo clean
 ### Project Structure
 - **Main App**: `DuckDepo/` - SwiftUI app with MVVM architecture
 - **AutoFill Extension**: `DuckDepoAutoFillExtension/` - iOS AutoFill credential provider
-- **Shared Core Data**: Both targets open the same store in the App Group container (`group.evgenymitko.duckdepo`)
+- **Share Extension**: `DuckDepoShareExtension/` - saves images and PDFs shared from other apps as a document (see Share Extension below)
+- **Shared Core Data**: The app and both extensions open the same store in the App Group container (`group.evgenymitko.duckdepo`)
 - **Minimum iOS**: 26.0 for all targets
 
 ## Architecture
@@ -37,13 +38,13 @@ xcodebuild -project DuckDepo.xcodeproj -scheme DuckDepo clean
 - Models are Core Data entities with custom classes
 
 ### Core Data Stack
-- **PersistenceController**: Singleton managing NSPersistentCloudKitContainer. Roles: `.app` (syncs with CloudKit), `.autoFill` (same file, no CloudKit), `.inMemory` (tests)
-- **CloudKit Integration**: Only the app mirrors to `iCloud.DuckDepo`. AutoFill writes reach the app through persistent history (`mergeChangesFromOtherProcesses`)
-- **Store location**: moved from the app sandbox to the App Group on first launch of 2.7 (`moveLegacyStoreIfNeeded`); the extension waits for `DefaultsController.isSharedStoreReady`
+- **PersistenceController**: Singleton managing NSPersistentCloudKitContainer. Roles: `.app` (syncs with CloudKit), `.autoFill` and `.share` (same file, no CloudKit), `.inMemory` (tests)
+- **CloudKit Integration**: Only the app mirrors to `iCloud.DuckDepo`. The extensions' writes (`Role.extensions`: AutoFill, Share) reach the app through persistent history (`mergeChangesFromOtherProcesses`, `extensionTransactions`). The extensions don't merge others' changes: call `DataBase.readLatestStoredData()` before reading what the app may have changed
+- **Store location**: moved from the app sandbox to the App Group on first launch of 2.7 (`moveLegacyStoreIfNeeded`); the extensions wait for `DefaultsController.isSharedStoreReady`
 - **Model changes**: add a new model version (additive only: CloudKit can't rename or remove), run a Debug build once with `-InitializeCloudKitSchema`, then deploy the schema to Production in the CloudKit Console
 - **Entities**: `DDDocument`, `DDPhoto`, `DDPassword`, `DDSection`, `DDField`, `DDFolder` (current model: `DuckDepo 3`)
 - **Keys**: predefined sections and fields store a stable `key` (`SectionKey`/`FieldKey` in `FieldCatalog.swift`) and display their name from it, so names follow the current language. Date fields store `yyyy-MM-dd` (`FieldDate`); documents keep `createdAt`/`updatedAt`/`expiresAt`
-- **Photos**: one `DDPhoto` record per photo (ID derived from the image bytes), plus the old `photoData` blob kept in sync for devices still on 2.6. `LegacyDataMigration` converts `photoData` changed by 2.6 and removes duplicate records the same way on every device
+- **Photos**: one `DDPhoto` record per photo (ID derived from the image bytes), plus the old `photoData` blob kept in sync for devices still on 2.6. `LegacyDataMigration` converts `photoData` changed by 2.6 and removes duplicate records the same way on every device. `DocumentPhoto` holds only the JPEG and its `size`: `image` decodes a new copy on each call (keep it only while shown), `downsampled(toMaxPixelSize:)` for anything smaller. New photos are stored at `storedScale` (long side 2560 px; pages over 2:1 keep about 3.3 MP so text stays readable) and on white where transparent. A failed `save`/`update` rolls the context back (`saveOrRollBack`)
 - **File Protection**: Complete file protection enabled for security
 
 ### Scanning (`DuckDepo/Scanning/`)
@@ -69,7 +70,8 @@ xcodebuild -project DuckDepo.xcodeproj -scheme DuckDepo clean
 - Tab-based main interface (`Tab` API): Depo (Documents), Passwords, Settings, plus a search tab (`Tab(role: .search)` with `.tabViewSearchActivation(.searchTabSelection)`, the separate button at the end of the tab bar) that searches documents and passwords together (`SearchView`)
 - Each list is a selection-based `NavigationSplitView` (sidebar list, detail column on iPad, push on iPhone), with swipe actions and context menus
 - Editors are sheets with close/confirm toolbar buttons (`Button(role: .close)` / `.confirm`) and a discard confirmation
-- Photos open in `PhotoViewer` (full screen, zoom transition from the tapped photo); on the document they show in `PhotoGallery` (a row at each photo's own shape, or one photo at full width)
+- Photos open in `PhotoViewer` (full screen, zoom transition from the tapped photo; only the page on screen and its neighbours hold a full-size image); on the document they show in `PhotoGallery` (a row at each photo's own shape, or one photo at full width); the editor's strip draws `PhotoThumbnails` (cached copies sized to the cell)
+- A document's share menu: Share as Text and Copy All (`Document.plainText`: name, description, filled-in fields by section; Copy All goes through `ClipboardController`), and its photos as a PDF
 - Settings: an overview card (counts, with passkeys counted as passwords; documents to renew), rows with `ColorfulIconLabelStyle` tiles (`.labelStyle(.tile(color))`), Security (lock, clipboard), Reminders, Sync and AutoFill (status from `ASCredentialIdentityStore`), Import and Export (`TransferSection`, `ImportGuideView`), About (Privacy page, version)
 
 ## Key Components
@@ -114,6 +116,14 @@ Target `DuckDepoTests` (Swift Testing, hosted by the app). The app skips its dat
 - Development environment configured
 - Sharing capabilities enabled (`CKSharingSupported`)
 - Push notifications for remote changes
+
+### Share Extension
+- Target `DuckDepoShareExtension` (bundle `DuckDepo.DuckDepoShareExtension`, flag `SHARE_EXTENSION`, store role `.share` with transaction author "share", merged by the app like AutoFill's; `Role.extensions`)
+- Takes images and PDFs (activation rule in its Info.plist), about 120 MB of memory in all. `PageImport` reads each item from its file (`loadFileRepresentation`; data only as a fallback) a page at a time without decoding full-size images (ImageIO thumbnails; PDF pages by their crop box; every page of a TIFF), keeps identical pages once, up to `PageImport.maximumSharedPages` (10, the editor's photo picker included)
+- New Document: `DocumentScanner.draft(from: [DocumentPhoto])`, then the app's own `EditDocumentView` in `.scanned` mode as a sheet (the camera is hidden: extensions can't use it; Add Photo opens the library directly). Add to a Document: Face ID first when `BiometricController.isLockRequired` (the list shows names), then `DataBase.addPhotos(_:toDocumentWith:)`, which only appends photo records and the 2.6 copy (`DDDocument.appendPhotos`: never rewrites sections from the extension's possibly stale copy) and refuses documents with more than 30 MB of photos (`.tooLarge`)
+- While the documents list is open it's covered when the host app goes inactive and closed once the host has been in the background for the lock's delay (`NSExtensionHost…` notifications in `ShareViewController`)
+- No keychain access (its entitlements have only the App Group); Face ID text in its own `InfoPlist.xcstrings`
+- It compiles the data layer, the scanner and the document editor; new files they need must be added to the share target too
 
 ### AutoFill Extension
 - Shares Core Data stack with main app
