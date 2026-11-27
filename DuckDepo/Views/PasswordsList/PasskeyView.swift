@@ -8,7 +8,7 @@ import SwiftUI
 /// A passkey's page: the site and account it signs in to, and a way to delete it.
 struct PasskeyView: View {
 
-    let passkey: Passkey
+    let passkey: PasskeySummary
     let onDelete: () -> Void
 
     var body: some View {
@@ -47,6 +47,6 @@ struct PasskeyView: View {
 
 #Preview {
     NavigationStack {
-        PasskeyView(passkey: Passkey.make(relyingParty: "github.com", userName: "jane", userHandle: Data([1]))) {}
+        PasskeyView(passkey: Passkey.make(relyingParty: "github.com", userName: "jane", userHandle: Data([1])).summary) {}
     }
 }

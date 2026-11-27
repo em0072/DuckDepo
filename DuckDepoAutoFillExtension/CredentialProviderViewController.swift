@@ -12,6 +12,9 @@ import UIKit
 final class CredentialProviderViewController: ASCredentialProviderViewController {
 
     private let lock = BiometricController.shared
+    /// The passkey request on screen was answered or cancelled. Close can be tapped while it's being answered,
+    /// so whichever comes first wins.
+    private var isPasskeyRequestFinished = false
 
     /// The user opened the AutoFill list from the keyboard or a password field.
     override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
@@ -46,16 +49,12 @@ final class CredentialProviderViewController: ASCredentialProviderViewController
 
     override func prepareInterfaceToProvideCredential(for credentialRequest: any ASCredentialRequest) {
         if credentialRequest.type == .passkeyAssertion, let request = credentialRequest as? ASPasskeyCredentialRequest {
-            guard let identity = request.credentialIdentity as? ASPasskeyCredentialIdentity,
-                  let passkey = PasskeyStorage().passkey(credentialID: identity.credentialID) else {
+            guard let identity = request.credentialIdentity as? ASPasskeyCredentialIdentity else {
                 cancel(.credentialIdentityNotFound)
                 return
             }
-            show(PasskeyWorkingView())
-            Task {
-                await signIn(with: passkey, clientDataHash: request.clientDataHash,
-                             preference: request.userVerificationPreference)
-            }
+            signIn(credentialID: identity.credentialID, clientDataHash: request.clientDataHash,
+                   preference: request.userVerificationPreference)
             return
         }
         guard requiresAuthentication else {
@@ -85,18 +84,21 @@ final class CredentialProviderViewController: ASCredentialProviderViewController
 
     // MARK: - Passkeys
 
-    /// A site asked to sign in with a passkey and the user chose DuckDepo.
+    /// A site that accepts passkeys asked to sign in and the user opened DuckDepo's list. Passwords are
+    /// listed too, as Apple asks: the user may not have a passkey for the site.
     override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier],
                                         requestParameters: ASPasskeyCredentialRequestParameters) {
         let passkeys = PasskeyStorage().passkeys(for: requestParameters.relyingPartyIdentifier,
                                                  allowed: requestParameters.allowedCredentials)
-        show(PasskeyChoiceView(relyingParty: requestParameters.relyingPartyIdentifier, passkeys: passkeys, onCancel: { [weak self] in
+        let viewModel = AutoFillPasswordsListViewModel(identifiers: serviceIdentifiers.map(\.identifier), passkeys: passkeys)
+        show(AutoFillPasswordsListView(viewModel: viewModel, onClose: { [weak self] in
             self?.cancel(.userCanceled)
-        }, onSelect: { [weak self] passkey in
-            Task {
-                await self?.signIn(with: passkey, clientDataHash: requestParameters.clientDataHash,
-                                   preference: requestParameters.userVerificationPreference)
-            }
+        }, onSelect: { [weak self] credential in
+            self?.extensionContext.completeRequest(withSelectedCredential: credential, completionHandler: nil)
+        }, onSelectPasskey: { [weak self, weak viewModel] passkey in
+            self?.signIn(credentialID: passkey.credentialID, clientDataHash: requestParameters.clientDataHash,
+                         preference: requestParameters.userVerificationPreference,
+                         userJustVerified: viewModel?.wasUnlockedByUser ?? false)
         }))
     }
 
@@ -111,57 +113,91 @@ final class CredentialProviderViewController: ASCredentialProviderViewController
         // The site already has one of DuckDepo's passkeys for this account.
         let storage = PasskeyStorage()
         if let excluded = request.excludedCredentials,
-           excluded.contains(where: { storage.passkey(credentialID: $0.credentialID) != nil }) {
+           excluded.contains(where: { storage.passkey(credentialID: $0.credentialID)?.relyingParty == identity.relyingPartyIdentifier }) {
             cancel(.matchedExcludedCredential)
             return
         }
         show(PasskeyRegistrationView(relyingParty: identity.relyingPartyIdentifier, userName: identity.userName, onCancel: { [weak self] in
             self?.cancel(.userCanceled)
         }, onSave: { [weak self] in
-            Task {
-                await self?.register(identity: identity, request: request)
-            }
+            self?.register(identity: identity, request: request)
         }))
     }
 
-    private func register(identity: ASPasskeyCredentialIdentity, request: ASPasskeyCredentialRequest) async {
-        let verification = await UserVerification.verify(reason: String(localized: "passkey_save_reason \(identity.relyingPartyIdentifier)"))
-        guard let userVerified = Self.userVerified(verification, preference: request.userVerificationPreference) else {
-            cancel(verification == .failed ? .userCanceled : .failed)
-            return
+    private func register(identity: ASPasskeyCredentialIdentity, request: ASPasskeyCredentialRequest) {
+        showWorking()
+        Task {
+            let verification = await UserVerification.verify(reason: String(localized: "passkey_save_reason \(identity.relyingPartyIdentifier)"))
+            // Closed meanwhile: save nothing.
+            guard claimPasskeyRequest() else { return }
+            guard let userVerified = Self.userVerified(verification, preference: request.userVerificationPreference) else {
+                cancel(verification == .failed ? .userCanceled : .failed)
+                return
+            }
+            let passkey = Passkey.make(relyingParty: identity.relyingPartyIdentifier, userName: identity.userName,
+                                       userHandle: identity.userHandle)
+            guard let attestation = try? PasskeyAuthenticator.attestationObject(for: passkey, userVerified: userVerified),
+                  let replaced = PasskeyStorage().saveReplacingEarlier(passkey) else {
+                cancel(.failed)
+                return
+            }
+            CredentialIdentityStoreController.shared.remove(replaced)
+            CredentialIdentityStoreController.shared.add(passkey.summary)
+            let credential = ASPasskeyRegistrationCredential(relyingParty: identity.relyingPartyIdentifier,
+                                                             clientDataHash: request.clientDataHash,
+                                                             credentialID: passkey.credentialID,
+                                                             attestationObject: attestation)
+            await extensionContext.completeRegistrationRequest(using: credential)
         }
-        let passkey = Passkey.make(relyingParty: identity.relyingPartyIdentifier, userName: identity.userName,
-                                   userHandle: identity.userHandle)
-        guard let attestation = try? PasskeyAuthenticator.attestationObject(for: passkey, userVerified: userVerified),
-              PasskeyStorage().save(passkey) else {
-            cancel(.failed)
-            return
-        }
-        CredentialIdentityStoreController.shared.add(passkey)
-        let credential = ASPasskeyRegistrationCredential(relyingParty: identity.relyingPartyIdentifier,
-                                                         clientDataHash: request.clientDataHash,
-                                                         credentialID: passkey.credentialID,
-                                                         attestationObject: attestation)
-        await extensionContext.completeRegistrationRequest(using: credential)
     }
 
-    private func signIn(with passkey: Passkey, clientDataHash: Data,
-                        preference: ASAuthorizationPublicKeyCredentialUserVerificationPreference) async {
-        let verification = await UserVerification.verify(reason: String(localized: "passkey_sign_in_reason \(passkey.relyingParty)"))
-        guard let userVerified = Self.userVerified(verification, preference: preference) else {
-            cancel(verification == .failed ? .userCanceled : .failed)
+    /// Confirms it's the owner, unless they just unlocked DuckDepo with Face ID or the passcode, then signs.
+    private func signIn(credentialID: Data, clientDataHash: Data,
+                        preference: ASAuthorizationPublicKeyCredentialUserVerificationPreference,
+                        userJustVerified: Bool = false) {
+        guard let passkey = PasskeyStorage().passkey(credentialID: credentialID) else {
+            cancel(.credentialIdentityNotFound)
             return
         }
-        guard let assertion = try? PasskeyAuthenticator.assertion(for: passkey, clientDataHash: clientDataHash,
-                                                                 userVerified: userVerified) else {
-            cancel(.failed)
-            return
+        showWorking()
+        Task {
+            let verification: UserVerification.Result = if userJustVerified {
+                .verified
+            } else {
+                await UserVerification.verify(reason: String(localized: "passkey_sign_in_reason \(passkey.relyingParty)"))
+            }
+            guard claimPasskeyRequest() else { return }
+            guard let userVerified = Self.userVerified(verification, preference: preference) else {
+                cancel(verification == .failed ? .userCanceled : .failed)
+                return
+            }
+            guard let assertion = try? PasskeyAuthenticator.assertion(for: passkey, clientDataHash: clientDataHash,
+                                                                     userVerified: userVerified) else {
+                cancel(.failed)
+                return
+            }
+            let credential = ASPasskeyAssertionCredential(userHandle: passkey.userHandle, relyingParty: passkey.relyingParty,
+                                                          signature: assertion.signature, clientDataHash: clientDataHash,
+                                                          authenticatorData: assertion.authenticatorData,
+                                                          credentialID: passkey.credentialID)
+            await extensionContext.completeAssertionRequest(using: credential)
         }
-        let credential = ASPasskeyAssertionCredential(userHandle: passkey.userHandle, relyingParty: passkey.relyingParty,
-                                                      signature: assertion.signature, clientDataHash: clientDataHash,
-                                                      authenticatorData: assertion.authenticatorData,
-                                                      credentialID: passkey.credentialID)
-        await extensionContext.completeAssertionRequest(using: credential)
+    }
+
+    /// Replaces the screen that was tapped, so a second tap can't start the same thing again.
+    private func showWorking() {
+        isPasskeyRequestFinished = false
+        show(PasskeyWorkingView(onCancel: { [weak self] in
+            guard let self, claimPasskeyRequest() else { return }
+            cancel(.userCanceled)
+        }))
+    }
+
+    /// True only for the first of answering and Close.
+    private func claimPasskeyRequest() -> Bool {
+        guard !isPasskeyRequestFinished else { return false }
+        isPasskeyRequestFinished = true
+        return true
     }
 
     /// Whether to report the user as verified; nil when the request can't go ahead.

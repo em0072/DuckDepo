@@ -8,7 +8,7 @@ import SwiftUI
 /// A passkey in a list: the account, then the site. Sized like `PasswordRow`.
 struct PasskeyRow: View {
 
-    let passkey: Passkey
+    let passkey: PasskeySummary
 
     var body: some View {
         HStack(spacing: 12) {

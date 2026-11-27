@@ -12,8 +12,8 @@ import Foundation
 final class PasswordsListViewModel {
 
     var passwords: [Password] = []
-    /// Read from the keychain, which tells nobody when it changes: reload when coming back to the app.
-    private(set) var passkeys: [Passkey] = []
+    /// Read from the keychain, which only tells this process: reload when coming back to the app too.
+    private(set) var passkeys: [PasskeySummary] = []
     var isAddingNewPassword = false
 
     @ObservationIgnored private var cancellables = Set<AnyCancellable>()
@@ -37,6 +37,12 @@ final class PasswordsListViewModel {
         storage.passwords
             .sink { [weak self] passwords in
                 self?.passwords = passwords
+            }
+            .store(in: &cancellables)
+        // A passkey deleted here, or all of them by Delete All Data in Settings.
+        passkeyStorage.changes
+            .sink { [weak self] _ in
+                self?.reloadPasskeys()
             }
             .store(in: &cancellables)
     }
@@ -73,14 +79,14 @@ final class PasswordsListViewModel {
         }
     }
 
-    func passkey(with id: Passkey.ID?) -> Passkey? {
+    func passkey(with id: PasskeySummary.ID?) -> PasskeySummary? {
         guard let id else { return nil }
         return passkeys.first { $0.id == id }
     }
 
-    func delete(_ passkey: Passkey) {
+    /// The list reloads through `PasskeyStorage.didChange`.
+    func delete(_ passkey: PasskeySummary) {
         passkeyStorage.delete(passkey)
-        CredentialIdentityStoreController.shared.refresh()
-        reloadPasskeys()
+        CredentialIdentityStoreController.shared.remove([passkey])
     }
 }

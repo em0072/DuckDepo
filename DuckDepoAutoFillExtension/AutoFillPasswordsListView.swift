@@ -15,6 +15,8 @@ struct AutoFillPasswordsListView: View {
     var onSelect: ((ASPasswordCredential) -> Void)?
     /// In one-time code mode, called with the code to fill in.
     var onSelectCode: ((String) -> Void)?
+    /// When the site asked for a passkey, called with the one picked.
+    var onSelectPasskey: ((PasskeySummary) -> Void)?
 
     var body: some View {
         NavigationStack {
@@ -59,7 +61,7 @@ struct AutoFillPasswordsListView: View {
                 .task {
                     viewModel.unlock()
                 }
-        } else if viewModel.passwords.isEmpty {
+        } else if viewModel.passwords.isEmpty && viewModel.passkeys.isEmpty {
             if viewModel.mode == .oneTimeCodes {
                 ContentUnavailableView("af_no_codes_title", systemImage: "number",
                                        description: Text("af_no_codes_body"))
@@ -78,6 +80,19 @@ struct AutoFillPasswordsListView: View {
 
     private var listView: some View {
         List {
+            if !viewModel.filteredPasskeys.isEmpty {
+                Section {
+                    ForEach(viewModel.filteredPasskeys) { passkey in
+                        Button {
+                            onSelectPasskey?(passkey)
+                        } label: {
+                            PasskeyRow(passkey: passkey)
+                        }
+                    }
+                } header: {
+                    Text("pl_passkeys")
+                }
+            }
             if !viewModel.recommendedPasswords.isEmpty && viewModel.searchText.isEmpty {
                 Section {
                     ForEach(viewModel.recommendedPasswords) { password in
@@ -87,12 +102,14 @@ struct AutoFillPasswordsListView: View {
                     Text("af_recommended_passwords")
                 }
             }
-            Section {
-                ForEach(viewModel.filteredPasswords) { password in
-                    row(for: password)
+            if !viewModel.passwords.isEmpty {
+                Section {
+                    ForEach(viewModel.filteredPasswords) { password in
+                        row(for: password)
+                    }
+                } header: {
+                    Text("af_all_passwords")
                 }
-            } header: {
-                Text("af_all_passwords")
             }
         }
     }

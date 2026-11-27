@@ -57,20 +57,35 @@ final class CredentialIdentityStoreController {
         return ASOneTimeCodeCredentialIdentity(serviceIdentifier: service, label: label, recordIdentifier: id.uuidString)
     }
 
-    static func identity(for passkey: Passkey) -> ASPasskeyCredentialIdentity {
+    static func identity(for passkey: PasskeySummary) -> ASPasskeyCredentialIdentity {
         ASPasskeyCredentialIdentity(relyingPartyIdentifier: passkey.relyingParty, userName: passkey.userName,
                                     credentialID: passkey.credentialID, userHandle: passkey.userHandle,
                                     recordIdentifier: passkey.id.uuidString)
     }
 
     /// Adds one passkey without waiting for the next full refresh, which only the app does.
-    func add(_ passkey: Passkey) {
+    func add(_ passkey: PasskeySummary) {
         let identity = Self.identity(for: passkey)
         ASCredentialIdentityStore.shared.getState { [logger] state in
             guard state.isEnabled else { return }
             ASCredentialIdentityStore.shared.saveCredentialIdentities([identity]) { _, error in
                 if let error {
                     logger.error("Saving a passkey identity failed: \(String(describing: error), privacy: .public)")
+                }
+            }
+        }
+    }
+
+    /// Removes only these passkeys' suggestions. A full refresh would rebuild every suggestion from the
+    /// database, and drop all the passwords' if it couldn't be read.
+    func remove(_ passkeys: [PasskeySummary]) {
+        guard !passkeys.isEmpty else { return }
+        let identities: [any ASCredentialIdentity] = passkeys.map(Self.identity(for:))
+        ASCredentialIdentityStore.shared.getState { [logger] state in
+            guard state.isEnabled else { return }
+            ASCredentialIdentityStore.shared.removeCredentialIdentities(identities) { _, error in
+                if let error {
+                    logger.error("Removing passkey identities failed: \(String(describing: error), privacy: .public)")
                 }
             }
         }

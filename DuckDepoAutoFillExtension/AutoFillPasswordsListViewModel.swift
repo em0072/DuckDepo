@@ -24,10 +24,14 @@ final class AutoFillPasswordsListViewModel {
     /// The one-time code settings of each listed entry, in `oneTimeCodes` mode.
     private(set) var oneTimeCodes: [Password.ID: OneTimeCode] = [:]
     var recommendedPasswords: [Password] = []
+    /// When the site asked for a passkey: DuckDepo's passkeys for it, listed above the passwords.
+    let passkeys: [PasskeySummary]
     var selectedPassword: Password?
     var isAddingNewPassword = false
     var searchText = ""
     private(set) var isLocked: Bool
+    /// The user unlocked the list with Face ID or the passcode, so a passkey picked now needs no second check.
+    @ObservationIgnored private(set) var wasUnlockedByUser = false
 
     let identifiers: [String]
     /// `false` until the app has been opened once after updating and moved its data where the extension can read it.
@@ -39,10 +43,12 @@ final class AutoFillPasswordsListViewModel {
 
     init(identifiers: [String],
          mode: Mode = .passwords,
+         passkeys: [PasskeySummary] = [],
          isStoreReady: Bool = DefaultsController.shared.isSharedStoreReady,
          lock: BiometricController = .shared) {
         self.identifiers = identifiers
         self.mode = mode
+        self.passkeys = passkeys
         self.isStoreReady = isStoreReady
         self.lock = lock
         // Respect the app's lock setting: nothing is listed until the user authenticates.
@@ -73,6 +79,12 @@ final class AutoFillPasswordsListViewModel {
         passwords.filter { $0.matches(searchText) }
     }
 
+    var filteredPasskeys: [PasskeySummary] {
+        let query = searchText.trimmingCharacters(in: .whitespaces)
+        guard !query.isEmpty else { return passkeys }
+        return passkeys.filter { $0.userName.localizedStandardContains(query) || $0.relyingParty.localizedStandardContains(query) }
+    }
+
     static func recommended(from passwords: [Password], for identifiers: [String]) -> [Password] {
         passwords.filter { password in
             identifiers.contains { DomainMatcher.matches(website: password.website, serviceIdentifier: $0) }
@@ -83,6 +95,7 @@ final class AutoFillPasswordsListViewModel {
         guard isLocked else { return }
         lock.authenticate { [weak self] success in
             if success {
+                self?.wasUnlockedByUser = true
                 self?.isLocked = false
             }
         }

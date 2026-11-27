@@ -56,51 +56,23 @@ struct PasskeyRegistrationView: View {
     }
 }
 
-/// The site's passkeys in DuckDepo, to sign in with one.
-struct PasskeyChoiceView: View {
+/// Shown while Face ID confirms a passkey is made or used. Replacing the screen that was tapped also
+/// stops a second tap from starting it again.
+struct PasskeyWorkingView: View {
 
-    let relyingParty: String
-    let passkeys: [Passkey]
     let onCancel: () -> Void
-    let onSelect: (Passkey) -> Void
 
     var body: some View {
         NavigationStack {
-            Group {
-                if passkeys.isEmpty {
-                    ContentUnavailableView {
-                        Label("passkey_none_title", systemImage: "person.badge.key")
-                    } description: {
-                        Text("passkey_none_body \(relyingParty)")
-                    }
-                } else {
-                    List(passkeys) { passkey in
-                        Button {
-                            onSelect(passkey)
-                        } label: {
-                            PasskeyRow(passkey: passkey)
-                        }
+            ProgressView()
+                .controlSize(.large)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button(role: .close, action: onCancel)
                     }
                 }
-            }
-            .navigationTitle("passkey_sign_in_title")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button(role: .close, action: onCancel)
-                }
-            }
         }
         .tint(.duckYellow)
-    }
-}
-
-/// Shown while Face ID confirms a passkey sign-in picked from the keyboard.
-struct PasskeyWorkingView: View {
-
-    var body: some View {
-        ProgressView()
-            .controlSize(.large)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }

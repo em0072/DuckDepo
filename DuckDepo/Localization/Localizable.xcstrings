@@ -2723,40 +2723,6 @@
         }
       }
     },
-    "passkey_none_body %@" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "DuckDepo has no passkey for %@."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "В DuckDepo нет ключа входа для %@."
-          }
-        }
-      }
-    },
-    "passkey_none_title" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No Passkeys"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Нет ключей входа"
-          }
-        }
-      }
-    },
     "passkey_row_hint" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2855,23 +2821,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Войти на %@"
-          }
-        }
-      }
-    },
-    "passkey_sign_in_title" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sign In with a Passkey"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Вход с ключом входа"
           }
         }
       }
@@ -4565,13 +4514,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This deletes all documents and passwords on this device and on every device signed in to the same iCloud account. It can't be undone."
+            "value" : "This deletes all documents, passwords and passkeys on this device and on every device signed in to the same iCloud account. It can't be undone."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Будут удалены все документы и пароли на этом устройстве и на всех устройствах с той же учётной записью iCloud. Это действие нельзя отменить."
+            "value" : "Будут удалены все документы, пароли и ключи входа на этом устройстве и на всех устройствах с той же учётной записью iCloud. Это действие нельзя отменить."
           }
         }
       }
@@ -4616,13 +4565,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Deletes every document and password here and on your other devices."
+            "value" : "Deletes every document, password and passkey here and on your other devices."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Удаляет все документы и пароли здесь и на других ваших устройствах."
+            "value" : "Удаляет все документы, пароли и ключи входа здесь и на других ваших устройствах."
           }
         }
       }

@@ -41,6 +41,8 @@ final class DataBase {
             }
             save()
             keychain.clear()
+            // Passkeys were in the keychain too.
+            NotificationCenter.default.post(name: PasskeyStorage.didChange, object: keychain)
             CredentialIdentityStoreController.shared.removeAll()
         } catch {
             logger.error("Deleting everything failed: \(String(describing: error), privacy: .public)")
