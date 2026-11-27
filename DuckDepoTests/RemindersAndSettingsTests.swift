@@ -105,7 +105,7 @@ struct SettingsCountTests {
         #expect(viewModel.passwordCount == 0)
     }
 
-    @Test func passkeysCountAsPasswords() async {
+    @Test func passkeysCountAsPasswords() async throws {
         let keychain = InMemoryKeychain()
         let passkeys = PasskeyStorage(keychain: keychain)
         let passwords = PasswordsStorage(database: database, keychain: keychain, identityStore: nil)
@@ -116,9 +116,16 @@ struct SettingsCountTests {
         // A password and a passkey for the same site are still two.
         #expect(viewModel.passwordCount == 2)
 
-        // One made through AutoFill shows up the next time Settings refreshes.
-        #expect(passkeys.save(Passkey.make(relyingParty: "example.com", userName: "joe", userHandle: Data([2]))))
+        // One made through AutoFill, another process that can't tell this one, shows up the next time Settings refreshes.
+        let fromAutoFill = Passkey.make(relyingParty: "example.com", userName: "joe", userHandle: Data([2]))
+        let json = String(decoding: try JSONEncoder().encode(fromAutoFill), as: UTF8.self)
+        keychain.set(json, forKey: PasskeyStorage.key(for: fromAutoFill.credentialID), service: PasskeyStorage.service)
+        #expect(viewModel.passwordCount == 2)
         await viewModel.refreshSystemState()
         #expect(viewModel.passwordCount == 3)
+
+        // Deleting one in the app counts at once.
+        passkeys.delete(fromAutoFill.summary)
+        #expect(viewModel.passwordCount == 2)
     }
 }

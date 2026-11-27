@@ -31,13 +31,36 @@ struct Passkey: Codable, Identifiable, Hashable {
     var signingKey: P256.Signing.PrivateKey? {
         try? P256.Signing.PrivateKey(rawRepresentation: privateKey)
     }
+
+    var summary: PasskeySummary {
+        PasskeySummary(id: id, credentialID: credentialID, relyingParty: relyingParty, userName: userName,
+                       userHandle: userHandle, createdAt: createdAt)
+    }
+}
+
+/// A passkey without its private key: what lists and AutoFill suggestions show. Decoded from the same
+/// JSON as `Passkey`, so the key is never kept around just to display one.
+struct PasskeySummary: Codable, Identifiable, Hashable {
+    let id: UUID
+    let credentialID: Data
+    let relyingParty: String
+    let userName: String
+    let userHandle: Data
+    let createdAt: Date
 }
 
 /// Passkeys live in iCloud Keychain, one item each, next to passwords: they sync to the user's devices
 /// the same way and are end-to-end encrypted. Nothing about them is in Core Data.
+///
+/// They have their own keychain service, so listing them doesn't read passwords or code secrets.
 final class PasskeyStorage {
 
     static let keyPrefix = "passkey."
+    static let service = "DuckDepo.passkey"
+    /// Posted in this process after passkeys are saved or deleted, with their keychain as the object.
+    /// The keychain tells nobody else, so screens also look again when the app comes back
+    /// (AutoFill runs in another process).
+    static let didChange = Notification.Name("PasskeyStorage.didChange")
 
     private let keychain: KeychainStoring
 
@@ -45,44 +68,61 @@ final class PasskeyStorage {
         self.keychain = keychain
     }
 
+    /// Changes made in this process to the passkeys in this storage's keychain.
+    var changes: NotificationCenter.Publisher {
+        NotificationCenter.default.publisher(for: Self.didChange, object: keychain)
+    }
+
     /// How many passkeys there are, without reading them.
     func count() -> Int {
-        keychain.allKeys().filter { $0.hasPrefix(Self.keyPrefix) }.count
+        keychain.keys(service: Self.service).count
     }
 
     /// Every passkey, by site and then account.
-    func all() -> [Passkey] {
+    func all() -> [PasskeySummary] {
         let decoder = JSONDecoder()
-        return keychain.allKeys()
-            .filter { $0.hasPrefix(Self.keyPrefix) }
-            .compactMap { keychain.string(forKey: $0)?.data(using: .utf8) }
-            .compactMap { try? decoder.decode(Passkey.self, from: $0) }
-            .sorted { ($0.relyingParty, $0.userName) < ($1.relyingParty, $1.userName) }
+        return keychain.strings(service: Self.service).values
+            .compactMap { try? decoder.decode(PasskeySummary.self, from: Data($0.utf8)) }
+            .sorted { ($0.relyingParty, $0.userName, $0.createdAt) < ($1.relyingParty, $1.userName, $1.createdAt) }
     }
 
     /// The site's passkeys, only those in `allowed` when the site names some.
-    func passkeys(for relyingParty: String, allowed: [Data] = []) -> [Passkey] {
+    func passkeys(for relyingParty: String, allowed: [Data] = []) -> [PasskeySummary] {
         all().filter { $0.relyingParty == relyingParty && (allowed.isEmpty || allowed.contains($0.credentialID)) }
     }
 
+    /// The whole passkey, with its key, to sign with.
     func passkey(credentialID: Data) -> Passkey? {
-        keychain.string(forKey: Self.key(for: credentialID))?.data(using: .utf8)
-            .flatMap { try? JSONDecoder().decode(Passkey.self, from: $0) }
-    }
-
-    func passkey(id: UUID) -> Passkey? {
-        all().first { $0.id == id }
+        keychain.string(forKey: Self.key(for: credentialID))
+            .flatMap { try? JSONDecoder().decode(Passkey.self, from: Data($0.utf8)) }
     }
 
     @discardableResult
     func save(_ passkey: Passkey) -> Bool {
-        guard let data = try? JSONEncoder().encode(passkey), let json = String(data: data, encoding: .utf8) else { return false }
-        return keychain.set(json, forKey: Self.key(for: passkey.credentialID))
+        guard let data = try? JSONEncoder().encode(passkey), let json = String(data: data, encoding: .utf8),
+              keychain.set(json, forKey: Self.key(for: passkey.credentialID), service: Self.service) else { return false }
+        NotificationCenter.default.post(name: Self.didChange, object: keychain)
+        return true
+    }
+
+    /// Saves a site's new passkey and deletes the ones it made before for the same account (same site and
+    /// user handle), as WebAuthn asks: the site has replaced them. Returns what was deleted, or nil if the
+    /// new passkey couldn't be saved, in which case nothing is deleted.
+    func saveReplacingEarlier(_ passkey: Passkey) -> [PasskeySummary]? {
+        let earlier = passkeys(for: passkey.relyingParty)
+            .filter { $0.userHandle == passkey.userHandle && $0.credentialID != passkey.credentialID }
+        guard save(passkey) else { return nil }
+        for summary in earlier {
+            delete(summary)
+        }
+        return earlier
     }
 
     @discardableResult
-    func delete(_ passkey: Passkey) -> Bool {
-        keychain.delete(Self.key(for: passkey.credentialID))
+    func delete(_ passkey: PasskeySummary) -> Bool {
+        let deleted = keychain.delete(Self.key(for: passkey.credentialID))
+        NotificationCenter.default.post(name: Self.didChange, object: keychain)
+        return deleted
     }
 
     static func key(for credentialID: Data) -> String {

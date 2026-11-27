@@ -107,15 +107,133 @@ struct PasskeyStorageTests {
             #expect(storage.save(passkey))
         }
 
+        #expect(storage.count() == 3)
         #expect(storage.all().map(\.userName) == ["joe", "jane", "jane-work"])
-        #expect(Set(storage.passkeys(for: "github.com")) == [github, github2])
-        #expect(storage.passkeys(for: "github.com", allowed: [github2.credentialID]) == [github2])
+        #expect(Set(storage.passkeys(for: "github.com")) == [github.summary, github2.summary])
+        #expect(storage.passkeys(for: "github.com", allowed: [github2.credentialID]) == [github2.summary])
         #expect(storage.passkey(credentialID: example.credentialID) == example)
-        #expect(storage.passkey(id: github.id) == github)
 
-        #expect(storage.delete(github))
-        #expect(storage.passkeys(for: "github.com") == [github2])
+        #expect(storage.delete(github.summary))
+        #expect(storage.passkeys(for: "github.com") == [github2.summary])
         // Passwords are left alone.
         #expect(keychain.items.count == 3)
+    }
+
+    /// Lists read only the passkeys' own keychain service, never password values.
+    @Test func listingReadsOnlyPasskeys() {
+        let keychain = InMemoryKeychain()
+        keychain.set("a password", forKey: UUID().uuidString)
+        keychain.set("otpauth://totp/x?secret=ABC", forKey: UUID().uuidString + ".otp")
+        let storage = PasskeyStorage(keychain: keychain)
+        let passkey = Passkey.make(relyingParty: "github.com", userName: "jane", userHandle: Data([1]))
+        #expect(storage.save(passkey))
+
+        #expect(keychain.keys(service: PasskeyStorage.service) == [PasskeyStorage.key(for: passkey.credentialID)])
+        #expect(storage.count() == 1)
+        #expect(storage.all() == [passkey.summary])
+    }
+
+    /// WebAuthn: a new passkey for the same account on the same site replaces the old one.
+    @Test func aNewPasskeyReplacesTheAccountsEarlierOne() throws {
+        let storage = PasskeyStorage(keychain: InMemoryKeychain())
+        let old = Passkey.make(relyingParty: "github.com", userName: "jane", userHandle: Data([1]))
+        let otherAccount = Passkey.make(relyingParty: "github.com", userName: "joe", userHandle: Data([2]))
+        let otherSite = Passkey.make(relyingParty: "example.com", userName: "jane", userHandle: Data([1]))
+        for passkey in [old, otherAccount, otherSite] {
+            #expect(storage.save(passkey))
+        }
+
+        let new = Passkey.make(relyingParty: "github.com", userName: "jane", userHandle: Data([1]))
+        let replaced = try #require(storage.saveReplacingEarlier(new))
+
+        #expect(replaced == [old.summary])
+        #expect(storage.passkey(credentialID: old.credentialID) == nil)
+        #expect(Set(storage.all()) == [new.summary, otherAccount.summary, otherSite.summary])
+    }
+
+    @Test func nothingIsReplacedWhenTheNewPasskeyCantBeSaved() {
+        let keychain = InMemoryKeychain()
+        let storage = PasskeyStorage(keychain: keychain)
+        let old = Passkey.make(relyingParty: "github.com", userName: "jane", userHandle: Data([1]))
+        #expect(storage.save(old))
+
+        keychain.failWrites = true
+        #expect(storage.saveReplacingEarlier(Passkey.make(relyingParty: "github.com", userName: "jane", userHandle: Data([1]))) == nil)
+        #expect(storage.all() == [old.summary])
+    }
+
+    /// The key stays in the keychain: summaries are decoded without it.
+    @Test func summariesCarryNoKey() throws {
+        let passkey = Passkey.make(relyingParty: "github.com", userName: "jane", userHandle: Data([1]))
+        let json = try JSONEncoder().encode(passkey.summary)
+        let fields = try #require(try JSONSerialization.jsonObject(with: json) as? [String: Any])
+        #expect(fields["privateKey"] == nil)
+    }
+}
+
+/// The Passwords tab lists passkeys from the keychain, which only this process announces changes to.
+@MainActor
+struct PasswordsListPasskeyTests {
+
+    @Test func passkeysGoAfterDeleteAllData() {
+        let keychain = InMemoryKeychain()
+        let database = TestStack.makeDatabase()
+        let passkeys = PasskeyStorage(keychain: keychain)
+        #expect(passkeys.save(Passkey.make(relyingParty: "github.com", userName: "jane", userHandle: Data([1]))))
+        let viewModel = PasswordsListViewModel(makeStorage: {
+            PasswordsStorage(database: database, keychain: keychain, identityStore: nil)
+        }, passkeyStorage: passkeys)
+        viewModel.start()
+        #expect(viewModel.passkeys.count == 1)
+
+        database.deleteEverything(keychain: keychain)
+
+        #expect(viewModel.passkeys.isEmpty)
+    }
+
+    @Test func aDeletedPasskeyLeavesTheList() throws {
+        let keychain = InMemoryKeychain()
+        let passkeys = PasskeyStorage(keychain: keychain)
+        let passkey = Passkey.make(relyingParty: "github.com", userName: "jane", userHandle: Data([1]))
+        #expect(passkeys.save(passkey))
+        let database = TestStack.makeDatabase()
+        let viewModel = PasswordsListViewModel(makeStorage: {
+            PasswordsStorage(database: database, keychain: keychain, identityStore: nil)
+        }, passkeyStorage: passkeys)
+        viewModel.start()
+
+        viewModel.delete(try #require(viewModel.passkeys.first))
+
+        #expect(viewModel.passkeys.isEmpty)
+        #expect(passkeys.count() == 0)
+    }
+}
+
+/// The real keychain: items of one service are listed without the others. Uses throwaway names and removes them.
+struct KeychainServiceTests {
+
+    @Test func listsOnlyItsServiceAndFindsItemsByKey() {
+        let keychain = Keychain()
+        let service = "DuckDepoTests." + UUID().uuidString
+        let key = "test." + UUID().uuidString
+        let other = "test." + UUID().uuidString
+        defer {
+            keychain.delete(key)
+            keychain.delete(other)
+        }
+        #expect(keychain.set("passkey", forKey: key, service: service))
+        #expect(keychain.set("password", forKey: other))
+
+        #expect(keychain.strings(service: service) == [key: "passkey"])
+        #expect(keychain.keys(service: service) == [key])
+        #expect(keychain.string(forKey: key) == "passkey")
+
+        // Writing again replaces the item.
+        #expect(keychain.set("passkey 2", forKey: key, service: service))
+        #expect(keychain.strings(service: service) == [key: "passkey 2"])
+
+        #expect(keychain.delete(key))
+        #expect(keychain.keys(service: service).isEmpty)
+        #expect(keychain.string(forKey: other) == "password")
     }
 }

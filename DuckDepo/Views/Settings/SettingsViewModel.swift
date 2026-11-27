@@ -67,7 +67,16 @@ final class SettingsViewModel {
                 self?.countPasswords()
             }
             .store(in: &cancellables)
+        passkeyStorage.changes
+            .sink { [weak self] _ in
+                self?.countPasskeys()
+            }
+            .store(in: &cancellables)
         countPasswords()
+        countPasskeys()
+    }
+
+    private func countPasskeys() {
         passkeyCount = passkeyStorage.count()
     }
 
@@ -137,6 +146,6 @@ final class SettingsViewModel {
         database.deleteEverything()
         PhotoTextIndex.shared.removeAll()
         countPasswords()
-        passkeyCount = passkeyStorage.count()
+        countPasskeys()
     }
 }

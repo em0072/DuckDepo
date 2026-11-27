@@ -12,7 +12,7 @@ struct PasswordsListView: View {
     @State var viewModel: PasswordsListViewModel
     @State private var selection: Password.ID?
     @State private var passwordToDelete: Password?
-    @State private var passkeyToDelete: Passkey?
+    @State private var passkeyToDelete: PasskeySummary?
     @Environment(\.openURL) private var openURL
     @Environment(\.scenePhase) private var scenePhase
     private var syncMonitor = SyncMonitor.shared

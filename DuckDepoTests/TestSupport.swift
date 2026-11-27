@@ -11,6 +11,8 @@ import UIKit
 /// Keychain stand-in. `failWrites` simulates a keychain error.
 final class InMemoryKeychain: KeychainStoring {
     var items: [String: String] = [:]
+    /// The service of each item written with one.
+    var services: [String: String] = [:]
     var failWrites = false
 
     func string(forKey key: String) -> String? {
@@ -21,21 +23,36 @@ final class InMemoryKeychain: KeychainStoring {
     func set(_ value: String, forKey key: String) -> Bool {
         guard !failWrites else { return false }
         items[key] = value
+        services.removeValue(forKey: key)
         return true
     }
 
     @discardableResult
-    func delete(_ key: String) -> Bool {
-        items.removeValue(forKey: key) != nil
+    func set(_ value: String, forKey key: String, service: String) -> Bool {
+        guard !failWrites else { return false }
+        items[key] = value
+        services[key] = service
+        return true
     }
 
-    func allKeys() -> [String] {
-        Array(items.keys)
+    func strings(service: String) -> [String: String] {
+        items.filter { services[$0.key] == service }
+    }
+
+    func keys(service: String) -> [String] {
+        Array(strings(service: service).keys)
+    }
+
+    @discardableResult
+    func delete(_ key: String) -> Bool {
+        services.removeValue(forKey: key)
+        return items.removeValue(forKey: key) != nil
     }
 
     @discardableResult
     func clear() -> Bool {
         items.removeAll()
+        services.removeAll()
         return true
     }
 }
