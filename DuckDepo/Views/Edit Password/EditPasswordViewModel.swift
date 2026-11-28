@@ -32,6 +32,8 @@ final class EditPasswordViewModel {
     var oneTimeCodeURI = ""
     /// A setup key or QR code that isn't one.
     var oneTimeCodeError = false
+    /// Whose it is, or nil for no one.
+    var personID: Person.ID?
 
     private(set) var shouldCloseView = false
     var saveFailed = false
@@ -40,13 +42,17 @@ final class EditPasswordViewModel {
     private var original: Password
     @ObservationIgnored private var isLoaded = false
 
-    init(type: PasswordType, delegate: EditPasswordViewModelDelegate? = nil, storage: PasswordsStorage = PasswordsStorage()) {
+    /// - Parameter personID: Whose a new password is to begin with (the person the list shows).
+    init(type: PasswordType, delegate: EditPasswordViewModelDelegate? = nil, storage: PasswordsStorage = PasswordsStorage(),
+         personID: Person.ID? = nil) {
         self.type = type
         self.delegate = delegate
         self.storage = storage
         switch type {
         case .new:
-            original = Password()
+            var new = Password()
+            new.personID = personID
+            original = new
         case .existing(let password):
             original = password
         }
@@ -54,6 +60,7 @@ final class EditPasswordViewModel {
         passwordLogin = original.login
         passwordValue = original.value
         passwordWebsite = original.website
+        self.personID = original.personID
     }
 
     /// Reads the value from the keychain once: the caller's copy may be stale or a list item without a value.
@@ -106,6 +113,7 @@ final class EditPasswordViewModel {
         password.value = passwordValue
         password.website = passwordWebsite.trimmingCharacters(in: .whitespacesAndNewlines)
         password.oneTimeCode = oneTimeCodeURI
+        password.personID = personID
         return password
     }
 
@@ -123,10 +131,15 @@ final class EditPasswordViewModel {
 
     func save() {
         guard canSave else { return }
-        let password = edited
-        guard storage.save(password) else {
+        var password = edited
+        // Whose it is only when changed here: the copy loaded may be older than a change made meanwhile.
+        let includesPerson = isNew || personID != original.personID
+        guard storage.save(password, includingPerson: includesPerson) else {
             saveFailed = true
             return
+        }
+        if !includesPerson {
+            password.personID = storage.fetch(with: password.id)?.folder?.identifier
         }
         delegate?.passwordUpdated(password)
         shouldCloseView = true

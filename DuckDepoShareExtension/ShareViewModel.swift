@@ -70,13 +70,18 @@ final class ShareViewModel {
 
     // MARK: - New document
 
-    /// Reads the pages and opens the editor with what it found, as after a scan.
+    /// Reads the pages and opens the editor with what it found, as after a scan. While the app is locked
+    /// the editor shows nothing stored (no people, no suggestion), so it needs no Face ID.
     func newDocument() async {
         guard stage == .choosing, isStoreAvailable() else { return }
         stage = .reading
         let draft = await DocumentScanner.draft(from: photos)
         stage = .choosing
-        editor = EditDocumentViewModel(type: .scanned(draft)) { [weak self] saved in
+        let showsPeople = !BiometricController.shared.isLockRequired
+        if showsPeople {
+            readLatestStoredData()
+        }
+        editor = EditDocumentViewModel(type: .scanned(draft), showsPeople: showsPeople) { [weak self] saved in
             if saved != nil {
                 self?.didSave = true
             }
@@ -105,8 +110,7 @@ final class ShareViewModel {
             isAuthenticating = false
             guard unlocked else { return }
         }
-        // Changes the app made since the extension started.
-        DataBase.shared.readLatestStoredData()
+        readLatestStoredData()
         documents = DataBase.shared.allDocuments().sorted {
             $0.name.localizedStandardCompare($1.name) == .orderedAscending
         }
@@ -114,7 +118,10 @@ final class ShareViewModel {
     }
 
     var filteredDocuments: [Document] {
-        documents.filter { DocumentSearch.matches($0, query: query) }
+        documents.filter { document in
+            DocumentSearch.matches(document, query: query)
+                || PeopleDirectory.shared.person(with: document.personID)?.matches(query) == true
+        }
     }
 
     func add(to document: Document) {
@@ -170,6 +177,12 @@ final class ShareViewModel {
         isPicking = false
         documents = []
         query = ""
+    }
+
+    /// Changes the app made since the extension started (or since the last share, in the same process).
+    private func readLatestStoredData() {
+        DataBase.shared.readLatestStoredData()
+        PeopleDirectory.shared.refresh()
     }
 
     private func isStoreAvailable() -> Bool {

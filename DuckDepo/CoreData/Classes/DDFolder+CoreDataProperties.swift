@@ -6,65 +6,69 @@
 //
 //
 
-import Foundation
 import CoreData
-import UIKit
+import Foundation
 
+/// A person (see `Person`). The entity keeps its old name: CloudKit record types can't be renamed.
 extension DDFolder {
+
+    static let entityName = "DDFolder"
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<DDFolder> {
-        return NSFetchRequest<DDFolder>(entityName: "DDFolder")
+        NSFetchRequest<DDFolder>(entityName: DDFolder.entityName)
     }
 
+    /// Optional in the model, like every attribute CloudKit syncs. `LegacyDataMigration` gives one to a
+    /// folder made before version 2.8.
+    @NSManaged public var identifier: UUID?
+    /// The person's name, encrypted in iCloud (model 5). Read and written through `personName`.
+    @NSManaged public var encryptedName: String?
+    /// Not encrypted in iCloud, and that can't change for a field that's already there, so it stays
+    /// empty. A folder made before 2.8 may have a name here, which `LegacyDataMigration` moves.
     @NSManaged public var name: String?
     @NSManaged public var order: Int64
-    @NSManaged public var documents: Set<DDDocument>?
+    /// A `PersonColor` raw value.
+    @NSManaged public var color: String?
+    /// Unused: from the folders version 1 planned.
     @NSManaged public var icon: Data?
+    @NSManaged public var documents: Set<DDDocument>?
+    @NSManaged public var passwords: Set<DDPassword>?
 
-}
-
-// MARK: Generated accessors for documents
-extension DDFolder {
-
-    @objc(addDocumentsObject:)
-    @NSManaged public func addToDocuments(_ value: DDDocument)
-
-    @objc(removeDocumentsObject:)
-    @NSManaged public func removeFromDocuments(_ value: DDDocument)
-
-    @objc(addDocuments:)
-    @NSManaged public func addToDocuments(_ values: NSSet)
-
-    @objc(removeDocuments:)
-    @NSManaged public func removeFromDocuments(_ values: NSSet)
-    
-    func convert() -> Folder {
-        let folder = Folder(icon: getPhoto(),
-                            name: self.name ?? "",
-                            order:Int(self.order),
-                            documnets: getDocument())
-        
-        return folder
-    }
-
-    public func getPhoto() -> UIImage? {
-        guard let object = icon else { return nil }
-        if let dataArray = try? NSKeyedUnarchiver.unarchivedArrayOfObjects(ofClass: NSData.self, from: object) {
-            for data in dataArray {
-                if let image = UIImage(data: data as Data) {
-                    return image
-                }
+    /// Kept only in the encrypted field.
+    var personName: String {
+        get {
+            encryptedName ?? name ?? ""
+        }
+        set {
+            if encryptedName != newValue {
+                encryptedName = newValue
+            }
+            if name != nil {
+                name = nil
             }
         }
-        return nil
-    }
-    
-    public func getDocument() -> [DDDocument] {
-        return Array(documents ?? []).sorted()
     }
 
+    /// Nil for a folder without an ID yet.
+    func convert() -> Person? {
+        guard let identifier else { return nil }
+        return Person(id: identifier,
+                      name: personName,
+                      color: color.flatMap(PersonColor.init(rawValue:)) ?? .fallback(for: identifier),
+                      order: Int(clamping: order))
+    }
+
+    var counts: PersonCounts {
+        PersonCounts(documents: documents?.count ?? 0, passwords: passwords?.count ?? 0)
+    }
+
+    static func fetch(with id: UUID, in context: NSManagedObjectContext) -> DDFolder? {
+        let request = fetchRequest()
+        request.predicate = NSPredicate(format: "identifier = %@", id as CVarArg)
+        request.fetchLimit = 1
+        return try? context.fetch(request).first
+    }
 }
 
-extension DDFolder : Identifiable {
-
+extension DDFolder: Identifiable, CoreDataCountable {
 }

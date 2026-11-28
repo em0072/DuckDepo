@@ -67,7 +67,8 @@ private struct CountdownRing: View {
     @ScaledMetric(relativeTo: .body) private var size: CGFloat = 28
 
     var body: some View {
-        let color: Color = remaining <= 5 ? .red : .accentColor
+        // Not `.accentColor`: the project has no AccentColor asset, so that could be system blue.
+        let color: Color = remaining <= 5 ? .red : .duckYellow
         ZStack {
             Circle()
                 .stroke(.quaternary, lineWidth: 3)

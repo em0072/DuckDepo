@@ -56,7 +56,7 @@ struct DepoListView: View {
             scanDraft = draft
         }
         .sheet(item: $scanDraft) { draft in
-            EditDocumentView(viewModel: EditDocumentViewModel(type: .scanned(draft)))
+            EditDocumentView(viewModel: viewModel.scannedDocumentViewModel(for: draft))
         }
         .alert("delete_confirmation_title", isPresented: isConfirmingDelete, presenting: documentToDelete) { document in
             Button("delete", role: .destructive) {
@@ -68,8 +68,20 @@ struct DepoListView: View {
             Text("delete_confirmation_body")
         }
         .onChange(of: viewModel.documents) { _, documents in
-            // The selected document was deleted, here or on another device.
-            if let selection, !documents.contains(where: { $0.id == selection }) {
+            guard let selection else { return }
+            if !documents.contains(where: { $0.id == selection }) {
+                // The selected document was deleted, here or on another device.
+                self.selection = nil
+            } else if !viewModel.shownDocuments.contains(where: { $0.id == selection }) {
+                // It now belongs to someone else: show everyone's, so the open document is still listed.
+                withAnimation {
+                    viewModel.filter = .everyone
+                }
+            }
+        }
+        .onChange(of: viewModel.filter) {
+            // Someone else's document stays open no longer.
+            if let selection, !viewModel.shownDocuments.contains(where: { $0.id == selection }) {
                 self.selection = nil
             }
         }
@@ -102,42 +114,109 @@ struct DepoListView: View {
 
     private var listView: some View {
         List(selection: $selection) {
-            ForEach(viewModel.groups) { group in
-                Section(group.type.localizedName) {
-                    ForEach(group.documents) { document in
-                        DocumentRow(document: document)
-                            .tag(document.id)
-                            .swipeActions(edge: .trailing) {
-                                // Not the destructive role: that removes the row before the deletion is confirmed.
-                                Button {
-                                    documentToDelete = document
-                                } label: {
-                                    Label("delete", systemImage: "trash")
-                                }
-                                .tint(.red)
-                                Button {
-                                    documentToEdit = document
-                                } label: {
-                                    Label("edit_button", systemImage: "pencil")
-                                }
-                                .tint(.gray)
-                            }
-                            .contextMenu {
-                                Button {
-                                    documentToEdit = document
-                                } label: {
-                                    Label("edit_button", systemImage: "pencil")
-                                }
-                                Button(role: .destructive) {
-                                    documentToDelete = document
-                                } label: {
-                                    Label("delete", systemImage: "trash")
-                                }
-                            }
+            if !viewModel.people.people.isEmpty {
+                Section {
+                    PeopleFilterBar(selection: $viewModel.filter, people: viewModel.people.people)
+                        .peopleFilterRow()
+                }
+            }
+            if !viewModel.favorites.isEmpty {
+                Section("dl_favorites") {
+                    ForEach(viewModel.favorites) { document in
+                        documentRow(document)
                     }
                 }
             }
+            ForEach(viewModel.groups) { group in
+                Section(group.type.localizedName) {
+                    ForEach(group.documents) { document in
+                        documentRow(document)
+                    }
+                }
+            }
+            if viewModel.shownDocuments.isEmpty, let person = viewModel.people.person(with: viewModel.selectedPersonID) {
+                ContentUnavailableView {
+                    Label("dl_no_person_documents_title", systemImage: "doc.text")
+                } description: {
+                    Text("dl_no_person_documents_body \(person.name)")
+                } actions: {
+                    Menu {
+                        addDocumentActions
+                    } label: {
+                        Text("add_new_doc")
+                    }
+                }
+                .listRowBackground(Color.clear)
+                .transition(.opacity)
+            }
         }
+    }
+
+    private func documentRow(_ document: Document) -> some View {
+        DocumentRow(document: document, person: viewModel.person(for: document))
+            .tag(document.id)
+            .swipeActions(edge: .leading) {
+                Button {
+                    toggleFavorite(document)
+                } label: {
+                    favoriteLabel(for: document)
+                }
+                .tint(Self.favoriteTint)
+            }
+            .swipeActions(edge: .trailing) {
+                // Not the destructive role: that removes the row before the deletion is confirmed.
+                Button {
+                    documentToDelete = document
+                } label: {
+                    Label("delete", systemImage: "trash")
+                }
+                .tint(.red)
+                Button {
+                    documentToEdit = document
+                } label: {
+                    Label("edit_button", systemImage: "pencil")
+                }
+                .tint(.gray)
+            }
+            .contextMenu {
+                Button {
+                    documentToEdit = document
+                } label: {
+                    Label("edit_button", systemImage: "pencil")
+                }
+                Button {
+                    toggleFavorite(document)
+                } label: {
+                    favoriteLabel(for: document)
+                }
+                PersonChoices.menu(personID: document.personID, people: viewModel.people.people) { personID in
+                    withAnimation {
+                        viewModel.setPerson(personID, for: document)
+                    }
+                }
+                Divider()
+                Button(role: .destructive) {
+                    documentToDelete = document
+                } label: {
+                    Label("delete", systemImage: "trash")
+                }
+            }
+    }
+
+    /// Deep amber in both modes (duck yellow's light-mode shade): swipe actions draw white on their tint,
+    /// which bright yellow can't carry.
+    private static let favoriteTint = Color(red: 0x9E / 255, green: 0x6C / 255, blue: 0)
+
+    private func toggleFavorite(_ document: Document) {
+        withAnimation {
+            viewModel.toggleFavorite(document)
+        }
+    }
+
+    private func favoriteLabel(for document: Document) -> some View {
+        document.isFavorite
+            ? Label("dl_remove_favorite", systemImage: "star.slash")
+            : Label("dl_add_favorite", systemImage: "star")
     }
 
     /// Scan from the camera, Photos or Files, or fill in a blank document.

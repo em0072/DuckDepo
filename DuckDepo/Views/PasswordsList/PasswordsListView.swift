@@ -58,7 +58,7 @@ struct PasswordsListView: View {
             }
         }
         .sheet(isPresented: $viewModel.isAddingNewPassword) {
-            EditPasswordView(type: .new)
+            EditPasswordView(type: .new, personID: viewModel.selectedPersonID)
         }
         .alert("epv_delete_alert_title", isPresented: isConfirmingDelete, presenting: passwordToDelete) { password in
             Button("epv_delete_alert_delete", role: .destructive) {
@@ -80,6 +80,12 @@ struct PasswordsListView: View {
         }
         .onChange(of: viewModel.passwords) {
             clearDeletedSelection()
+            // The open password now belongs to someone else: show everyone's, so it's still listed.
+            if let password = viewModel.password(with: selection), !viewModel.shownPasswords.contains(password) {
+                withAnimation {
+                    viewModel.filter = .everyone
+                }
+            }
         }
         .onChange(of: viewModel.passkeys) {
             clearDeletedSelection()
@@ -94,6 +100,14 @@ struct PasswordsListView: View {
         }
         .onChange(of: health.showsInPasswords) {
             clearDeletedSelection()
+        }
+        .onChange(of: viewModel.filter) {
+            // Someone else's password stays open no longer.
+            if let password = viewModel.password(with: selection), !viewModel.shownPasswords.contains(password) {
+                selection = nil
+            } else if viewModel.passkey(with: selection) != nil, viewModel.shownPasskeys.isEmpty {
+                selection = nil
+            }
         }
     }
 
@@ -130,20 +144,40 @@ struct PasswordsListView: View {
 
     private var listView: some View {
         List(selection: $selection) {
+            if !viewModel.people.people.isEmpty {
+                Section {
+                    PeopleFilterBar(selection: $viewModel.filter, people: viewModel.people.people)
+                        .peopleFilterRow()
+                }
+            }
             if health.showsInPasswords {
                 Section {
                     PasswordHealthLabel(toFixCount: health.report.toFixCount, isLoaded: health.isLoaded)
                         .tag(PasswordHealthView.selectionID)
                 }
             }
-            Section {
-                ForEach(viewModel.passwords) { password in
-                    passwordRow(password)
+            if !viewModel.shownPasswords.isEmpty {
+                Section {
+                    ForEach(viewModel.shownPasswords) { password in
+                        passwordRow(password)
+                    }
                 }
+            } else if let person = viewModel.people.person(with: viewModel.selectedPersonID) {
+                ContentUnavailableView {
+                    Label("pl_no_person_passwords_title", systemImage: "key")
+                } description: {
+                    Text("pl_no_person_passwords_body \(person.name)")
+                } actions: {
+                    // Borderless: otherwise the whole row would be the button.
+                    Button("epv_add_new_password_button", action: viewModel.addNewPasswordButtonPressed)
+                        .buttonStyle(.borderless)
+                }
+                .listRowBackground(Color.clear)
+                .transition(.opacity)
             }
-            if !viewModel.passkeys.isEmpty {
+            if !viewModel.shownPasskeys.isEmpty {
                 Section("pl_passkeys") {
-                    ForEach(viewModel.passkeys) { passkey in
+                    ForEach(viewModel.shownPasskeys) { passkey in
                         PasskeyRow(passkey: passkey)
                             .tag(passkey.id)
                             .swipeActions(edge: .trailing) {
@@ -168,7 +202,7 @@ struct PasswordsListView: View {
     }
 
     private func passwordRow(_ password: Password) -> some View {
-        PasswordRow(name: password.name, login: password.login)
+        PasswordRow(name: password.name, login: password.login, person: viewModel.person(for: password))
             .tag(password.id)
             .swipeActions(edge: .leading) {
                 Button {
@@ -218,6 +252,11 @@ struct PasswordsListView: View {
                 openURL(url)
             } label: {
                 Label("dv_open_website", systemImage: "safari")
+            }
+        }
+        PersonChoices.menu(personID: password.personID, people: viewModel.people.people) { personID in
+            withAnimation {
+                viewModel.setPerson(personID, for: password)
             }
         }
         Divider()

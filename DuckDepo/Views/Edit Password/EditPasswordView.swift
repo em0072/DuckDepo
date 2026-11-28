@@ -19,8 +19,9 @@ struct EditPasswordView: View {
     @State private var codeSetup = OneTimeCodeSetup()
     #endif
 
-    init(type: EditPasswordViewModel.PasswordType = .new, delegate: EditPasswordViewModelDelegate? = nil) {
-        _viewModel = State(initialValue: EditPasswordViewModel(type: type, delegate: delegate))
+    init(type: EditPasswordViewModel.PasswordType = .new, delegate: EditPasswordViewModelDelegate? = nil,
+         personID: Person.ID? = nil) {
+        _viewModel = State(initialValue: EditPasswordViewModel(type: type, delegate: delegate, personID: personID))
     }
 
     var body: some View {
@@ -91,6 +92,9 @@ extension EditPasswordView {
         Form {
             Section {
                 LabeledTextField(title: "epv_name".localized(), value: $viewModel.passwordName, kind: .name)
+                #if !AUTOFILL_EXTENSION
+                PersonPicker(personID: $viewModel.personID)
+                #endif
             } header: {
                 Text("epv_general_information")
             }

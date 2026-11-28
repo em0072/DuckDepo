@@ -36,6 +36,20 @@ final class DocumentViewModel {
         reload()
     }
 
+    /// The list's copy changed. When only the star or whose it is did, those are copied over; anything
+    /// else reads the document again, photos and all.
+    func listItemChanged(from old: Document, to new: Document) {
+        var unchanged = old
+        unchanged.isFavorite = new.isFavorite
+        unchanged.personID = new.personID
+        guard unchanged == new else {
+            reload()
+            return
+        }
+        document.isFavorite = new.isFavorite
+        document.personID = new.personID
+    }
+
     /// Reads the document again, for when it changed (edited, or synced from another device).
     func reload() {
         if let full = db.fullDocument(with: document.id) {
@@ -91,6 +105,18 @@ final class DocumentViewModel {
 
     func editButtonPressed() {
         showEditDocumentView = true
+    }
+
+    /// Shown at once; the list follows from the store.
+    func toggleFavorite() {
+        let isFavorite = !document.isFavorite
+        guard db.setFavorite(isFavorite, forDocumentWith: document.id) else { return }
+        document.isFavorite = isFavorite
+    }
+
+    func setPerson(_ personID: Person.ID?) {
+        guard db.setPerson(personID, forDocumentWith: document.id) else { return }
+        document.personID = personID
     }
 
     func editAllowed() -> Bool {

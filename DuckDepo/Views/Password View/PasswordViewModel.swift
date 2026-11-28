@@ -43,6 +43,7 @@ final class PasswordViewModel {
         password.name = listItem.name
         password.login = listItem.login
         password.website = listItem.website
+        password.personID = listItem.personID
         password.value = storage.value(for: password.id)
         password.oneTimeCode = storage.oneTimeCode(for: password.id)
     }
@@ -92,6 +93,14 @@ final class PasswordViewModel {
     private func share(items: [Any]) {
         itemsToShare = items
         showShareSheetView = true
+    }
+}
+
+extension PasswordViewModel {
+
+    func setPerson(_ personID: Person.ID?) {
+        guard storage.setPerson(personID, forPasswordWith: password.id) else { return }
+        password.personID = personID
     }
 }
 

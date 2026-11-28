@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22758" systemVersion="23A344" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
+    <entity name="DDDocument" representedClassName="DDDocument" syncable="YES">
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="documentDescription" optional="YES" attributeType="String"/>
+        <attribute name="documentType" optional="YES" attributeType="String"/>
+        <attribute name="documentTypeOrder" optional="YES" attributeType="Integer 16" defaultValueString="100" usesScalarValueType="YES"/>
+        <attribute name="expiresAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="identifier" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="isFavorite" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="order" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="legacyPhotosKey" optional="YES" attributeType="String"/>
+        <attribute name="photoData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" allowsCloudEncryption="YES"/>
+        <attribute name="updatedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="folder" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DDFolder" inverseName="documents" inverseEntity="DDFolder"/>
+        <relationship name="photoRecords" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="DDPhoto" inverseName="document" inverseEntity="DDPhoto"/>
+        <relationship name="sections" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="DDSection" inverseName="document" inverseEntity="DDSection"/>
+    </entity>
+    <entity name="DDField" representedClassName="DDField" syncable="YES">
+        <attribute name="key" optional="YES" attributeType="String"/>
+        <attribute name="order" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <attribute name="type" optional="YES" attributeType="String"/>
+        <attribute name="value" optional="YES" attributeType="String" allowsCloudEncryption="YES"/>
+        <relationship name="section" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DDSection" inverseName="fields" inverseEntity="DDSection"/>
+    </entity>
+    <entity name="DDFolder" representedClassName="DDFolder" syncable="YES">
+        <attribute name="color" optional="YES" attributeType="String"/>
+        <attribute name="icon" optional="YES" attributeType="Binary"/>
+        <attribute name="identifier" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="order" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="documents" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DDDocument" inverseName="folder" inverseEntity="DDDocument"/>
+        <relationship name="passwords" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DDPassword" inverseName="folder" inverseEntity="DDPassword"/>
+    </entity>
+    <entity name="DDPhoto" representedClassName="DDPhoto" syncable="YES">
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="identifier" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="imageData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" allowsCloudEncryption="YES"/>
+        <attribute name="instanceID" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="order" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="thumbnailData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" allowsCloudEncryption="YES"/>
+        <relationship name="document" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DDDocument" inverseName="photoRecords" inverseEntity="DDDocument"/>
+    </entity>
+    <entity name="DDPassword" representedClassName="DDPassword" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="login" attributeType="String" defaultValueString="" allowsCloudEncryption="YES"/>
+        <attribute name="name" attributeType="String" defaultValueString=""/>
+        <attribute name="value" attributeType="String" defaultValueString="" allowsCloudEncryption="YES"/>
+        <attribute name="website" attributeType="String" defaultValueString=""/>
+        <relationship name="folder" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DDFolder" inverseName="passwords" inverseEntity="DDFolder"/>
+    </entity>
+    <entity name="DDSection" representedClassName="DDSection" syncable="YES">
+        <attribute name="key" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="order" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="document" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DDDocument" inverseName="sections" inverseEntity="DDDocument"/>
+        <relationship name="fields" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="DDField" inverseName="section" inverseEntity="DDField"/>
+    </entity>
+</model>

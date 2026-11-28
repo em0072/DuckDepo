@@ -25,15 +25,19 @@ final class SearchViewModel {
     @ObservationIgnored private let database: DataBase
     @ObservationIgnored private let keychain: KeychainStoring
     @ObservationIgnored private let photoText: PhotoTextIndex
+    @ObservationIgnored private let people: PeopleDirectory
 
-    init(database: DataBase = .shared, keychain: KeychainStoring = Keychain.shared, photoText: PhotoTextIndex = .shared) {
+    init(database: DataBase = .shared, keychain: KeychainStoring = Keychain.shared, photoText: PhotoTextIndex = .shared,
+         people: PeopleDirectory = .shared) {
         self.database = database
         self.keychain = keychain
         self.photoText = photoText
+        self.people = people
     }
 
     /// Starts fetching documents and passwords. Safe to call more than once.
     func start() {
+        people.start()
         guard documentsStorage == nil else { return }
         let documentsStorage = DocumentsStorage(database: database)
         // Search never saves, so it doesn't need the AutoFill identity store.
@@ -63,12 +67,26 @@ final class SearchViewModel {
         !query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
-    /// Documents whose name, description, type, any field or the text in a photo matches. Empty until
-    /// something is typed.
+    /// Documents whose name, description, type, any field, person or the text in a photo matches. Empty
+    /// until something is typed.
     var documentResults: [Document] {
         guard isSearching else { return [] }
         let inPhotos = photoMatches
-        return documents.filter { DocumentSearch.matches($0, query: query) || inPhotos[$0.id] != nil }
+        let people = matchingPeople
+        return documents.filter { document in
+            DocumentSearch.matches(document, query: query) || inPhotos[document.id] != nil
+                || document.personID.map(people.contains) == true
+        }
+    }
+
+    /// The people whose name matches: everything of theirs is found too.
+    private var matchingPeople: Set<Person.ID> {
+        Set(people.people.filter { $0.matches(query) }.map(\.id))
+    }
+
+    /// Whose a result is.
+    func person(with id: Person.ID?) -> Person? {
+        people.person(with: id)
     }
 
     /// For documents found only by the text in a photo, an excerpt of that text, to show why they're here.
@@ -81,10 +99,11 @@ final class SearchViewModel {
         }
     }
 
-    /// Passwords whose name, login or website matches. Empty until something is typed.
+    /// Passwords whose name, login, website or person matches. Empty until something is typed.
     var passwordResults: [Password] {
         guard isSearching else { return [] }
-        return passwords.filter { $0.matches(query) }
+        let people = matchingPeople
+        return passwords.filter { $0.matches(query) || $0.personID.map(people.contains) == true }
     }
 
     func document(with id: Document.ID) -> Document? {

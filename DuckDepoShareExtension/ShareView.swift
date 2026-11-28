@@ -140,13 +140,18 @@ struct ShareView: View {
 private struct DocumentPicker: View {
 
     @Bindable var model: ShareViewModel
+    private var people = PeopleDirectory.shared
+
+    init(model: ShareViewModel) {
+        self.model = model
+    }
 
     var body: some View {
         List(model.filteredDocuments) { document in
             Button {
                 model.add(to: document)
             } label: {
-                DocumentRow(document: document)
+                DocumentRow(document: document, person: people.person(with: document.personID))
             }
             .foregroundStyle(.primary)
         }
@@ -163,6 +168,7 @@ private struct DocumentPicker: View {
             .animation(.default, value: model.isSaving)
         }
         .searchable(text: $model.query)
+        .onAppear(perform: people.start)
         .navigationTitle("share_choose_document")
         .navigationBarTitleDisplayMode(.inline)
     }

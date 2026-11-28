@@ -45,6 +45,7 @@ struct SearchView: View {
                         ForEach(documents) { document in
                             NavigationLink(value: SearchDestination.document(document.id)) {
                                 DocumentRow(document: document,
+                                            person: viewModel.person(with: document.personID),
                                             photoMatch: photoMatches[document.id].map { ($0, viewModel.query) })
                             }
                         }
@@ -54,7 +55,8 @@ struct SearchView: View {
                     Section("plv_title") {
                         ForEach(passwords) { password in
                             NavigationLink(value: SearchDestination.password(password.id)) {
-                                PasswordRow(name: password.name, login: password.login)
+                                PasswordRow(name: password.name, login: password.login,
+                                            person: viewModel.person(with: password.personID))
                             }
                         }
                     }

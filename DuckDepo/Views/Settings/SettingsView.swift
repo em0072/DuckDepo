@@ -23,6 +23,7 @@ struct SettingsView: View {
                                  renewalCount: viewModel.renewalCount,
                                  toFixCount: passwordHealth.isLoaded ? passwordHealth.report.toFixCount : nil)
                 }
+                PeopleSection()
                 SecuritySection(isBiometryEnabled: $biometricController.isBiometryEnabled,
                                 biometryDelay: $biometricController.biometricDelay,
                                 clipboardLifetime: $viewModel.clipboardLifetime)

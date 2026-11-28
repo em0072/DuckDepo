@@ -43,10 +43,13 @@ struct PlannedReminder: Equatable {
     let daysLeft: Int
     /// The local day and hour it goes off.
     let fireDate: DateComponents
+    /// Whose document it is, so a family's passports can be told apart.
+    var personName: String? = nil
 }
 
-/// Notifications before documents expire. They show only the document's name, so nothing sensitive
-/// appears on the lock screen. Rescheduled whenever documents change, here or through iCloud.
+/// Notifications before documents expire. They show only the document's name and whose it is, so nothing
+/// sensitive appears on the lock screen. Rescheduled whenever documents or people change, here or through
+/// iCloud.
 final class ExpiryReminders {
 
     static let shared = ExpiryReminders()
@@ -60,8 +63,10 @@ final class ExpiryReminders {
     private let center: UNUserNotificationCenter
     private let defaults: DefaultsController
     private var storage: DocumentsStorage?
+    private var peopleStorage: PeopleStorage?
     private var subscription: AnyCancellable?
     private var documents: [Document] = []
+    private var people: [Person] = []
 
     init(center: UNUserNotificationCenter = .current(), defaults: DefaultsController = .shared) {
         self.center = center
@@ -80,12 +85,15 @@ final class ExpiryReminders {
     func start() {
         guard isEnabled, storage == nil else { return }
         let storage = DocumentsStorage()
+        let peopleStorage = PeopleStorage()
         self.storage = storage
-        subscription = storage.documents
+        self.peopleStorage = peopleStorage
+        subscription = storage.documents.combineLatest(peopleStorage.people)
             // A sync delivers documents in batches; schedule once they've settled.
             .debounce(for: .seconds(1), scheduler: DispatchQueue.main)
-            .sink { [weak self] documents in
+            .sink { [weak self] documents, people in
                 self?.documents = documents
+                self?.people = people
                 self?.reschedule()
             }
     }
@@ -108,7 +116,9 @@ final class ExpiryReminders {
         defaults.areExpiryRemindersEnabled = false
         subscription = nil
         storage = nil
+        peopleStorage = nil
         documents = []
+        people = []
         Task {
             await removeScheduled()
         }
@@ -127,7 +137,8 @@ final class ExpiryReminders {
 
     private func reschedule() {
         guard isEnabled else { return }
-        let plan = Self.plan(for: documents, schedule: schedule, now: .now)
+        let names = Dictionary(people.map { ($0.id, $0.name) }, uniquingKeysWith: { first, _ in first })
+        let plan = Self.plan(for: documents, schedule: schedule, now: .now, personNames: names)
         Task {
             await removeScheduled()
             for reminder in plan {
@@ -147,7 +158,8 @@ final class ExpiryReminders {
 
     /// The reminders still ahead for `documents`, nearest first, at most `limit`.
     static func plan(for documents: [Document], schedule: ReminderSchedule, now: Date,
-                     calendar: Calendar = FieldDate.localCalendar, limit: Int = maximumPending) -> [PlannedReminder] {
+                     calendar: Calendar = FieldDate.localCalendar, limit: Int = maximumPending,
+                     personNames: [Person.ID: String] = [:]) -> [PlannedReminder] {
         var utc = Calendar(identifier: .gregorian)
         utc.timeZone = TimeZone(identifier: "UTC")!
         var planned: [(date: Date, reminder: PlannedReminder)] = []
@@ -159,7 +171,8 @@ final class ExpiryReminders {
                 components.hour = hour
                 guard let date = calendar.date(from: components), date > now else { continue }
                 let reminder = PlannedReminder(identifier: "\(identifierPrefix)\(document.id.uuidString).\(days)",
-                                               documentName: document.name, daysLeft: days, fireDate: components)
+                                               documentName: document.name, daysLeft: days, fireDate: components,
+                                               personName: document.personID.flatMap { personNames[$0] })
                 planned.append((date, reminder))
             }
         }
@@ -168,7 +181,12 @@ final class ExpiryReminders {
 
     static func request(for reminder: PlannedReminder) -> UNNotificationRequest {
         let content = UNMutableNotificationContent()
-        content.title = reminder.documentName.isEmpty ? String(localized: "reminder_untitled_document") : reminder.documentName
+        let documentName = reminder.documentName.isEmpty ? String(localized: "reminder_untitled_document") : reminder.documentName
+        if let personName = reminder.personName?.trimmingCharacters(in: .whitespacesAndNewlines), !personName.isEmpty {
+            content.title = String(localized: "reminder_title_person \(documentName) \(personName)")
+        } else {
+            content.title = documentName
+        }
         content.body = reminder.daysLeft == 0
             ? String(localized: "expiry_today")
             : String(localized: "expiry_in_days \(reminder.daysLeft)")
