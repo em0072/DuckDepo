@@ -27,6 +27,12 @@ struct PasswordView: View {
             credentialsSection
             websiteSection
             #if !AUTOFILL_EXTENSION
+            // Only once there are people, or it's theirs: otherwise it would say "No One" on every password.
+            if !PeopleDirectory.shared.people.isEmpty || viewModel.password.personID != nil {
+                Section {
+                    PersonPicker(personID: personBinding)
+                }
+            }
             PasswordHealthHiddenNote(password: viewModel.password)
             #endif
         }
@@ -82,6 +88,18 @@ struct PasswordView: View {
 }
 
 extension PasswordView {
+
+    #if !AUTOFILL_EXTENSION
+    private var personBinding: Binding<Person.ID?> {
+        Binding {
+            viewModel.password.personID
+        } set: { personID in
+            withAnimation {
+                viewModel.setPerson(personID)
+            }
+        }
+    }
+    #endif
 
     private var credentialsSection: some View {
         Section {

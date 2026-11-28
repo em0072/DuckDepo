@@ -23,7 +23,10 @@ struct EditDocumentView: View {
                 }
                 TitleView(name: $viewModel.document.name,
                           description: $viewModel.document.description,
-                          documentType: $viewModel.document.documentType)
+                          documentType: $viewModel.document.documentType,
+                          personID: $viewModel.document.personID,
+                          showsPeople: viewModel.showsPeople,
+                          isPersonSuggested: viewModel.isPersonSuggested)
                 PhotosSectionView(photos: viewModel.document.photos, namespace: photoNamespace, delegate: viewModel)
                 SectionView(sections: $viewModel.document.sections, delegate: viewModel,
                             scanConfidence: viewModel.scanConfidence(for:))

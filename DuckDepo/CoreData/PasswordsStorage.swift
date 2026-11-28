@@ -152,8 +152,10 @@ final class PasswordsStorage: NSObject {
     }
 
     /// Inserts or updates the record and its keychain value. Returns `false` if nothing was saved.
+    /// - Parameter includingPerson: Whether to write whose it is. Editors pass it only when they changed it,
+    ///   so a change made meanwhile (on another device, say) isn't undone.
     @discardableResult
-    func save(_ password: Password) -> Bool {
+    func save(_ password: Password, includingPerson: Bool = true) -> Bool {
         let object: DDPassword
         if let existing = fetch(with: password.id) {
             object = existing
@@ -162,6 +164,9 @@ final class PasswordsStorage: NSObject {
             object.id = password.id
         }
         object.update(name: password.name, login: password.login, website: password.website)
+        if includingPerson {
+            object.setPerson(password.personID)
+        }
         guard keychain.set(password.value, forKey: password.id.uuidString), saveOneTimeCode(of: password) else {
             context.rollback()
             return false
@@ -173,6 +178,12 @@ final class PasswordsStorage: NSObject {
         identityStore?.refresh(context: context, keychain: keychain)
         postDidChange()
         return true
+    }
+
+    /// Gives the password to a person, or to no one. AutoFill doesn't show people, so it isn't refreshed.
+    @discardableResult
+    func setPerson(_ personID: Person.ID?, forPasswordWith id: UUID) -> Bool {
+        database.setPerson(personID, forPasswordWith: id)
     }
 
     // MARK: - Import and export
@@ -226,6 +237,7 @@ final class PasswordsStorage: NSObject {
             let object = DDPassword(context: context)
             object.id = password.id
             object.update(name: password.name, login: password.login, website: password.website)
+            object.setPerson(password.personID)
         }
         guard database.save() else {
             context.rollback()

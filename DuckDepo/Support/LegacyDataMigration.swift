@@ -21,12 +21,16 @@ import os
 /// and a record per photo. Every step gives the same result on every device, so two devices migrating
 /// the same synced data agree. Version 2.6 keeps writing sections, fields and `photoData` without these,
 /// so each step runs again for whatever it changed.
+///
+/// Version 2.8 shows folders as people; the model always had them, but without an ID.
 enum LegacyDataMigration {
 
     struct Result: Equatable {
         var movedPasswordValues = 0
         var assignedPasswordIDs = 0
         var assignedDocumentIDs = 0
+        var assignedFolderIDs = 0
+        var encryptedFolderNames = 0
         var assignedSectionKeys = 0
         var assignedFieldKeys = 0
         var convertedDates = 0
@@ -35,7 +39,7 @@ enum LegacyDataMigration {
         var removedDuplicatePhotos = 0
 
         var didChange: Bool {
-            movedPasswordValues + assignedPasswordIDs + assignedDocumentIDs + assignedSectionKeys + assignedFieldKeys
+            movedPasswordValues + assignedPasswordIDs + assignedDocumentIDs + assignedFolderIDs + encryptedFolderNames + assignedSectionKeys + assignedFieldKeys
                 + convertedDates + updatedExpiryDates + convertedPhotoDocuments + removedDuplicatePhotos > 0
         }
     }
@@ -49,6 +53,7 @@ enum LegacyDataMigration {
         context.performAndWait {
             migratePasswords(in: context, keychain: keychain, result: &result)
             assignDocumentIDs(in: context, result: &result)
+            assignFolderIDs(in: context, result: &result)
             assignSectionKeys(in: context, result: &result)
             assignFieldKeysAndConvertDates(in: context, result: &result)
             updateDocuments(in: context, convertPhotos: convertPhotos, result: &result)
@@ -62,7 +67,7 @@ enum LegacyDataMigration {
             }
         }
         if result.didChange {
-            logger.notice("Migrated \(result.movedPasswordValues) password values, \(result.assignedPasswordIDs) password IDs, \(result.assignedDocumentIDs) document IDs, \(result.assignedSectionKeys) section keys, \(result.assignedFieldKeys) field keys, \(result.convertedDates) dates, \(result.updatedExpiryDates) expiry dates, \(result.convertedPhotoDocuments) photo sets; removed \(result.removedDuplicatePhotos) duplicate photos")
+            logger.notice("Migrated \(result.movedPasswordValues) password values, \(result.assignedPasswordIDs) password IDs, \(result.assignedDocumentIDs) document IDs, \(result.assignedFolderIDs) folder IDs, \(result.encryptedFolderNames) folder names, \(result.assignedSectionKeys) section keys, \(result.assignedFieldKeys) field keys, \(result.convertedDates) dates, \(result.updatedExpiryDates) expiry dates, \(result.convertedPhotoDocuments) photo sets; removed \(result.removedDuplicatePhotos) duplicate photos")
         }
         return result
     }
@@ -97,6 +102,27 @@ enum LegacyDataMigration {
         for document in documents {
             document.identifier = UUID()
             result.assignedDocumentIDs += 1
+        }
+    }
+
+    /// Two devices may give the same folder different IDs; the last one saved wins on both. Documents
+    /// and passwords point at the folder itself, not its ID, so they stay with it either way. A name in
+    /// the old field (not encrypted in iCloud) moves to the encrypted one.
+    private static func assignFolderIDs(in context: NSManagedObjectContext, result: inout Result) {
+        let request = DDFolder.fetchRequest()
+        request.predicate = NSPredicate(format: "identifier == nil OR name != nil")
+        guard let folders = try? context.fetch(request) else { return }
+        for folder in folders {
+            if folder.identifier == nil {
+                folder.identifier = UUID()
+                result.assignedFolderIDs += 1
+            }
+            if let name = folder.name {
+                // One already in the encrypted field is newer.
+                let encrypted = folder.encryptedName ?? ""
+                folder.personName = encrypted.isEmpty ? name : encrypted
+                result.encryptedFolderNames += 1
+            }
         }
     }
 

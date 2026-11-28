@@ -17,6 +17,7 @@ struct DocumentView: View {
     @State private var currentPhotoID: DocumentPhoto.ID?
     @State private var isShowingPhotoViewer = false
     @Namespace private var photoNamespace
+    private var people = PeopleDirectory.shared
 
     init(document: Document) {
         self.document = document
@@ -35,6 +36,12 @@ struct DocumentView: View {
                     .listRowBackground(Color.clear)
                 }
             }
+            // Only once there are people, or it's theirs: otherwise it would say "No One" on every document.
+            if !people.people.isEmpty || viewModel.document.personID != nil {
+                Section {
+                    PersonPicker(personID: personBinding)
+                }
+            }
             if let expiryDate = viewModel.document.expiryDate {
                 Section {
                     ExpiryRow(expiryDate: expiryDate)
@@ -49,14 +56,19 @@ struct DocumentView: View {
         .navigationSubtitle(viewModel.document.description)
         .navigationBarTitleDisplayMode(.inline)
         .onAppear(perform: viewModel.load)
-        .onChange(of: document) {
+        .onChange(of: document) { old, new in
             // A change from iCloud or another screen; the first load (onAppear) isn't animated.
             withAnimation {
-                viewModel.reload()
+                viewModel.listItemChanged(from: old, to: new)
             }
         }
         .toolbar {
             ToolbarItemGroup(placement: .primaryAction) {
+                Button(action: toggleFavorite) {
+                    Label(LocalizedStringKey(viewModel.document.isFavorite ? "dl_remove_favorite" : "dl_add_favorite"),
+                          systemImage: viewModel.document.isFavorite ? "star.fill" : "star")
+                        .contentTransition(.symbolEffect(.replace))
+                }
                 shareMenu
                 Button(action: viewModel.editButtonPressed) {
                     Label("edit_button", systemImage: "pencil")
@@ -77,6 +89,22 @@ struct DocumentView: View {
         .onChange(of: viewModel.shouldDismissView) { _, shouldDismiss in
             if shouldDismiss {
                 dismiss()
+            }
+        }
+    }
+
+    private func toggleFavorite() {
+        withAnimation {
+            viewModel.toggleFavorite()
+        }
+    }
+
+    private var personBinding: Binding<Person.ID?> {
+        Binding {
+            viewModel.document.personID
+        } set: { personID in
+            withAnimation {
+                viewModel.setPerson(personID)
             }
         }
     }

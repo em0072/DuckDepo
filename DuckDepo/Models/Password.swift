@@ -17,6 +17,8 @@ struct Password: Identifiable, Hashable {
     /// The `otpauth://` link of the account's one-time codes, or empty. Kept in the keychain like `value`
     /// and empty in list items too; read it with `PasswordsStorage.oneTimeCode(for:)`.
     var oneTimeCode: String
+    /// The person it belongs to, or nil for no one.
+    var personID: Person.ID?
 
     init(id: UUID = UUID(), name: String = "", login: String = "", value: String = "", website: String = "",
          oneTimeCode: String = "") {

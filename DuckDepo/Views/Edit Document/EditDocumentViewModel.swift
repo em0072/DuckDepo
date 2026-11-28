@@ -26,6 +26,9 @@ final class EditDocumentViewModel {
     @ObservationIgnored private let scannedValues: [Field.ID: (value: String, confidence: ScanConfidence)]
 
     let type: Mode
+    /// Whether "Belongs To" shows, and a scan gets a suggestion. Off in the share extension while the
+    /// app is locked: nothing stored shows there before Face ID.
+    let showsPeople: Bool
 
     var document: Document
     private(set) var shouldCloseView = false
@@ -33,22 +36,29 @@ final class EditDocumentViewModel {
 
     var isShowingPhotoViewer = false
     var viewerPhotoID: DocumentPhoto.ID?
+    /// For a scan: whose it probably is, from the name on it.
+    private(set) var suggestedPersonID: Person.ID?
 
-    init(type: Mode, database: DataBase = .shared, onDismiss: ((Document?) -> Void)? = nil) {
+    /// - Parameter personID: Whose a new document is to begin with (the person the list shows).
+    init(type: Mode, database: DataBase = .shared, personID: Person.ID? = nil, showsPeople: Bool = true,
+         onDismiss: ((Document?) -> Void)? = nil) {
         self.type = type
         self.db = database
+        self.showsPeople = showsPeople
         self.onDismiss = onDismiss
         var scannedValues: [Field.ID: (value: String, confidence: ScanConfidence)] = [:]
         switch type {
         case .new:
-            let initial = Document()
+            let initial = Document(personID: personID)
             document = initial
             originalDocument = initial
         case .existing(let document):
             self.document = document
             originalDocument = document
         case .scanned(let draft):
-            document = draft.document
+            var scanned = draft.document
+            scanned.personID = personID
+            document = scanned
             // Compared with an empty document, so closing asks before throwing the scan away.
             originalDocument = Document(id: draft.document.id)
             for field in draft.document.sections.flatMap(\.fields) {
@@ -72,14 +82,30 @@ final class EditDocumentViewModel {
         return draft.isEmpty
     }
 
+    /// Shows the suggestion until another person is picked.
+    var isPersonSuggested: Bool {
+        suggestedPersonID != nil && document.personID == suggestedPersonID
+    }
+
     /// For an existing document, edits start from the stored version (with photos), not the caller's copy.
-    /// Runs once, before anything is edited.
+    /// A scan gets the person it probably belongs to. Runs once, before anything is edited.
     func load() {
         guard !isLoaded else { return }
         isLoaded = true
-        guard case .existing(let document) = type, let stored = db.fullDocument(with: document.id) else { return }
-        self.document = stored
-        originalDocument = stored
+        switch type {
+        case .existing(let document):
+            guard let stored = db.fullDocument(with: document.id) else { return }
+            self.document = stored
+            originalDocument = stored
+        case .scanned:
+            guard showsPeople else { return }
+            if let suggestion = PersonSuggestion.person(for: document, in: db) {
+                suggestedPersonID = suggestion
+                document.personID = suggestion
+            }
+        case .new:
+            break
+        }
     }
 
     var isNew: Bool {
@@ -106,7 +132,9 @@ final class EditDocumentViewModel {
 
     func save() {
         guard canSave else { return }
-        let saved = isNew ? db.save(document) : db.update(document)
+        // Whose it is only when changed here: the copy loaded may be older than a change made meanwhile
+        // (on another device, say).
+        let saved = isNew ? db.save(document) : db.update(document, includingPerson: document.personID != originalDocument.personID)
         guard saved else {
             saveFailed = true
             return

@@ -18,7 +18,9 @@ struct Document: Identifiable, Hashable {
     var documentType: DocumentType
     var photos: [DocumentPhoto]
     var sections: [DocSection]
-    var folder: String?
+    /// The person it belongs to, or nil for no one.
+    var personID: Person.ID?
+    var isFavorite = false
     var order: Int?
     /// Set by the store. Nil for documents created before version 2.7.
     var createdAt: Date?
@@ -42,14 +44,14 @@ struct Document: Identifiable, Hashable {
 
     init(id: UUID = UUID(), name: String = "", description: String = "",
          documentType: DocumentType = .identification, photos: [DocumentPhoto] = [],
-         sections: [DocSection] = [], folder: String? = nil) {
+         sections: [DocSection] = [], personID: Person.ID? = nil) {
         self.id = id
         self.name = name
         self.description = description
         self.documentType = documentType
         self.photos = photos
         self.sections = sections
-        self.folder = folder
+        self.personID = personID
     }
 
     /// The day the document expires (midnight UTC), from its expiry date field.
@@ -74,7 +76,7 @@ struct Document: Identifiable, Hashable {
                                                                    Field(title: "Series", value: "12", type: .string),
                                                                    Field(title: "Issue Date", value: "02.02.2022", type: .string),
                                                                    Field(title: "Expiration Date", value: "01.02.2032", type: .string)])]
-        return Document(name: "Passport", description: "Evgeny Bobcat", documentType: .identification, photos: photos, sections: sections, folder: nil)
+        return Document(name: "Passport", description: "Evgeny Bobcat", documentType: .identification, photos: photos, sections: sections)
     }
 }
 

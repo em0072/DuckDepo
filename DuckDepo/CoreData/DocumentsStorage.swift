@@ -24,7 +24,7 @@ final class DocumentsStorage: NSObject {
         let fetchRequest = DDDocument.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \DDDocument.documentTypeOrder, ascending: true),
                                         NSSortDescriptor(keyPath: \DDDocument.order, ascending: true)]
-        fetchRequest.relationshipKeyPathsForPrefetching = ["sections", "sections.fields", "photoRecords"]
+        fetchRequest.relationshipKeyPathsForPrefetching = ["sections", "sections.fields", "photoRecords", "folder"]
         fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
                                                               managedObjectContext: database.context,
                                                               sectionNameKeyPath: nil,
@@ -168,8 +168,10 @@ extension DataBase {
         DDDocument.fetchDocument(with: id, viewContext: context)?.convert(includePhotos: true)
     }
 
+    /// - Parameter includingPerson: Whether to write whose it is. Editors pass it only when they changed it,
+    ///   so a change made meanwhile (on another device, say) isn't undone.
     @discardableResult
-    func update(_ document: Document) -> Bool {
+    func update(_ document: Document, includingPerson: Bool = true) -> Bool {
         guard let stored = DDDocument.fetchDocument(with: document.id, viewContext: context) else { return false }
         for section in stored.getSections() {
             for field in section.getAllFields() {
@@ -182,6 +184,14 @@ extension DataBase {
         stored.documentDescription = document.description
         stored.updatedAt = Date()
         stored.expiresAt = document.expiryDate
+        // Not `isFavorite`: the editor doesn't change it, and its copy may be older than a change made
+        // meanwhile (on another device, say).
+        if includingPerson {
+            let person = document.personID.flatMap { DDFolder.fetch(with: $0, in: context) }
+            if stored.folder != person {
+                stored.folder = person
+            }
+        }
         stored.setPhotos(document.photos)
         for (index, section) in document.sections.enumerated() {
             stored.addToSections(DDSection(viewContext: context, object: section, order: index, document: stored))

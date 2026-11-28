@@ -54,7 +54,7 @@ final class DataBase {
 
     /// Deletes all documents, folders and passwords on this device and, through iCloud, on the user's other devices.
     func deleteEverything(keychain: KeychainStoring = Keychain.shared) {
-        let entityNames = [DDDocument.entityName, DDPassword.entityName, "DDFolder"]
+        let entityNames = [DDDocument.entityName, DDPassword.entityName, DDFolder.entityName]
         do {
             for name in entityNames {
                 let request = NSFetchRequest<NSManagedObject>(entityName: name)

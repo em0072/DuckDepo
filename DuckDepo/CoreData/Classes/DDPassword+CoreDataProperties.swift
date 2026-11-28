@@ -24,11 +24,23 @@ extension DDPassword {
     /// Only used by version 1. Values now live in the keychain; `LegacyDataMigration` clears this.
     @NSManaged public var value: String
     @NSManaged public var website: String
+    /// The person it belongs to (2.8+).
+    @NSManaged public var folder: DDFolder?
 
     /// `nil` for a record that has no ID yet.
     func convert() -> Password? {
         guard let id else { return nil }
-        return Password(id: id, name: name, login: login, website: website)
+        var password = Password(id: id, name: name, login: login, website: website)
+        password.personID = folder?.identifier
+        return password
+    }
+
+    /// Belongs to the person with this ID, or to no one when there's no such person (any more).
+    func setPerson(_ personID: Person.ID?) {
+        let person = personID.flatMap { id in managedObjectContext.flatMap { DDFolder.fetch(with: id, in: $0) } }
+        if folder != person {
+            folder = person
+        }
     }
 
     func update(name: String? = nil, login: String? = nil, website: String? = nil) {

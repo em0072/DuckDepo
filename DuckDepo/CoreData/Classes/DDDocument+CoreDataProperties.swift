@@ -39,6 +39,11 @@ extension DDDocument {
     /// `legacyPhotosKey(for:)` of the `photoData` that `photoRecords` were last matched with. When it
     /// differs, `photoData` was changed by version 2.6 (or never converted) and is converted again.
     @NSManaged public var legacyPhotosKey: String?
+
+    /// The person it belongs to (2.8+).
+    @NSManaged public var folder: DDFolder?
+    /// Shown at the top of the documents list (2.8+).
+    @NSManaged public var isFavorite: Bool
 }
 
 // MARK: Generated accessors for sections
@@ -245,6 +250,8 @@ extension DDDocument {
         createdAt = now
         updatedAt = now
         expiresAt = object.expiryDate
+        folder = object.personID.flatMap { DDFolder.fetch(with: $0, in: viewContext) }
+        isFavorite = object.isFavorite
         setPhotos(object.photos)
         for (index, section) in object.sections.enumerated() {
             addToSections(DDSection(viewContext: viewContext, object: section, order: index, document: self))
@@ -261,6 +268,8 @@ extension DDDocument {
                                 photos: includePhotos ? photos() : [],
                                 sections: getSections().map { $0.convert() })
         document.order = Int(order)
+        document.personID = folder?.identifier
+        document.isFavorite = isFavorite
         document.createdAt = createdAt
         document.updatedAt = updatedAt
         // From the records even when 2.6 changed `photoData` since: checking that means reading every

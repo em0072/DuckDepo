@@ -11,8 +11,11 @@ struct PasswordRow: View {
 
     let name: String
     let login: String
+    /// Whose it is, when the list shows several people's passwords.
+    var person: Person?
 
     @ScaledMetric(relativeTo: .body) private var iconSize: CGFloat = 36
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
         HStack(spacing: 12) {
@@ -26,6 +29,20 @@ struct PasswordRow: View {
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
+                if let person, dynamicTypeSize.isAccessibilitySize {
+                    PersonTag(person: person, isShort: true)
+                        .padding(.top, 2)
+                        .transition(.opacity)
+                }
+            }
+            // Before the spacer, which would otherwise take half the room.
+            .layoutPriority(1)
+            if let person, !dynamicTypeSize.isAccessibilitySize {
+                Spacer(minLength: 8)
+                // Whole, however long the text beside it: that wraps instead.
+                PersonTag(person: person, isShort: true)
+                    .fixedSize()
+                    .transition(.opacity)
             }
         }
         .padding(.vertical, 2)

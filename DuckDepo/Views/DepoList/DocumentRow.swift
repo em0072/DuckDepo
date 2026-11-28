@@ -8,10 +8,13 @@ import SwiftUI
 struct DocumentRow: View {
 
     let document: Document
+    /// Whose it is, when the list shows several people's documents.
+    var person: Person?
     /// Search results found by a photo's text: an excerpt of it, and the words searched for, to highlight.
     var photoMatch: (excerpt: String, query: String)?
 
     @ScaledMetric(relativeTo: .body) private var iconSize: CGFloat = 44
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
         HStack(spacing: 12) {
@@ -32,6 +35,20 @@ struct DocumentRow: View {
                     ExpiryBadge(status: status)
                         .padding(.top, 2)
                 }
+                if let person, dynamicTypeSize.isAccessibilitySize {
+                    PersonTag(person: person, isShort: true)
+                        .padding(.top, 2)
+                        .transition(.opacity)
+                }
+            }
+            // Before the spacer, which would otherwise take half the room.
+            .layoutPriority(1)
+            if let person, !dynamicTypeSize.isAccessibilitySize {
+                Spacer(minLength: 8)
+                // Whole, however long the text beside it: that wraps instead.
+                PersonTag(person: person, isShort: true)
+                    .fixedSize()
+                    .transition(.opacity)
             }
         }
         .padding(.vertical, 2)
